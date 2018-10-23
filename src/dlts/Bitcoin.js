@@ -1,5 +1,5 @@
 import bitcoin from 'bitcoinjs-lib';
-import AbstractDLT from './AbstractDLT';
+import AbstractDLT from './AbstractDlt';
 
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT = 546;
@@ -64,7 +64,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-   * Create account for the DLT
+   * @inheritdoc
    */
   createAccount() {
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
@@ -80,7 +80,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-   * Set a account for the DLT
+   * @inheritdoc
    */
   setAccount(privateKey) {
     this.account = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
