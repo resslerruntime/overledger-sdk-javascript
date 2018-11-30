@@ -1,24 +1,31 @@
-import web3Utils from 'web3-utils';
 import Accounts from 'web3-eth-accounts';
-import AbstractDLT from './AbstractDlt';
+import Web3 from 'web3';
+import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
+import OverledgerSDK from '../';
 
 class Ethereum extends AbstractDLT {
+  chainId: number;
+  account: Accounts;
+  web3: Web3;
+
   /**
    * Name of the DLT
    */
-  name = 'ethereum';
+  name: string = 'ethereum';
 
   /**
    * Symbol of the DLT
    */
-  symbol = 'ETH';
+  symbol: string = 'ETH';
 
   /**
    * @inheritdoc
    */
-  constructor(sdk, options) {
+    // @TODO: add options statement
+  constructor(sdk: OverledgerSDK, options: Options) {
     super(sdk, options);
 
+    this.web3 = new Web3();
     this.options = options;
 
     if (options.privateKey) {
@@ -30,12 +37,17 @@ class Ethereum extends AbstractDLT {
     } else {
       this.chainId = 500;
     }
+
   }
 
   /**
-   * @inheritdoc
+   * Build the transaction
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
    */
-  buildTransaction(fromAddress, toAddress, message, options) {
+  buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be setup');
     }
@@ -59,17 +71,21 @@ class Ethereum extends AbstractDLT {
       gas: options.feeLimit,
       gasPrice: options.feePrice,
       value: options.amount,
-      data: web3Utils.asciiToHex(message),
+      data: this.web3.utils.asciiToHex(message),
     };
 
     return transaction;
   }
 
   /**
-   * @inheritdoc
+   * Sign the transaction
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
    */
-  _sign(fromAddress, toAddress, message, options) {
-    const transaction = this.buildTransaction(fromAddress, toAddress, message, options);
+  _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
+    const transaction = this.buildTransaction(toAddress, message, options);
 
     return new Promise((resolve, reject) => {
       this.account.signTransaction(transaction, (err, data) => {
@@ -85,18 +101,31 @@ class Ethereum extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  createAccount() {
-    const account = new Accounts();
-    return account.create();
+  createAccount(): Account {
+    return this.web3.eth.accounts.create();
   }
 
   /**
    * @inheritdoc
    */
-  setAccount(privateKey) {
-    const account = new Accounts();
-    this.account = account.privateKeyToAccount(privateKey);
+  setAccount(privateKey: string): void {
+    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
   }
+}
+
+export type Transaction = {
+  nonce: number,
+  chainId: number,
+  to: string,
+  gas: string,
+  gasPrice: string,
+  value: string,
+  data: string,
+};
+
+interface TransactionOptions extends BaseTransactionOptions {
+  feePrice: string;
+  feeLimit: string;
 }
 
 export default Ethereum;
