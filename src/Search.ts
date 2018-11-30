@@ -1,29 +1,22 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
+import OverledgerSDK from './';
 
 class Search {
-  TESTNET = 'testnet';
-
-  MAINNET = 'mainnet';
-
-  /**
-   * The object storing the DLTs loaded by the Overledger sdk
-   */
-  dlts = {};
+  sdk: OverledgerSDK;
+  request: AxiosInstance;
 
   /**
    * @param {Object} sdk
    * @param {Object} options
    */
-  constructor(sdk, options = {}) {
+  constructor(sdk) {
     this.sdk = sdk;
 
     this.request = axios.create({
       baseURL: `${this.sdk.overledgerUri}/search`,
       timeout: 1000,
-      headers: { Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}` }
+      headers: { Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}` },
     });
-
-
   }
 
   /**
@@ -36,7 +29,6 @@ class Search {
       const response = await this.request.get(`/transactions/${transactionHash}`);
       return response;
     } catch (e) {
-      console.log(e);
       return e.response;
     }
   }
@@ -56,21 +48,7 @@ class Search {
   }
 
   /**
-   * Get block by number
-   *
-   * @param {number} number block number
-   */
-  async getBlockByDltAndNumber(dlt, number) {
-    try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
-      return response;
-    } catch (e) {
-      return e.response;
-    }
-  }
-
-  /**
-   * Get block by hash
+   * Get block hash
    *
    * @param {string} hash block hash
    */
@@ -82,6 +60,20 @@ class Search {
       return e.response;
     }
   }
+
+  /**
+   * Get block number
+   *
+   * @param {number} number block number
+   */
+  async getBlockByDltAndNumber(dlt, number) {
+    try {
+      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
+      return response;
+    } catch (e) {
+      return e.response;
+    }
+  }
 }
 
-module.exports = Search;
+export default Search;

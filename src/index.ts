@@ -1,23 +1,32 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import Search from './Search';
 import ucFirst from './utils/ucFirst';
+import AbstractDLT, { ApiCall, TransactionOptions } from './dlts/AbstractDlt';
 
 class OverledgerSDK {
-  TESTNET = 'testnet';
+  TESTNET: string = 'testnet';
 
-  MAINNET = 'mainnet';
+  MAINNET: string = 'mainnet';
 
   /**
    * The object storing the DLTs loaded by the Overledger sdk
    */
   dlts = {};
 
+  overledgerUri: string;
+  mappId: string;
+  bpiKey: string;
+  network: string;
+  request: AxiosInstance;
+
+  search: Search;
+
   /**
    * @param {string} mappId
    * @param {string} bpiKey
    * @param {Object} options
    */
-  constructor(mappId, bpiKey, options = {}) {
+  constructor(mappId: string, bpiKey: string, options: SDKOptions) {
     this.mappId = mappId;
     this.bpiKey = bpiKey;
 
@@ -30,7 +39,7 @@ class OverledgerSDK {
    *
    * @param {Object} options
    */
-  validateOptions(options) {
+  private validateOptions(options: SDKOptions): void {
     if (!options.dlts) {
       throw new Error('The dlts are missing');
     }
@@ -41,8 +50,8 @@ class OverledgerSDK {
    *
    * @param {Object} options
    */
-  configure(options) {
-    options.dlts.forEach((dltConfig) => {
+  private configure(options: SDKOptions): void {
+    options.dlts.forEach((dltConfig: DltOptions) => {
       const dlt = this.loadDlt(dltConfig);
       this.dlts[dlt.name] = dlt;
     });
@@ -52,7 +61,7 @@ class OverledgerSDK {
     if (this.network === this.MAINNET) {
       this.overledgerUri = 'https://bpi.overledger.io/v1';
     } else {
-      this.overledgerUri = 'https://bpi.testnet.overledger.io/v1';
+      this.overledgerUri = 'http://bpi.devnet.overledger.io/v1';
     }
 
     this.request = axios.create({
@@ -63,7 +72,7 @@ class OverledgerSDK {
       },
     });
 
-    this.search = new Search(this, options);
+    this.search = new Search(this);
   }
 
   /**
@@ -71,7 +80,7 @@ class OverledgerSDK {
    *
    * @param {Object} dlts Object of the DLTs where you want to send a transaction
    */
-  async sign(dlts) {
+  public async sign(dlts: SignOptions): Promise<any> {
     if (!Array.isArray(dlts)) {
       throw new Error('The dlts object must be an array');
     }
@@ -79,7 +88,7 @@ class OverledgerSDK {
     const responseDlts = await Promise.all(dlts.map(async (dlt) => {
       return {
         dlt: dlt.dlt,
-        signedTransaction: await this.dlts[dlt.dlt].sign(dlt.fromAddress, dlt.toAddress, dlt.message, dlt.options),
+        signedTransaction: await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options),
       };
     }));
 
@@ -91,10 +100,10 @@ class OverledgerSDK {
    *
    * @param {array} dltData
    */
-  buildWrapperApiCall(dltData) {
+  private buildWrapperApiCall(dltData: ApiCall[]): WrapperApiCall {
     return {
-      mappId: this.mappId,
       dltData,
+      mappId: this.mappId,
     };
   }
 
@@ -103,12 +112,10 @@ class OverledgerSDK {
    *
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
-  send(signedTransactions) {
+  public send(signedTransactions): Promise<any> {
     const apiCall = signedTransactions.map(
       dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
     );
-
-    console.log(this.buildWrapperApiCall(apiCall), `${this.overledgerUri}/transactions`);
 
     return this.request.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
   }
@@ -116,11 +123,12 @@ class OverledgerSDK {
   /**
    * Load the dlt to the Overledger SDK
    *
-   * @param {object} config
+   * @param {Object} config
    *
    * @return {Provider}
    */
-  loadDlt(config) {
+  private loadDlt(config: DltOptions): AbstractDLT {
+    // Need to improve this loading
     const Provider = require(`./dlts/${ucFirst(config.dlt)}`).default;
 
     return new Provider(this, config);
@@ -129,7 +137,7 @@ class OverledgerSDK {
   /**
    * Read by mapp id
    */
-  async readTransactionsByMappId() {
+  public async readTransactionsByMappId(): Promise<Object> {
     try {
       const response = await this.request.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
       return response.data;
@@ -143,7 +151,7 @@ class OverledgerSDK {
    *
    * @param {string} ovlTransactionId
    */
-  async readByTransactionId(ovlTransactionId) {
+  public async readByTransactionId(ovlTransactionId: string): Promise<Object> {
     try {
       const response = await this.request.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
       return response.data;
@@ -157,14 +165,14 @@ class OverledgerSDK {
    *
    * @param {string} mappId
    */
-  setMappId(mappId) {
+  public setMappId(mappId: string): void {
     this.mappId = mappId;
   }
 
   /**
    * get the mapp id
    */
-  getMappId() {
+  public getMappId(): string {
     return this.mappId;
   }
 
@@ -173,16 +181,38 @@ class OverledgerSDK {
    *
    * @param {string} bpiKey
    */
-  setBpiKey(bpiKey) {
+  public setBpiKey(bpiKey: string): void {
     this.bpiKey = bpiKey;
   }
 
   /**
    * get the bpi key
    */
-  getBpiKey() {
+  public getBpiKey(): string {
     return this.bpiKey;
   }
 }
 
-module.exports = OverledgerSDK;
+export type SDKOptions = {
+  dlts: DltOptions[],
+  network?: 'mainnet' | 'testnet',
+};
+
+export type DltOptions = {
+  dlt: string,
+  privateKey?: string,
+};
+
+export type WrapperApiCall = {
+  mappId: string,
+  dltData: ApiCall[],
+};
+
+export type SignOptions = [{
+  dlt: string,
+  toAddress: string,
+  message: string,
+  options: TransactionOptions,
+}];
+
+export default OverledgerSDK;
