@@ -1,4 +1,5 @@
 import OverledgerSDK from '../';
+import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {
   name: string;
@@ -25,7 +26,7 @@ abstract class AbstractDLT {
    */
   public sign(toAddress: string, message: string, options: TransactionOptions = {}): Promise<string> {
     if (!this.account) {
-      throw new Error('The account must be setup');
+      throw new Error(`The ${this.name} account must be setup`);
     }
 
     return this._sign(toAddress, message, options);
@@ -45,7 +46,7 @@ abstract class AbstractDLT {
    *
    * @param {string|string[]} signedTransaction
    */
-  public send(signedTransaction: string|string[]): Promise<any> {
+  public send(signedTransaction: string | string[]): AxiosPromise<Object> {
     let signedTransactions = [];
     if (!Array.isArray(signedTransaction)) {
       signedTransactions = [signedTransaction];
@@ -66,7 +67,7 @@ abstract class AbstractDLT {
    *
    * @return {Promise<axios>}
    */
-  async signAndSend(toAddress: string, message: string, options: TransactionOptions): Promise<any> {
+  async signAndSend(toAddress: string, message: string, options: TransactionOptions): Promise<AxiosResponse> {
     const signedTx = await this.sign(toAddress, message, options);
 
     return this.send(signedTx);
@@ -110,7 +111,7 @@ abstract class AbstractDLT {
    * @param {number} amount The amount to fund
    * @param {string} address the address to fund
    */
-  async fundAccount(amount: number, address: string = null): Promise<Object> {
+  async fundAccount(amount: number, address: string = null): Promise<AxiosResponse> {
     if (address === null) {
       if (!this.account) {
         throw new Error('The account must be setup');
@@ -119,12 +120,7 @@ abstract class AbstractDLT {
       address = this.account.address;
     }
 
-    try {
-      const response = await this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
-      return response.data;
-    } catch (e) {
-      return e.response.data;
-    }
+    return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
   }
 }
 

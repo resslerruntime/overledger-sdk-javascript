@@ -29,17 +29,11 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Cannot sign a ripple transaction without an account setup', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('The ripple account must be setup');
   });
 
-  test('Cannot fund without the address parameter if no account are setup', () => {
-    try {
-      overledger.dlts.ripple.fundAccount();
-      axios.post.mockResolvedValue({});
-      expect(axios.post).not.toBeCalledWith('');
-    } catch (e) {
-      console.log(e);
-    }
+  test('Cannot fund without the address parameter if no account are setup', async() => {
+    await expect(overledger.dlts.ripple.fundAccount()).rejects.toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
@@ -124,7 +118,7 @@ describe('Dlt/Ripple', () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
     await overledger.dlts.ripple.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
       dltData:
         [{
@@ -140,7 +134,7 @@ describe('Dlt/Ripple', () => {
       amount: '1', feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
     });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
       dltData:
         [{

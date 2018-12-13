@@ -29,17 +29,11 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without an account setup', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The ethereum account must be setup');
   });
 
-  test('Cannot fund without the address parameter if no account are setup', () => {
-    try {
-      overledger.dlts.ethereum.fundAccount();
-      axios.post.mockResolvedValue({});
-      expect(axios.post).not.toBeCalledWith('');
-    } catch (e) {
-      console.log(e);
-    }
+  test('Cannot fund without the address parameter if no account are setup', async () => {
+    await expect(overledger.dlts.ethereum.fundAccount()).rejects.toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
@@ -106,13 +100,12 @@ describe('Dlt/Ethereum', () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 
@@ -122,13 +115,12 @@ describe('Dlt/Ethereum', () => {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
     });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 });
