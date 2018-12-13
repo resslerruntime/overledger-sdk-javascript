@@ -64,7 +64,7 @@ class Bitcoin extends AbstractDLT {
    */
   _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
     const transaction = this.buildTransaction(toAddress, message, options);
-    transaction.sign(0, this.account);
+    transaction.sign(0, this.account.privateKey);
 
     return Promise.resolve(transaction.build().toHex());
   }
@@ -89,7 +89,20 @@ class Bitcoin extends AbstractDLT {
    * @inheritdoc
    */
   setAccount(privateKey: string): void {
-    this.account = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
+    const keyPair = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
+
+    this.account = {
+      privateKey: keyPair,
+      address: bitcoin.payments
+      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
+    };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  async fundAccount(amount: number = 1e8, address: string = null): Promise<Object> {
+    return super.fundAccount(amount, address);
   }
 }
 
