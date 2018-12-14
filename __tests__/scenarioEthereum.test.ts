@@ -33,7 +33,11 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot fund without the address parameter if no account are setup', async () => {
-    await expect(overledger.dlts.ethereum.fundAccount()).rejects.toThrow('The account must be setup');
+    expect(() => overledger.dlts.ethereum.fundAccount()).toThrow('The account must be setup');
+  });
+
+  test('Cannot getBalance without the address parameter if no account are setup', async () => {
+    expect(() => overledger.dlts.ethereum.getBalance()).toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
@@ -56,12 +60,33 @@ describe('Dlt/Ethereum', () => {
     expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/10`);
   });
 
-  test('Can fund the setup account with a specific amount', () => {
+  test('Can fund an account with a specific amount', () => {
     const newAccount = overledger.dlts.ethereum.createAccount();
     overledger.dlts.ethereum.fundAccount(10, newAccount.address);
 
     axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
     expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${newAccount.address}/10`);
+  });
+
+  test('Can getBalance the setup account', () => {
+    overledger.dlts.ethereum.getBalance();
+
+    axios.post.mockResolvedValue({ unit: 'wei', value: '0' });
+    expect(axios.post).toBeCalledWith('/balances', {
+      dlt: 'ethereum',
+      address: account.address,
+    });
+  });
+
+  test('Can getBalance an account with a specific address', () => {
+    const newAccount = overledger.dlts.ethereum.createAccount();
+    overledger.dlts.ethereum.getBalance(newAccount.address);
+
+    axios.post.mockResolvedValue({ unit: 'wei', value: '0' });
+    expect(axios.post).toBeCalledWith('/balances', {
+      dlt: 'ethereum',
+      address: newAccount.address,
+    });
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
