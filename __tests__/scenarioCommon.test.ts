@@ -63,14 +63,11 @@ describe('Dlt/Common', () => {
         expect(axios.post).toBeCalledWith(`/faucet/fund/${dlt.type}/${newAccount.address}/10`);
       });
 
-      test('Can getBalance the setup account', () => {
+      test('Can getBalance of the setup account', () => {
         overledger.dlts[dlt.type].getBalance();
 
         axios.post.mockResolvedValue({ unit: 'wei', value: '0' });
-        expect(axios.post).toBeCalledWith('/balances', {
-          dlt: dlt.type,
-          address: account.address,
-        });
+        expect(axios.get).toBeCalledWith(`/balances/${dlt.type}/${account.address}`);
       });
 
       test('Can getBalance an account with a specific address', () => {
@@ -78,10 +75,7 @@ describe('Dlt/Common', () => {
         overledger.dlts[dlt.type].getBalance(newAccount.address);
 
         axios.post.mockResolvedValue({ unit: 'wei', value: '0' });
-        expect(axios.post).toBeCalledWith('/balances', {
-          dlt: dlt.type,
-          address: newAccount.address,
-        });
+        expect(axios.get).toBeCalledWith(`/balances/${dlt.type}/${newAccount.address}`);
       });
     });
   });
