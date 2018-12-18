@@ -122,6 +122,26 @@ abstract class AbstractDLT {
 
     return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
   }
+
+  /**
+   * Get the balance for a specific address
+   *
+   * @param {string} address The address to look at
+   */
+  getBalance(address: string = null): Promise<AxiosResponse> {
+    if (address === null) {
+      if (!this.account) {
+        throw new Error('The account must be setup');
+      }
+
+      address = this.account.address;
+    }
+
+    return this.sdk.request.post('/balances', {
+      address,
+      dlt: this.name,
+    });
+  }
 }
 
 export type Account = {
