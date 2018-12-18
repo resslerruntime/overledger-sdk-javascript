@@ -137,10 +137,7 @@ abstract class AbstractDLT {
       address = this.account.address;
     }
 
-    return this.sdk.request.post('/balances', {
-      address,
-      dlt: this.name,
-    });
+    return this.sdk.request.get(`/balances/${this.name}/${address}`);
   }
 }
 
