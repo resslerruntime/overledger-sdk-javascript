@@ -179,6 +179,11 @@ class OverledgerSDK {
   public getBpiKey(): string {
     return this.bpiKey;
   }
+
+  public getBalances(array): AxiosPromise<Object> {
+
+    return this.request.post('/balances', array);
+  }
 }
 
 export type SignedTransactionResponse = {
