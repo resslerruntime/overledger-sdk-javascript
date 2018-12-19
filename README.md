@@ -62,7 +62,7 @@ const overledger = new OverledgerSDK("mappId", "bpiKey", {
 
 ## Usage
 
-The SDK provides the following functions which return a standard axios response which includes the BPI data in the `data` field:
+The SDK provides the following functions which return a promise with a standard axios response which includes the BPI data in the `data` field:
 
 - Main functions
   - [configure](#configure)
