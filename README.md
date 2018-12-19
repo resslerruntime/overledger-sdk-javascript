@@ -62,7 +62,7 @@ const overledger = new OverledgerSDK("mappId", "bpiKey", {
 
 ## Usage
 
-The SDK provides following functions:
+The SDK provides the following functions which return a promise with a standard axios response which includes the BPI data in the `data` field:
 
 - Main functions
   - [configure](#configure)
@@ -75,6 +75,8 @@ The SDK provides following functions:
   - [getMappId](#getMappId)
   - [setBpiKey](#setBpiKey)
   - [getBpiKey](#getBpiKey)
+  - [getBalance](#getBalance)
+  - [getBalances](#getBalances)
 - DLT functions
   - [Faucet](#faucet)
 
@@ -275,6 +277,69 @@ This function returns a string representing the bpi key that is currently used.
 | -------- | ------ | ------------------------------------- |
 | `bpiKey` | string | String representation of the BPI key. |
 
+### getBalance
+
+Get the balance of an address or, by default, the account that is currently set.
+
+Usage: `overledger.dlts.{dltName}.getBalance(address);`
+
+#### Parameters
+
+| Name      | Type   | Description       |
+| --------- | ------ | ------------------|
+| `address` | string | Optional address. |
+
+#### Return value
+
+This function returns an object with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `address` | string | The address holding the balance                                   |
+| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
+| `value`   | string | The amount of units this address holds                            |
+
+### getBalances
+
+Get the balances of multiple addresses
+Usage:
+
+```
+const request = [
+	{
+		"dlt": "ethereum",
+		"address": "0x0000000000000000000000000000000000000000"
+	},
+	{
+		"dlt": "ripple",
+		"address": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+	}
+]
+
+overledger.getBalances(request);
+```
+
+#### Parameters
+
+This function accepts an array of objects with the following fields:
+
+| Name      | Type   | Description                                      |
+| --------- | ------ | ------------------------------------------------ |
+| `dlt`     | string | The dlt where this address should be searched on |
+| `address` | string | The address for the balance query                |
+
+#### Return value
+
+This function returns an array of objects with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `address` | string | The address holding the balance                                   |
+| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
+| `value`   | string | The amount of units this address holds                            |
+
 ### Faucet
 As per default it would take the configured address.
 From the DLT level `overledger.dlts.[dlt]`
@@ -322,3 +387,34 @@ In this section we will provide a description of the common object types.
 | `feeLimit`          | string | Maximum fee to pay for the transaction to be submitted on the DLT                                            |
 | `callbackUrl`       | string | Endpoint provided by the Mapp for the BPI layer to call back                                                 |
 | `signedTransaction` | string | Hexadecimal string representation of a signed transaction                                                    |
+
+
+## Usage Example
+
+In this simple usage example we will call the `getBalance` method to request the balance of the genesis address on Ripple (created by the blockchain on startup).
+
+```
+npm install @quantnetwork/overledger-sdk
+```
+
+```
+// Boilerplate
+const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
+// Replace mappId and bipKey with your own credentials.
+const overledger = new OverledgerSDK("mappId", "bpiKey", {
+  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
+});
+
+// Method call
+;(async () => {
+
+  const rippleAddress = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+
+  const response = await overledger.dlts.ripple.getBalance(rippleAddress);
+
+  var rippleGenesisBalance = response.data
+  // The lowest unit in XRP is called 'drop'
+  console.log("The balance of the genesis address on the Quant Ripple Testnet is", rippleGenesisBalance.value, rippleGenesisBalance.unit);
+
+})();
+```
