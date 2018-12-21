@@ -12,31 +12,30 @@ describe('Dlt/Bitcoin', () => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
       dlts: [{
         dlt: 'bitcoin',
-        network: 'testnet',
       }],
+      network: 'testnet',
     });
-  });
-
-  test('Can get name', () => {
-    expect(overledger.dlts.bitcoin.name).toBe('bitcoin');
-    expect(overledger.dlts.bitcoin.symbol).toBe('XBT');
   });
 
   test('Can create a account', () => {
     account = overledger.dlts.bitcoin.createAccount();
+    overledger.dlts.bitcoin.setAccount(account.privateKey);
 
     expect(account.privateKey.length).toBe(52);
     expect(account.address.length).toBe(34);
   });
 
-  test('Cannot sign a bitcoin transaction without a account setup', () => {
-    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('The account must be setup');
-  });
+  test('Can fund the setup account with the default amount', () => {
+    overledger.dlts.bitcoin.fundAccount();
 
-  test('Can set the account previously created', () => {
-    overledger.dlts.bitcoin.setAccount(account.privateKey);
-
-    expect(overledger.dlts.bitcoin.account.toWIF()).toBe(account.privateKey);
+    axios.post.mockResolvedValue({ status: 'OK',
+    message: null,
+    address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
+    amount: 1,
+    txnHash:
+     '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
+    vout: 1 });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
   });
 
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {

@@ -16,26 +16,19 @@ describe('Dlt/Ethereum', () => {
     });
   });
 
-  test('Can get name', () => {
-    expect(overledger.dlts.ethereum.name).toBe('ethereum');
-    expect(overledger.dlts.ethereum.symbol).toBe('ETH');
-  });
-
   test('Can create an account', () => {
     account = overledger.dlts.ethereum.createAccount();
+    overledger.dlts.ethereum.setAccount(account.privateKey);
 
     expect(account.privateKey.length).toBe(66);
     expect(account.address.length).toBe(42);
   });
 
-  test('Cannot sign an ethereum transaction without an account setup', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
-  });
+  test('Can fund the setup account with the default amount', () => {
+    overledger.dlts.ethereum.fundAccount();
 
-  test('Can set the account previously created', () => {
-    overledger.dlts.ethereum.setAccount(account.privateKey);
-
-    expect(overledger.dlts.ethereum.account.privateKey).toBe(account.privateKey);
+    axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/1000000000000000000`);
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
@@ -74,13 +67,12 @@ describe('Dlt/Ethereum', () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 
@@ -90,13 +82,12 @@ describe('Dlt/Ethereum', () => {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
     });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 });

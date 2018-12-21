@@ -2,6 +2,7 @@ import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
 import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import OverledgerSDK from '../';
+import { AxiosResponse } from 'axios';
 
 class Ethereum extends AbstractDLT {
   chainId: number;
@@ -37,7 +38,6 @@ class Ethereum extends AbstractDLT {
     } else {
       this.chainId = 500;
     }
-
   }
 
   /**
@@ -110,6 +110,13 @@ class Ethereum extends AbstractDLT {
    */
   setAccount(privateKey: string): void {
     this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  fundAccount(amount: number = 1e18, address: string = null): Promise<AxiosResponse> {
+    return super.fundAccount(amount, address);
   }
 }
 
