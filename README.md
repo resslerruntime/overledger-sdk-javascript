@@ -134,7 +134,7 @@ Example of DLT transaction data:
     toAddress: "0x0000000000000000000000000000000000000000",
     message: "QNT test",
     options: {
-      amount: 1, // amount in wei
+      amount: '1', // amount in wei
       sequence: 2, // nonce
       feeLimit: '10',
       feePrice: '10',
@@ -145,10 +145,10 @@ Example of DLT transaction data:
     toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
     message: "QNT test",
     options: {
-      amount: 1, // amount in drop
+      amount: '1', // amount in drop
       feePrice: '10',
       sequence: 1,
-      maxLedgerVersion: 99999999999999,
+      maxLedgerVersion: '4294967295',
     }
   }
 ];
