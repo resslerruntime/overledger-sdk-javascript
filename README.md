@@ -79,6 +79,7 @@ The SDK provides the following functions which return a promise with a standard 
   - [getBalances](#getBalances)
 - DLT functions
   - [Faucet](#faucet)
+  - [Account](#account)
 
 
 ### configure
@@ -404,6 +405,52 @@ In this section we will provide a description of the common object types.
 | `callbackUrl`       | string | Endpoint provided by the Mapp for the BPI layer to call back                                                 |
 | `signedTransaction` | string | Hexadecimal string representation of a signed transaction                                                    |
 
+### Account
+From the DLT level `overledger.dlts.[dlt]`
+
+#### Set Account
+This function set the default account for the specified blockchain into the SDK, every transaction will be signed by this account
+Usage: `setAccount(privateKey)`
+*Must be a WIF key for bitcoin*
+
+##### Parameters
+
+This function takes:
+- privateKey: the privateKey belonging to the specified blockchain
+
+##### Return Value
+
+This function returns `undefined`
+
+#### Get Account
+This function get the default account for the specified blockchain from the SDK
+Usage: `overledger.dlts.[dlt].account`
+
+##### Return Value
+
+This function returns
+```
+{
+  privateKey: 'string' // The privateKey belonging to the specified blockchain
+  address: 'string' // The address belonging to this privateKey
+}
+```
+*For bitcoin, the privateKey is in the WIF format*
+
+#### Create Account
+This function create an account for the specified blockchain from the SDK
+Usage: `overledger.dlts.[dlt].createAccount()`
+
+##### Return Value
+
+This function returns
+```
+{
+  privateKey: 'string' // The privateKey belonging to the specified blockchain
+  address: 'string' // The address belonging to this privateKey
+}
+```
+*For bitcoin, the privateKey is in the WIF format*
 
 ## Usage Example
 
