@@ -115,25 +115,41 @@ This function has array of DLT transaction data.
 
 Example of DLT transaction data:
 
+*Because the data differs between blockchain, the `options` object contains all the non-generic variables and can be different in each blockchain.*
+
 ```javascript
 [
   {
     dlt: "bitcoin",
-    fromAddress: "2NFj2CVhE5ru7werwXUNCbirUW6KDo2d",
     toAddress: "2NFj2CVhE5ru7werwXUNCbirUW6KDo2d",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: 1,
+      sequence: 2, // VOUT
+      previousTransactionHash: '77b04805f40a7cba6ed49be10d200f41462bfa266f24db91114798178c802058',
+    }
   },
   {
     dlt: "ethereum",
-    fromAddress: "0x930724bd974260Eb6C859abE2144f7e7ea73d7C1",
     toAddress: "0x0000000000000000000000000000000000000000",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: '1', // amount in wei
+      sequence: 2, // nonce
+      feeLimit: '10',
+      feePrice: '10',
+    }
   },
   {
     dlt: "ripple",
-    fromAddress: "rBLsJC9zuwn4H4z3LA8JD4fv2Nut4qf7ve",
     toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: '1', // amount in drop
+      feePrice: '10',
+      sequence: 1,
+      maxLedgerVersion: '4294967295',
+    }
   }
 ];
 ```
