@@ -409,7 +409,7 @@ In this section we will provide a description of the common object types.
 From the DLT level `overledger.dlts.[dlt]`
 
 #### Set Account
-This function set the default account for the specified blockchain into the SDK, every transaction will be signed by this account
+This function sets the default account for the specified blockchain into the SDK, every transaction will be signed by this account
 Usage: `setAccount(privateKey)`
 *Must be a WIF key for bitcoin*
 
@@ -420,10 +420,10 @@ This function takes:
 
 ##### Return Value
 
-This function returns `undefined`
+This function has no return value.
 
 #### Get Account
-This function get the default account for the specified blockchain from the SDK
+This function gets the default account for the specified blockchain from the SDK
 Usage: `overledger.dlts.[dlt].account`
 
 ##### Return Value
@@ -438,7 +438,7 @@ This function returns
 *For bitcoin, the privateKey is in the WIF format*
 
 #### Create Account
-This function create an account for the specified blockchain from the SDK
+This function creates an account for the specified blockchain from the SDK
 Usage: `overledger.dlts.[dlt].createAccount()`
 
 ##### Return Value
