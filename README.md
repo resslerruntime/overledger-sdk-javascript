@@ -57,7 +57,7 @@ Initialize the SDK with the 3 available dlts. Optionally, a timeout period can b
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
-  timeout: 1500,
+  timeout: 1500, // Optional
 });
 ```
 
