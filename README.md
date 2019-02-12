@@ -52,11 +52,12 @@ NodeJS
 const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
 ```
 
-Initialize the SDK with the 3 available dlts.
+Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 1000ms).
 
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
+  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
+  timeout: 1500,
 });
 ```
 
@@ -108,7 +109,7 @@ Usage: `sign(dlts)`
 
 #### Parameters
 
-This function has array of DLT transaction data.
+This function takes an array of DLT transaction data.
 
 | Name   | Type  | Description                                                                 |
 | ------ | ----- | --------------------------------------------------------------------------- |
@@ -135,7 +136,7 @@ Example of DLT transaction data:
     toAddress: "0x0000000000000000000000000000000000000000",
     message: "QNT test",
     options: {
-      amount: '1', // amount in wei
+      amount: '1', // Amount in wei (1 ETH = 10^18 wei)
       sequence: 2, // nonce
       feeLimit: '10',
       feePrice: '10',
@@ -146,10 +147,10 @@ Example of DLT transaction data:
     toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
     message: "QNT test",
     options: {
-      amount: '1', // amount in drop
-      feePrice: '10',
-      sequence: 1, // transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
-      maxLedgerVersion: '4294967295',
+      amount: '1', // Amount in drops (1 XRP = 1,000,000 drops)
+      feePrice: '0.000012', // Standard fee price on the XRP network
+      sequence: 1, // Transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
+      maxLedgerVersion: '4294967295', // This is the maximum value that this option field can take
     }
   }
 ];
