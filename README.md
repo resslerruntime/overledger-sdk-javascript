@@ -148,7 +148,7 @@ Example of DLT transaction data:
     options: {
       amount: '1', // amount in drop
       feePrice: '10',
-      sequence: 1,
+      sequence: 1, // transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
       maxLedgerVersion: '4294967295',
     }
   }
@@ -366,13 +366,14 @@ Usage: `fundAccount(amount?, address?)`
 
 #### Parameters
 
-This function takes:
-- amount: **OPTIONAL** the dlt amount must be the lowest decimal available; ie. for bitcoin in satoshi, ripple in drops and ethereum in wei
-- address: **OPTIONAL** the dlt address.
+| Name      | Type   | Description                                                                                                               |
+| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `amount`  | string | _Optional_ The amount of tokens to fund, in the smallest unit (satoshi for Bitcoin, wei for Ethereum or drops for Ripple) |
+| `address` | string | _Optional_ The address to fund                                                                                            |
 
 #### Return Value
 
-This function returns `Promise`
+This function returns a `Promise`
 
 
 ## Types

@@ -45,16 +45,16 @@ class Ripple extends AbstractDlt {
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options.amount === 'undefined') {
-      throw new Error('options.amount must be setup');
+      throw new Error('options.amount must be set up');
     }
     if (typeof options.feePrice === 'undefined') {
-      throw new Error('options.feePrice must be setup');
+      throw new Error('options.feePrice must be set up');
     }
     if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be setup');
+      throw new Error('options.sequence must be set up');
     }
     if (typeof options.maxLedgerVersion === 'undefined') {
-      throw new Error('options.maxLedgerVersion must be setup');
+      throw new Error('options.maxLedgerVersion must be set up');
     }
     const amountInXRP = dropsToXrp(options.amount);
 
@@ -135,7 +135,7 @@ class Ripple extends AbstractDlt {
   /**
    * @inheritdoc
    */
-  fundAccount(amount: number = 1e9, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: string = '1000000000', address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }

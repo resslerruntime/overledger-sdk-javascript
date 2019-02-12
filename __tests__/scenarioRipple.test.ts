@@ -24,7 +24,7 @@ describe('Dlt/Ripple', () => {
     expect(account.address).toMatch(/r[1-9A-HJ-NP-Za-km-z]{25,34}/);
   });
 
-  test('Can fund the setup account with the default amount', () => {
+  test('Can fund the set up account with the default amount', () => {
     overledger.dlts.ripple.fundAccount();
 
     axios.post.mockResolvedValue({ status: 'OK',
@@ -38,25 +38,25 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Cannot sign a ripple transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be setup');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a feePrice', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
       amount: '1',
-    })).toThrow('options.feePrice must be setup');
+    })).toThrow('options.feePrice must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a sequence', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
       amount: '1', feePrice: '0.000012',
-    })).toThrow('options.sequence must be setup');
+    })).toThrow('options.sequence must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a maxLedgerVersion', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
       amount: '1', feePrice: '0.000012', sequence: '1',
-    })).toThrow('options.maxLedgerVersion must be setup');
+    })).toThrow('options.maxLedgerVersion must be set up');
   });
 
   test('Can sign a ripple transaction', async () => {

@@ -26,7 +26,7 @@ abstract class AbstractDLT {
    */
   public sign(toAddress: string, message: string, options: TransactionOptions = {}): Promise<string> {
     if (!this.account) {
-      throw new Error(`The ${this.name} account must be setup`);
+      throw new Error(`The ${this.name} account must be set up`);
     }
 
     return this._sign(toAddress, message, options);
@@ -108,13 +108,17 @@ abstract class AbstractDLT {
   /**
    * Fund an account
    *
-   * @param {number} amount The amount to fund
+   * @param {string} amount The amount to fund
    * @param {string} address the address to fund
    */
-  fundAccount(amount: number, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: string, address: string = null): Promise<AxiosResponse> {
+    if (typeof amount !== 'string') {
+      throw new Error('The amount parameter must be of type string');
+    }
+    
     if (address === null) {
       if (!this.account) {
-        throw new Error('The account must be setup');
+        throw new Error('The account must be set up');
       }
 
       address = this.account.address;
@@ -131,7 +135,7 @@ abstract class AbstractDLT {
   getBalance(address: string = null): Promise<AxiosResponse> {
     if (address === null) {
       if (!this.account) {
-        throw new Error('The account must be setup');
+        throw new Error('The account must be set up');
       }
 
       address = this.account.address;

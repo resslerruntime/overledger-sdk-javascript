@@ -49,19 +49,19 @@ class Ethereum extends AbstractDLT {
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options.amount === 'undefined') {
-      throw new Error('options.amount must be setup');
+      throw new Error('options.amount must be set up');
     }
 
     if (typeof options.feeLimit === 'undefined') {
-      throw new Error('options.feeLimit must be setup');
+      throw new Error('options.feeLimit must be set up');
     }
 
     if (typeof options.feePrice === 'undefined') {
-      throw new Error('options.feePrice must be setup');
+      throw new Error('options.feePrice must be set up');
     }
 
     if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be setup');
+      throw new Error('options.sequence must be set up');
     }
 
     const transaction = {
@@ -115,7 +115,7 @@ class Ethereum extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  fundAccount(amount: number = 1e18, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: string = '1000000000000000000', address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }
