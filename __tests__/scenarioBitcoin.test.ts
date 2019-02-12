@@ -25,7 +25,7 @@ describe('Dlt/Bitcoin', () => {
     expect(account.address.length).toBe(34);
   });
 
-  test('Can fund the setup account with the default amount', () => {
+  test('Can fund the set up account with the default amount', () => {
     overledger.dlts.bitcoin.fundAccount();
 
     axios.post.mockResolvedValue({ status: 'OK',
@@ -39,11 +39,11 @@ describe('Dlt/Bitcoin', () => {
   });
 
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('options.sequence must be setup');
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('options.sequence must be set up');
   });
 
   test('Cannot sign a bitcoin transaction without specifying a previousTransactionHash', () => {
-    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1 })).toThrow('options.previousTransactionHash must be setup');
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1 })).toThrow('options.previousTransactionHash must be set up');
   });
 
   // @TODO: Needs to be fix

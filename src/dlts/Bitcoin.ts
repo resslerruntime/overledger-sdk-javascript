@@ -42,11 +42,11 @@ class Bitcoin extends AbstractDLT {
     // @TODO: add option statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be setup');
+      throw new Error('options.sequence must be set up');
     }
 
     if (typeof options.previousTransactionHash === 'undefined') {
-      throw new Error('options.previousTransactionHash must be setup');
+      throw new Error('options.previousTransactionHash must be set up');
     }
 
     const tx = new bitcoin.TransactionBuilder(this.addressType);
@@ -102,7 +102,7 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  fundAccount(amount: number = 1e8, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: string = '100000000', address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }
