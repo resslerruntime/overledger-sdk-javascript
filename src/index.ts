@@ -66,7 +66,7 @@ class OverledgerSDK {
 
     this.request = axios.create({
       baseURL: this.overledgerUri,
-      timeout: 1000,
+      timeout: options.timeout || 1000,
       headers: {
         Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
       },
@@ -194,6 +194,7 @@ export type SignedTransactionResponse = {
 export type SDKOptions = {
   dlts: DltOptions[],
   network?: 'mainnet' | 'testnet',
+  timeout?: number,
 };
 
 export type DltOptions = {

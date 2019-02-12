@@ -19,11 +19,27 @@ describe('Dlt/Common', () => {
             {
               dlt: dlt.type
             }
-          ]
+          ],
         });
 
         account = overledger.dlts[dlt.type].createAccount();
       });
+
+      test ('Can specify a custom request timeout', () => {
+        /**
+         * To be able to test that a specific timeout period has been set,
+         * we have to use the constructor again because of the scope of the mock
+         */
+        new OverledgerSDK('testmappid', 'testbpikey', {
+          dlts: [
+            {
+              dlt: dlt.type
+            }
+          ],
+          timeout: 2000,
+        });
+        expect(axios.create.mock.calls[0][0].timeout).toEqual(2000);
+      })
 
       test('Can get name', () => {
         expect(overledger.dlts[dlt.type].name).toBe(dlt.type);
