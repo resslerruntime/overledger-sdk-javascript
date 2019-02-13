@@ -131,6 +131,8 @@ Example of DLT transaction data:
       amount: 1,
       sequence: 2, // VOUT
       previousTransactionHash: '77b04805f40a7cba6ed49be10d200f41462bfa266f24db91114798178c802058',
+      feePrice: 1e5,
+      value: 1
     }
   },
   {
@@ -152,7 +154,7 @@ Example of DLT transaction data:
       amount: '1', // Amount in drops (1 XRP = 1,000,000 drops)
       feePrice: '0.000012', // Standard fee price on the XRP network
       sequence: 1, // Transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
-      maxLedgerVersion: '4294967295', // This is the maximum value that this option field can take
+      maxLedgerVersion: 4294967295, // This is the maximum value that this option field can take
     }
   }
 ];

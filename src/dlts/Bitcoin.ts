@@ -38,8 +38,7 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-    // @TODO: add return statement
-    // @TODO: add option statement
+  // @TODO: add return statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
@@ -49,13 +48,26 @@ class Bitcoin extends AbstractDLT {
       throw new Error('options.previousTransactionHash must be set up');
     }
 
-    const tx = new bitcoin.TransactionBuilder(this.addressType);
-    const data = Buffer.from(message); // Message is inserted
+    if (typeof options.value === 'undefined') {
+      throw new Error('options.value must be set up');
+    }
 
-    const embed = bitcoin.payments.embed({ data: [data] });
+    if (typeof options.feePrice === 'undefined') {
+      throw new Error('options.feePrice must be set up');
+    }
+
+    const tx = new bitcoin.TransactionBuilder(this.addressType);
+    const data = Buffer.from(message, 'utf8'); // Message is inserted
+
     tx.addInput(options.previousTransactionHash, options.sequence);
     tx.addOutput(toAddress, options.amount);
-    tx.addOutput(embed.output, this.NON_DUST_AMOUNT);
+    const ret = bitcoin.script.compile(
+      [
+        bitcoin.opcodes.OP_RETURN,
+        data,
+      ]);
+    tx.addOutput(ret, 0);
+    tx.addOutput(this.account.address, options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
 
     return tx;
   }
@@ -95,7 +107,7 @@ class Bitcoin extends AbstractDLT {
     this.account = {
       privateKey: keyPair,
       address: bitcoin.payments
-      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
+        .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
     };
   }
 
@@ -109,6 +121,9 @@ class Bitcoin extends AbstractDLT {
 
 interface TransactionOptions extends BaseTransactionOptions {
   previousTransactionHash: string;
+  value: number;
+  amount: number;
+  feePrice: number;
 }
 
 export default Bitcoin;
