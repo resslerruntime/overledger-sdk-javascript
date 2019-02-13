@@ -24,7 +24,7 @@ describe('Dlt/Ethereum', () => {
     expect(account.address.length).toBe(42);
   });
 
-  test('Can fund the setup account with the default amount', () => {
+  test('Can fund the set up account with the default amount', () => {
     overledger.dlts.ethereum.fundAccount();
 
     axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
@@ -32,26 +32,26 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feeLimit', () => {
 
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0,
-    })).toThrow('options.feeLimit must be setup');
+    })).toThrow('options.feeLimit must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feePrice', () => {
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100,
-    })).toThrow('options.feePrice must be setup');
+    })).toThrow('options.feePrice must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying a sequence', () => {
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1,
-    })).toThrow('options.sequence must be setup');
+    })).toThrow('options.sequence must be set up');
   });
 
   test('Can sign an ethereum transaction', async () => {

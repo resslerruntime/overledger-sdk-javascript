@@ -26,7 +26,7 @@ abstract class AbstractDLT {
    */
   public sign(toAddress: string, message: string, options: TransactionOptions = {}): Promise<string> {
     if (!this.account) {
-      throw new Error(`The ${this.name} account must be setup`);
+      throw new Error(`The ${this.name} account must be set up`);
     }
 
     return this._sign(toAddress, message, options);
@@ -54,13 +54,21 @@ abstract class AbstractDLT {
       signedTransactions = signedTransaction;
     }
 
-    return this.sdk.send(signedTransactions.map(dlt => this.buildApiCall(dlt)));
+    return this.sdk.send(signedTransactions.map(dlt => this.buildSignedTransactionsApiCall(dlt)));
+  }
+
+  /**
+   * Get the sequence for a specific address
+   *
+   * @param {string|string[]} fromAddress
+   */
+  public getSequence(fromAddress: string): AxiosPromise<Object> {
+    return this.sdk.getSequences([{ fromAddress, dlt: this.name }]);
   }
 
   /**
    * Sign and send a DLT transaction to overledger
    *
-   * @param {string} fromAddress
    * @param {string} toAddress
    * @param {string} message
    * @param {TransactionOptions} options
@@ -80,7 +88,7 @@ abstract class AbstractDLT {
    *
    * @return {ApiCall}
    */
-  protected buildApiCall(signedTransaction: string): ApiCall {
+  protected buildSignedTransactionsApiCall(signedTransaction: string): ApiCall {
     return {
       signedTransaction,
       dlt: this.name,
@@ -108,13 +116,17 @@ abstract class AbstractDLT {
   /**
    * Fund an account
    *
-   * @param {number} amount The amount to fund
+   * @param {string} amount The amount to fund
    * @param {string} address the address to fund
    */
-  fundAccount(amount: number, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: string, address: string = null): Promise<AxiosResponse> {
+    if (typeof amount !== 'string') {
+      throw new Error('The amount parameter must be of type string');
+    }
+
     if (address === null) {
       if (!this.account) {
-        throw new Error('The account must be setup');
+        throw new Error('The account must be set up');
       }
 
       address = this.account.address;
@@ -131,7 +143,7 @@ abstract class AbstractDLT {
   getBalance(address: string = null): Promise<AxiosResponse> {
     if (address === null) {
       if (!this.account) {
-        throw new Error('The account must be setup');
+        throw new Error('The account must be set up');
       }
 
       address = this.account.address;
@@ -152,7 +164,7 @@ export type Options = {
 
 export type TransactionOptions = {
   sequence?: number,
-  amount?: string,
+  amount?: string | number,
 };
 
 export type ApiCall = {

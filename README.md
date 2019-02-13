@@ -52,11 +52,12 @@ NodeJS
 const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
 ```
 
-Initialize the SDK with the 3 available dlts.
+Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 5000ms).
 
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
+  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
+  timeout: 1500, // Optional
 });
 ```
 
@@ -75,10 +76,13 @@ The SDK provides the following functions which return a promise with a standard 
   - [getMappId](#getMappId)
   - [setBpiKey](#setBpiKey)
   - [getBpiKey](#getBpiKey)
-  - [getBalance](#getBalance)
   - [getBalances](#getBalances)
+  - [getSequences](#getSequences)
 - DLT functions
   - [Faucet](#faucet)
+  - [Account](#account)
+  - [getBalance](#getBalance)
+  - [getSequence](#getSequence)
 
 
 ### configure
@@ -107,7 +111,7 @@ Usage: `sign(dlts)`
 
 #### Parameters
 
-This function has array of DLT transaction data.
+This function takes an array of DLT transaction data.
 
 | Name   | Type  | Description                                                                 |
 | ------ | ----- | --------------------------------------------------------------------------- |
@@ -115,25 +119,43 @@ This function has array of DLT transaction data.
 
 Example of DLT transaction data:
 
+*Because the data differs between blockchain, the `options` object contains all the non-generic variables and can be different in each blockchain.*
+
 ```javascript
 [
   {
     dlt: "bitcoin",
-    fromAddress: "2NFj2CVhE5ru7werwXUNCbirUW6KDo2d",
     toAddress: "2NFj2CVhE5ru7werwXUNCbirUW6KDo2d",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: 1,
+      sequence: 2, // VOUT
+      previousTransactionHash: '77b04805f40a7cba6ed49be10d200f41462bfa266f24db91114798178c802058',
+      feePrice: 1e5,
+      value: 1
+    }
   },
   {
     dlt: "ethereum",
-    fromAddress: "0x930724bd974260Eb6C859abE2144f7e7ea73d7C1",
     toAddress: "0x0000000000000000000000000000000000000000",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: '1', // Amount in wei (1 ETH = 10^18 wei)
+      sequence: 2, // nonce
+      feeLimit: '10',
+      feePrice: '10',
+    }
   },
   {
     dlt: "ripple",
-    fromAddress: "rBLsJC9zuwn4H4z3LA8JD4fv2Nut4qf7ve",
     toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
-    data: "QNT test"
+    message: "QNT test",
+    options: {
+      amount: '1', // Amount in drops (1 XRP = 1,000,000 drops)
+      feePrice: '0.000012', // Standard fee price on the XRP network
+      sequence: 1, // Transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
+      maxLedgerVersion: 4294967295, // This is the maximum value that this option field can take
+    }
   }
 ];
 ```
@@ -277,29 +299,6 @@ This function returns a string representing the bpi key that is currently used.
 | -------- | ------ | ------------------------------------- |
 | `bpiKey` | string | String representation of the BPI key. |
 
-### getBalance
-
-Get the balance of an address or, by default, the account that is currently set.
-
-Usage: `overledger.dlts.{dltName}.getBalance(address);`
-
-#### Parameters
-
-| Name      | Type   | Description       |
-| --------- | ------ | ------------------|
-| `address` | string | Optional address. |
-
-#### Return value
-
-This function returns an object with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `address` | string | The address holding the balance                                   |
-| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
-| `value`   | string | The amount of units this address holds                            |
-
 ### getBalances
 
 Get the balances of multiple addresses
@@ -340,6 +339,44 @@ This function returns an array of objects with the following fields.
 | `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
 | `value`   | string | The amount of units this address holds                            |
 
+### getSequences
+
+Get the sequences of multiple addresses
+Usage:
+
+```
+const request = [
+	{
+		"dlt": "ethereum",
+		"fromAddress": "0x0000000000000000000000000000000000000000"
+	},
+	{
+		"dlt": "ripple",
+		"fromAddress": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+	}
+]
+
+overledger.getSequences(request);
+```
+
+#### Parameters
+
+This function accepts an array of objects with the following fields:
+
+| Name          | Type   | Description                                      |
+| ------------- | ------ | ------------------------------------------------ |
+| `dlt`         | string | The dlt where this address should be searched on |
+| `fromAddress` | string | The address for the sequence query               |
+
+#### Return value
+
+This function returns an array of objects with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `sequence`| string | The sequence number of this address                               |
+
 ### Faucet
 As per default it would take the configured address.
 From the DLT level `overledger.dlts.[dlt]`
@@ -349,13 +386,14 @@ Usage: `fundAccount(amount?, address?)`
 
 #### Parameters
 
-This function takes:
-- amount: **OPTIONAL** the dlt amount must be the lowest decimal available; ie. for bitcoin in satoshi, ripple in drops and ethereum in wei
-- address: **OPTIONAL** the dlt address.
+| Name      | Type   | Description                                                                                                               |
+| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `amount`  | string | _Optional_ The amount of tokens to fund, in the smallest unit (satoshi for Bitcoin, wei for Ethereum or drops for Ripple) |
+| `address` | string | _Optional_ The address to fund                                                                                            |
 
 #### Return Value
 
-This function returns `Promise`
+This function returns a `Promise`
 
 
 ## Types
@@ -387,6 +425,97 @@ In this section we will provide a description of the common object types.
 | `feeLimit`          | string | Maximum fee to pay for the transaction to be submitted on the DLT                                            |
 | `callbackUrl`       | string | Endpoint provided by the Mapp for the BPI layer to call back                                                 |
 | `signedTransaction` | string | Hexadecimal string representation of a signed transaction                                                    |
+
+### Account
+From the DLT level `overledger.dlts.[dlt]`
+
+#### Set Account
+This function sets the default account for the specified blockchain into the SDK, every transaction will be signed by this account
+Usage: `setAccount(privateKey)`
+*Must be a WIF key for bitcoin*
+
+##### Parameters
+
+This function takes:
+- privateKey: the privateKey belonging to the specified blockchain
+
+##### Return Value
+
+This function has no return value.
+
+#### Get Account
+This function gets the default account for the specified blockchain from the SDK
+Usage: `overledger.dlts.[dlt].account`
+
+##### Return Value
+
+This function returns
+```
+{
+  privateKey: 'string' // The privateKey belonging to the specified blockchain
+  address: 'string' // The address belonging to this privateKey
+}
+```
+*For bitcoin, the privateKey is in the WIF format*
+
+#### Create Account
+This function creates an account for the specified blockchain from the SDK
+Usage: `overledger.dlts.[dlt].createAccount()`
+
+##### Return Value
+
+This function returns
+```
+{
+  privateKey: 'string' // The privateKey belonging to the specified blockchain
+  address: 'string' // The address belonging to this privateKey
+}
+```
+*For bitcoin, the privateKey is in the WIF format*
+
+### getBalance
+
+Get the balance of an address or, by default, the account that is currently set.
+
+Usage: `overledger.dlts.{dltName}.getBalance(address);`
+
+#### Parameters
+
+| Name      | Type   | Description       |
+| --------- | ------ | ------------------|
+| `address` | string | Optional address. |
+
+#### Return value
+
+This function returns an object with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `address` | string | The address holding the balance                                   |
+| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
+| `value`   | string | The amount of units this address holds                            |
+
+
+### getSequence
+
+Get the sequence of an address
+Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000000000000');`
+
+#### Parameters
+
+| Name          | Type   | Description                                      |
+| ------------- | ------ | ------------------------------------------------ |
+| `fromAddress` | string | The address for the sequence query               |
+
+#### Return value
+
+This function returns an array of objects with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `sequence`| string | The sequence number of this address                               |
 
 
 ## Usage Example
