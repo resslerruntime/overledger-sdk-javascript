@@ -1,7 +1,7 @@
 {
-  "name": "@overledger/ripple",
+  "name": "@overledger/search",
   "version": "1.0.0-alpha.8",
-  "description": "Quant Network Overledger Ripple software development kit (SDK) for the JavaScript (JS) programming language.",
+  "description": "Quant Network Overledger Search software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
@@ -21,9 +21,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "event-stream": "3.3.4",
-    "ripple-keypairs": "^0.10.1",
-    "ripple-lib": "^1.1.1",
-    "typedarray-to-buffer": "^3.1.5"
+    "typedarray-to-buffer": "^3.1.5",
+    "web3": "<=1.0.0-beta.36"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
