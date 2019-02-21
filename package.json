@@ -1,5 +1,6 @@
 {
   "name": "overledger",
+  "private": true,
   "version": "1.0.0-alpha.9",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",

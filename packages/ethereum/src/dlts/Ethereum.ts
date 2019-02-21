@@ -1,6 +1,6 @@
 import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
-import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
+import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/abstract-dlt';
 import OverledgerSDK from '../';
 import { AxiosResponse } from 'axios';
 

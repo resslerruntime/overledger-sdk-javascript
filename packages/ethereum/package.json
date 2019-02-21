@@ -19,9 +19,8 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
+    "@overledger/abstract-dlt": "^1.0.0-aplha.8",
     "axios": "^0.18.0",
-    "event-stream": "3.3.4",
-    "typedarray-to-buffer": "^3.1.5",
     "web3": "<=1.0.0-beta.36"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import OverledgerSDK from '../';
+import OverledgerSDK from '@overledger/core';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {

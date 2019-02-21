@@ -2,7 +2,7 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import OverledgerSDK from '../';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
-import AbstractDlt, { Account, Options, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
+import AbstractDlt, { Account, Options, TransactionOptions as BaseTransactionOptions } from '@overledger/abstract-dlt';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 import { AxiosResponse } from 'axios';

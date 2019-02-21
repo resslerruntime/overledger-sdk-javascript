@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import Search from './Search';
-import ucFirst from './utils/ucFirst';
-import AbstractDLT, { ApiCall, TransactionOptions } from './dlts/AbstractDlt';
+import AbstractDLT, { ApiCall, TransactionOptions } from '@overledger/abstract-dlt';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
@@ -136,7 +135,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require(`./dlts/${ucFirst(config.dlt)}`).default;
+    const Provider = require(`@quantnetwork/${config.dlt}`).default;
 
     return new Provider(this, config);
   }
