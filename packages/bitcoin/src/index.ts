@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import AbstractDLT, { ApiCall, TransactionOptions } from '@overledger/abstract-dlt';
+import AbstractDLT from '@overledger/abstract-dlt';
+import { ApiCall, SDKOptions, DltOptions, SignOptions, SignedTransactionResponse, sequenceDataRequest, WrapperApiCall } from '../../types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
@@ -188,43 +189,5 @@ class OverledgerSDK {
     return this.request.post('/balances', array);
   }
 }
-
-export type SignedTransactionResponse = {
-  dlt: string,
-  signedTransaction: string,
-};
-
-export type SDKOptions = {
-  dlts: DltOptions[],
-  network?: 'mainnet' | 'testnet',
-  timeout?: number,
-};
-
-export type DltOptions = {
-  dlt: string,
-  privateKey?: string,
-};
-
-export type WrapperApiCall = {
-  mappId: string,
-  dltData: ApiCall[] | sequenceDataRequest[],
-};
-
-export type SignOptions = [{
-  dlt: string,
-  toAddress: string,
-  message: string,
-  options: TransactionOptions,
-}];
-
-export type sequenceDataRequest = {
-  dlt: string,
-  fromAddress: string,
-};
-
-export type sequenceDataResponse = [{
-  dlt: string,
-  sequence: number,
-}];
 
 export default OverledgerSDK;

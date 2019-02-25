@@ -1,4 +1,4 @@
-import OverledgerSDK from '@overledger/core';
+import { OverledgerSDK, TransactionOptions, ApiCall, Account } from '../../types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {
@@ -152,24 +152,5 @@ abstract class AbstractDLT {
     return this.sdk.request.get(`/balances/${this.name}/${address}`);
   }
 }
-
-export type Account = {
-  privateKey: string,
-  address: string,
-};
-
-export type Options = {
-  privateKey?: string,
-};
-
-export type TransactionOptions = {
-  sequence?: number,
-  amount?: string | number,
-};
-
-export type ApiCall = {
-  dlt: string,
-  signedTransaction: string,
-};
 
 export default AbstractDLT;

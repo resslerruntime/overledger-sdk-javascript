@@ -19,7 +19,6 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/abstract-dlt": "^1.0.0-aplha.8",
     "@overledger/bitcoin": "^1.0.0-alpha.8",
     "@overledger/ethereum": "^1.0.0-alpha.8",
     "@overledger/ripple": "^1.0.0-alpha.8",

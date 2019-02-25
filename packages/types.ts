@@ -1,5 +1,63 @@
 import { AxiosInstance } from 'axios';
-declare class OverledgerSDK {
+
+export type Account = {
+  privateKey: string,
+  address: string,
+};
+
+export type Options = {
+  privateKey?: string,
+};
+
+export type TransactionOptions = {
+  sequence?: number,
+  amount?: string | number,
+};
+
+export type ApiCall = {
+  dlt: string,
+  signedTransaction: string,
+};
+
+export type SignedTransactionResponse = {
+  dlt: string,
+  signedTransaction: string,
+};
+
+export type SDKOptions = {
+  dlts: DltOptions[],
+  network?: 'mainnet' | 'testnet',
+  timeout?: number,
+};
+
+export type DltOptions = {
+  dlt: string,
+  privateKey?: string,
+};
+
+export type WrapperApiCall = {
+  mappId: string,
+  dltData: ApiCall[] | sequenceDataRequest[],
+};
+
+export type SignOptions = [{
+  dlt: string,
+  toAddress: string,
+  message: string,
+  options: TransactionOptions,
+}];
+
+export type sequenceDataRequest = {
+  dlt: string,
+  fromAddress: string,
+};
+
+export type sequenceDataResponse = [{
+  dlt: string,
+  sequence: number,
+}];
+
+export declare class OverledgerSDK {
     TESTNET: string;
     MAINNET: string;
     /**
@@ -88,5 +146,32 @@ declare class OverledgerSDK {
      * get the bpi key
      */
     getBpiKey(): string;
-}
-export default OverledgerSDK;
+};
+
+export declare class Search {
+  sdk: OverledgerSDK;
+  request: AxiosInstance;
+  /**
+   * @param {Object} sdk
+   * @param {Object} options
+   */
+  constructor(sdk: any);
+  /**
+   * Get transaction by a transaction hash (non-deterministic)
+   *
+   * @param {string} transactionHash Transaction hash
+   */
+  getTransaction(transactionHash: any): Promise<any>;
+  /**
+   * Get whoami
+   *
+   * @param {string} hash hash
+   */
+  whoami(hash: any): Promise<any>; 
+  /**
+   * Get block
+   *
+   * @param {string} hashOrNumber hash or number
+   */
+  getBlockByDltAndHash(dlt: any, hashOrNumber: any): Promise<any>;
+};
