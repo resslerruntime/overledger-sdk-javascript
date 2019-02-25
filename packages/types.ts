@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios';
 
 export type Account = {
   privateKey: string,
@@ -107,7 +107,7 @@ export declare class OverledgerSDK {
      *
      * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
      */
-    send(signedTransactions: any): import("axios").AxiosPromise<any>;
+    send(signedTransactions: any): AxiosPromise<any>;
     /**
      * Load the dlt to the Overledger SDK
      *
@@ -146,6 +146,10 @@ export declare class OverledgerSDK {
      * get the bpi key
      */
     getBpiKey(): string;
+    /**
+     * get the sequence for the required address
+     */
+    getSequences(sequenceData: sequenceDataRequest[]): AxiosPromise<sequenceDataResponse>;
 };
 
 export declare class Search {
@@ -174,4 +178,99 @@ export declare class Search {
    * @param {string} hashOrNumber hash or number
    */
   getBlockByDltAndHash(dlt: any, hashOrNumber: any): Promise<any>;
+};
+
+export declare class AbstractDLT {
+  name: string;
+  sdk: OverledgerSDK;
+  options: Object;
+
+  account?: Account;
+
+  constructor(sdk: OverledgerSDK, options: Object);
+
+  /**
+   * Sign a transaction for the DLT
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
+   */
+  sign(toAddress: string, message: string, options: TransactionOptions): Promise<string>;
+
+  /**
+   * Internal method to sign a transaction for the DLT
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {Object} options
+   */
+  _sign(toAddress: string, message: string, options?: TransactionOptions): Promise<string>;
+
+  /**
+   * Send a signed transactions array to overledger
+   *
+   * @param {string|string[]} signedTransaction
+   */
+  send(signedTransaction: string | string[]): AxiosPromise<Object>;
+
+  /**
+   * Get the sequence for a specific address
+   *
+   * @param {string|string[]} fromAddress
+   */
+  getSequence(fromAddress: string): AxiosPromise<sequenceDataResponse>;
+
+  /**
+   * Sign and send a DLT transaction to overledger
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
+   *
+   * @return {Promise<axios>}
+   */
+  signAndSend(toAddress: string, message: string, options: TransactionOptions): Promise<AxiosResponse>;
+
+  /**
+   * Wrap a specific DLT signed transaction with the overledger
+   *
+   * @param {string} signedTransaction
+   *
+   * @return {ApiCall}
+   */
+  buildSignedTransactionsApiCall(signedTransaction: string): ApiCall;
+
+  /**
+   * Create an account for a specific DLT
+   *
+   * @typedef {Object} Account
+   * @property {string} privateKey The privateKey
+   * @property {string} address The address
+   *
+   * @return {Account}
+   */
+  createAccount(): Account;
+
+  /**
+   * Set an account for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
+   */
+  setAccount(privateKey: string): void;
+
+  /**
+   * Fund an account
+   *
+   * @param {string} amount The amount to fund
+   * @param {string} address the address to fund
+   */
+  fundAccount(amount: string, address: string): Promise<AxiosResponse>;
+
+  /**
+   * Get the balance for a specific address
+   *
+   * @param {string} address The address to look at
+   */
+  getBalance(address: string): Promise<AxiosResponse>;
 };

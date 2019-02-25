@@ -1,7 +1,7 @@
 import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
-import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/abstract-dlt';
-import OverledgerSDK from '../';
+import AbstractDLT from '@overledger/abstract-dlt';
+import { OverledgerSDK, Options, Account, TransactionOptions as BaseTransactionOptions } from '../../../types';
 import { AxiosResponse } from 'axios';
 
 class Ethereum extends AbstractDLT {
