@@ -130,7 +130,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require(`@quantnetwork/${config.dlt}`).default;
+    const Provider = require(`@quantnetwork/${config.dlt}`);
 
     return new Provider(this, config);
   }

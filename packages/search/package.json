@@ -1,6 +1,6 @@
 {
   "name": "@overledger/search",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger Search software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,6 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    
     "axios": "^0.18.0",
     "event-stream": "3.3.4",
     "typedarray-to-buffer": "^3.1.5",

@@ -1,6 +1,6 @@
 {
   "name": "@overledger/core",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
@@ -19,10 +19,10 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/bitcoin": "^1.0.0-alpha.8",
-    "@overledger/ethereum": "^1.0.0-alpha.8",
-    "@overledger/ripple": "^1.0.0-alpha.8",
-    "@overledger/search": "^1.0.0-alpha.8",
+    "@overledger/bitcoin": "^1.0.0-beta.1",
+    "@overledger/ethereum": "^1.0.0-beta.1",
+    "@overledger/ripple": "^1.0.0-beta.1",
+    "@overledger/search": "^1.0.0-beta.1",
     "axios": "^0.18.0"
   },
   "devDependencies": {

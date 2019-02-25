@@ -1,7 +1,7 @@
 {
   "name": "overledger",
   "private": true,
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "test": "jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && tsc",
-    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'"
+    "build": "lerna bootstrap & lerna exec -- npm run build",
+    "lint": "tslint -c tslint.json --project tsconfig.json 'packages/*/src/**/*.ts'"
   },
   "repository": {
     "type": "git",
