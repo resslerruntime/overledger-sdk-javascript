@@ -2,7 +2,7 @@
   "name": "@overledger/search",
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger Search software development kit (SDK) for the JavaScript (JS) programming language.",
-  "main": "dist/index.js",
+  "main": "dist/search/src/index.js",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",

@@ -4,7 +4,7 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 abstract class AbstractDLT {
   name: string;
   sdk: OverledgerSDK;
-  options: {};
+  options: Object;
 
   account?: Account;
 

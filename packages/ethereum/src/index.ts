@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import AbstractDLT, { ApiCall, TransactionOptions } from '@quantnetwork/abstract-dlt';
+import { AbstractDLT, ApiCall, TransactionOptions } from '../../types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
