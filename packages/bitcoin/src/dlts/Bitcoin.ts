@@ -7,6 +7,8 @@ class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT: number = 546;
   addressType: string;
   privateKey: string;
+  account: Account;
+  options: Object;
 
   /**
    * Name of the DLT

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
-import { ApiCall, TransactionOptions, AbstractDLT } from '../../types';
+import { ApiCall, AbstractDLT, SDKOptions, DltOptions, SignOptions, SignedTransactionResponse, sequenceDataRequest, WrapperApiCall } from '../../types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
@@ -135,7 +135,8 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require(`@quantnetwork/${config.dlt}`);
+    let dltName = config.dlt.charAt(0).toUpperCase() + config.dlt.slice(1);
+    const Provider = require(`../../${config.dlt}/src/dlts/${dltName}`).default;
 
     return new Provider(this, config);
   }
@@ -193,43 +194,5 @@ class OverledgerSDK {
     return this.request.post('/balances', array);
   }
 }
-
-export type SignedTransactionResponse = {
-  dlt: string,
-  signedTransaction: string,
-};
-
-export type SDKOptions = {
-  dlts: DltOptions[],
-  network?: 'mainnet' | 'testnet',
-  timeout?: number,
-};
-
-export type DltOptions = {
-  dlt: string,
-  privateKey?: string,
-};
-
-export type WrapperApiCall = {
-  mappId: string,
-  dltData: ApiCall[] | sequenceDataRequest[],
-};
-
-export type SignOptions = [{
-  dlt: string,
-  toAddress: string,
-  message: string,
-  options: TransactionOptions,
-}];
-
-export type sequenceDataRequest = {
-  dlt: string,
-  fromAddress: string,
-};
-
-export type sequenceDataResponse = [{
-  dlt: string,
-  sequence: number,
-}];
 
 export default OverledgerSDK;

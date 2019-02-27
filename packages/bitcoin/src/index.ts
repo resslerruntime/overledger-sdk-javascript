@@ -130,7 +130,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require(`@quantnetwork/${config.dlt}`);
+    const Provider = require('./dlts/Bitcoin').default;
 
     return new Provider(this, config);
   }

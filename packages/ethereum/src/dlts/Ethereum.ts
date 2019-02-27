@@ -7,6 +7,7 @@ import { AxiosResponse } from 'axios';
 class Ethereum extends AbstractDLT {
   chainId: number;
   account: Accounts;
+  options: Object;
   web3: Web3;
 
   /**

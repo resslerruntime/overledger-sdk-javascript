@@ -131,7 +131,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require(`@quantnetwork/${config.dlt}`);
+    const Provider = require('./dlts/Ripple').default;
 
     return new Provider(this, config);
   }

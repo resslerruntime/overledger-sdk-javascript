@@ -3,7 +3,7 @@ import OverledgerSDK from '../src';
 
 jest.mock('axios');
 
-describe('Search', () => {
+describe.skip('Search', () => {
   let overledger;
 
   beforeAll(() => {
