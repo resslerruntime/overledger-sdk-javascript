@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
-import { ApiCall, AbstractDLT, SDKOptions, DltOptions, SignOptions, SignedTransactionResponse, sequenceDataRequest, WrapperApiCall } from '../../types';
+import { ApiCall, AbstractDLT, SDKOptions, DltOptions, SignOptions, SignedTransactionResponse, sequenceDataRequest, WrapperApiCall } from '@overledger/types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';

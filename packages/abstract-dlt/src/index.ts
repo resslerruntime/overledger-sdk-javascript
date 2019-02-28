@@ -1,4 +1,4 @@
-import { OverledgerSDK, TransactionOptions, ApiCall, Account } from '../../types';
+import { OverledgerSDK, TransactionOptions, ApiCall, Account } from '@overledger/types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {

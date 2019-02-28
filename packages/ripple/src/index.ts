@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import AbstractDLT from '@overledger/abstract-dlt';
-import { ApiCall, TransactionOptions } from '../../types';
+import { ApiCall, TransactionOptions } from '@overledger/types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
