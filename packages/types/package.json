@@ -2,14 +2,12 @@
   "name": "@overledger/types",
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger types package for the JavaScript (JS) programming language.",
-  "main": "dist/types/src/index.js",
-  "types": "src/index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
-    "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && tsc",
+    "build": "echo \"Nothing to build\" && exit 0",
     "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": {

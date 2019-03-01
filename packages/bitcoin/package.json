@@ -2,7 +2,7 @@
   "name": "@overledger/bitcoin",
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger Bitcoin software development kit (SDK) for the JavaScript (JS) programming language.",
-  "main": "dist/bitcoin/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",

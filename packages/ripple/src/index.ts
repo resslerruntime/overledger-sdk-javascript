@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import AbstractDLT from '@overledger/abstract-dlt';
-import { ApiCall, TransactionOptions } from '@overledger/types';
+import { DLTOptions, SDKOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICall, APICallWrapper } from '@overledger/types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
@@ -48,7 +48,7 @@ class OverledgerSDK {
    * @param {Object} options
    */
   private configure(options: SDKOptions): void {
-    options.dlts.forEach((dltConfig: DltOptions) => {
+    options.dlts.forEach((dltConfig: DLTOptions) => {
       const dlt = this.loadDlt(dltConfig);
       this.dlts[dlt.name] = dlt;
     });
@@ -93,7 +93,7 @@ class OverledgerSDK {
    *
    * @param {array} dltData
    */
-  private buildWrapperApiCall(dltData: ApiCall[] | sequenceDataRequest[]): WrapperApiCall {
+  private buildWrapperApiCall(dltData: APICall[] | SequenceDataRequest[]): APICallWrapper {
     return {
       dltData,
       mappId: this.mappId,
@@ -118,7 +118,7 @@ class OverledgerSDK {
    *
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
-  public getSequences(sequenceData: sequenceDataRequest[]): AxiosPromise<Object> {
+  public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<Object> {
     return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
   }
 
@@ -129,7 +129,7 @@ class OverledgerSDK {
    *
    * @return {Provider}
    */
-  private loadDlt(config: DltOptions): AbstractDLT {
+  private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
     const Provider = require('./dlts/Ripple').default;
 
@@ -189,43 +189,5 @@ class OverledgerSDK {
     return this.request.post('/balances', array);
   }
 }
-
-export type SignedTransactionResponse = {
-  dlt: string,
-  signedTransaction: string,
-};
-
-export type SDKOptions = {
-  dlts: DltOptions[],
-  network?: 'mainnet' | 'testnet',
-  timeout?: number,
-};
-
-export type DltOptions = {
-  dlt: string,
-  privateKey?: string,
-};
-
-export type WrapperApiCall = {
-  mappId: string,
-  dltData: ApiCall[] | sequenceDataRequest[],
-};
-
-export type SignOptions = [{
-  dlt: string,
-  toAddress: string,
-  message: string,
-  options: TransactionOptions,
-}];
-
-export type sequenceDataRequest = {
-  dlt: string,
-  fromAddress: string,
-};
-
-export type sequenceDataResponse = [{
-  dlt: string,
-  sequence: number,
-}];
 
 export default OverledgerSDK;

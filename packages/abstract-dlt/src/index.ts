@@ -1,4 +1,4 @@
-import { OverledgerSDK, TransactionOptions, ApiCall, Account } from '@overledger/types';
+import { OverledgerSDK, TransactionOptions, APICall, Account } from '@overledger/types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {
@@ -88,7 +88,7 @@ abstract class AbstractDLT {
    *
    * @return {ApiCall}
    */
-  protected buildSignedTransactionsApiCall(signedTransaction: string): ApiCall {
+  protected buildSignedTransactionsApiCall(signedTransaction: string): APICall {
     return {
       signedTransaction,
       dlt: this.name,

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import { ApiCall, SDKOptions, DltOptions, SignOptions, SignedTransactionResponse, sequenceDataRequest, WrapperApiCall, AbstractDLT } from '@overledger/types';
+import { APICall, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper, AbstractDLT } from '@overledger/types';
 
 class OverledgerSDK {
   TESTNET: string = 'testnet';
@@ -47,7 +47,7 @@ class OverledgerSDK {
    * @param {Object} options
    */
   private configure(options: SDKOptions): void {
-    options.dlts.forEach((dltConfig: DltOptions) => {
+    options.dlts.forEach((dltConfig: DLTOptions) => {
       const dlt = this.loadDlt(dltConfig);
       this.dlts[dlt.name] = dlt;
     });
@@ -92,7 +92,7 @@ class OverledgerSDK {
    *
    * @param {array} dltData
    */
-  private buildWrapperApiCall(dltData: ApiCall[] | sequenceDataRequest[]): WrapperApiCall {
+  private buildWrapperApiCall(dltData: APICall[] | SequenceDataRequest[]): APICallWrapper {
     return {
       dltData,
       mappId: this.mappId,
@@ -117,7 +117,7 @@ class OverledgerSDK {
    *
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
-  public getSequences(sequenceData: sequenceDataRequest[]): AxiosPromise<Object> {
+  public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<Object> {
     return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
   }
 
@@ -128,7 +128,7 @@ class OverledgerSDK {
    *
    * @return {Provider}
    */
-  private loadDlt(config: DltOptions): AbstractDLT {
+  private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
     const Provider = require('./dlts/Bitcoin').default;
 
