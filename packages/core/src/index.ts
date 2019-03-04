@@ -135,10 +135,10 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
-    let dltName = config.dlt.charAt(0).toUpperCase() + config.dlt.slice(1);
-    const Provider = require(`../../${config.dlt}/src/dlts/${dltName}`).default;
+    const dltName = config.dlt.charAt(0).toUpperCase() + config.dlt.slice(1);
+    const provider = require(`../../${config.dlt}/src/dlts/${dltName}`).default;
 
-    return new Provider(this, config);
+    return new provider(this, config);
   }
 
   /**

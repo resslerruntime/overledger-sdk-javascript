@@ -131,9 +131,9 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require('./dlts/Ripple').default;
+    const provider = require('./dlts/Ripple').default;
 
-    return new Provider(this, config);
+    return new provider(this, config);
   }
 
   /**

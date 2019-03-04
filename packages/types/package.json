@@ -8,7 +8,7 @@
     "test": "jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "build": "echo \"Nothing to build\" && exit 0",
-    "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'"
+    "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",

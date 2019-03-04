@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",
     "build": "lerna exec -- npm run build",
-    "lint": "tslint -c tslint.json --project tsconfig.json 'packages/*/src/**/*.ts'"
+    "lint": "lerna exec -- npm run lint"
   },
   "repository": {
     "type": "git",

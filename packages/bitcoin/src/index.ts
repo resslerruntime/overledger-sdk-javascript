@@ -130,9 +130,9 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
-    const Provider = require('./dlts/Bitcoin').default;
+    const provider = require('./dlts/Bitcoin').default;
 
-    return new Provider(this, config);
+    return new provider(this, config);
   }
 
   /**

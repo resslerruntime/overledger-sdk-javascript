@@ -27,5 +27,5 @@ export {
   SequenceDataResponse,
   SignedTransactionResponse,
   SignOptions,
-  TransactionOptions
-}
+  TransactionOptions,
+};

@@ -20,7 +20,7 @@ declare class Search {
    *
    * @param {string} hash hash
    */
-  whoami(hash: any): Promise<any>; 
+  whoami(hash: any): Promise<any>;
   /**
    * Get block
    *

@@ -64,11 +64,11 @@ class Search {
   /**
    * Get block number
    *
-   * @param {number} number block number
+   * @param {number} blockNumber block number
    */
-  async getBlockByDltAndNumber(dlt, number) {
+  async getBlockByDltAndNumber(dlt, blockNumber) {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
+      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${blockNumber}`);
       return response;
     } catch (e) {
       return e.response;
