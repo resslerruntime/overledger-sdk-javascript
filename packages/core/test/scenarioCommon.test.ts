@@ -38,7 +38,6 @@ describe('Dlt/Common', () => {
           ],
         });
         expect(axios.create.mock.calls[0][0].timeout).toEqual(5000);
-        expect(axios.create.mock.calls[1][0].timeout).toEqual(5000);
       })
 
       test.skip('Can specify a custom request timeout', () => {
@@ -55,7 +54,6 @@ describe('Dlt/Common', () => {
           timeout: 2000,
         });
         expect(axios.create.mock.calls[0][0].timeout).toEqual(2000);
-        expect(axios.create.mock.calls[1][0].timeout).toEqual(2000);
       })
 
       test('Can get name', () => {

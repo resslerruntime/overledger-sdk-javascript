@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import { AxiosInstance, AxiosPromise } from 'axios';
+import overledgerRequest from '@overledger/network';
 import { SDKOptions, AbstractDLT, APICall, SignOptions, SignedTransactionResponse, APICallWrapper, SequenceDataRequest, DLTOptions} from '@overledger/types';
 
 class OverledgerSDK {
@@ -27,7 +28,27 @@ class OverledgerSDK {
     this.bpiKey = bpiKey;
 
     this.validateOptions(options);
-    this.configure(options);
+
+    options.dlts.forEach((dltConfig: DLTOptions) => {
+      const dlt = this.loadDlt(dltConfig);
+      this.dlts[dlt.name] = dlt;
+    });
+
+    this.request = overledgerRequest(mappId, bpiKey, options);
+  }
+
+    /**
+   * Load the dlt to the Overledger SDK
+   *
+   * @param {Object} config
+   *
+   * @return {Provider}
+   */
+  private loadDlt(config: DLTOptions): AbstractDLT {
+    // Need to improve this loading
+    const provider = require('./dlts/Ethereum').default;
+
+    return new provider(this, config);
   }
 
   /**
@@ -39,34 +60,6 @@ class OverledgerSDK {
     if (!options.dlts) {
       throw new Error('The dlts are missing');
     }
-  }
-
-  /**
-   * Configure the provided options
-   *
-   * @param {Object} options
-   */
-  private configure(options: SDKOptions): void {
-    options.dlts.forEach((dltConfig: DLTOptions) => {
-      const dlt = this.loadDlt(dltConfig);
-      this.dlts[dlt.name] = dlt;
-    });
-
-    this.network = options.network || this.TESTNET;
-
-    if (this.network === this.MAINNET) {
-      this.overledgerUri = 'https://bpi.overledger.io/v1';
-    } else {
-      this.overledgerUri = 'https://bpi.testnet.overledger.io/v1';
-    }
-
-    this.request = axios.create({
-      baseURL: this.overledgerUri,
-      timeout: options.timeout || 5000,
-      headers: {
-        Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
-      },
-    });
   }
 
   /**
@@ -119,20 +112,6 @@ class OverledgerSDK {
    */
   public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<Object> {
     return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
-  }
-
-  /**
-   * Load the dlt to the Overledger SDK
-   *
-   * @param {Object} config
-   *
-   * @return {Provider}
-   */
-  private loadDlt(config: DLTOptions): AbstractDLT {
-    // Need to improve this loading
-    const provider = require('./dlts/Ethereum').default;
-
-    return new provider(this, config);
   }
 
   /**

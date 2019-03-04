@@ -20,6 +20,7 @@
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
     "@overledger/abstract-dlt": "1.0.0-beta.1",
+    "@overledger/network": "^1.0.0-beta.1",
     "@overledger/types": "^1.0.0-beta.1",
     "axios": "^0.18.0",
     "bitcoinjs-lib": "^4.0.2",
