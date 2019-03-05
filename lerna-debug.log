@@ -1,0 +1,13 @@
+0 silly argv { _: [ 'bootstrap' ], lernaVersion: '3.13.0', '$0': 'lerna' }
+1 notice cli v3.13.0
+2 verbose rootPath /Users/alex/dev/quant/Overledger/overledger-sdk-javascript
+3 error Error: Invalid tag name "^^24.1.0": Tags may not have any characters that encodeURIComponent encodes.
+3 error     at invalidTagName (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:87:15)
+3 error     at fromRegistry (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:290:13)
+3 error     at Function.resolve (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:77:12)
+3 error     at Object.keys.forEach.depName (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:109:30)
+3 error     at Array.forEach (<anonymous>)
+3 error     at PackageGraph.forEach (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:103:38)
+3 error     at Map.forEach (<anonymous>)
+3 error     at new PackageGraph (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:92:10)
+3 error     at chain.then.packages (/Users/alex/.nvm/versions/node/v8.14.0/lib/node_modules/lerna/node_modules/@lerna/command/index.js:263:27)

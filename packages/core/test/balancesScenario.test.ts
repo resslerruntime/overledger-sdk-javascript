@@ -2,6 +2,7 @@ import axios from "axios";
 import OverledgerSDK from "../src";
 
 jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Balances", () => {
   let overledger;
@@ -36,7 +37,7 @@ describe("Balances", () => {
 
     overledger.getBalances(array);
 
-    axios.post.mockResolvedValue([
+    mockedAxios.post.mockResolvedValue([
       {
         dlt: "ethereum",
         address: "0x0000000000000000000000000000000000000000",
@@ -50,6 +51,6 @@ describe("Balances", () => {
         value: "202995413"
       }
     ]);
-    expect(axios.post).toBeCalledWith("/balances", array);
+    expect(mockedAxios.post).toBeCalledWith("/balances", array);
   });
 });

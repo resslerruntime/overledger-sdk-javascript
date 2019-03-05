@@ -2,6 +2,7 @@ import axios from 'axios';
 import OverledgerSDK from '../src';
 
 jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Dlt/RippleAndEthereum', () => {
   describe('Main read functions', () => {
@@ -17,7 +18,7 @@ describe('Dlt/RippleAndEthereum', () => {
         ],
       });
 
-      axios.post.mockResolvedValue([
+      mockedAxios.post.mockResolvedValue([
         {
           mappId: 'mappTestId',
           overledgerTransactionId: null,
@@ -48,7 +49,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.getSequences(params);
 
-      expect(axios.post).toBeCalledWith('/sequence', {
+      expect(mockedAxios.post).toBeCalledWith('/sequence', {
         mappId: 'testmappid',
         dltData: [
           {
@@ -76,7 +77,7 @@ describe('Dlt/RippleAndEthereum', () => {
         ],
       });
 
-      axios.post.mockResolvedValue([
+      mockedAxios.post.mockResolvedValue([
         {
           mappId: 'mappTestId',
           overledgerTransactionId: null,
@@ -92,7 +93,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.dlts.ethereum.getSequence(ethAddress);
 
-      expect(axios.post).toBeCalledWith('/sequence', {
+      expect(mockedAxios.post).toBeCalledWith('/sequence', {
         mappId: 'testmappid',
         dltData: [
           {
@@ -115,7 +116,7 @@ describe('Dlt/RippleAndEthereum', () => {
         ],
       });
 
-      axios.get.mockResolvedValue([
+      mockedAxios.get.mockResolvedValue([
         {
           mappId: 'mappTestId',
           overledgerTransactionId: 'c2559f8d-d181-4ba3-9012-a47d6b6c6111',
@@ -134,7 +135,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.readTransactionsByMappId();
 
-      expect(axios.get).toBeCalledWith('/transactions/mappid/testmappid');
+      expect(mockedAxios.get).toBeCalledWith('/transactions/mappid/testmappid');
     });
 
     test('Can read transactions by overledger transaction id', async () => {
@@ -149,7 +150,7 @@ describe('Dlt/RippleAndEthereum', () => {
         ],
       });
 
-      axios.get.mockResolvedValue({
+      mockedAxios.get.mockResolvedValue({
         mappId: 'mappTestId',
         overledgerTransactionId: '70cb4832-bbd0-400f-a6d8-2add51deb111',
         timestamp: '2018-09-07T23:36:49.832Z',
@@ -167,7 +168,7 @@ describe('Dlt/RippleAndEthereum', () => {
       const transactionId = '70cb4832-bbd0-400f-a6d8-2add51deb111';
       await overledger.readByTransactionId(transactionId);
 
-      expect(axios.get).toBeCalledWith(`/transactions/id/${transactionId}`);
+      expect(mockedAxios.get).toBeCalledWith(`/transactions/id/${transactionId}`);
     });
   });
 
@@ -241,14 +242,14 @@ describe('Dlt/RippleAndEthereum', () => {
     });
 
     test('Can send ripple & ethereum signedTransactions', async () => {
-      axios.post.mockResolvedValue([
+      mockedAxios.post.mockResolvedValue([
         { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ]);
 
       await overledger.send(signedTransactions);
 
-      expect(axios.post).toBeCalledWith('/transactions', {
+      expect(mockedAxios.post).toBeCalledWith('/transactions', {
         mappId: 'testmappid',
         dltData:
           [
@@ -335,14 +336,14 @@ describe('Dlt/RippleAndEthereum', () => {
     });
 
     test('Can send ripple & ethereum signedTransactions', async () => {
-      axios.post.mockResolvedValue([
+      mockedAxios.post.mockResolvedValue([
         { dlt: 'ripple', status: 'broadcasted', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' },
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ]);
 
       await overledger.send(signedTransactions);
 
-      expect(axios.post).toBeCalledWith('/transactions', {
+      expect(mockedAxios.post).toBeCalledWith('/transactions', {
         mappId: 'testmappid',
         dltData: [
           {

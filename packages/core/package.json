@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "@types/web3": "^1.0.12",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "lerna": "^3.13.0",
     "merge": ">=1.2.1",
     "nodemon": "^1.18.6",

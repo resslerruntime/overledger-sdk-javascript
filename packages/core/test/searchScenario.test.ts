@@ -2,6 +2,7 @@ import axios from 'axios';
 import OverledgerSDK from '../src';
 
 jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe.skip('Search', () => {
   let overledger;
@@ -16,7 +17,7 @@ describe.skip('Search', () => {
 
   test('Can search for a transaction by transaction Hash', async () => {
     const transactionHash = 'a91894a935135295ba9ba65cc142b59d9c729e71a063528d90e05152ca97b5d0';
-    axios.get.mockResolvedValue({
+    mockedAxios.get.mockResolvedValue({
       dlt: 'bitcoin',
       data: {
         m: {
@@ -46,13 +47,13 @@ describe.skip('Search', () => {
     });
     await overledger.search.getTransaction(transactionHash);
 
-    expect(axios.get).toBeCalledWith(`/transactions/${transactionHash}`);
+    expect(mockedAxios.get).toBeCalledWith(`/transactions/${transactionHash}`);
   });
 
   test('Can search for a block by dlt and Hash', async () => {
     const dlt = 'bitcoin';
     const hash = '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a';
-    axios.get.mockResolvedValue({
+    mockedAxios.get.mockResolvedValue({
       dlt,
       data: {
         m: {
@@ -89,7 +90,7 @@ describe.skip('Search', () => {
   test('Can search for a block by dlt and Number', async () => {
     const dlt = 'bitcoin';
     const number = 42;
-    axios.get.mockResolvedValue({
+    mockedAxios.get.mockResolvedValue({
       dlt,
       data: {
         m: {

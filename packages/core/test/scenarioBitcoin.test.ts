@@ -2,6 +2,7 @@ import axios from 'axios';
 import OverledgerSDK from '../src';
 
 jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Dlt/Bitcoin', () => {
   let overledger;
@@ -28,14 +29,14 @@ describe('Dlt/Bitcoin', () => {
   test('Can fund the set up account with the default amount', () => {
     overledger.dlts.bitcoin.fundAccount();
 
-    axios.post.mockResolvedValue({ status: 'OK',
+    mockedAxios.post.mockResolvedValue({ status: 'OK',
     message: null,
     address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
     amount: 1,
     txnHash:
      '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
     vout: 1 });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
+    expect(mockedAxios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
   });
 
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
@@ -64,10 +65,10 @@ describe('Dlt/Bitcoin', () => {
 
   // @TODO: Needs to be fix
   test.skip('Can send a bitcoin signedTransaction', async () => {
-    axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' });
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' });
     await overledger.dlts.bitcoin.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(mockedAxios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
       mappId: 'testmappid',
       dltData:
         [{
@@ -79,10 +80,10 @@ describe('Dlt/Bitcoin', () => {
 
   // @TODO: Needs to be fix
   test.skip('Can signAndSend a bitcoin transaction', async () => {
-    axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' });
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' });
     await overledger.dlts.bitcoin.signAndSend('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1, previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(mockedAxios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
       mappId: 'testmappid',
       dltData:
         [{

@@ -4,19 +4,13 @@ import overledgerRequest from '@overledger/network';
 import { APICall, AbstractDLT, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
 
 class OverledgerSDK {
-  TESTNET: string = 'testnet';
-
-  MAINNET: string = 'mainnet';
-
   /**
    * The object storing the DLTs loaded by the Overledger sdk
    */
   dlts = {};
 
-  overledgerUri: string;
   mappId: string;
   bpiKey: string;
-  network: string;
   request: AxiosInstance;
 
   search: Search;
@@ -49,8 +43,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
-    const dltName = config.dlt.charAt(0).toUpperCase() + config.dlt.slice(1);
-    const provider = require(`../../${config.dlt}/src/dlts/${dltName}`).default;
+    const provider = require(`@overledger/${config.dlt}`).default;
 
     return new provider(this, config);
   }
