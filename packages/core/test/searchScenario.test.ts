@@ -4,7 +4,7 @@ import OverledgerSDK from '../src';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe.skip('Search', () => {
+describe('Search', () => {
   let overledger;
 
   beforeAll(() => {

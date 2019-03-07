@@ -1,6 +1,7 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
 import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
+import AbstractDLT from './AbstractDLT';
 
 declare class OverledgerSDK {
   TESTNET: string;
@@ -8,7 +9,7 @@ declare class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger sdk
    */
-  dlts: {};
+  dlts: { [key: string]: AbstractDLT };
   overledgerUri: string;
   mappId: string;
   bpiKey: string;

@@ -41,7 +41,7 @@ describe('Dlt/Common', () => {
         expect(mockedAxios.create.mock.calls[0][0].timeout).toEqual(5000);
       })
 
-      test.skip('Can specify a custom request timeout', () => {
+      test('Can specify a custom request timeout', () => {
         /**
          * To be able to test that a specific timeout period has been set,
          * we have to use the constructor again because of the scope of the mock

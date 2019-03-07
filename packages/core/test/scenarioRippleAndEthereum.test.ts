@@ -9,12 +9,8 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Can getSequences for specific addresses from mappId', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
-          {
-            dlt: 'ripple',
-          },
-          {
-            dlt: 'ethereum',
-          },
+          {dlt: 'ripple',},
+          {dlt: 'ethereum',},
         ],
       });
 

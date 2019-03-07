@@ -7,7 +7,7 @@ class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger sdk
    */
-  dlts = {};
+  dlts: { [key: string]: AbstractDLT } = {};
 
   mappId: string;
   bpiKey: string;
@@ -32,6 +32,7 @@ class OverledgerSDK {
     });
 
     this.request = overledgerRequest(mappId, bpiKey, options);
+    this.search = new Search(this, options);
   }
 
   /**
@@ -43,6 +44,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
+
     const provider = require(`@overledger/${config.dlt}`).default;
 
     return new provider(this, config);

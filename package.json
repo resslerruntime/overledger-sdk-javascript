@@ -20,6 +20,9 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "devDependencies": {
+    "@overledger/bitcoin": "1.0.0-beta.1",
+    "@overledger/ethereum": "1.0.0-beta.1",
+    "@overledger/ripple": "1.0.0-beta.1",
     "@types/jest": "^23.3.10",
     "@types/web3": "^1.0.12",
     "jest": "^24.1.0",
