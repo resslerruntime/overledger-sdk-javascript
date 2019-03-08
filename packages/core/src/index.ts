@@ -44,10 +44,15 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
-
-    const provider = require(`@overledger/${config.dlt}`).default;
-
-    return new provider(this, config);
+    try {
+      const provider = require(`@overledger/${config.dlt}`).default;
+      
+      return new provider(this, config);
+    } catch (error) {
+      if (error.code === 'MODULE_NOT_FOUND') {
+        throw new Error(`Could not find the package for this DLT. Please install @overledger/${config.dlt} manually`);
+      }
+    }
   }
 
   /**

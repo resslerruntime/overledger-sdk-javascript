@@ -12,10 +12,14 @@ function request(mappId: string, bpiKey: string, options: SDKOptions): AxiosInst
   let network = options.network || TESTNET;
   let overledgerUri: string;
 
-  if (network === MAINNET) {
-    overledgerUri = "https://bpi.overledger.io/v1";
-  } else {
+  if (network === TESTNET) {
     overledgerUri = "https://bpi.testnet.overledger.io/v1";
+  }
+  else if (network === MAINNET) {
+    overledgerUri = "https://bpi.overledger.io/v1";
+  }
+  else {
+    overledgerUri = network;
   }
 
   let request = axios.create({

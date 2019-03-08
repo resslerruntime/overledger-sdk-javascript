@@ -4,10 +4,8 @@
   "description": "Quant Network Overledger types package for the JavaScript (JS) programming language.",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
-    "build": "echo \"Nothing to build\" && exit 0",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": {

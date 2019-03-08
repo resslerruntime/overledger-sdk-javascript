@@ -4,7 +4,6 @@
   "description": "Quant Network Overledger Ripple software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",

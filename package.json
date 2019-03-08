@@ -6,10 +6,11 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
-    "test": "jest --runInBand",
+    "clean": "lerna run clean",
+    "bootstrap": "lerna bootstrap",
+    "test": "lerna exec -- jest --runInBand",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
-    "clean": "rm -rf dist && mkdir dist",
-    "build": "lerna exec -- npm run build",
+    "build": "lerna run build",
     "lint": "lerna exec -- npm run lint"
   },
   "repository": {
@@ -20,9 +21,6 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "devDependencies": {
-    "@overledger/bitcoin": "1.0.0-beta.1",
-    "@overledger/ethereum": "1.0.0-beta.1",
-    "@overledger/ripple": "1.0.0-beta.1",
     "@types/jest": "^23.3.10",
     "@types/web3": "^1.0.12",
     "jest": "^24.1.0",
