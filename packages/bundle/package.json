@@ -1,9 +1,10 @@
 {
-  "name": "@overledger/abstract-dlt",
+  "name": "@overledger/bundle",
   "version": "1.0.0-beta.1",
-  "description": "Quant Network Overledger Bitcoin software development kit (SDK) for the JavaScript (JS) programming language.",
+  "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
+    "test": "jest --runInBand --passWithNoTests",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && tsc",
@@ -17,12 +18,15 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/types": "^1.0.0-beta.1",
-    "axios": "^0.18.0"
+    "@overledger/bitcoin": "^1.0.0-beta.1",
+    "@overledger/core": "^1.0.0-beta.1",
+    "@overledger/ethereum": "^1.0.0-beta.1",
+    "@overledger/ripple": "^1.0.0-beta.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "@types/web3": "^1.0.12",
+    "axios": "^0.18.0",
     "jest": "^24.1.0",
     "lerna": "^3.13.0",
     "merge": ">=1.2.1",

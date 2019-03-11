@@ -49,6 +49,7 @@ class OverledgerSDK {
       
       return new provider(this, config);
     } catch (error) {
+      console.log(error);
       if (error.code === 'MODULE_NOT_FOUND') {
         throw new Error(`Could not find the package for this DLT. Please install @overledger/${config.dlt} manually`);
       }

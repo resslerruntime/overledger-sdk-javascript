@@ -2,9 +2,9 @@
   "name": "@overledger/core",
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
-  "main": "dist/core/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --passWithNoTests",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && tsc",
