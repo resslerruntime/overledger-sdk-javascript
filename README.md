@@ -1,3 +1,5 @@
+>THIS DOCUMENTATION IS A WORK IN PROGRESS. PLEASE CHECK THE DEVELOPMENT SECTION
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM package version](https://img.shields.io/npm/v/@quantnetwork/overledger-sdk.svg)](https://www.npmjs.com/package/@quantnetwork/overledger-sdk)
 
@@ -36,7 +38,17 @@ yarn add @quantnetwork/overledger-sdk
 
 ## Development
 
-To run the SDK in development mode, run the command `npm run dev` and every change will be automatically built.
+To develop on the SDK following the lerna update, checkout this branch and run the following commands:
+
+```
+lerna bootstrap
+```
+
+```
+npm run build
+```
+
+The `npm run dev` script hasn't been updated to reflect the changes.
 
 ## Getting started
 
