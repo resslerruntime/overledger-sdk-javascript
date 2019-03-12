@@ -38,10 +38,16 @@ yarn add @quantnetwork/overledger-sdk
 
 ## Development
 
-To develop on the SDK following the lerna update, checkout this branch and run the following commands:
+To develop on the SDK following the lerna update, first install lerna:
 
 ```
-lerna bootstrap
+npm install -g lerna
+```
+
+Then, checkout this branch and run the following commands:
+
+```
+npm run bootstrap
 ```
 
 ```
