@@ -132,7 +132,7 @@ abstract class AbstractDLT {
       address = this.account.address;
     }
 
-    return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
+    return this.sdk.request.post(`/faucet/${this.name}/fund/${address}/${amount}`);
   }
 
   /**

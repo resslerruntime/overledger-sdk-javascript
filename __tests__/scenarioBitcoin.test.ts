@@ -35,7 +35,7 @@ describe('Dlt/Bitcoin', () => {
     txnHash:
      '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
     vout: 1 });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
+    expect(axios.post).toBeCalledWith(`/faucet/bitcoin/fund/${account.address}/100000000`);
   });
 
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
