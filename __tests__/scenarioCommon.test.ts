@@ -95,7 +95,7 @@ describe('Dlt/Common', () => {
           message: 'successfully added to the queue'
         });
         expect(axios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${account.address}/10`
+          `/faucet/${dlt.type}/fund/${account.address}/10`
         );
       });
 
@@ -108,7 +108,7 @@ describe('Dlt/Common', () => {
           message: 'successfully added to the queue'
         });
         expect(axios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${newAccount.address}/10`
+          `/faucet/${dlt.type}/fund/${newAccount.address}/10`
         );
       });
 

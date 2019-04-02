@@ -28,7 +28,7 @@ describe('Dlt/Ethereum', () => {
     overledger.dlts.ethereum.fundAccount();
 
     axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/1000000000000000000`);
+    expect(axios.post).toBeCalledWith(`/faucet/ethereum/fund/${account.address}/1000000000000000000`);
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
