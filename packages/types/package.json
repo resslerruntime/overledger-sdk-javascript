@@ -6,10 +6,7 @@
   "scripts": {
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/quantnetwork/overledger-sdk-javascript.git"
-  },
+  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/types",
   "author": "Sebastien Bramille <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
