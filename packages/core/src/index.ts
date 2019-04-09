@@ -46,7 +46,7 @@ class OverledgerSDK {
     // Need to improve this loading
     try {
       const provider = require(`@overledger/${config.dlt}`).default;
-      
+
       return new provider(this, config);
     } catch (error) {
       console.log(error);

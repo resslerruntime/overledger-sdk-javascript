@@ -39,8 +39,8 @@ declare class OverledgerSDK {
    * @param {Object} dlts Object of the DLTs where you want to send a transaction
    */
   sign(dlts: any): Promise<{
-      dlt: any;
-      signedTransaction: any;
+    dlt: any;
+    signedTransaction: any;
   }[]>;
   /**
    * Wrap the DLTData with the api schema
