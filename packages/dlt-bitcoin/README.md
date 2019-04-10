@@ -1,4 +1,4 @@
-# dlt-bitcoin
+# @overledger/dlt-bitcoin
 
 This is a sub package of [overledger-sdk][repo]
 

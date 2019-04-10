@@ -1,4 +1,4 @@
-# core
+# @overledger/core
 
 This is the main package of [overledger-sdk][repo]
 

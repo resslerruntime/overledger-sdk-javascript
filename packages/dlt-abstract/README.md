@@ -1,4 +1,4 @@
-# abstract-dlt
+# @overledger/dlt-abstract
 
 This is a sub package of [overledger-sdk][repo]
 
@@ -7,7 +7,7 @@ The Abstract module abstracts the DLT interface and is used within all [overledg
 ## Installation
 
 ```bash
-npm install @overledger/abstract-dlt
+npm install @overledger/dlt-abstract
 ```
 
 **Can't be used on it's own**

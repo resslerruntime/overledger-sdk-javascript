@@ -1,5 +1,5 @@
 import bitcoin from 'bitcoinjs-lib';
-import AbstractDLT from '@overledger/abstract-dlt';
+import AbstractDLT from '@overledger/dlt-abstract';
 import { OverledgerSDK, Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { AxiosResponse } from 'axios';
 

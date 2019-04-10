@@ -1,4 +1,4 @@
-# dlt-ripple
+# @overledger/dlt-ripple
 
 This is a sub package of [overledger-sdk][repo]
 

@@ -1,4 +1,4 @@
-# search
+# @overledger/search
 
 This is a sub package of [overledger-sdk][repo]
 

@@ -8,12 +8,12 @@
     "build": "npm run clean && tsc",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
-  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/ripple",
+  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/dlt-ripple",
   "author": "Sebastien Bramille <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/abstract-dlt": "^1.0.0-beta.1",
+    "@overledger/dlt-abstract": "^1.0.0-beta.1",
     "@overledger/network": "^1.0.0-beta.1",
     "@overledger/types": "^1.0.0-beta.1",
     "axios": "^0.18.0",
