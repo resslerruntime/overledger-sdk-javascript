@@ -1,9 +1,9 @@
 import DLTOptions from './DLTOptions';
+import providerOptions from './providerOptions';
 
 type SDKOptions = {
   dlts: DLTOptions[],
-  network?: 'mainnet' | 'testnet',
-  timeout?: number,
+  provider?: providerOptions,
 };
 
 export default SDKOptions;

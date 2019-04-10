@@ -1,8 +1,9 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
-import overledgerRequest from '@overledger/network';
+import Provider from '@overledger/provider';
 import { APICall, AbstractDLT, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
 import colors from 'colors';
+import networkOptions from '@overledger/types/src/networkOptions';
 
 class OverledgerSDK {
   /**
@@ -12,6 +13,8 @@ class OverledgerSDK {
 
   mappId: string;
   bpiKey: string;
+  network: networkOptions;
+  provider: any; // TODO: define the type
   request: AxiosInstance;
 
   search: Search;
@@ -24,6 +27,7 @@ class OverledgerSDK {
   constructor(mappId: string, bpiKey: string, options: SDKOptions) {
     this.mappId = mappId;
     this.bpiKey = bpiKey;
+    this.network = options.provider && options.provider.network || 'testnet';
 
     this.validateOptions(options);
 
@@ -32,8 +36,9 @@ class OverledgerSDK {
       this.dlts[dlt.name] = dlt;
     });
 
-    this.request = overledgerRequest(mappId, bpiKey, options);
-    this.search = new Search(this, options);
+    this.provider = new Provider(mappId, bpiKey, options.provider);
+    this.request = this.provider.createRequest();
+    this.search = new Search(this);
   }
 
   /**

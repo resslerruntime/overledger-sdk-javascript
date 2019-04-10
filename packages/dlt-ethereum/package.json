@@ -14,7 +14,7 @@
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
     "@overledger/dlt-abstract": "^1.0.0-beta.1",
-    "@overledger/network": "^1.0.0-beta.1",
+    "@overledger/provider": "^1.0.0-beta.1",
     "@overledger/types": "^1.0.0-beta.1",
     "axios": "^0.18.0",
     "web3": "<=1.0.0-beta.36"

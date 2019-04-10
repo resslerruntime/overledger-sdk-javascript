@@ -2,6 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import AbstractDLT from './AbstractDLT';
+import networkOptions from './networkOptions';
 
 declare class OverledgerSDK {
   TESTNET: string;
@@ -13,7 +14,8 @@ declare class OverledgerSDK {
   overledgerUri: string;
   mappId: string;
   bpiKey: string;
-  network: string;
+  provider: any; // TODO: Define the type
+  network: networkOptions;
   request: AxiosInstance;
   /**
    * @param {string} mappId
