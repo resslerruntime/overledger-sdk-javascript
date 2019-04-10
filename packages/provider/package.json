@@ -1,14 +1,14 @@
 {
-  "name": "@overledger/network",
+  "name": "@overledger/provider",
   "version": "1.0.0-beta.1",
-  "description": "Quant Network Overledger network package to be used by the other packages",
+  "description": "Quant Network Overledger provider package to be used by the other packages",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && tsc",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
-  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/network",
+  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/provider",
   "author": "Sebastien Bramille <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",

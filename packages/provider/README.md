@@ -1,4 +1,4 @@
-# @overledger/network
+# @overledger/provider
 
 This is a sub package of [overledger-sdk][repo]
 
@@ -7,7 +7,7 @@ This is the search package to be used with the `overledger-sdk` package. Please 
 ## Installation
 
 ```bash
-npm install @overledger/network
+npm install @overledger/provider
 ```
 
 **Can't be used on it's own**
