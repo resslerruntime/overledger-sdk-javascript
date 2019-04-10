@@ -2,6 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
 import overledgerRequest from '@overledger/network';
 import { APICall, AbstractDLT, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
+import colors from 'colors';
 
 class OverledgerSDK {
   /**
@@ -44,14 +45,16 @@ class OverledgerSDK {
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
     // Need to improve this loading
+    const dltName = `dlt-${config.dlt}`;
     try {
-      const provider = require(`@overledger/${config.dlt}`).default;
+      const provider = require(`@overledger/${dltName}`).default;
 
       return new provider(this, config);
     } catch (error) {
-      console.log(error);
       if (error.code === 'MODULE_NOT_FOUND') {
-        throw new Error(`Could not find the package for this DLT. Please install @overledger/${config.dlt} manually`);
+        console.log(colors.red(`Could not find the package for this DLT. Please install @overledger/${dltName} manually`));
+        process.exit(1);
+        return;
       }
     }
   }
