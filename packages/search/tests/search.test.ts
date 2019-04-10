@@ -1,18 +1,28 @@
 import axios from 'axios';
-import OverledgerSDK from '../src';
+import OverledgerSDK from '../../bundle/src';
+import Search from '../src';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Search', () => {
-  let overledger;
-
+  let search;
   beforeAll(() => {
-    overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{
-        dlt: 'bitcoin',
-      }],
-    });
+    const mappId = 'mockMappId';
+    const bpiKey = 'mockBpiKey';
+
+    const options = {
+      dlts: [],
+      provider: {
+        timeout: 5000,
+      },
+    };
+
+    const sdk = new OverledgerSDK(mappId, bpiKey, options);
+    search = new Search(sdk);
+
+    expect(sdk.search).toEqual(search);
+    expect(search.sdk).toEqual(sdk);
   });
 
   test('Can search for a transaction by transaction Hash', async () => {
@@ -45,7 +55,7 @@ describe('Search', () => {
         },
       },
     });
-    await overledger.search.getTransaction(transactionHash);
+    await search.getTransaction(transactionHash);
 
     expect(mockedAxios.get).toBeCalledWith(`/transactions/${transactionHash}`);
   });
@@ -82,7 +92,7 @@ describe('Search', () => {
       },
     });
 
-    await overledger.search.getBlockByDltAndHash('bitcoin', hash);
+    await search.getBlockByDltAndHash('bitcoin', hash);
 
     expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${hash}`);
   });
@@ -118,7 +128,7 @@ describe('Search', () => {
         },
       },
     });
-    await overledger.search.getBlockByDltAndNumber('bitcoin', number);
+    await search.getBlockByDltAndNumber('bitcoin', number);
 
     expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${number}`);
   });

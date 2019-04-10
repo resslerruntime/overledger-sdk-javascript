@@ -6,9 +6,9 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Dlt/Common', () => {
   [
-    { type: 'ethereum', symbol: 'ETH' },
-    { type: 'ripple', symbol: 'XRP' },
-    { type: 'bitcoin', symbol: 'XBT' }
+    {type: 'ethereum', symbol: 'ETH'},
+    {type: 'ripple', symbol: 'XRP'},
+    {type: 'bitcoin', symbol: 'XBT'},
   ].forEach(dlt => {
     describe(dlt.type, () => {
       let overledger;
@@ -18,8 +18,8 @@ describe('Dlt/Common', () => {
         overledger = new OverledgerSDK('testmappid', 'testbpikey', {
           dlts: [
             {
-              dlt: dlt.type
-            }
+              dlt: dlt.type,
+            },
           ],
         });
 
@@ -34,12 +34,12 @@ describe('Dlt/Common', () => {
         new OverledgerSDK('testmappid', 'testbpikey', {
           dlts: [
             {
-              dlt: dlt.type
-            }
+              dlt: dlt.type,
+            },
           ],
         });
         expect(mockedAxios.create.mock.calls[0][0].timeout).toEqual(5000);
-      })
+      });
 
       test('Can specify a custom request timeout', () => {
         /**
@@ -49,13 +49,15 @@ describe('Dlt/Common', () => {
         new OverledgerSDK('testmappid', 'testbpikey', {
           dlts: [
             {
-              dlt: dlt.type
-            }
+              dlt: dlt.type,
+            },
           ],
-          timeout: 2000,
+          provider: {
+            timeout: 2000,
+          },
         });
         expect(mockedAxios.create.mock.calls[0][0].timeout).toEqual(2000);
-      })
+      });
 
       test('Can get name', () => {
         expect(overledger.dlts[dlt.type].name).toBe(dlt.type);
@@ -64,19 +66,19 @@ describe('Dlt/Common', () => {
 
       test('Cannot sign a transaction without an account set up', () => {
         expect(() =>
-          overledger.dlts[dlt.type].sign(account.address, 'QNT tt3')
+          overledger.dlts[dlt.type].sign(account.address, 'QNT tt3'),
         ).toThrow(`The ${dlt.type} account must be set up`);
       });
 
       test('Cannot fund without the address parameter if no account are set up', async () => {
         expect(() => overledger.dlts[dlt.type].fundAccount()).toThrow(
-          'The account must be set up'
+          'The account must be set up',
         );
       });
 
       test('Cannot getBalance without the address parameter if no account are set up', async () => {
         expect(() => overledger.dlts[dlt.type].getBalance()).toThrow(
-          'The account must be set up'
+          'The account must be set up',
         );
       });
 
@@ -91,10 +93,10 @@ describe('Dlt/Common', () => {
 
         mockedAxios.post.mockResolvedValue({
           status: 'ok',
-          message: 'successfully added to the queue'
+          message: 'successfully added to the queue',
         });
         expect(mockedAxios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${account.address}/10`
+          `/faucet/fund/${dlt.type}/${account.address}/10`,
         );
       });
 
@@ -104,19 +106,19 @@ describe('Dlt/Common', () => {
 
         mockedAxios.post.mockResolvedValue({
           status: 'ok',
-          message: 'successfully added to the queue'
+          message: 'successfully added to the queue',
         });
         expect(mockedAxios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${newAccount.address}/10`
+          `/faucet/fund/${dlt.type}/${newAccount.address}/10`,
         );
       });
 
       test('Can getBalance of the set up account', () => {
         overledger.dlts[dlt.type].getBalance();
 
-        mockedAxios.post.mockResolvedValue({ unit: 'wei', value: '0' });
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
         expect(mockedAxios.get).toBeCalledWith(
-          `/balances/${dlt.type}/${account.address}`
+          `/balances/${dlt.type}/${account.address}`,
         );
       });
 
@@ -124,9 +126,9 @@ describe('Dlt/Common', () => {
         const newAccount = overledger.dlts[dlt.type].createAccount();
         overledger.dlts[dlt.type].getBalance(newAccount.address);
 
-        mockedAxios.post.mockResolvedValue({ unit: 'wei', value: '0' });
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
         expect(mockedAxios.get).toBeCalledWith(
-          `/balances/${dlt.type}/${newAccount.address}`
+          `/balances/${dlt.type}/${newAccount.address}`,
         );
       });
     });

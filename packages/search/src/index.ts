@@ -18,10 +18,9 @@ class Search {
    *
    * @param {string} transactionHash Transaction hash
    */
-  async getTransaction(transactionHash) {
+  getTransaction(transactionHash: string): AxiosPromise {
     try {
-      const response = await this.request.get(`/transactions/${transactionHash}`);
-      return response;
+      return this.request.get(`/transactions/${transactionHash}`);
     } catch (e) {
       return e.response;
     }
@@ -32,10 +31,9 @@ class Search {
    *
    * @param {string} hash hash
    */
-  async whoami(hash) {
+  whoami(hash: string): AxiosPromise {
     try {
-      const response = await this.request.get(`/whoami/${hash}`);
-      return response;
+      return this.request.get(`/whoami/${hash}`);
     } catch (e) {
       return e.response;
     }
@@ -44,12 +42,12 @@ class Search {
   /**
    * Get block hash
    *
+   * @param {string} dlt the DLT name
    * @param {string} hash block hash
    */
-  async getBlockByDltAndHash(dlt, hash) {
+  getBlockByDltAndHash(dlt: string, hash: string): AxiosPromise {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byHash/${hash}`);
-      return response;
+      return this.request.get(`/${dlt}/blocks/${hash}`);
     } catch (e) {
       return e.response;
     }
@@ -58,12 +56,12 @@ class Search {
   /**
    * Get block number
    *
+   * @param {string} dlt the DLT name
    * @param {number} blockNumber block number
    */
-  async getBlockByDltAndNumber(dlt, blockNumber) {
+  getBlockByDltAndNumber(dlt: string, blockNumber: number): AxiosPromise {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${blockNumber}`);
-      return response;
+      return this.request.get(`/${dlt}/blocks/${blockNumber}`);
     } catch (e) {
       return e.response;
     }
