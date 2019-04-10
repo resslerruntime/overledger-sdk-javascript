@@ -14,10 +14,10 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/bitcoin": "^1.0.0-beta.1",
+    "@overledger/dlt-bitcoin": "^1.0.0-beta.1",
     "@overledger/core": "^1.0.0-beta.1",
-    "@overledger/ethereum": "^1.0.0-beta.1",
-    "@overledger/ripple": "^1.0.0-beta.1"
+    "@overledger/dlt-ethereum": "^1.0.0-beta.1",
+    "@overledger/dlt-ripple": "^1.0.0-beta.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",

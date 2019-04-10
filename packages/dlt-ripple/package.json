@@ -1,5 +1,5 @@
 {
-  "name": "@overledger/ripple",
+  "name": "@overledger/dlt-ripple",
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger Ripple software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
