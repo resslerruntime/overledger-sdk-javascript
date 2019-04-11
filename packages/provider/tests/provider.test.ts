@@ -1,11 +1,11 @@
-import Network from '../src';
+import Provider from '../src';
 
-describe('Network', () => {
+describe('Provider', () => {
   test('Can construct the class without any options', () => {
     const mappId = 'mockMappId';
     const bpiKey = 'mockBpiKey';
 
-    const network = new Network(mappId, bpiKey);
+    const network = new Provider(mappId, bpiKey);
 
     expect(network.mappId).toEqual(mappId);
     expect(network.bpiKey).toEqual(bpiKey);
@@ -22,7 +22,7 @@ describe('Network', () => {
       network: 'mainnet',
     };
 
-    const network = new Network(mappId, bpiKey, options);
+    const network = new Provider(mappId, bpiKey, options);
 
     expect(network.mappId).toEqual(mappId);
     expect(network.bpiKey).toEqual(bpiKey);
@@ -39,7 +39,7 @@ describe('Network', () => {
       network: 'differentnetwork',
     };
 
-    const network = new Network(mappId, bpiKey, options);
+    const network = new Provider(mappId, bpiKey, options);
 
     expect(network.mappId).toEqual(mappId);
     expect(network.bpiKey).toEqual(bpiKey);
@@ -58,7 +58,7 @@ describe('Network', () => {
       const mappId = 'mockMappId';
       const bpiKey = 'mockBpiKey';
 
-      network = new Network(mappId, bpiKey, options);
+      network = new Provider(mappId, bpiKey, options);
     });
 
     test('Can create a request without a path', () => {
