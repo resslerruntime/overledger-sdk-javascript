@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
-import { OverledgerSDK } from '@overledger/types';
+import OverledgerSDK from '@overledger/core';
 
 class Search {
   sdk: OverledgerSDK;

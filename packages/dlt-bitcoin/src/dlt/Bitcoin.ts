@@ -1,6 +1,8 @@
 import bitcoin from 'bitcoinjs-lib';
 import AbstractDLT from '@overledger/dlt-abstract';
-import { OverledgerSDK, Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
+import { MAINNET } from '@overledger/provider';
+import OverledgerSDK from '@overledger/core';
+import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { AxiosResponse } from 'axios';
 
 class Bitcoin extends AbstractDLT {
@@ -26,7 +28,7 @@ class Bitcoin extends AbstractDLT {
   constructor(sdk: OverledgerSDK, options: Options) {
     super(sdk, options);
 
-    if (sdk.network === sdk.MAINNET) {
+    if (sdk.network === MAINNET) {
       this.addressType = bitcoin.networks.bitcoin;
     } else {
       this.addressType = bitcoin.networks.testnet;

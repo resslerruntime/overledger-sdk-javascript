@@ -6,13 +6,14 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "test": "jest --runInBand",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc --declaration",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/provider",
   "author": "Sebastien Bramille <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
+  "types":"dist/index.d.ts",
   "dependencies": {
     "@overledger/types": "^1.0.0-beta.1",
     "axios": "^0.18.0"

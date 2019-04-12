@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 import providerOptions from '@overledger/types/src/providerOptions';
 import networkOptions from '@overledger/types/src/networkOptions';
 
-const TESTNET: networkOptions = 'testnet';
-const MAINNET: networkOptions = 'mainnet';
+export const TESTNET: networkOptions = 'testnet';
+export const MAINNET: networkOptions = 'mainnet';
 
 class Provider {
   mappId: string;

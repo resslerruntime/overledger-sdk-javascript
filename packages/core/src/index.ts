@@ -1,8 +1,11 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
-import Provider from '@overledger/provider';
-import { APICall, AbstractDLT, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
+import Provider, { TESTNET } from '@overledger/provider';
+import AbstractDLT from '@overledger/dlt-abstract';
+import { APICall, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
 import networkOptions from '@overledger/types/src/networkOptions';
+import SequenceDataResponse from '@overledger/types/src/SequenceDataResponse';
+import SignedTransactionRequest from '@overledger/types/src/SignedTransactionRequest';
 
 class OverledgerSDK {
   /**
@@ -15,7 +18,6 @@ class OverledgerSDK {
   network: networkOptions;
   provider: any; // TODO: define the type
   request: AxiosInstance;
-
   search: Search;
 
   /**
@@ -26,7 +28,7 @@ class OverledgerSDK {
   constructor(mappId: string, bpiKey: string, options: SDKOptions) {
     this.mappId = mappId;
     this.bpiKey = bpiKey;
-    this.network = options.provider && options.provider.network || 'testnet';
+    this.network = options.provider && options.provider.network || TESTNET;
 
     this.validateOptions(options);
 
@@ -107,7 +109,7 @@ class OverledgerSDK {
    *
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
-  public send(signedTransactions): AxiosPromise<Object> {
+  public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
     const apiCall = signedTransactions.map(
       dlt => this.dlts[dlt.dlt].buildSignedTransactionsApiCall(dlt.signedTransaction),
     );
@@ -118,9 +120,9 @@ class OverledgerSDK {
   /**
    * Get the sequence number from the provided address
    *
-   * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
+   * @param sequenceData[]
    */
-  public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<Object> {
+  public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<SequenceDataResponse> {
     return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
   }
 

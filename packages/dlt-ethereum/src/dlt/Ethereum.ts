@@ -1,7 +1,9 @@
 import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
+import { MAINNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
-import { OverledgerSDK, Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
+import OverledgerSDK from '@overledger/core';
+import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { AxiosResponse } from 'axios';
 
 class Ethereum extends AbstractDLT {
@@ -24,7 +26,7 @@ class Ethereum extends AbstractDLT {
    * @inheritdoc
    */
     // @TODO: add options statement
-  constructor(sdk: OverledgerSDK, options: Options) {
+  constructor(sdk: OverledgerSDK, options: Options = {}) {
     super(sdk, options);
 
     this.web3 = new Web3();
@@ -34,7 +36,7 @@ class Ethereum extends AbstractDLT {
       this.setAccount(options.privateKey);
     }
 
-    if (sdk.network === sdk.MAINNET) {
+    if (sdk.network === MAINNET) {
       this.chainId = 1;
     } else {
       this.chainId = 500;
