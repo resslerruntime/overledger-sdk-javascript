@@ -2,7 +2,6 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
 import Provider from '@overledger/provider';
 import { APICall, AbstractDLT, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
-import colors from 'colors';
 import networkOptions from '@overledger/types/src/networkOptions';
 
 class OverledgerSDK {
@@ -57,9 +56,7 @@ class OverledgerSDK {
       return new provider(this, config);
     } catch (error) {
       if (error.code === 'MODULE_NOT_FOUND') {
-        console.log(colors.red(`Could not find the package for this DLT. Please install @overledger/${dltName} manually`));
-        process.exit(1);
-        return;
+        throw `Could not find the package for this DLT. Please install @overledger/${dltName} manually`;
       }
     }
   }

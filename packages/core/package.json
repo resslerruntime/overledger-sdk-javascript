@@ -17,8 +17,7 @@
     "@overledger/provider": "^1.0.0-beta.1",
     "@overledger/search": "^1.0.0-beta.1",
     "@overledger/types": "^1.0.0-beta.1",
-    "axios": "^0.18.0",
-    "colors": "^1.3.3"
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
