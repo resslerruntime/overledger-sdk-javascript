@@ -25,6 +25,7 @@ The Overledger SDK is a node module written in Javascript/ES6.
 ## How to use it with lerna locally
 
 You can't use this package without globally installing yarn version 1.15.2
+A Makefile will be used to build the package by priority
 
 * Run `npm install -g yarn`
 * Run `npm install`
