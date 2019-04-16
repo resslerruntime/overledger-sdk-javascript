@@ -21,6 +21,20 @@ The Overledger SDK is a node module written in Javascript/ES6.
 - You will require a MAppId and BPI key:
   - Register your application in order to get a free MApp ID.
   - Verify your Quant token, and create a BPI key.
+  
+## How to use it with lerna locally
+
+You can't use this package without globally installing yarn version 1.15.2
+
+* Run `npm install -g yarn`
+* Run `npm install`
+* Run `npm run bootstrap`
+* Run `npm run build`
+
+**Running the tests** 
+
+* Run `npm run lint`
+* Run `npm run test`
 
 ## Installation
 
