@@ -1,7 +1,6 @@
 import bitcoin from 'bitcoinjs-lib';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { MAINNET } from '@overledger/provider';
-import OverledgerSDK from '@overledger/core';
 import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { AxiosResponse } from 'axios';
 
@@ -25,7 +24,7 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  constructor(sdk: OverledgerSDK, options: Options) {
+  constructor(sdk: any, options: Options) {
     super(sdk, options);
 
     if (sdk.network === MAINNET) {

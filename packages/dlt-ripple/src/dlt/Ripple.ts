@@ -2,7 +2,6 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@overledger/dlt-abstract';
-import OverledgerSDK from '@overledger/core';
 import { Account, Options, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
@@ -26,7 +25,7 @@ class Ripple extends AbstractDLT {
    * @inheritdoc
    */
   // @TODO: add options statement
-  constructor(sdk: OverledgerSDK, options: Options = {}) {
+  constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
 
     this.options = options;
