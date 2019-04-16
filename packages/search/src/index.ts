@@ -1,14 +1,13 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
-import OverledgerSDK from '@overledger/core';
 
 class Search {
-  sdk: OverledgerSDK;
+  sdk: any;
   request: AxiosInstance;
 
   /**
    * @param {Object} sdk
    */
-  constructor(sdk: OverledgerSDK) {
+  constructor(sdk: any) {
     this.sdk = sdk;
     this.request = this.sdk.provider.createRequest('/search');
   }

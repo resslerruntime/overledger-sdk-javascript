@@ -1,6 +1,6 @@
 import axios from 'axios';
-import OverledgerSDK from '../../bundle/src';
-import Search from '../src';
+import OverledgerSDK from '../src';
+import Search from '@overledger/search';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;

@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && tsc --declaration",
-    "test": "jest --runInBand",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/search",
@@ -20,7 +19,6 @@
     "axios": "^0.18.0"
   },
   "devDependencies": {
-    "@overledger/core": "^1.0.0-beta.1",
     "@types/jest": "^23.3.10",
     "jest": "^24.1.0",
     "lerna": "^3.13.0",

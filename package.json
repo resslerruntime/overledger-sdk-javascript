@@ -10,7 +10,7 @@
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test --stream",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
-    "build": "lerna run build",
+    "build": "make",
     "lint": "lerna exec -- npm run lint"
   },
   "repository": {

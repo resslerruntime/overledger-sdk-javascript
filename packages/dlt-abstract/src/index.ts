@@ -1,19 +1,18 @@
 import { TransactionOptions, APICall, Account } from '@overledger/types';
-import OverledgerSDK from '@overledger/core';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {
   name: string;
-  sdk: OverledgerSDK;
+  sdk: any;
   options: Object;
 
   account?: Account;
 
   /**
-   * @param {OverledgerSDK} sdk
+   * @param {any} sdk
    * @param {Object} options
    */
-  constructor(sdk: OverledgerSDK, options: Object = {}) {
+  constructor(sdk: any, options: Object = {}) {
     this.sdk = sdk;
     this.options = options;
   }
