@@ -74,6 +74,7 @@ describe('Dlt/Bitcoin', () => {
         [{
           dlt: 'bitcoin',
           signedTransaction: expect.any(String),
+          fromAddress: expect.any(String),
         }],
     });
   });

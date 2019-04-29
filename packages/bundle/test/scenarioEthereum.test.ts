@@ -73,6 +73,7 @@ describe('Dlt/Ethereum', () => {
       dltData: [{
         dlt: 'ethereum',
         signedTransaction: expect.any(String),
+        fromAddress: expect.any(String),
       }],
     });
   });
@@ -88,6 +89,7 @@ describe('Dlt/Ethereum', () => {
       dltData: [{
         dlt: 'ethereum',
         signedTransaction: expect.any(String),
+        fromAddress: expect.any(String),
       }],
     });
   });
