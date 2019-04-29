@@ -92,6 +92,7 @@ abstract class AbstractDLT {
     return {
       signedTransaction,
       dlt: this.name,
+      fromAddress: this.account.address,
     };
   }
 
