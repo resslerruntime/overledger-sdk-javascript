@@ -35,11 +35,11 @@ describe('Dlt/RippleAndEthereum', () => {
       const params = [
         {
           dlt: 'ethereum',
-          fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
+          address: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
         },
         {
           dlt: 'ripple',
-          fromAddress: 'sncVkJpFZGjfHkahGeXVM4d3fXZTU',
+          address: 'sncVkJpFZGjfHkahGeXVM4d3fXZTU',
         },
       ];
 
@@ -50,11 +50,11 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData: [
           {
             dlt: 'ethereum',
-            fromAddress: expect.any(String),
+            address: expect.any(String),
           },
           {
             dlt: 'ripple',
-            fromAddress: expect.any(String),
+            address: expect.any(String),
           },
         ],
       });
@@ -94,7 +94,7 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData: [
           {
             dlt: 'ethereum',
-            fromAddress: expect.any(String),
+            address: expect.any(String),
           },
         ],
       });

@@ -60,10 +60,10 @@ abstract class AbstractDLT {
   /**
    * Get the sequence for a specific address
    *
-   * @param {string|string[]} fromAddress
+   * @param {string|string[]} address
    */
-  public getSequence(fromAddress: string): AxiosPromise<Object> {
-    return this.sdk.getSequences([{ fromAddress, dlt: this.name }]);
+  public getSequence(address: string): AxiosPromise<Object> {
+    return this.sdk.getSequences([{ address, dlt: this.name }]);
   }
 
   /**
