@@ -36,6 +36,7 @@ class Provider {
       timeout: this.options.timeout || 5000,
       headers: {
         Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
+        'Content-type': 'application/json',
       },
     });
   }
