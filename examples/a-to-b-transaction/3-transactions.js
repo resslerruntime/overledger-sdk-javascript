@@ -50,8 +50,7 @@ const partyBRippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
                     // TODO: This fee price is required when you put the output of the transaction
                     feePrice: 100000, // is this fee price set? Should an endpoint be called beforehand? How is it calculated?
                     previousTransactionHash: bitcoinFaucetMessageTxnHash,
-                    // TODO: What is this amount?
-                    value: bitcoinFaucetMessageAmount,
+                    value: bitcoinFaucetMessageAmount, // This value is used to calculate the output amount
                 }
             },
             {
@@ -60,9 +59,9 @@ const partyBRippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
                 message: transactionMessage,
                 options: {
                     amount: 0, // On Ethereum you can send 0 amount transactions. But you still pay network fees
-                    sequence: 0,
-                    feePrice: 21000,
-                    feeLimit: 2100000,
+                    sequence: 0, // Sequence starts at 0 after funding
+                    feePrice: 21000, // This is the minimum fee price in Ethereum
+                    feeLimit: 2100000, // The maximum fee that this transaction can use (can be set by the user)
                 }
             },
             {
@@ -73,7 +72,7 @@ const partyBRippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
                     amount: '1', // Minimum allowed amount of drops
                     sequence: 1, // Sequence increases by 1 with each transaction 
                     feePrice: '0.000012', // Minimum feePrice on Ripple
-                    maxLedgerVersion: 4294967295,
+                    maxLedgerVersion: 4294967295, // The maximum ledger version the transaction can be included in.
                 }
             }
         ]);
