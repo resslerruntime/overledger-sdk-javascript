@@ -540,7 +540,7 @@ Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000
 
 | Name          | Type   | Description                                      |
 | ------------- | ------ | ------------------------------------------------ |
-| `fromAddress` | string | The address for the sequence query               |
+| `address`     | string | The address for the sequence query               |
 
 #### Return value
 
