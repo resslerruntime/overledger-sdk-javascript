@@ -1,17 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
-import providerOptions from '@overledger/types/src/providerOptions';
-import networkOptions from '@overledger/types/src/networkOptions';
+import { NetworkOptions, ProviderOptions } from '@overledger/types';
 
-export const TESTNET: networkOptions = 'testnet';
-export const MAINNET: networkOptions = 'mainnet';
+export const TESTNET: NetworkOptions = 'testnet';
+export const MAINNET: NetworkOptions = 'mainnet';
 
 class Provider {
   mappId: string;
   bpiKey: string;
-  options: providerOptions;
-  network: networkOptions;
+  options: ProviderOptions;
+  network: NetworkOptions;
 
-  constructor(mappId: string, bpiKey: string, options: providerOptions = {}) {
+  constructor(mappId: string, bpiKey: string, options: ProviderOptions = {}) {
     this.mappId = mappId;
     this.bpiKey = bpiKey;
     this.options = options;

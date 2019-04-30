@@ -1,4 +1,4 @@
-import networkOptions from './networkOptions';
+import networkOptions from './NetworkOptions';
 
 type providerOptions = {
   network?: networkOptions,

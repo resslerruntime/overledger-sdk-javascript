@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
 import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
-import { APICall, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper } from '@overledger/types';
+import { APICall, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
 import networkOptions from '@overledger/types/src/networkOptions';
 import SequenceDataResponse from '@overledger/types/src/SequenceDataResponse';
 import SignedTransactionRequest from '@overledger/types/src/SignedTransactionRequest';
@@ -174,8 +174,7 @@ class OverledgerSDK {
     return this.bpiKey;
   }
 
-  public getBalances(array): AxiosPromise<Object> {
-
+  public getBalances(array: DLTAndAddressArray): AxiosPromise<Object> {
     return this.request.post('/balances', array);
   }
 }
