@@ -42,47 +42,47 @@ A Makefile will be used to build the package by priority
 The Overledger SDK can be easily installed as an npm module. This will ensure that all required dependencies are automatically included.
 
 ```
-npm install @quantnetwork/overledger-sdk
+npm install @overledger/bundle
 ```
 
 Or if you prefer Yarn as the package manager.
 
 ```
-yarn add @quantnetwork/overledger-sdk
+yarn add @overledger/bundle
 ```
 
 ## Development
 
-To develop on the SDK following the lerna update, first install lerna:
+To develop on the SDK, first install lerna:
 
 ```
 npm install -g lerna
 ```
 
-Then, checkout this branch and run the following commands:
-
-```
-npm run bootstrap
-```
+Then, checkout this branch and run the following command:
 
 ```
 npm run build
 ```
 
-The `npm run dev` script hasn't been updated to reflect the changes.
+Or, for continous development:
+
+```
+npm run dev
+```
 
 ## Getting started
 
 NodeJS with babel
 
 ```javascript
-import OverledgerSDK from "@quantnetwork/overledger-sdk";
+import OverledgerSDK from "@overledger/bundle";
 ```
 
 NodeJS
 
 ```javascript
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
+const OverledgerSDK = require("@overledger/bundle").default;
 ```
 
 Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 5000ms).
@@ -91,6 +91,7 @@ Initialize the SDK with the 3 available dlts. Optionally, a timeout period can b
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
   timeout: 1500, // Optional
+  provider: { network: 'testnet' }, // Optional
 });
 ```
 
@@ -551,32 +552,6 @@ This function returns an array of objects with the following fields.
 | `sequence`| string | The sequence number of this address                               |
 
 
-## Usage Example
+## Examples
 
-In this simple usage example we will call the `getBalance` method to request the balance of the genesis address on Ripple (created by the blockchain on startup).
-
-```
-npm install @quantnetwork/overledger-sdk
-```
-
-```
-// Boilerplate
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
-// Replace mappId and bipKey with your own credentials.
-const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
-});
-
-// Method call
-;(async () => {
-
-  const rippleAddress = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
-
-  const response = await overledger.dlts.ripple.getBalance(rippleAddress);
-
-  var rippleGenesisBalance = response.data
-  // The lowest unit in XRP is called 'drop'
-  console.log("The balance of the genesis address on the Quant Ripple Testnet is", rippleGenesisBalance.value, rippleGenesisBalance.unit);
-
-})();
-```
+Examples can be found in the examples folder.
