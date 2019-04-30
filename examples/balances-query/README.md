@@ -1,6 +1,6 @@
-# Multichain Balances Request
+# Multichain Balances Query
 
-This example contains one script to return the balances for mutliple addresses on multiple DLTs.
+This example contains one script to return the balances for mutliple addresses on multiple DLTs. Please not this feature is not supported for Bitcoin at the moment.
 
 ## Building
 
@@ -15,7 +15,7 @@ npm run build
 The script has a section at the beginning where a couple of variables need to be initialised. First, set a mappId and BPI key. Then you can just run:
 
 ```
-node get-balances.js
+node balances-query.js
 ```
 
-This will return the balances for the addresses declared. At the moment, getting the balance on Bitcoin is not supported.
+This will return the balances for the addresses declared.

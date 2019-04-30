@@ -13,7 +13,7 @@ In order to run the examples, first, make sure you have built the sdk by running
 npm run build
 ```
 
-## Running the scripts
+## Running the example
 
 Each script has a section at the beginning where a couple of variables need to be initialised. First, set a mappId and BPI key in all of the scripts. For scripts 1 and 2, these are the only variables that need to be initialised.
 

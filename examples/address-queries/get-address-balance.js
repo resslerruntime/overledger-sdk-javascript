@@ -29,15 +29,6 @@ const rippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
         const rippleAddressBalance = await overledger.dlts.ripple.getBalance(rippleAddress);
         console.log('Ripple address balance:\n', rippleAddressBalance.data);
         console.log('\n');
-
-        const ethereumAddressSequence = await overledger.dlts.ethereum.getSequence(ethereumAddress);
-        console.log('Ethereum address sequence:\n', ethereumAddressSequence.data);
-        console.log('\n');
-
-        const rippleAddressSequence = await overledger.dlts.ripple.getSequence(rippleAddress);
-        console.log('Ripple address sequence:\n', rippleAddressSequence.data);
-        console.log('\n');
-
     } catch (e) {
         console.error('error', e.response.data);
     }
