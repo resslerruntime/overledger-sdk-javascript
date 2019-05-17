@@ -3,8 +3,8 @@ const OverledgerSDK = require("../../packages/bundle").default;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.examples.search';
-const bpiKey = 'DkucSXHTIKsNoT7EX9kfpvkVyorhSoa4odHLnYS-3f0';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Take these from the search-transaction scripts, as the response
 // includes what block the transaction is included in (except for bitcoin);
@@ -27,7 +27,7 @@ const rippleBlockNumber = '379468';
             provider: { network: 'http://10.7.4.236:30020/v1' },
 
         });
-        
+
 
         const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
         console.log('Bitcoin block: ', bitcoinBlock.data);

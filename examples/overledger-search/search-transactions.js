@@ -3,8 +3,8 @@ const OverledgerSDK = require("../../packages/bundle").default;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.examples.search';
-const bpiKey = 'DkucSXHTIKsNoT7EX9kfpvkVyorhSoa4odHLnYS-3f0';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // If looking for transaction hashes, they can be returned by running the 'a-to-b-transaction' example
 const bitcoinTransactionHash = 'cba56fa5543cab114ff54b315a453a89912ce34737e7d1a799e22f9f00b501d9';

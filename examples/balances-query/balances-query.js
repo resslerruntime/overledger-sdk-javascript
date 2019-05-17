@@ -3,8 +3,8 @@ const OverledgerSDK = require("../../packages/bundle").default;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.examples.get-balances';
-const bpiKey = 'DkucSXHTIKsNoT7EX9kfpvkVyorhSoa4odHLnYS-3f0';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 const ethereumAddress = '0x8661C6a3A44862498aB944C921858A5faDa931A7';
 const rippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
