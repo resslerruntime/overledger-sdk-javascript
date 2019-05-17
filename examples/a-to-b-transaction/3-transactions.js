@@ -3,8 +3,8 @@ const OverledgerSDK = require("../../packages/bundle").default;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.examples.a-to-b-transaction';
-const bpiKey = 'DkucSXHTIKsNoT7EX9kfpvkVyorhSoa4odHLnYS-3f0';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // FROM THE OUTPUT OF SCRIPT '1-partyA.js';
 const partyABitcoinPrivateKey = 'cSNgxoDKt65wBc96m5ugRkoVaBVQLTCodd1jtDuJrhWDYFuBvruq';
@@ -27,9 +27,6 @@ const partyBRippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
-            // TODO: Set this to 'testnet' once the release is live
-            provider: { network: 'http://10.7.4.236:30020/v1' },
-
         });
 
         const transactionMessage = 'SDK test';
@@ -70,7 +67,7 @@ const partyBRippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
                 message: transactionMessage,
                 options: {
                     amount: '1', // Minimum allowed amount of drops
-                    sequence: 1, // Sequence increases by 1 with each transaction 
+                    sequence: 1, // Sequence increases by 1 with each transaction
                     feePrice: '0.000012', // Minimum feePrice on Ripple
                     maxLedgerVersion: 4294967295, // The maximum ledger version the transaction can be included in.
                 }
