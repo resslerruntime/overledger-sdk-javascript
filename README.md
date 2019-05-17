@@ -555,3 +555,5 @@ This function returns an array of objects with the following fields.
 ## Examples
 
 Examples can be found in the examples folder.
+
+Don't forget to setup your `mappId` and `bpiKey`, you can get these on the [developer portal](https://developer.quant.network)
