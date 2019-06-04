@@ -6,7 +6,6 @@
     "es2015",
   ],
   "compilerOptions": {
-    "outDir": "dist",
     "module": "commonjs",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -17,6 +16,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "declaration": true,
     // Target latest version of ECMAScript.
     "target": "es6",
     // Search under node_modules for non-relative imports.
@@ -26,9 +26,6 @@
   },
   "exclude": [
     "node_modules",
-    "*/node_modules/",
-    "__mocks__",
-    "__tests__",
     "jest.config.js"
   ]
 }

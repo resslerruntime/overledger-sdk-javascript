@@ -1,3 +1,5 @@
+>THIS DOCUMENTATION IS A WORK IN PROGRESS. PLEASE CHECK THE DEVELOPMENT SECTION
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM package version](https://img.shields.io/npm/v/@quantnetwork/overledger-sdk.svg)](https://www.npmjs.com/package/@quantnetwork/overledger-sdk)
 
@@ -19,37 +21,68 @@ The Overledger SDK is a node module written in Javascript/ES6.
 - You will require a MAppId and BPI key:
   - Register your application in order to get a free MApp ID.
   - Verify your Quant token, and create a BPI key.
+  
+## How to use it with lerna locally
+
+You can't use this package without globally installing yarn version 1.15.2
+A Makefile will be used to build the package by priority
+
+* Run `npm install -g yarn`
+* Run `npm install`
+* Run `npm run bootstrap`
+* Run `npm run build`
+
+**Running the tests** 
+
+* Run `npm run lint`
+* Run `npm run test`
 
 ## Installation
 
 The Overledger SDK can be easily installed as an npm module. This will ensure that all required dependencies are automatically included.
 
 ```
-npm install @quantnetwork/overledger-sdk
+npm install @overledger/bundle
 ```
 
 Or if you prefer Yarn as the package manager.
 
 ```
-yarn add @quantnetwork/overledger-sdk
+yarn add @overledger/bundle
 ```
 
 ## Development
 
-To run the SDK in development mode, run the command `npm run dev` and every change will be automatically built.
+To develop on the SDK, first install lerna:
+
+```
+npm install -g lerna
+```
+
+Then, checkout this branch and run the following command:
+
+```
+npm run build
+```
+
+Or, for continous development:
+
+```
+npm run dev
+```
 
 ## Getting started
 
 NodeJS with babel
 
 ```javascript
-import OverledgerSDK from "@quantnetwork/overledger-sdk";
+import OverledgerSDK from "@overledger/bundle";
 ```
 
 NodeJS
 
 ```javascript
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
+const OverledgerSDK = require("@overledger/bundle").default;
 ```
 
 Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 5000ms).
@@ -58,6 +91,7 @@ Initialize the SDK with the 3 available dlts. Optionally, a timeout period can b
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
   timeout: 1500, // Optional
+  provider: { network: 'testnet' }, // Optional
 });
 ```
 
@@ -506,7 +540,7 @@ Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000
 
 | Name          | Type   | Description                                      |
 | ------------- | ------ | ------------------------------------------------ |
-| `fromAddress` | string | The address for the sequence query               |
+| `address`     | string | The address for the sequence query               |
 
 #### Return value
 
@@ -518,32 +552,8 @@ This function returns an array of objects with the following fields.
 | `sequence`| string | The sequence number of this address                               |
 
 
-## Usage Example
+## Examples
 
-In this simple usage example we will call the `getBalance` method to request the balance of the genesis address on Ripple (created by the blockchain on startup).
+Examples can be found in the examples folder.
 
-```
-npm install @quantnetwork/overledger-sdk
-```
-
-```
-// Boilerplate
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
-// Replace mappId and bipKey with your own credentials.
-const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
-});
-
-// Method call
-;(async () => {
-
-  const rippleAddress = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
-
-  const response = await overledger.dlts.ripple.getBalance(rippleAddress);
-
-  var rippleGenesisBalance = response.data
-  // The lowest unit in XRP is called 'drop'
-  console.log("The balance of the genesis address on the Quant Ripple Testnet is", rippleGenesisBalance.value, rippleGenesisBalance.unit);
-
-})();
-```
+Don't forget to setup your `mappId` and `bpiKey`, you can get these on the [developer portal](https://developer.quant.network)
