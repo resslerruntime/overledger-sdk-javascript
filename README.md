@@ -57,6 +57,7 @@ Initialize the SDK with the 3 available dlts. Optionally, a timeout period can b
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
+  network: 'testnet',
   timeout: 1500, // Optional
 });
 ```
@@ -141,7 +142,7 @@ Example of DLT transaction data:
     message: "QNT test",
     options: {
       amount: '1', // Amount in wei (1 ETH = 10^18 wei)
-      sequence: 2, // nonce
+      sequence: 0, // nonce
       feeLimit: '10',
       feePrice: '10',
     }

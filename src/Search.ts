@@ -15,7 +15,10 @@ class Search {
     this.request = axios.create({
       baseURL: `${this.sdk.overledgerUri}/search`,
       timeout: 1000,
-      headers: { Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}` },
+      headers: {
+        Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}`,
+        'Content-Type': 'application/json',
+      },
     });
   }
 

@@ -54,7 +54,7 @@ abstract class AbstractDLT {
       signedTransactions = signedTransaction;
     }
 
-    return this.sdk.send(signedTransactions.map(dlt => this.buildSignedTransactionsApiCall(dlt)));
+    return this.sdk.send(signedTransactions.map(signedTx => this.buildSignedTransactionsApiCall(signedTx)));
   }
 
   /**
@@ -84,14 +84,19 @@ abstract class AbstractDLT {
   /**
    * Wrap a specific DLT signed transaction with the overledger
    *
-   * @param {string} signedTransaction
+   * @param {string} signedTransactionHex
    *
    * @return {ApiCall}
    */
-  protected buildSignedTransactionsApiCall(signedTransaction: string): ApiCall {
+  protected buildSignedTransactionsApiCall(signedTransactionHex: string): ApiCall {
     return {
-      signedTransaction,
+      signedTransaction: {
+        transactions: [signedTransactionHex],
+        signatures: ['placeholder'],
+      },
       dlt: this.name,
+      fromAddress: 'address',
+      amount: 0,
     };
   }
 
@@ -169,7 +174,9 @@ export type TransactionOptions = {
 
 export type ApiCall = {
   dlt: string,
-  signedTransaction: string,
+  signedTransaction: Object,
+  fromAddress: string,
+  amount: number
 };
 
 export default AbstractDLT;
