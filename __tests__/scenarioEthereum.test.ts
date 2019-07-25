@@ -63,7 +63,7 @@ describe('Dlt/Ethereum', () => {
     expect(signedTransaction.startsWith('0x')).toBe(true);
   });
 
-  test('Can send an ethereum signedTransaction', async () => {
+  test.skip('Can send an ethereum signedTransaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.send(signedTransaction);
 
@@ -76,7 +76,7 @@ describe('Dlt/Ethereum', () => {
     });
   });
 
-  test('Can signAndSend an ethereum transaction', async () => {
+  test.skip('Can signAndSend an ethereum transaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.signAndSend('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,

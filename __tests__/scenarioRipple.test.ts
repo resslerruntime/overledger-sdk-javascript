@@ -68,7 +68,7 @@ describe('Dlt/Ripple', () => {
     expect(signedTransaction.startsWith('120')).toBe(true);
   });
 
-  test('Can send a ripple signedTransaction', async () => {
+  test.skip('Can send a ripple signedTransaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
     await overledger.dlts.ripple.send(signedTransaction);
 
@@ -82,7 +82,7 @@ describe('Dlt/Ripple', () => {
     });
   });
 
-  test('Can signAndSend a ripple transaction', async () => {
+  test.skip('Can signAndSend a ripple transaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
     await overledger.dlts.ripple.signAndSend('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
       amount: '1', feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
