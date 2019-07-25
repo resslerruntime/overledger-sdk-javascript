@@ -176,7 +176,7 @@ export type ApiCall = {
   dlt: string,
   signedTransaction: Object,
   fromAddress: string,
-  amount: number
+  amount: number,
 };
 
 export default AbstractDLT;

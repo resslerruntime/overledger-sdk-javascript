@@ -90,9 +90,9 @@ class OverledgerSDK {
       return {
         dlt: dlt.dlt,
         signedTransaction: {
-          transactions: [ await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options)],
-          signatures: ['emtpy']
-        }
+          transactions: [await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options)],
+          signatures: ['emtpy'],
+        },
       };
     }));
   }
