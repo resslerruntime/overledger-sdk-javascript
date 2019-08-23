@@ -94,7 +94,7 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData: [
           {
             dlt: 'ethereum',
-            fromAddress: expect.any(String),
+            address: expect.any(String),
           },
         ],
       });
@@ -251,10 +251,12 @@ describe('Dlt/RippleAndEthereum', () => {
           [
             {
               dlt: 'ripple',
+              fromAddress: expect.any(String),
               signedTransaction: expect.any(String),
             },
             {
               dlt: 'ethereum',
+              fromAddress: expect.any(String),
               signedTransaction: expect.any(String),
             },
           ],
@@ -344,10 +346,12 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData: [
           {
             dlt: 'ripple',
+            fromAddress: expect.any(String),
             signedTransaction: expect.any(String),
           },
           {
             dlt: 'ethereum',
+            fromAddress: expect.any(String),
             signedTransaction: expect.any(String),
           },
         ],

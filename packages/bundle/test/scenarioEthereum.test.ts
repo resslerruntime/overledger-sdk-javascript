@@ -72,6 +72,7 @@ describe('Dlt/Ethereum', () => {
       mappId: 'testmappid',
       dltData: [{
         dlt: 'ethereum',
+        fromAddress: expect.any(String),
         signedTransaction: expect.any(String),
       }],
     });
@@ -87,6 +88,7 @@ describe('Dlt/Ethereum', () => {
       mappId: 'testmappid',
       dltData: [{
         dlt: 'ethereum',
+        fromAddress: expect.any(String),
         signedTransaction: expect.any(String),
       }],
     });

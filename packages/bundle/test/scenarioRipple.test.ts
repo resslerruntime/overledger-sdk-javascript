@@ -78,6 +78,7 @@ describe('Dlt/Ripple', () => {
       dltData:
         [{
           dlt: 'ripple',
+          fromAddress: expect.any(String),
           signedTransaction: expect.any(String),
         }],
     });
@@ -94,6 +95,7 @@ describe('Dlt/Ripple', () => {
       dltData:
         [{
           dlt: 'ripple',
+          fromAddress: expect.any(String),
           signedTransaction: expect.any(String),
         }],
     });
