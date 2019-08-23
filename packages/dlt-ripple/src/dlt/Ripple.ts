@@ -5,7 +5,6 @@ import AbstractDLT from '@overledger/dlt-abstract';
 import { Account, Options, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
-import { AxiosResponse } from 'axios';
 
 class Ripple extends AbstractDLT {
   rippleAPI: RippleAPI;
@@ -131,13 +130,6 @@ class Ripple extends AbstractDLT {
     };
     account.address = deriveAddress(keypair.publicKey);
     this.account = account;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  fundAccount(amount: string = '1000000000', address: string = null): Promise<AxiosResponse> {
-    return super.fundAccount(amount, address);
   }
 }
 

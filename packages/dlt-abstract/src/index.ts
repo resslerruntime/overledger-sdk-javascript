@@ -94,28 +94,6 @@ abstract class AbstractDLT {
   abstract setAccount(privateKey: string): void;
 
   /**
-   * Fund an account
-   *
-   * @param {string} amount The amount to fund
-   * @param {string} address the address to fund
-   */
-  fundAccount(amount: string, address: string = null): Promise<AxiosResponse> {
-    if (typeof amount !== 'string') {
-      throw new Error('The amount parameter must be of type string');
-    }
-
-    if (address === null) {
-      if (!this.account) {
-        throw new Error('The account must be set up');
-      }
-
-      address = this.account.address;
-    }
-
-    return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
-  }
-
-  /**
    * Get the balance for a specific address
    *
    * @param {string} address The address to look at
