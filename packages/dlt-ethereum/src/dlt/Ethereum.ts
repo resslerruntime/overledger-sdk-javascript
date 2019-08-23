@@ -38,7 +38,7 @@ class Ethereum extends AbstractDLT {
     if (sdk.network === MAINNET) {
       this.chainId = 1;
     } else {
-      this.chainId = 500;
+      this.chainId = 3;
     }
   }
 
