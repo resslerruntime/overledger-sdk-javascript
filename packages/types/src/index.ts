@@ -1,5 +1,4 @@
 import Account from './Account';
-import APICall from './APICall';
 import APICallWrapper from './APICallWrapper';
 import DLTAndAddress from './DLTAndAddress';
 import DLTAndAddressArray from './DLTAndAddressArray';
@@ -10,6 +9,7 @@ import ProviderOptions from './ProviderOptions';
 import SDKOptions from './SDKOptions';
 import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
+import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
 import SignedTransactionResponse from './SignedTransactionResponse';
 import SignOptions from './SignOptions';
@@ -17,7 +17,6 @@ import TransactionOptions from './TransactionOptions';
 
 export {
   Account,
-  APICall,
   APICallWrapper,
   DLTAndAddress,
   DLTAndAddressArray,
@@ -28,6 +27,7 @@ export {
   SDKOptions,
   SequenceDataRequest,
   SequenceDataResponse,
+  OverledgerSignedTransaction,
   SignedTransactionRequest,
   SignedTransactionResponse,
   SignOptions,

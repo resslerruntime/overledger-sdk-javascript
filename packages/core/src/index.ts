@@ -2,10 +2,9 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
 import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
-import { APICall, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
+import { SignedTransactionRequest, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
 import networkOptions from '@overledger/types/src/networkOptions';
 import SequenceDataResponse from '@overledger/types/src/SequenceDataResponse';
-import SignedTransactionRequest from '@overledger/types/src/SignedTransactionRequest';
 
 class OverledgerSDK {
   /**
@@ -97,21 +96,21 @@ class OverledgerSDK {
    *
    * @param {array} dltData
    */
-  private buildWrapperApiCall(dltData: APICall[] | SequenceDataRequest[]): APICallWrapper {
+  private buildWrapperApiCall(dltData: SignedTransactionRequest[] | SequenceDataRequest[]): APICallWrapper {
     return {
-      dltData,
       mappId: this.mappId,
+      dltData,
     };
   }
 
   /**
    * Send signed transactions to the provided DLTs
    *
-   * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
+   * @param {SignedTransactionRequest[]} signedTransactions Object of the DLTs where you want to send a transaction
    */
   public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
     const apiCall = signedTransactions.map(
-      dlt => this.dlts[dlt.dlt].buildSignedTransactionsApiCall(dlt.signedTransaction),
+      stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));

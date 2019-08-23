@@ -1,4 +1,4 @@
-import { TransactionOptions, APICall, Account } from '@overledger/types';
+import { TransactionOptions, SignedTransactionRequest, Account } from '@overledger/types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 abstract class AbstractDLT {
@@ -42,19 +42,12 @@ abstract class AbstractDLT {
   abstract _sign(toAddress: string, message: string, options?: TransactionOptions): Promise<string>;
 
   /**
-   * Send a signed transactions array to overledger
+   * Send an Overledger signed transaction
    *
-   * @param {string|string[]} signedTransaction
+   * @param {SignedTransactionRequest} signedTransaction
    */
-  public send(signedTransaction: string | string[]): AxiosPromise<Object> {
-    let signedTransactions = [];
-    if (!Array.isArray(signedTransaction)) {
-      signedTransactions = [signedTransaction];
-    } else {
-      signedTransactions = signedTransaction;
-    }
-
-    return this.sdk.send(signedTransactions.map(dlt => this.buildSignedTransactionsApiCall(dlt)));
+  public send(signedTransaction: SignedTransactionRequest): AxiosPromise<Object> {
+    return this.sdk.send(this.buildSignedTransactionsApiCall(signedTransaction));
   }
 
   /**
@@ -67,32 +60,18 @@ abstract class AbstractDLT {
   }
 
   /**
-   * Sign and send a DLT transaction to overledger
+   * Wrap a specific DLT signed transaction with the Overledger required fields
    *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
-   *
-   * @return {Promise<axios>}
-   */
-  async signAndSend(toAddress: string, message: string, options: TransactionOptions): Promise<AxiosResponse> {
-    const signedTx = await this.sign(toAddress, message, options);
-
-    return this.send(signedTx);
-  }
-
-  /**
-   * Wrap a specific DLT signed transaction with the overledger
-   *
-   * @param {string} signedTransaction
+   * @param {SignedTransactionRequest} signedTransaction
    *
    * @return {ApiCall}
    */
-  public buildSignedTransactionsApiCall(signedTransaction: string): APICall {
+  public buildSignedTransactionsApiCall(stx: SignedTransactionRequest): SignedTransactionRequest {
     return {
-      signedTransaction,
       dlt: this.name,
-      fromAddress: this.account.address,
+      fromAddress: stx.fromAddress,
+      amount: stx.amount,
+      signedTransaction: stx.signedTransaction,
     };
   }
 

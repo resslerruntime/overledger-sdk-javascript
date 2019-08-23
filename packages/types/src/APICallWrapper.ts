@@ -1,9 +1,9 @@
 import SequenceDataRequest from './SequenceDataRequest';
-import APICall from './APICall';
+import SignedTransactionRequest from './SignedTransactionRequest';
 
 export type APICallWrapper = {
   mappId: string,
-  dltData: APICall[] | SequenceDataRequest[],
+  dltData: SignedTransactionRequest[] | SequenceDataRequest[],
 };
 
 export default APICallWrapper;
