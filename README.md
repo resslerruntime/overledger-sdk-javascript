@@ -62,13 +62,13 @@ npm install -g lerna
 Then, checkout this branch and run the following command:
 
 ```
-npm run build
+yarn run build
 ```
 
 Or, for continous development:
 
 ```
-npm run dev
+yarn run dev
 ```
 
 ## Getting started

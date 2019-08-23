@@ -4,19 +4,19 @@
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "scripts": {
-    "dev": "nodemon --config nodemon.json --exec npm run build",
+    "dev": "nodemon --config nodemon.json --exec yarn run build",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test --stream",
-    "prepublishOnly": "npm run lint && npm run test && npm run build",
+    "prepublishOnly": "yarn run lint && yarn run test && yarn run build",
     "build": "make",
-    "lint": "lerna exec -- npm run lint"
+    "lint": "lerna exec -- yarn run lint"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/quantnetwork/overledger-sdk-javascript.git"
   },
-  "author": "Sebastien Bramille <support@quant.network>",
+  "author": "Quant Network <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "devDependencies": {

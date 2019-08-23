@@ -5,11 +5,22 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && tsc --declaration",
+    "build": "yarn run clean && tsc --declaration",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/dlt-abstract",
-  "author": "Sebastien Bramille <support@quant.network>",
+  "contributors": [
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
+    },
+    {
+      "name": "Alexandru Chiriac",
+      "email": "alexandru.chiriac@quant.network",
+      "url": "https://github.com/alexchiriac"
+    }
+  ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "types":"dist/index.d.ts",
