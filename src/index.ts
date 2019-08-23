@@ -69,6 +69,7 @@ class OverledgerSDK {
       timeout: options.timeout || 5000,
       headers: {
         Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
+        'Content-Type': 'application/json',
       },
     });
 
@@ -88,7 +89,10 @@ class OverledgerSDK {
     return Promise.all(dlts.map(async (dlt) => {
       return {
         dlt: dlt.dlt,
-        signedTransaction: await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options),
+        signedTransaction: {
+          transactions: [await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options)],
+          signatures: ['emtpy'],
+        },
       };
     }));
   }
@@ -112,7 +116,7 @@ class OverledgerSDK {
    */
   public send(signedTransactions): AxiosPromise<Object> {
     const apiCall = signedTransactions.map(
-      dlt => this.dlts[dlt.dlt].buildSignedTransactionsApiCall(dlt.signedTransaction),
+      dltTransactionObject => this.dlts[dltTransactionObject.dlt].buildSignedTransactionsApiCall(dltTransactionObject.signedTransaction.transactions[0]),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
@@ -197,7 +201,7 @@ class OverledgerSDK {
 
 export type SignedTransactionResponse = {
   dlt: string,
-  signedTransaction: string,
+  signedTransaction: Object,
 };
 
 export type SDKOptions = {
