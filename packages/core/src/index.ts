@@ -76,7 +76,7 @@ class OverledgerSDK {
   /**
    * Sign transactions for the provided DLTs
    *
-   * @param {Object} dlts Object of the DLTs where you want to send a transaction
+   * @param {SignOptions} dlts Object of the DLTs where you want to send a transaction
    */
   public async sign(dlts: SignOptions): Promise<SignedTransactionResponse[]> {
     if (!Array.isArray(dlts)) {
@@ -119,7 +119,7 @@ class OverledgerSDK {
   /**
    * Get the sequence number from the provided address
    *
-   * @param sequenceData[]
+   * @param {SequenceDataRequest[]} sequenceData[]
    */
   public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<SequenceDataResponse> {
     return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
