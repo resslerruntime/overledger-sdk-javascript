@@ -1,6 +1,6 @@
 type SequenceDataRequest = {
   dlt: string,
-  fromAddress: string,
+  address: string,
 };
 
 export default SequenceDataRequest;

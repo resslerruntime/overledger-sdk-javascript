@@ -76,7 +76,7 @@ class OverledgerSDK {
   /**
    * Sign the provided transaction
    *
-   * @param {UnsignedData} unsignedData Data object encompassing a single transaction
+   * @param {UnsignedData} unsignedData Object encompassing data for a single transaction
    */
   public async sign(unsignedData: UnsignedData): Promise<string> {
     const signedTransaction = await this.dlts[unsignedData.dlt].sign(unsignedData.toAddress, unsignedData.message, unsignedData.options)
@@ -89,7 +89,7 @@ class OverledgerSDK {
    *
    * @param {Array} dltData
    */
-  private buildWrapperApiCall(dltData: SignedTransactionRequest[] | SequenceDataRequest[]): APICallWrapper {
+  private buildWrapperApiCall(dltData: SignedTransactionRequest[]): APICallWrapper {
     return {
       mappId: this.mappId,
       dltData,
@@ -112,10 +112,13 @@ class OverledgerSDK {
   /**
    * Get the sequence number from the provided address
    *
-   * @param {SequenceDataRequest[]} sequenceData[]
+   * @param {SequenceDataRequest[]} sequenceData
    */
   public getSequences(sequenceData: SequenceDataRequest[]): AxiosPromise<SequenceDataResponse> {
-    return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
+    const sequenceRequest = {
+      dltData: sequenceData,
+    }
+    return this.request.post('/sequence', sequenceRequest);
   }
 
   /**
