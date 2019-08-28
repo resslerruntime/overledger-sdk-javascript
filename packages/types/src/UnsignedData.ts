@@ -1,10 +1,10 @@
 import TransactionOptions from './TransactionOptions';
 
-type SignOptions = [{
+type UnsignedData = {
   dlt: string,
   toAddress: string,
   message: string,
   options: TransactionOptions,
-}];
+};
 
-export default SignOptions;
+export default UnsignedData;

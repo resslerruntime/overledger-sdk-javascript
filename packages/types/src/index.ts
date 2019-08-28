@@ -11,8 +11,7 @@ import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
-import SignedTransactionResponse from './SignedTransactionResponse';
-import SignOptions from './SignOptions';
+import UnsignedData from './UnsignedData';
 import TransactionOptions from './TransactionOptions';
 
 export {
@@ -29,7 +28,6 @@ export {
   SequenceDataResponse,
   OverledgerSignedTransaction,
   SignedTransactionRequest,
-  SignedTransactionResponse,
-  SignOptions,
+  UnsignedData,
   TransactionOptions,
 };

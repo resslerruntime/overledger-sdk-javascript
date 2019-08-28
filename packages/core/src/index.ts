@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import Search from '@overledger/search';
 import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
-import { SignedTransactionRequest, SDKOptions, DLTOptions, SignOptions, SignedTransactionResponse, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
+import { SignedTransactionRequest, SDKOptions, DLTOptions, UnsignedData, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
 import networkOptions from '@overledger/types/src/networkOptions';
 import SequenceDataResponse from '@overledger/types/src/SequenceDataResponse';
 
@@ -65,7 +65,7 @@ class OverledgerSDK {
   /**
    * Validate the provided options
    *
-   * @param {Object} options
+   * @param {SDKOptions} options
    */
   private validateOptions(options: SDKOptions): void {
     if (!options.dlts) {
@@ -74,27 +74,20 @@ class OverledgerSDK {
   }
 
   /**
-   * Sign transactions for the provided DLTs
+   * Sign the provided transaction
    *
-   * @param {SignOptions} dlts Object of the DLTs where you want to send a transaction
+   * @param {UnsignedData} unsignedData Data object encompassing a single transaction
    */
-  public async sign(dlts: SignOptions): Promise<SignedTransactionResponse[]> {
-    if (!Array.isArray(dlts)) {
-      throw new Error('The dlts object must be an array');
-    }
+  public async sign(unsignedData: UnsignedData): Promise<string> {
+    const signedTransaction = await this.dlts[unsignedData.dlt].sign(unsignedData.toAddress, unsignedData.message, unsignedData.options)
 
-    return Promise.all(dlts.map(async (dlt) => {
-      return {
-        dlt: dlt.dlt,
-        signedTransaction: await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options),
-      };
-    }));
+    return signedTransaction;
   }
 
   /**
    * Wrap the DLTData with the api schema
    *
-   * @param {array} dltData
+   * @param {Array} dltData
    */
   private buildWrapperApiCall(dltData: SignedTransactionRequest[] | SequenceDataRequest[]): APICallWrapper {
     return {
