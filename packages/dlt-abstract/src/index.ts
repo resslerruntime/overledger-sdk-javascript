@@ -47,7 +47,7 @@ abstract class AbstractDLT {
    * @param {SignedTransactionRequest} signedTransaction
    */
   public send(signedTransaction: SignedTransactionRequest): AxiosPromise<Object> {
-    return this.sdk.buildSignedTransactionsApiCall(signedTransaction);
+    return this.sdk.send([this.buildSignedTransactionsApiCall(signedTransaction)]);
   }
 
   /**
