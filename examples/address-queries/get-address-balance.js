@@ -1,4 +1,4 @@
-const OverledgerSDK = require("../../packages/bundle").default;
+const OverledgerSDK = require('../../packages/bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -17,9 +17,7 @@ const rippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
-            // TODO: Set this to 'testnet' once the release is live
-            provider: { network: 'http://10.7.4.236:30020/v1' },
-
+            provider: { network: 'testnet' },
         });
 
         const ethereumAddressBalance = await overledger.dlts.ethereum.getBalance(ethereumAddress);

@@ -1,10 +1,10 @@
-const OverledgerSDK = require("../../packages/bundle").default;
+const OverledgerSDK = require('../../packages/bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '';
-const bpiKey = '';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Paste in credentials from the public testnet faucets for Party A.
 // TODO: BITCOIN 
@@ -29,7 +29,8 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+      provider: { network: 'testnet' },
     });
 
     const transactionMessage = 'Overledger JavaScript SDK Test';
