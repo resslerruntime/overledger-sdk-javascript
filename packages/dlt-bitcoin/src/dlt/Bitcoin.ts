@@ -58,18 +58,22 @@ class Bitcoin extends AbstractDLT {
       throw new Error('options.feePrice must be set up');
     }
 
+    const value = Number.parseFloat(options.value);
+    const amount = Number.parseFloat(options.amount);
+    const feePrice = Number.parseFloat(options.feePrice);
+
     const tx = new bitcoin.TransactionBuilder(this.addressType);
     const data = Buffer.from(message, 'utf8'); // Message is inserted
 
     tx.addInput(options.previousTransactionHash, options.sequence);
-    tx.addOutput(toAddress, options.amount);
+    tx.addOutput(toAddress, amount);
     const ret = bitcoin.script.compile(
       [
         bitcoin.opcodes.OP_RETURN,
         data,
       ]);
     tx.addOutput(ret, 0);
-    tx.addOutput(this.account.address, options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
+    tx.addOutput(this.account.address, value - amount - this.NON_DUST_AMOUNT - feePrice);
 
     return tx;
   }
@@ -116,9 +120,9 @@ class Bitcoin extends AbstractDLT {
 
 interface TransactionOptions extends BaseTransactionOptions {
   previousTransactionHash: string;
-  value: number;
-  amount: number;
-  feePrice: number;
+  value: string;
+  amount: string;
+  feePrice: string;
 }
 
 export default Bitcoin;

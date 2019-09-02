@@ -56,7 +56,9 @@ class Ripple extends AbstractDLT {
     if (typeof options.maxLedgerVersion === 'undefined') {
       throw new Error('options.maxLedgerVersion must be set up');
     }
+    const maxLedgerVersion = Number.parseFloat(options.maxLedgerVersion) | 5;
     const amountInXRP = dropsToXrp(options.amount);
+    const feeInXRP = dropsToXrp(options.feePrice);
 
     const address = this.account.address;
     const payment = {
@@ -79,9 +81,9 @@ class Ripple extends AbstractDLT {
       }],
     };
     const instructions = {
-      maxLedgerVersion: options.maxLedgerVersion,
+      maxLedgerVersion: maxLedgerVersion,
       sequence: options.sequence,
-      fee: options.feePrice,
+      fee: feeInXRP,
     };
 
     return { address, payment, instructions };
@@ -141,7 +143,7 @@ export type Transaction = {
 
 interface TransactionOptions extends BaseTransactionOptions {
   feePrice: string;
-  maxLedgerVersion: number;
+  maxLedgerVersion: string;
   amount: string;
 }
 

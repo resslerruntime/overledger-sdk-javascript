@@ -1,6 +1,6 @@
 type TransactionOptions = {
   sequence?: number,
-  amount?: string | number,
+  amount?: string,
 };
 
 export default TransactionOptions;
