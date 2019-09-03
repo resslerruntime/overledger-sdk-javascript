@@ -26,31 +26,31 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be set up');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message')).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feeLimit', () => {
 
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
-      amount: 0,
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {
+      amount: '0',
     })).toThrow('options.feeLimit must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feePrice', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
-      amount: 0, feeLimit: 100,
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {
+      amount: '0', feeLimit: '100',
     })).toThrow('options.feePrice must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
-      amount: 0, feeLimit: 100, feePrice: 1,
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {
+      amount: '0', feeLimit: '100', feePrice: '1',
     })).toThrow('options.sequence must be set up');
   });
 
   test('Can sign an ethereum transaction', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
-      amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
+    signedTransaction = await overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {
+      amount: '0', feeLimit: '100', feePrice: '1', sequence: 1,
     });
 
     expect(signedTransaction.length).toBeGreaterThan(200);

@@ -26,30 +26,30 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Cannot sign a ripple transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be set up');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message')).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a feePrice', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: 1,
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1',
     })).toThrow('options.feePrice must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: 1, feePrice: '0.000012',
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12',
     })).toThrow('options.sequence must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a maxLedgerVersion', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: 1, feePrice: '0.000012', sequence: '1',
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12', sequence: 1,
     })).toThrow('options.maxLedgerVersion must be set up');
   });
 
   test('Can sign a ripple transaction', async () => {
-    signedTransaction = await overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: 1, feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
+    signedTransaction = await overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12', sequence: 1, maxLedgerVersion: '100000000',
     });
 
     expect(signedTransaction.length).toBeGreaterThan(200);

@@ -199,12 +199,12 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ripple',
           toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'QNT test',
+          message: 'message',
           options: {
             sequence: 1,
-            amount: 1,
-            feePrice: '0.000012',
-            maxLedgerVersion: 100000000,
+            amount: '1',
+            feePrice: '12',
+            maxLedgerVersion: '100000000',
           },
         },
       )
@@ -212,11 +212,11 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ethereum',
           toAddress: '0x0000000000000000000000000000000000000000',
-          message: 'QNT test',
+          message: 'message',
           options: {
-            amount: 0,
-            feeLimit: 100,
-            feePrice: 1,
+            amount: '0',
+            feeLimit: '100',
+            feePrice: '1',
             sequence: 1,
           },
         },
@@ -314,12 +314,12 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ripple',
           toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'QNT test',
+          message: 'message',
           options: {
             sequence: 1,
-            amount: 1,
-            feePrice: '0.000012',
-            maxLedgerVersion: 100000000,
+            amount: '1',
+            feePrice: '12',
+            maxLedgerVersion: '100000000',
           },
         },
       )
@@ -327,11 +327,11 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ethereum',
           toAddress: '0x0000000000000000000000000000000000000000',
-          message: 'QNT test',
+          message: 'message',
           options: {
-            amount: 0,
-            feeLimit: 100,
-            feePrice: 1,
+            amount: '0',
+            feeLimit: '100',
+            feePrice: '1',
             sequence: 1,
           },
         },

@@ -66,7 +66,7 @@ describe('Dlt/Common', () => {
 
       test('Cannot sign a transaction without an account set up', () => {
         expect(() =>
-          overledger.dlts[dlt.type].sign(account.address, 'QNT tt3'),
+          overledger.dlts[dlt.type].sign(account.address, 'message'),
         ).toThrow(`The ${dlt.type} account must be set up`);
       });
 
