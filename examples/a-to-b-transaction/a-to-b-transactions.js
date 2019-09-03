@@ -59,10 +59,10 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       toAddress: partyBEthereumAddress,
       message: transactionMessage,
       options: {
-        amount: 0, // On Ethereum you can send 0 amount transactions. But you still pay network fees
+        amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
         sequence: 0, // Sequence starts at 0 after funding
-        feePrice: 21000, // This is the minimum fee price in Ethereum
-        feeLimit: 2100000, // The maximum fee that this transaction can use (can be set by the user)
+        feePrice: '21000', // This is the minimum fee price in Ethereum
+        feeLimit: '2100000', // The maximum fee that this transaction can use (can be set by the user)
       }
     });
     const rippleSignedTransaction = await overledger.sign({
@@ -70,10 +70,10 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       toAddress: partyBRippleAddress,
       message: transactionMessage,
       options: {
-        amount: 1, // Minimum allowed amount of drops
+        amount: '1', // Minimum allowed amount of drops
         sequence: 1, // Sequence increases by 1 with each transaction
-        feePrice: '0.000012', // Minimum feePrice on Ripple
-        maxLedgerVersion: 4294967295, // The maximum ledger version the transaction can be included in.
+        feePrice: '12', // Minimum feePrice on Ripple
+        maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       }
     });
 

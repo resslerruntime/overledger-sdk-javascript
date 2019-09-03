@@ -58,9 +58,9 @@ class Bitcoin extends AbstractDLT {
       throw new Error('options.feePrice must be set up');
     }
 
-    const value = Number.parseFloat(options.value);
-    const amount = Number.parseFloat(options.amount);
-    const feePrice = Number.parseFloat(options.feePrice);
+    const value = Number(options.value);
+    const amount = Number(options.amount);
+    const feePrice = Number(options.feePrice);
 
     const tx = new bitcoin.TransactionBuilder(this.addressType);
     const data = Buffer.from(message, 'utf8'); // Message is inserted

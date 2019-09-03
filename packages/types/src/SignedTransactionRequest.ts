@@ -1,4 +1,4 @@
-import OverledgerSignedTransaction from './OverledgerSignedTransaction'
+import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 
 type SignedTransactionRequest = {
   dlt: string,
