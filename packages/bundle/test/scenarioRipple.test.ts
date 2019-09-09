@@ -41,6 +41,12 @@ describe('Dlt/Ripple', () => {
     })).toThrow('options.sequence must be set up');
   });
 
+  test('Cannot sign a ripple transaction without specifying a maxLedgerVersion', () => {
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12', maxLedgerVersion: '4294967295',
+    })).toThrow('options.sequence must be set up');
+  });
+
   test('Can sign a ripple transaction', async () => {
     signedTransaction = await overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
       amount: '1', feePrice: '12', sequence: 1, maxLedgerVersion: '100000000',

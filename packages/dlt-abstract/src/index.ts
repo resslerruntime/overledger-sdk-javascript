@@ -24,7 +24,7 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  public sign(toAddress: string, message: string, options: TransactionOptions = {}): Promise<string> {
+  public sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
     }
@@ -68,7 +68,7 @@ abstract class AbstractDLT {
    */
   public buildSignedTransactionsApiCall(stx: SignedTransactionRequest): SignedTransactionRequest {
     return {
-      dlt: this.name,
+      dlt: stx.dlt,
       fromAddress: stx.fromAddress,
       amount: stx.amount,
       signedTransaction: stx.signedTransaction,

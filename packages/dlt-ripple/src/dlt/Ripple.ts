@@ -53,7 +53,10 @@ class Ripple extends AbstractDLT {
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
     }
-    const maxLedgerVersion = Number(options.maxLedgerVersion) || 5;
+    if (typeof options.maxLedgerVersion === 'undefined') {
+      throw new Error('options.maxLedgerVersion must be set up');
+    }
+    const maxLedgerVersion = Number(options.maxLedgerVersion);
     const amountInXRP = dropsToXrp(options.amount);
     const feeInXRP = dropsToXrp(options.feePrice);
 

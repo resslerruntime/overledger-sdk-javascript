@@ -3,7 +3,7 @@ import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 type SignedTransactionRequest = {
   dlt: string,
   fromAddress: string,
-  amount: number,
+  amount: string,
   signedTransaction: OverledgerSignedTransaction,
 };
 

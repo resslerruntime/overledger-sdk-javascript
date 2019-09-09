@@ -74,14 +74,26 @@ class OverledgerSDK {
   }
 
   /**
-   * Sign the provided transaction
+   * Sign the provided transactions
    *
-   * @param {UnsignedData} unsignedData Object encompassing data for a single transaction
+   * @param {UnsignedData[]} unsignedData Array of unsigned transactions
    */
-  public async sign(unsignedData: UnsignedData): Promise<string> {
-    const signedTransaction = await this.dlts[unsignedData.dlt].sign(unsignedData.toAddress, unsignedData.message, unsignedData.options);
+  public async sign(unsignedData: UnsignedData[]): Promise<SignedTransactionRequest[]> {
+    const signedTransactionRequest = Promise.all(unsignedData.map(async (data) => {
+      const signedTransaction = await this.dlts[data.dlt].sign(data.toAddress, data.message, data.options);
 
-    return signedTransaction;
+      return {
+        dlt: data.dlt,
+        fromAddress: this.dlts[data.dlt].account.address,
+        amount: data.options.amount,
+        signedTransaction: {
+          signatures: [],
+          transactions: [signedTransaction],
+        },
+      };
+    }));
+    
+    return signedTransactionRequest;
   }
 
   /**
