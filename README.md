@@ -378,23 +378,6 @@ This function returns an array of objects with the following fields.
 | `dlt`     | string | The DLT which the request has been submitted to                   |
 | `sequence`| string | The sequence number of this address                               |
 
-### Faucet
-As per default it would take the configured address.
-From the DLT level `overledger.dlts.[dlt]`
-Fund an account on our testnet.
-
-Usage: `fundAccount(amount?, address?)`
-
-#### Parameters
-
-| Name      | Type   | Description                                                                                                               |
-| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `amount`  | string | _Optional_ The amount of tokens to fund, in the smallest unit (satoshi for Bitcoin, wei for Ethereum or drops for Ripple) |
-| `address` | string | _Optional_ The address to fund                                                                                            |
-
-#### Return Value
-
-This function returns a `Promise`
 
 
 ## Types

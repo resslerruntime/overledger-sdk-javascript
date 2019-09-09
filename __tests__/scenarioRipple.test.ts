@@ -24,19 +24,6 @@ describe('Dlt/Ripple', () => {
     expect(account.address).toMatch(/r[1-9A-HJ-NP-Za-km-z]{25,34}/);
   });
 
-  test('Can fund the set up account with the default amount', () => {
-    overledger.dlts.ripple.fundAccount();
-
-    axios.post.mockResolvedValue({ status: 'OK',
-    message:
-     'The transaction was applied. Only final in a validated ledger.',
-    transactionHash:
-     '1CF917EBBA27CA477878E8386C404EC9851CA39237BB3433CCD79C6172D12788',
-    address: 'rfkP2KXi9G8GEsMHgUm2NS4ip4QbU4jga',
-    amount: '1000000000' });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/ripple/${account.address}/1000000000`);
-  });
-
   test('Cannot sign a ripple transaction without specifying an amount', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be set up');
   });
