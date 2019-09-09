@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bitcoinjs-lib": "^4.0.2",
     "event-stream": "3.3.4",
     "ripple-keypairs": "^0.10.1",

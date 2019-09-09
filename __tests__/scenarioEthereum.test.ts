@@ -24,13 +24,6 @@ describe('Dlt/Ethereum', () => {
     expect(account.address.length).toBe(42);
   });
 
-  test('Can fund the set up account with the default amount', () => {
-    overledger.dlts.ethereum.fundAccount();
-
-    axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/1000000000000000000`);
-  });
-
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be set up');
   });

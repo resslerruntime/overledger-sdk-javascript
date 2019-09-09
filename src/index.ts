@@ -229,7 +229,7 @@ export type SignOptions = [{
 
 export type sequenceDataRequest = {
   dlt: string,
-  fromAddress: string,
+  address: string,
 };
 
 export type sequenceDataResponse = [{

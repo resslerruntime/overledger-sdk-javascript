@@ -25,19 +25,6 @@ describe('Dlt/Bitcoin', () => {
     expect(account.address.length).toBe(34);
   });
 
-  test('Can fund the set up account with the default amount', () => {
-    overledger.dlts.bitcoin.fundAccount();
-
-    axios.post.mockResolvedValue({ status: 'OK',
-    message: null,
-    address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
-    amount: 1,
-    txnHash:
-     '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
-    vout: 1 });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
-  });
-
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
     expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('options.sequence must be set up');
   });
