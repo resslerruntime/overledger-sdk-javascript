@@ -80,7 +80,6 @@ The SDK provides the following functions which return a promise with a standard 
   - [getBalances](#getBalances)
   - [getSequences](#getSequences)
 - DLT functions
-  - [Faucet](#faucet)
   - [Account](#account)
   - [getBalance](#getBalance)
   - [getSequence](#getSequence)
@@ -349,11 +348,11 @@ Usage:
 const request = [
 	{
 		"dlt": "ethereum",
-		"fromAddress": "0x0000000000000000000000000000000000000000"
+		"address": "0x0000000000000000000000000000000000000000"
 	},
 	{
 		"dlt": "ripple",
-		"fromAddress": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+		"address": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
 	}
 ]
 
@@ -367,7 +366,7 @@ This function accepts an array of objects with the following fields:
 | Name          | Type   | Description                                      |
 | ------------- | ------ | ------------------------------------------------ |
 | `dlt`         | string | The dlt where this address should be searched on |
-| `fromAddress` | string | The address for the sequence query               |
+| `address` | string | The address for the sequence query               |
 
 #### Return value
 
@@ -490,7 +489,7 @@ Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000
 
 | Name          | Type   | Description                                      |
 | ------------- | ------ | ------------------------------------------------ |
-| `fromAddress` | string | The address for the sequence query               |
+| `address` | string | The address for the sequence query               |
 
 #### Return value
 
