@@ -1,7 +1,6 @@
 import bitcoin from 'bitcoinjs-lib';
 import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import OverledgerSDK from '../';
-import { AxiosResponse } from 'axios';
 
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT: number = 546;
@@ -109,13 +108,6 @@ class Bitcoin extends AbstractDLT {
       address: bitcoin.payments
         .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
     };
-  }
-
-  /**
-   * @inheritdoc
-   */
-  fundAccount(amount: string = '100000000', address: string = null): Promise<AxiosResponse> {
-    return super.fundAccount(amount, address);
   }
 }
 

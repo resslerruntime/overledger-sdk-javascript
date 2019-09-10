@@ -54,16 +54,16 @@ abstract class AbstractDLT {
       signedTransactions = signedTransaction;
     }
 
-    return this.sdk.send(signedTransactions.map(dlt => this.buildSignedTransactionsApiCall(dlt)));
+    return this.sdk.send(signedTransactions.map(signedTx => this.buildSignedTransactionsApiCall(signedTx)));
   }
 
   /**
    * Get the sequence for a specific address
    *
-   * @param {string|string[]} fromAddress
+   * @param {string|string[]} address
    */
-  public getSequence(fromAddress: string): AxiosPromise<Object> {
-    return this.sdk.getSequences([{ fromAddress, dlt: this.name }]);
+  public getSequence(address: string): AxiosPromise<Object> {
+    return this.sdk.getSequences([{ address, dlt: this.name }]);
   }
 
   /**
@@ -84,14 +84,19 @@ abstract class AbstractDLT {
   /**
    * Wrap a specific DLT signed transaction with the overledger
    *
-   * @param {string} signedTransaction
+   * @param {string} signedTransactionHex
    *
    * @return {ApiCall}
    */
-  protected buildSignedTransactionsApiCall(signedTransaction: string): ApiCall {
+  protected buildSignedTransactionsApiCall(signedTransactionHex: string): ApiCall {
     return {
-      signedTransaction,
+      signedTransaction: {
+        transactions: [signedTransactionHex],
+        signatures: ['placeholder'],
+      },
       dlt: this.name,
+      fromAddress: 'address',
+      amount: 0,
     };
   }
 
@@ -112,28 +117,6 @@ abstract class AbstractDLT {
    * @param {string} privateKey The privateKey
    */
   abstract setAccount(privateKey: string): void;
-
-  /**
-   * Fund an account
-   *
-   * @param {string} amount The amount to fund
-   * @param {string} address the address to fund
-   */
-  fundAccount(amount: string, address: string = null): Promise<AxiosResponse> {
-    if (typeof amount !== 'string') {
-      throw new Error('The amount parameter must be of type string');
-    }
-
-    if (address === null) {
-      if (!this.account) {
-        throw new Error('The account must be set up');
-      }
-
-      address = this.account.address;
-    }
-
-    return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
-  }
 
   /**
    * Get the balance for a specific address
@@ -169,7 +152,9 @@ export type TransactionOptions = {
 
 export type ApiCall = {
   dlt: string,
-  signedTransaction: string,
+  signedTransaction: Object,
+  fromAddress: string,
+  amount: number,
 };
 
 export default AbstractDLT;

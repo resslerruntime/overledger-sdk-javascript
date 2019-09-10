@@ -24,13 +24,6 @@ describe('Dlt/Ethereum', () => {
     expect(account.address.length).toBe(42);
   });
 
-  test('Can fund the set up account with the default amount', () => {
-    overledger.dlts.ethereum.fundAccount();
-
-    axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
-    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/1000000000000000000`);
-  });
-
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be set up');
   });
@@ -63,7 +56,7 @@ describe('Dlt/Ethereum', () => {
     expect(signedTransaction.startsWith('0x')).toBe(true);
   });
 
-  test('Can send an ethereum signedTransaction', async () => {
+  test.skip('Can send an ethereum signedTransaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.send(signedTransaction);
 
@@ -76,7 +69,7 @@ describe('Dlt/Ethereum', () => {
     });
   });
 
-  test('Can signAndSend an ethereum transaction', async () => {
+  test.skip('Can signAndSend an ethereum transaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.signAndSend('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
