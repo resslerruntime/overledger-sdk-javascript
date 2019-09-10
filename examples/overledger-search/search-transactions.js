@@ -19,8 +19,7 @@ const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
-            // TODO: Set this to 'testnet' once the release is live
-            provider: { network: 'http://10.7.4.236:30020/v1' },
+            provider: { network: 'testnet' },
 
         });
 

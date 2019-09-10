@@ -90,6 +90,7 @@ Initialize the SDK with the 3 available dlts. Optionally, a timeout period can b
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
+  network: 'testnet',
   timeout: 1500, // Optional
   provider: { network: 'testnet' }, // Optional
 });
@@ -113,7 +114,6 @@ The SDK provides the following functions which return a promise with a standard 
   - [getBalances](#getBalances)
   - [getSequences](#getSequences)
 - DLT functions
-  - [Faucet](#faucet)
   - [Account](#account)
   - [getBalance](#getBalance)
   - [getSequence](#getSequence)
@@ -175,7 +175,7 @@ Example of DLT transaction data:
     message: "QNT test",
     options: {
       amount: '1', // Amount in wei (1 ETH = 10^18 wei)
-      sequence: 2, // nonce
+      sequence: 0, // nonce
       feeLimit: '10',
       feePrice: '10',
     }
@@ -382,11 +382,11 @@ Usage:
 const request = [
 	{
 		"dlt": "ethereum",
-		"fromAddress": "0x0000000000000000000000000000000000000000"
+		"address": "0x0000000000000000000000000000000000000000"
 	},
 	{
 		"dlt": "ripple",
-		"fromAddress": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+		"address": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
 	}
 ]
 
@@ -400,7 +400,7 @@ This function accepts an array of objects with the following fields:
 | Name          | Type   | Description                                      |
 | ------------- | ------ | ------------------------------------------------ |
 | `dlt`         | string | The dlt where this address should be searched on |
-| `fromAddress` | string | The address for the sequence query               |
+| `address` | string | The address for the sequence query               |
 
 #### Return value
 
@@ -411,23 +411,6 @@ This function returns an array of objects with the following fields.
 | `dlt`     | string | The DLT which the request has been submitted to                   |
 | `sequence`| string | The sequence number of this address                               |
 
-### Faucet
-As per default it would take the configured address.
-From the DLT level `overledger.dlts.[dlt]`
-Fund an account on our testnet.
-
-Usage: `fundAccount(amount?, address?)`
-
-#### Parameters
-
-| Name      | Type   | Description                                                                                                               |
-| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `amount`  | string | _Optional_ The amount of tokens to fund, in the smallest unit (satoshi for Bitcoin, wei for Ethereum or drops for Ripple) |
-| `address` | string | _Optional_ The address to fund                                                                                            |
-
-#### Return Value
-
-This function returns a `Promise`
 
 
 ## Types

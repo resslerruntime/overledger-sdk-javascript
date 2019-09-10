@@ -23,8 +23,7 @@ const rippleBlockNumber = '379468';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
-            // TODO: Set this to 'testnet' once the release is live
-            provider: { network: 'http://10.7.4.236:30020/v1' },
+            provider: { network: 'testnet' },
 
         });
 
