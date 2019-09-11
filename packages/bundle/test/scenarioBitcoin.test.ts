@@ -11,7 +11,7 @@ describe('Dlt/Bitcoin', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{dlt: 'bitcoin',}],
+      dlts: [{ dlt: 'bitcoin', }],
     });
   });
 
@@ -53,7 +53,7 @@ describe('Dlt/Bitcoin', () => {
 
   // @TODO: Needs to be fixed
   test.skip('Can send a bitcoin signedTransaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' });
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'bitcoin', transactionHash: '0123000000000000000000' } as any);
     await overledger.dlts.bitcoin.send(signedTransaction);
 
     expect(mockedAxios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {

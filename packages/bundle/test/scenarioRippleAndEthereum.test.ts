@@ -8,26 +8,21 @@ describe('Dlt/RippleAndEthereum', () => {
   describe('Main read functions', () => {
     test('Can getSequences for specific addresses', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [
-          { dlt: 'ripple', },
-          { dlt: 'ethereum', },
-        ],
+        dlts: [{ dlt: 'ethereum', }, { dlt: 'ripple', },],
       });
 
-      mockedAxios.post.mockResolvedValue(
-        {
-          dltData: [
-            {
-              sequence: 2,
-              dlt: 'ripple',
-            },
-            {
-              sequence: 0,
-              dlt: 'ethereum',
-            },
-          ],
-        },
-      );
+      mockedAxios.post.mockResolvedValue({
+        dltData: [
+          {
+            sequence: 0,
+            dlt: 'ethereum',
+          },
+          {
+            sequence: 1,
+            dlt: 'ripple',
+          },
+        ],
+      } as any);
 
       const params = [
         {
@@ -78,7 +73,7 @@ describe('Dlt/RippleAndEthereum', () => {
             },
           ],
         },
-      ]);
+      ] as any);
 
       await overledger.dlts.ethereum.getSequence(ethAddress);
 
@@ -112,7 +107,7 @@ describe('Dlt/RippleAndEthereum', () => {
             },
           ],
         },
-      ]);
+      ] as any);
 
       await overledger.readTransactionsByMappId();
 
@@ -137,7 +132,7 @@ describe('Dlt/RippleAndEthereum', () => {
             links: [],
           },
         ],
-      });
+      } as any);
 
       const transactionId = '70cb4832-bbd0-400f-a6d8-2add51deb111';
       await overledger.readByTransactionId(transactionId);
@@ -224,7 +219,7 @@ describe('Dlt/RippleAndEthereum', () => {
       mockedAxios.post.mockResolvedValue([
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
         { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
-      ]);
+      ] as any );
 
       await overledger.send(signedTransactions);
 
@@ -338,7 +333,7 @@ describe('Dlt/RippleAndEthereum', () => {
       mockedAxios.post.mockResolvedValue([
         { dlt: 'ripple', status: 'broadcasted', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' },
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
-      ]);
+      ] as any);
 
       await overledger.send(signedTransactions);
 

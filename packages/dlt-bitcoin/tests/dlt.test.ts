@@ -19,7 +19,6 @@ describe('Dlt', () => {
     const dlt = new Dlt(sdk, options);
 
     expect(sdk.dlts.bitcoin.name).toEqual(dlt.name);
-    expect(sdk.dlts.bitcoin.addressType).toEqual(dlt.addressType);
     expect(sdk.dlts.bitcoin.account.address).toEqual(dlt.account.address);
   });
 });

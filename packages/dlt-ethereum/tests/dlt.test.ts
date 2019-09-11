@@ -19,7 +19,6 @@ describe('Dlt', () => {
     const dlt = new Dlt(sdk, options);
 
     expect(sdk.dlts.ethereum.name).toEqual(dlt.name);
-    expect(sdk.dlts.ethereum.chainId).toEqual(dlt.chainId);
     expect(sdk.dlts.ethereum.account.address).toEqual(dlt.account.address);
   });
 });

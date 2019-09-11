@@ -11,7 +11,7 @@ describe('Dlt/Ripple', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{dlt: 'ripple',}],
+      dlts: [{ dlt: 'ripple', }],
     });
   });
 
@@ -59,7 +59,7 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Can send a ripple signedTransaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' } as any);
     const signedTransactionRequest = {
       dlt: 'ripple',
       fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',

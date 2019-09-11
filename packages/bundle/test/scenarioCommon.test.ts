@@ -16,7 +16,7 @@ describe('Dlt/Common', () => {
 
       beforeAll(() => {
         overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-          dlts: [{dlt: dlt.type,},],
+          dlts: [{ dlt: dlt.type, },],
         });
 
         account = overledger.dlts[dlt.type].createAccount();
@@ -81,7 +81,7 @@ describe('Dlt/Common', () => {
       test('Can getBalance of the set up account', () => {
         overledger.dlts[dlt.type].getBalance();
 
-        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'} as any);
         expect(mockedAxios.get).toBeCalledWith(
           `/balances/${dlt.type}/${account.address}`,
         );
@@ -91,7 +91,7 @@ describe('Dlt/Common', () => {
         const newAccount = overledger.dlts[dlt.type].createAccount();
         overledger.dlts[dlt.type].getBalance(newAccount.address);
 
-        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'} as any);
         expect(mockedAxios.get).toBeCalledWith(
           `/balances/${dlt.type}/${newAccount.address}`,
         );

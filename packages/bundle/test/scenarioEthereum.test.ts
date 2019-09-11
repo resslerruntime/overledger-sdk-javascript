@@ -11,7 +11,7 @@ describe('Dlt/Ethereum', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{dlt: 'ethereum',}],
+      dlts: [{ dlt: 'ethereum', }],
     });
   });
 
@@ -59,7 +59,7 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Can send an ethereum signedTransaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' } as any);
     const signedTransactionRequest = {
       dlt: 'ethereum',
       fromAddress: '0x0000000000000000000000000000000000000000',
