@@ -11,9 +11,7 @@ describe('Dlt/Bitcoin', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{
-        dlt: 'bitcoin',
-      }],
+      dlts: [{dlt: 'bitcoin',}],
     });
   });
 
@@ -25,8 +23,12 @@ describe('Dlt/Bitcoin', () => {
     expect(account.address.length).toBe(34);
   });
 
+  test('Cannot sign a bitcoin transaction without defining the options', () => {
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'message')).toThrow('Transaction options must be defined.');
+  });
+
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'message')).toThrow('options.sequence must be set up');
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'message', {})).toThrow('options.sequence must be set up');
   });
 
   test('Cannot sign a bitcoin transaction without specifying a previousTransactionHash', () => {

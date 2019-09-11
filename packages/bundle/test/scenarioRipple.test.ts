@@ -11,9 +11,7 @@ describe('Dlt/Ripple', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{
-        dlt: 'ripple',
-      }],
+      dlts: [{dlt: 'ripple',}],
     });
   });
 
@@ -25,8 +23,12 @@ describe('Dlt/Ripple', () => {
     expect(account.address).toMatch(/r[1-9A-HJ-NP-Za-km-z]{25,34}/);
   });
 
+  test('Cannot sign a ripple transaction without defining the options', () => {
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message')).toThrow('Transaction options must be defined.');
+  });
+
   test('Cannot sign a ripple transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message')).toThrow('options.amount must be set up');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {})).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a feePrice', () => {

@@ -16,11 +16,7 @@ describe('Dlt/Common', () => {
 
       beforeAll(() => {
         overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-          dlts: [
-            {
-              dlt: dlt.type,
-            },
-          ],
+          dlts: [{dlt: dlt.type,},],
         });
 
         account = overledger.dlts[dlt.type].createAccount();

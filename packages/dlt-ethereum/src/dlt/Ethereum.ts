@@ -49,6 +49,10 @@ class Ethereum extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
+    if (typeof options === 'undefined') {
+      throw new Error('Transaction options must be defined.');
+    }
+
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be set up');
     }

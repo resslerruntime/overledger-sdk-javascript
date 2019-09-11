@@ -42,6 +42,10 @@ class Bitcoin extends AbstractDLT {
    */
   // @TODO: add return statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
+    if (typeof options === 'undefined') {
+      throw new Error('Transaction options must be defined.');
+    }
+
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
     }

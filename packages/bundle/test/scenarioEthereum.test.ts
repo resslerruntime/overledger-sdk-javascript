@@ -11,9 +11,7 @@ describe('Dlt/Ethereum', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{
-        dlt: 'ethereum',
-      }],
+      dlts: [{dlt: 'ethereum',}],
     });
   });
 
@@ -25,12 +23,15 @@ describe('Dlt/Ethereum', () => {
     expect(account.address.length).toBe(42);
   });
 
+  test('Cannot sign an ethereum transaction without defining the options', () => {
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message')).toThrow('Transaction options must be defined.');
+  });
+
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message')).toThrow('options.amount must be set up');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {})).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feeLimit', () => {
-
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'message', {
       amount: '0',
     })).toThrow('options.feeLimit must be set up');

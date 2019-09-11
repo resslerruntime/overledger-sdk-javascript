@@ -94,14 +94,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can read transactions from mappId', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [
-          {
-            dlt: 'ripple',
-          },
-          {
-            dlt: 'ethereum',
-          },
-        ],
+        dlts: [{ dlt: 'ripple', }, { dlt: 'ethereum', },],
       });
 
       mockedAxios.get.mockResolvedValue([
@@ -128,14 +121,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can read transactions by overledger transaction id', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [
-          {
-            dlt: 'ripple',
-          },
-          {
-            dlt: 'ethereum',
-          },
-        ],
+        dlts: [{ dlt: 'ripple', }, { dlt: 'ethereum', },],
       });
 
       mockedAxios.get.mockResolvedValue({
@@ -160,30 +146,22 @@ describe('Dlt/RippleAndEthereum', () => {
     });
   });
 
-  describe('Using ripple & ethereum without injecting the privatekey in the DLT array', () => {
+  describe('Using Ethereum and Ripple without injecting the privatekey in the DLT array', () => {
     let overledger;
     let ethereumAccount;
     let rippleAccount;
-    let ethereumSignedTransaction;
-    let rippleSignedTransaction
+    let signedTransactions
 
-    test('Load ripple and ethereum DLTs', async () => {
+    test('Load Ethereum and Ripple DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [
-          {
-            dlt: 'ripple',
-          },
-          {
-            dlt: 'ethereum',
-          },
-        ],
+        dlts: [{ dlt: 'ethereum', }, { dlt: 'ripple', },],
       });
 
       expect(overledger.dlts.ethereum).toBeDefined();
       expect(overledger.dlts.ripple).toBeDefined();
     });
 
-    test('Can generate & set account for ethereum & ripple', async () => {
+    test('Can generate and set account for ethereum & ripple', async () => {
       rippleAccount = overledger.dlts.ripple.createAccount();
       ethereumAccount = overledger.dlts.ethereum.createAccount();
 
@@ -194,64 +172,60 @@ describe('Dlt/RippleAndEthereum', () => {
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
     });
 
-    test('Can sign ripple & ethereum transactions', async () => {
-      rippleSignedTransaction = await overledger.sign(
-        {
-          dlt: 'ripple',
-          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'message',
-          options: {
-            sequence: 1,
-            amount: '1',
-            feePrice: '12',
-            maxLedgerVersion: '100000000',
-          },
-        },
-      )
-      ethereumSignedTransaction = await overledger.sign(
+    test('Can sign Ethereum and Ripple transactions', async () => {
+      signedTransactions = await overledger.sign([
         {
           dlt: 'ethereum',
           toAddress: '0x0000000000000000000000000000000000000000',
           message: 'message',
           options: {
             amount: '0',
+            sequence: 1,
             feeLimit: '100',
             feePrice: '1',
-            sequence: 1,
           },
         },
-      );
-
-      expect(typeof ethereumSignedTransaction).toBe('string');
-      expect(typeof rippleSignedTransaction).toBe('string');
-    });
-
-    test('Can send ripple & ethereum signedTransactions', async () => {
-      mockedAxios.post.mockResolvedValue([
-        { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
-        { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
-      ]);
-
-      const signedTransactions = [
         {
           dlt: 'ripple',
-          fromAddress: rippleAccount.address,
-          amount: 1,
-          signedTransaction: {
-            signatures: [],
-            transactions: [rippleSignedTransaction]
+          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+          message: 'message',
+          options: {
+            amount: '1',
+            sequence: 1,
+            feePrice: '12',
+            maxLedgerVersion: '100000000',
           },
         },
+      ]);
+
+      expect(signedTransactions).toEqual([
         {
           dlt: 'ethereum',
-          fromAddress: ethereumAccount.address,
-          amount: 0,
+          fromAddress: expect.any(String),
+          amount: expect.any(String),
           signedTransaction: {
             signatures: [],
-            transactions: [ethereumSignedTransaction]
-          },
-        }
-      ]
+            transactions: [expect.any(String)],
+          }
+        },
+        {
+          dlt: 'ripple',
+          fromAddress: expect.any(String),
+          amount: expect.any(String),
+          signedTransaction: {
+            signatures: [],
+            transactions: [expect.any(String)],
+          }
+        },
+      ]);
+    });
+
+    test('Can send Ethereum and Ripple signedTransactions', async () => {
+      mockedAxios.post.mockResolvedValue([
+        { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
+        { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
+      ]);
+
       await overledger.send(signedTransactions);
 
       expect(mockedAxios.post).toBeCalledWith('/transactions', {
@@ -259,38 +233,39 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData:
           [
             {
-              dlt: 'ripple',
-              fromAddress: expect.any(String),
-              amount: expect.any(Number),
-              signedTransaction: expect.any(Object),
-            },
-            {
               dlt: 'ethereum',
               fromAddress: expect.any(String),
-              amount: expect.any(Number),
-              signedTransaction: expect.any(Object),
+              amount: expect.any(String),
+              signedTransaction: {
+                signatures: [],
+                transactions: [expect.any(String)],
+              }
+            },
+            {
+              dlt: 'ripple',
+              fromAddress: expect.any(String),
+              amount: expect.any(String),
+              signedTransaction: {
+                signatures: [],
+                transactions: [expect.any(String)],
+              }
             },
           ],
       });
     });
   });
 
-  describe('Using ripple & ethereum with injecting the privatekey in the DLT array', () => {
+  describe('Using Ethereum and Ripple with injecting the privatekey in the DLT array', () => {
     let overledger;
     let ethereumAccount;
     let rippleAccount;
-    let ethereumSignedTransaction;
-    let rippleSignedTransaction;
+    let signedTransactions;
 
-    test('Load ripple and ethereum DLTs', async () => {
+    test('Load Ethereum and Ripple DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
-          {
-            dlt: 'ripple', privateKey: 'shL8VmeBqoB7CnbPjXmfue7zeBeeg',
-          },
-          {
-            dlt: 'ethereum', privateKey: '0xe58af4f4a4a509b0190d87bdcd6d05ec4c274cfdd2282f4d196da6466d56c621',
-          },
+          { dlt: 'ethereum', privateKey: '0xe58af4f4a4a509b0190d87bdcd6d05ec4c274cfdd2282f4d196da6466d56c621', },
+          { dlt: 'ripple', privateKey: 'shL8VmeBqoB7CnbPjXmfue7zeBeeg', },
         ],
       });
 
@@ -298,47 +273,65 @@ describe('Dlt/RippleAndEthereum', () => {
       expect(overledger.dlts.ripple).toBeDefined();
     });
 
-    test('Can generate & set account for ethereum & ripple', async () => {
-      rippleAccount = overledger.dlts.ripple.createAccount();
+    test('Can generate and set the accounts for Ethereum & Ripple', async () => {
       ethereumAccount = overledger.dlts.ethereum.createAccount();
+      rippleAccount = overledger.dlts.ripple.createAccount();
 
-      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
+
       overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
+      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
 
-      expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
+
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
+      expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
     });
 
-    test('Can sign ripple & ethereum transactions', async () => {
-      rippleSignedTransaction = await overledger.sign(
-        {
-          dlt: 'ripple',
-          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'message',
-          options: {
-            sequence: 1,
-            amount: '1',
-            feePrice: '12',
-            maxLedgerVersion: '100000000',
-          },
-        },
-      )
-      ethereumSignedTransaction = await overledger.sign(
+    test('Can sign Ethereum and Ripple transactions', async () => {
+      signedTransactions = await overledger.sign([
         {
           dlt: 'ethereum',
           toAddress: '0x0000000000000000000000000000000000000000',
           message: 'message',
           options: {
             amount: '0',
+            sequence: 1,
             feeLimit: '100',
             feePrice: '1',
-            sequence: 1,
           },
         },
-      );
+        {
+          dlt: 'ripple',
+          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+          message: 'message',
+          options: {
+            amount: '1',
+            sequence: 1,
+            feePrice: '12',
+            maxLedgerVersion: '100000000',
+          },
+        },
+      ]);
 
-      expect(typeof ethereumSignedTransaction).toBe('string');
-      expect(typeof rippleSignedTransaction).toBe('string');
+      expect(signedTransactions).toEqual([
+        {
+          dlt: 'ethereum',
+          fromAddress: expect.any(String),
+          amount: expect.any(String),
+          signedTransaction: {
+            signatures: [],
+            transactions: [expect.any(String)],
+          }
+        },
+        {
+          dlt: 'ripple',
+          fromAddress: expect.any(String),
+          amount: expect.any(String),
+          signedTransaction: {
+            signatures: [],
+            transactions: [expect.any(String)],
+          }
+        },
+      ]);
     });
 
     test('Can send ripple & ethereum signedTransactions', async () => {
@@ -347,42 +340,28 @@ describe('Dlt/RippleAndEthereum', () => {
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ]);
 
-      const signedTransactions = [
-        {
-          dlt: 'ripple',
-          fromAddress: rippleAccount.address,
-          amount: 1,
-          signedTransaction: {
-            signatures: [],
-            transactions: [rippleSignedTransaction]
-          },
-        },
-        {
-          dlt: 'ethereum',
-          fromAddress: ethereumAccount.address,
-          amount: 0,
-          signedTransaction: {
-            signatures: [],
-            transactions: [ethereumSignedTransaction]
-          },
-        }
-      ]
       await overledger.send(signedTransactions);
 
       expect(mockedAxios.post).toBeCalledWith('/transactions', {
         mappId: 'testmappid',
         dltData: [
           {
-            dlt: 'ripple',
-            fromAddress: expect.any(String),
-            amount: expect.any(Number),
-            signedTransaction: expect.any(Object),
-          },
-          {
             dlt: 'ethereum',
             fromAddress: expect.any(String),
-            amount: expect.any(Number),
-            signedTransaction: expect.any(Object),
+            amount: expect.any(String),
+            signedTransaction: {
+              signatures: [],
+              transactions: [expect.any(String)],
+            }
+          },
+          {
+            dlt: 'ripple',
+            fromAddress: expect.any(String),
+            amount: expect.any(String),
+            signedTransaction: {
+              signatures: [],
+              transactions: [expect.any(String)],
+            }
           },
         ],
       });
