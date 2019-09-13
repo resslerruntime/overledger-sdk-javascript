@@ -1,7 +1,7 @@
-import networkOptions from './NetworkOptions';
+import NetworkOptions from './NetworkOptions';
 
 type ProviderOptions = {
-  network?: networkOptions,
+  network?: NetworkOptions,
   timeout?: number,
 };
 

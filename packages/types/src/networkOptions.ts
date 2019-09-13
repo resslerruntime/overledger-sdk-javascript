@@ -1,3 +1,3 @@
-type networkOptions = 'mainnet' | 'testnet' | string;
+type NetworkOptions = 'mainnet' | 'testnet' | string;
 
-export default networkOptions;
+export default NetworkOptions;
