@@ -3,7 +3,7 @@ import Search from '@overledger/search';
 import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { SignedTransactionRequest, SDKOptions, DLTOptions, UnsignedData, SequenceDataRequest, APICallWrapper, DLTAndAddressArray } from '@overledger/types';
-import networkOptions from '@overledger/types/src/networkOptions';
+import networkOptions from '@overledger/types/src/NetworkOptions';
 import SequenceDataResponse from '@overledger/types/src/SequenceDataResponse';
 
 class OverledgerSDK {
