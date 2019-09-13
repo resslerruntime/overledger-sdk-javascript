@@ -1,8 +1,8 @@
 import networkOptions from './NetworkOptions';
 
-type providerOptions = {
+type ProviderOptions = {
   network?: networkOptions,
   timeout?: number,
 };
 
-export default providerOptions;
+export default ProviderOptions;
