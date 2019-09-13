@@ -26,33 +26,16 @@ describe('Search', () => {
   });
 
   test('Can search for a transaction by transaction Hash', async () => {
-    const transactionHash = 'a91894a935135295ba9ba65cc142b59d9c729e71a063528d90e05152ca97b5d0';
+    const transactionHash = '6F8E4F27A4D5FD75F8551D6C8AE803962070CC49E7B011D1157D3B5DEE981ED1';
     mockedAxios.get.mockResolvedValue({
-      dlt: 'bitcoin',
+      dlt: 'ripple',
       data: {
-        m: {
-          amount: 0,
-          confirmations: 4,
-          generated: true,
-          blockhash: '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a',
-          blockindex: 0,
-          blocktime: 1542972409,
-          txid: transactionHash,
-          walletconflicts: [],
-          time: 1542972409,
-          timereceived: 1542972409,
-          'bip125-replaceable': 'no',
-          details: [
-            {
-              account: '',
-              address: 'mtDXgSPMdQKZjPbBDdXp76hGEr1eURdAnY',
-              category: 'immature',
-              amount: 25.00009766,
-              vout: 0,
-            },
-          ],
-          hex: '020000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff0502e1000101ffffffff02261f0395000000002321036cc71c479d3183a48fa5ade2d80252518b4e9c068cf114d5e593eb9034b3a3fcac0000000000000000266a24aa21a9edca0b61538213b30dd40ac1cb7127f7fe86b13ae07ac88d61a2fc4ec2a1eed2890120000000000000000000000000000000000000000000000000000000000000000000000000'
-        },
+        type: 'payment',
+        address: 'rEuggJAHrA3RvepChNHMRT1HJy87mJaWHU',
+        sequence: 11,
+        id: '6F8E4F27A4D5FD75F8551D6C8AE803962070CC49E7B011D1157D3B5DEE981ED1',
+        specification: {},
+        outcome: {},
       },
     } as any);
     await search.getTransaction(transactionHash);
@@ -61,74 +44,45 @@ describe('Search', () => {
   });
 
   test('Can search for a block by dlt and Hash', async () => {
-    const dlt = 'bitcoin';
-    const hash = '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a';
+    const dlt = 'ripple';
+    const hash = 'CB260D04A2571F46367421040EA67096658C44659054C0FBD83D5DC2E4251734';
     mockedAxios.get.mockResolvedValue({
-      dlt,
-      data: {
-        m: {
-          amount: 0,
-          confirmations: 4,
-          generated: true,
-          blockhash: '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a',
-          blockindex: 0,
-          blocktime: 1542972409,
-          txid: hash,
-          walletconflicts: [],
-          time: 1542972409,
-          timereceived: 1542972409,
-          'bip125-replaceable': 'no',
-          details: [
-            {
-              account: '',
-              address: 'mtDXgSPMdQKZjPbBDdXp76hGEr1eURdAnY',
-              category: 'immature',
-              amount: 25.00009766,
-              vout: 0,
-            },
-          ],
-          hex: '020000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff0502e1000101ffffffff02261f0395000000002321036cc71c479d3183a48fa5ade2d80252518b4e9c068cf114d5e593eb9034b3a3fcac0000000000000000266a24aa21a9edca0b61538213b30dd40ac1cb7127f7fe86b13ae07ac88d61a2fc4ec2a1eed2890120000000000000000000000000000000000000000000000000000000000000000000000000'
-        },
-      },
+      stateHash: '0D86ED823D87C67EA459F3EEC6388C37C7B1CBB0D05C7895213919B285954896',
+      closeTime: '2019-09-13T16:40:12.000Z',
+      closeTimeResolution: 10,
+      closeFlags: 0,
+      ledgerHash: 'CB260D04A2571F46367421040EA67096658C44659054C0FBD83D5DC2E4251734',
+      ledgerVersion: 376939,
+      parentLedgerHash: '9CD5FE11364BAA0171E81DEBF5C49C61683D35B325EA63D6C05D6D3478FCC609',
+      parentCloseTime: '2019-09-13T16:40:11.000Z',
+      totalDrops: '99999996355638984',
+      transactionHash: '51F73895F8E5046CC9939F1533E4889D65BCD9562E83088850A2907D03394B0F',
+      transactions: []
     } as any);
 
-    await search.getBlockByDltAndHash('bitcoin', hash);
+    await search.getBlockByDltAndHash(dlt, hash);
 
     expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${hash}`);
   });
 
   test('Can search for a block by dlt and Number', async () => {
-    const dlt = 'bitcoin';
-    const number = 42;
+    const dlt = 'ripple';
+    const number = 376939;
     mockedAxios.get.mockResolvedValue({
-      dlt,
-      data: {
-        m: {
-          amount: 0,
-          confirmations: 4,
-          generated: true,
-          blockhash: '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a',
-          blockindex: number,
-          blocktime: 1542972409,
-          txid: '7344f80e63ebdcb88f778c672f1a9c4079d5c825eb499cef31e9fa4af9bd964a',
-          walletconflicts: [],
-          time: 1542972409,
-          timereceived: 1542972409,
-          'bip125-replaceable': 'no',
-          details: [
-            {
-              account: '',
-              address: 'mtDXgSPMdQKZjPbBDdXp76hGEr1eURdAnY',
-              category: 'immature',
-              amount: 25.00009766,
-              vout: 0,
-            },
-          ],
-          hex: '020000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff0502e1000101ffffffff02261f0395000000002321036cc71c479d3183a48fa5ade2d80252518b4e9c068cf114d5e593eb9034b3a3fcac0000000000000000266a24aa21a9edca0b61538213b30dd40ac1cb7127f7fe86b13ae07ac88d61a2fc4ec2a1eed2890120000000000000000000000000000000000000000000000000000000000000000000000000'
-        },
-      },
+      stateHash: '0D86ED823D87C67EA459F3EEC6388C37C7B1CBB0D05C7895213919B285954896',
+      closeTime: '2019-09-13T16:40:12.000Z',
+      closeTimeResolution: 10,
+      closeFlags: 0,
+      ledgerHash: 'CB260D04A2571F46367421040EA67096658C44659054C0FBD83D5DC2E4251734',
+      ledgerVersion: 376939,
+      parentLedgerHash: '9CD5FE11364BAA0171E81DEBF5C49C61683D35B325EA63D6C05D6D3478FCC609',
+      parentCloseTime: '2019-09-13T16:40:11.000Z',
+      totalDrops: '99999996355638984',
+      transactionHash: '51F73895F8E5046CC9939F1533E4889D65BCD9562E83088850A2907D03394B0F',
+      transactions: []
     } as any);
-    await search.getBlockByDltAndNumber('bitcoin', number);
+
+    await search.getBlockByDltAndNumber(dlt, number);
 
     expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${number}`);
   });

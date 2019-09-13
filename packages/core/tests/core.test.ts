@@ -7,7 +7,8 @@ describe('Core', () => {
   beforeAll(() => {
     const sdkOptions = {
       dlts: [
-        { dlt: 'bitcoin' },
+        { dlt: 'ethereum' },
+        { dlt: 'ripple' },
       ],
     };
 

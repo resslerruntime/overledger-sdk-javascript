@@ -6,8 +6,8 @@ const OverledgerSDK = require('../../packages/bundle').default;
 const mappId = '<ENTER YOUR MAPPID>';
 const bpiKey = '<ENTER YOUR BPIKEY>';
 
-const ethereumAddress = '0x8661C6a3A44862498aB944C921858A5faDa931A7';
-const rippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
+const ethereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
+const rippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -16,7 +16,7 @@ const rippleAddress = 'rJR7t9RDQupG5BbHramSKVcQH6jfpNdrxK';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
             provider: { network: 'testnet' },
         });
 

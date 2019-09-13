@@ -9,7 +9,7 @@ describe("Balances", () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK("testmappid", "testbpikey", {
-      dlts: [{ dlt: "bitcoin", }, { dlt: "ethereum", }, { dlt: "ripple", },]
+      dlts: [{ dlt: "ethereum", }, { dlt: "ripple", },]
     });
   });
 
