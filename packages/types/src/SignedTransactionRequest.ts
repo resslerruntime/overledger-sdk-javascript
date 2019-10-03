@@ -1,6 +1,15 @@
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 
 /**
+ * Overledger signed transaction request object
+ * @typedef {Object} SignedTransactionRequest
+ * @property {string} dlt - The distributed ledger technology.
+ * @property {string} fromAddress - The address initiating the transaction.
+ * @property {string} amount - The token amount in the lowest unit for the respective DLT.
+ * @property {OverledgerSignedTransaction} signedTransaction - The signed transaction object.
+ */
+
+/**
  * @memberof module:types
  */
 type SignedTransactionRequest = {

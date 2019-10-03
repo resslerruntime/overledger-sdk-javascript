@@ -25,6 +25,21 @@
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
+<dt><a href="#DLTAndAddress">DLTAndAddress</a> : <code>Object</code></dt>
+<dd><p>DLT and Address pair</p>
+</dd>
+<dt><a href="#DLTOptions">DLTOptions</a> : <code>Object</code></dt>
+<dd><p>Options for loading a DLT in the SDK</p>
+</dd>
+<dt><a href="#NetworkOptions">NetworkOptions</a> : <code>string</code></dt>
+<dd><p>Overledger network options</p>
+</dd>
+<dt><a href="#SequenceDataRequest">SequenceDataRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger sequence request</p>
+</dd>
+<dt><a href="#SequenceDataResponse">SequenceDataResponse</a> : <code>Array.&lt;Object&gt;</code></dt>
+<dd><p>Overledger sequence data response</p>
+</dd>
 <dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
 <dd><p>DLT transaction options.</p>
 </dd>
@@ -146,7 +161,7 @@ The object storing the DLTs loaded by the Overledger SDK
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>DLTOptions</code> | DLT name and an optional Private Key to use as the main account |
+| config | [<code>DLTOptions</code>](#DLTOptions) | DLT name and an optional Private Key to use as the main account |
 
 Load the DLT in the Overledger SDK
 
@@ -199,7 +214,7 @@ Send signed transactions to Overledger
 
 | Param | Type | Description |
 | --- | --- | --- |
-| balancesRequest | <code>Array.&lt;DLTAndAddress&gt;</code> | Array of objects specifing the address and corresponding DLT |
+| balancesRequest | [<code>Array.&lt;DLTAndAddress&gt;</code>](#DLTAndAddress) | Array of objects specifing the address and corresponding DLT |
 
 Get the balances of the specified addresses
 
@@ -209,11 +224,11 @@ Get the balances of the specified addresses
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sequenceRequest | <code>Array.&lt;SequenceDataRequest&gt;</code> | Request for sequence numbers of the provided addresses |
+| sequenceRequest | [<code>Array.&lt;SequenceDataRequest&gt;</code>](#SequenceDataRequest) | Request for sequence numbers of the provided addresses |
 
 Get the sequence numbers for the provided addresses
 
-**Returns**: <code>SequenceDataResponse</code> - Sequence response  
+**Returns**: [<code>SequenceDataResponse</code>](#SequenceDataResponse) - Sequence response  
 <a name="module_core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
@@ -736,6 +751,60 @@ Get block by DLT and hash
 
 An Overledger Account instance for a single DLT.
 
+<a name="DLTAndAddress"></a>
+
+## DLTAndAddress
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| address | <code>string</code> | The address on the respective dlt network. |
+
+DLT and Address pair
+
+<a name="DLTOptions"></a>
+
+## DLTOptions
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| [privateKey] | <code>string</code> | The private key of an account for the respecitve dlt. |
+
+Options for loading a DLT in the SDK
+
+<a name="NetworkOptions"></a>
+
+## NetworkOptions
+Overledger network options
+
+<a name="SequenceDataRequest"></a>
+
+## SequenceDataRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| address- | <code>string</code> | The address to search for. |
+
+Overledger sequence request
+
+<a name="SequenceDataResponse"></a>
+
+## SequenceDataResponse
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| address | <code>string</code> | The address the request was made for. |
+| sequence | <code>number</code> | The sequence number for the respective address. |
+
+Overledger sequence data response
+
 <a name="TransactionOptions"></a>
 
 ## TransactionOptions
@@ -743,7 +812,7 @@ An Overledger Account instance for a single DLT.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| sequence | <code>number</code> | This transaction's sequence in relation to the initiating account. |
+| [sequence] | <code>number</code> | This transaction's sequence in relation to the initiating account. |
 | amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
 
 DLT transaction options.

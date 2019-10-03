@@ -6,7 +6,7 @@ import TransactionOptions from './TransactionOptions';
  * @property {string} dlt - The DLT used for this transaction.
  * @property {string} toAddress - The recipient for this transaction.
  * @property {string} message - The transaction message.
- * @property {Object} options - The specific transaction options.
+ * @property {TransactionOptions} options - The specific transaction options.
  */
 
 /**
