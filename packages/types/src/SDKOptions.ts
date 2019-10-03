@@ -1,9 +1,9 @@
 import DLTOptions from './DLTOptions';
-import providerOptions from './ProviderOptions';
+import ProviderOptions from './ProviderOptions';
 
 type SDKOptions = {
   dlts: DLTOptions[],
-  provider?: providerOptions,
+  provider?: ProviderOptions,
 };
 
 export default SDKOptions;

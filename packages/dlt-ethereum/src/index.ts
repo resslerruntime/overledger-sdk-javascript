@@ -1,3 +1,6 @@
-import Ethereum from './dlt/Ethereum';
+/**
+ * @module dlt-ethereum
+ */
+import Ethereum from './Ethereum';
 
 export default Ethereum;

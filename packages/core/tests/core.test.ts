@@ -15,7 +15,7 @@ describe('Core', () => {
     sdk = new OverledgerSDK(mappId, bpiKey, sdkOptions);
   });
 
-  test('Can\'t initialize the connector with a wrong DLT name', () => {
+  test('Should not be able to initialize the connector with a wrong DLT name', () => {
     const mappId = 'mockMappId';
     const bpiKey = 'mockBpiKey';
 
@@ -29,7 +29,7 @@ describe('Core', () => {
       new OverledgerSDK(mappId, bpiKey, sdkOptions);
     } catch (e) {
       console.log(e);
-      expect(e).toEqual('Could not find the package for this DLT. Please install @overledger/dlt-wrongdltname manually');
+      expect(e).toEqual('Could not find the package for this DLT. Please install @overledger/dlt-wrongdltname manually.');
     }
   });
 

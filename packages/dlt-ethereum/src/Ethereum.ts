@@ -21,9 +21,10 @@ class Ethereum extends AbstractDLT {
   symbol: string = 'ETH';
 
   /**
-   * @inheritdoc
+   * @param {any} sdk
+   * @param {Object} options
    */
-    // @TODO: add options statement
+  // @TODO: add options statement
   constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
 
@@ -39,6 +40,24 @@ class Ethereum extends AbstractDLT {
     } else {
       this.chainId = 3;
     }
+  }
+
+  /**
+   * Create an account for a specific DLT
+   * 
+   * @return {Account}
+   */
+  createAccount(): Account {
+    return this.web3.eth.accounts.create();
+  }
+
+  /**
+   * Set an account for signing transactions for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
+   */
+  setAccount(privateKey: string): void {
+    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
   }
 
   /**
@@ -101,20 +120,6 @@ class Ethereum extends AbstractDLT {
         return resolve(data.rawTransaction);
       });
     });
-  }
-
-  /**
-   * @inheritdoc
-   */
-  createAccount(): Account {
-    return this.web3.eth.accounts.create();
-  }
-
-  /**
-   * @inheritdoc
-   */
-  setAccount(privateKey: string): void {
-    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
   }
 }
 

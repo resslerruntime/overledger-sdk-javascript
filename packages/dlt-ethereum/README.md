@@ -1,21 +1,115 @@
 # @overledger/dlt-ethereum
 
-This is a sub package of [overledger-sdk][repo]
-
-This is the Ethereum dlt package to be used in the `overledger-sdk` package. Please read the [overledger-sdk][doc] for more.
+Module for interaction with the Ethereum distributed ledger technology.
 
 ## Installation
 
-```bash
+Install using [npm](https://www.npmjs.org/):
+```
 npm install @overledger/dlt-ethereum
 ```
 
-**Can't be used on it's own**
+Or, if you prefer using [yarn](https://yarnpkg.com/):
 
-## Types 
+```
+yarn add @overledger/dlt-ethereum
+```
 
-All the typescript typings are placed in the types folder. 
-#TODO: Add the typings
+## API Reference
 
-[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
-[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+## Modules
+
+<dl>
+<dt><a href="#module_dlt-ethereum">dlt-ethereum</a></dt>
+<dd></dd>
+</dl>
+
+## Classes
+
+<dl>
+<dt><a href="#Ethereum">Ethereum</a></dt>
+<dd></dd>
+</dl>
+
+<a name="module_dlt-ethereum"></a>
+
+## dlt-ethereum
+<a name="Ethereum"></a>
+
+## Ethereum
+
+* [Ethereum](#Ethereum)
+
+    * [new Ethereum(sdk, options)](#new_Ethereum_new)
+
+    * [.name](#Ethereum+name)
+
+    * [.symbol](#Ethereum+symbol)
+
+    * [.createAccount()](#Ethereum+createAccount)
+
+    * [.setAccount(privateKey)](#Ethereum+setAccount)
+
+    * [.buildTransaction(toAddress, message, options)](#Ethereum+buildTransaction)
+
+    * [._sign(toAddress, message, options)](#Ethereum+_sign)
+
+
+<a name="new_Ethereum_new"></a>
+
+### new Ethereum(sdk, options)
+
+| Param | Type |
+| --- | --- |
+| sdk | <code>any</code> | 
+| options | <code>Object</code> | 
+
+<a name="Ethereum+name"></a>
+
+### *ethereum*.name
+Name of the DLT
+
+<a name="Ethereum+symbol"></a>
+
+### *ethereum*.symbol
+Symbol of the DLT
+
+<a name="Ethereum+createAccount"></a>
+
+### *ethereum*.createAccount()
+Create an account for a specific DLT
+
+<a name="Ethereum+setAccount"></a>
+
+### *ethereum*.setAccount(privateKey)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+
+Set an account for signing transactions for a specific DLT
+
+<a name="Ethereum+buildTransaction"></a>
+
+### *ethereum*.buildTransaction(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Build the transaction
+
+<a name="Ethereum+_sign"></a>
+
+### *ethereum*._sign(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Sign the transaction
+

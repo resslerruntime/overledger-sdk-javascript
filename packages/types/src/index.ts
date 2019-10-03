@@ -1,7 +1,9 @@
+/**
+ * @module types
+ */
 import Account from './Account';
 import APICallWrapper from './APICallWrapper';
 import DLTAndAddress from './DLTAndAddress';
-import DLTAndAddressArray from './DLTAndAddressArray';
 import DLTOptions from './DLTOptions';
 import NetworkOptions from './NetworkOptions';
 import Options from './Options';
@@ -18,7 +20,6 @@ export {
   Account,
   APICallWrapper,
   DLTAndAddress,
-  DLTAndAddressArray,
   DLTOptions,
   NetworkOptions,
   Options,

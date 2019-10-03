@@ -135,7 +135,7 @@ describe('Dlt/RippleAndEthereum', () => {
       } as any);
 
       const transactionId = '70cb4832-bbd0-400f-a6d8-2add51deb111';
-      await overledger.readByTransactionId(transactionId);
+      await overledger.readOverledgerTransaction(transactionId);
 
       expect(mockedAxios.get).toBeCalledWith(`/transactions/id/${transactionId}`);
     });

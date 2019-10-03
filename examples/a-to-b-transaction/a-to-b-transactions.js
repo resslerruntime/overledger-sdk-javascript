@@ -1,3 +1,4 @@
+// Replace the dependency by @overledger/bundle if you're in your own project
 const OverledgerSDK = require('../../packages/bundle').default;
 
 //  ---------------------------------------------------------
@@ -43,7 +44,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       message: transactionMessage,
       options: {
         amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
-        sequence: 0, // Sequence starts at 0 for newly created addresses
+        sequence: 1, // Sequence starts at 0 for newly created addresses
         feePrice: '1000', // Price for each individual gas unit this transaction will consume
         feeLimit: '8000000', // The maximum fee that this transaction can use (can be set by the user)
       },
@@ -60,10 +61,11 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       },
     },]);
-
+    
+    console.log(signedTransactions[0].signedTransaction);
 
     // Send the transactions to Overledger.
-    const result = (await overledger.send(signedTransactions)).data;
+    //const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
     console.log(JSON.stringify(result, null, 2));

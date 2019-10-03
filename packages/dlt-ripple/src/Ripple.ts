@@ -21,7 +21,8 @@ class Ripple extends AbstractDLT {
   symbol: string = 'XRP';
 
   /**
-   * @inheritdoc
+   * @param {any} sdk
+   * @param {Object} options
    */
   // @TODO: add options statement
   constructor(sdk: any, options: Options = {}) {
@@ -34,6 +35,37 @@ class Ripple extends AbstractDLT {
     if (options.privateKey) {
       this.setAccount(options.privateKey);
     }
+  }
+
+  /**
+   * Create an account for a specific DLT
+   * 
+   * @return {Account}
+   */
+  createAccount(): Account {
+    const generated = this.rippleAPI.generateAddress();
+
+    const account = {
+      address: generated.address,
+      privateKey: generated.secret,
+    };
+
+    return account;
+  }
+
+  /**
+   * Set an account for signing for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
+   */
+  setAccount(privateKey: string): void {
+    const keypair = deriveKeypair(privateKey);
+    const account = {
+      privateKey,
+      address: keypair.publicKey,
+    };
+    account.address = deriveAddress(keypair.publicKey);
+    this.account = account;
   }
 
   /**
@@ -110,35 +142,6 @@ class Ripple extends AbstractDLT {
       .then(
         prepared => this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction,
       );
-  }
-
-  /**
-   * @inheritdoc
-   */
-  // @TODO: add return statement
-  createAccount(): Account {
-    const generated = this.rippleAPI.generateAddress();
-
-    const account = {
-      address: generated.address,
-      privateKey: generated.secret,
-    };
-
-    return account;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  // @TODO: add return statement
-  setAccount(privateKey: string): void {
-    const keypair = deriveKeypair(privateKey);
-    const account = {
-      privateKey,
-      address: keypair.publicKey,
-    };
-    account.address = deriveAddress(keypair.publicKey);
-    this.account = account;
   }
 }
 

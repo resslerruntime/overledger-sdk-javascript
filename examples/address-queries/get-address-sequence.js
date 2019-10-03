@@ -1,3 +1,4 @@
+// Replace the dependency by @overledger/bundle if you're in your own project
 const OverledgerSDK = require('../../packages/bundle').default;
 
 //  ---------------------------------------------------------

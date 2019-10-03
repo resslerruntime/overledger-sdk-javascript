@@ -1,3 +1,6 @@
-import Ripple from './dlt/Ripple';
+/**
+ * @module dlt-ripple
+ */
+import Ripple from './Ripple';
 
 export default Ripple;
