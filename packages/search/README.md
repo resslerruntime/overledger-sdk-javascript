@@ -34,6 +34,11 @@ yarn add @overledger/search
 <a name="module_search"></a>
 
 ## search
+<a name="module_search.default"></a>
+
+### *search*.default
+Search support package.
+
 <a name="OverledgerSearch"></a>
 
 ## OverledgerSearch

@@ -34,6 +34,11 @@ yarn add @overledger/core
 <a name="module_core"></a>
 
 ## core
+<a name="module_core.default"></a>
+
+### *core*.default
+Core Overledger SDK class. Individual dlt packages must be installed manually.
+
 <a name="OverledgerSDK"></a>
 
 ## OverledgerSDK

@@ -34,6 +34,11 @@ yarn add @overledger/dlt-ripple
 <a name="module_dlt-ripple"></a>
 
 ## dlt-ripple
+<a name="module_dlt-ripple.default"></a>
+
+### *dlt-ripple*.default
+Development package for Ripple (XRP Ledger).
+
 <a name="Ripple"></a>
 
 ## Ripple

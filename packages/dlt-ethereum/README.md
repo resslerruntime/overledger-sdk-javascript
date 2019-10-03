@@ -34,6 +34,11 @@ yarn add @overledger/dlt-ethereum
 <a name="module_dlt-ethereum"></a>
 
 ## dlt-ethereum
+<a name="module_dlt-ethereum.default"></a>
+
+### *dlt-ethereum*.default
+Development package for Ethereum.
+
 <a name="Ethereum"></a>
 
 ## Ethereum

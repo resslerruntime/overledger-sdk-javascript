@@ -34,6 +34,11 @@ yarn add @overledger/dlt-abstract
 <a name="module_dlt-abstract"></a>
 
 ## dlt-abstract
+<a name="module_dlt-abstract.default"></a>
+
+### *dlt-abstract*.default
+Abstract class for DLT modules. All DLT packages need to extend this class.
+
 <a name="AbstractDLT"></a>
 
 ## AbstractDLT

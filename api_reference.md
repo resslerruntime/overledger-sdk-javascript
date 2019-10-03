@@ -38,26 +38,76 @@
 <a name="module_bundle.default"></a>
 
 ### *bundle*.default
-Main Overledger SDK class
+Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
 
 <a name="module_core"></a>
 
 ## core
+<a name="module_core.default"></a>
+
+### *core*.default
+Core Overledger SDK class. Individual dlt packages must be installed manually.
+
 <a name="module_dlt-abstract"></a>
 
 ## dlt-abstract
+<a name="module_dlt-abstract.default"></a>
+
+### *dlt-abstract*.default
+Abstract class for DLT modules. All DLT packages need to extend this class.
+
 <a name="module_dlt-ethereum"></a>
 
 ## dlt-ethereum
+<a name="module_dlt-ethereum.default"></a>
+
+### *dlt-ethereum*.default
+Development package for Ethereum.
+
 <a name="module_dlt-ripple"></a>
 
 ## dlt-ripple
+<a name="module_dlt-ripple.default"></a>
+
+### *dlt-ripple*.default
+Development package for Ripple (XRP Ledger).
+
 <a name="module_provider"></a>
 
 ## provider
+
+* [provider](#module_provider)
+
+    * [.TESTNET](#module_provider.TESTNET)
+
+    * [.MAINNET](#module_provider.MAINNET)
+
+    * [.default](#module_provider.default)
+
+
+<a name="module_provider.TESTNET"></a>
+
+### *provider*.TESTNET
+Constant for the testnet URL.
+
+<a name="module_provider.MAINNET"></a>
+
+### *provider*.MAINNET
+Constant for the mainnet URL (placeholder).
+
+<a name="module_provider.default"></a>
+
+### *provider*.default
+Network provider package.
+
 <a name="module_search"></a>
 
 ## search
+<a name="module_search.default"></a>
+
+### *search*.default
+Search support package.
+
 <a name="OverledgerSDK"></a>
 
 ## OverledgerSDK
