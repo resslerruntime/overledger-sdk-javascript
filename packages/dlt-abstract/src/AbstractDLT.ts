@@ -1,6 +1,9 @@
 import { TransactionOptions, SignedTransactionRequest, Account } from '@overledger/types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
+/** 
+ * @memberof module:dlt-abstract
+*/
 abstract class AbstractDLT {
   name: string;
   sdk: any;

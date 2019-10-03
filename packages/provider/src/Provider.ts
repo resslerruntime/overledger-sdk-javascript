@@ -4,6 +4,9 @@ import { NetworkOptions, ProviderOptions } from '@overledger/types';
 export const TESTNET: NetworkOptions = 'testnet';
 export const MAINNET: NetworkOptions = 'mainnet';
 
+/** 
+ * @memberof module:provider
+*/
 class Provider {
   mappId: string;
   bpiKey: string;

@@ -23,11 +23,15 @@ yarn add @overledger/provider
 
 * [provider](#module_provider)
 
-    * [.TESTNET](#module_provider.TESTNET)
+    * _static_
+        * [.TESTNET](#module_provider.TESTNET)
 
-    * [.MAINNET](#module_provider.MAINNET)
+        * [.MAINNET](#module_provider.MAINNET)
 
-    * [.default](#module_provider.default)
+        * [.default](#module_provider.default)
+
+    * _inner_
+        * [~Provider](#module_provider.Provider)
 
 
 <a name="module_provider.TESTNET"></a>
@@ -45,3 +49,6 @@ Constant for the mainnet URL (placeholder).
 ### *provider*.default
 Network provider package.
 
+<a name="module_provider.Provider"></a>
+
+### *provider*~Provider

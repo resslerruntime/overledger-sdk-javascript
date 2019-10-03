@@ -20,14 +20,6 @@
 ## Classes
 
 <dl>
-<dt><a href="#OverledgerSDK">OverledgerSDK</a></dt>
-<dd></dd>
-<dt><a href="#AbstractDLT">AbstractDLT</a></dt>
-<dd></dd>
-<dt><a href="#Ethereum">Ethereum</a></dt>
-<dd></dd>
-<dt><a href="#Ripple">Ripple</a></dt>
-<dd></dd>
 <dt><a href="#OverledgerSearch">OverledgerSearch</a></dt>
 <dd></dd>
 </dl>
@@ -43,34 +35,555 @@ Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
 <a name="module_core"></a>
 
 ## core
+
+* [core](#module_core)
+
+    * _static_
+        * [.default](#module_core.default)
+
+    * _inner_
+        * [~OverledgerSDK](#module_core.OverledgerSDK)
+
+            * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
+
+            * [.dlts](#module_core.OverledgerSDK+dlts)
+
+            * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
+
+            * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
+
+            * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
+
+            * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
+
+            * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
+
+            * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
+
+            * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
+
+            * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
+
+            * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
+
+            * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
+
+            * [.getMappId()](#module_core.OverledgerSDK+getMappId)
+
+            * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
+
+            * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
+
+
 <a name="module_core.default"></a>
 
 ### *core*.default
 Core Overledger SDK class. Individual dlt packages must be installed manually.
 
+<a name="module_core.OverledgerSDK"></a>
+
+### *core*~OverledgerSDK
+
+* [~OverledgerSDK](#module_core.OverledgerSDK)
+
+    * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
+
+    * [.dlts](#module_core.OverledgerSDK+dlts)
+
+    * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
+
+    * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
+
+    * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
+
+    * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
+
+    * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
+
+    * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
+
+    * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
+
+    * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
+
+    * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
+
+    * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
+
+    * [.getMappId()](#module_core.OverledgerSDK+getMappId)
+
+    * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
+
+    * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
+
+
+<a name="new_module_core.OverledgerSDK_new"></a>
+
+#### new OverledgerSDK(mappId, bpiKey, options)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The Multi-chain Application ID |
+| bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
+| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
+
+Create the Overledger SDK
+
+<a name="module_core.OverledgerSDK+dlts"></a>
+
+#### *overledgerSDK*.dlts
+The object storing the DLTs loaded by the Overledger SDK
+
+<a name="module_core.OverledgerSDK+loadDlt"></a>
+
+#### *overledgerSDK*.loadDlt(config)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>DLTOptions</code> | DLT name and an optional Private Key to use as the main account |
+
+Load the DLT in the Overledger SDK
+
+**Returns**: <code>AbstractDLT</code> - The loaded DLT class  
+<a name="module_core.OverledgerSDK+validateOptions"></a>
+
+#### *overledgerSDK*.validateOptions(options)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
+
+Validate the provided Overledger SDK Options
+
+<a name="module_core.OverledgerSDK+buildWrapperApiCall"></a>
+
+#### *overledgerSDK*.buildWrapperApiCall(signedTransactionRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| signedTransactionRequest | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of signed transactions |
+
+Wrap the DLT Data with the API schema
+
+**Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
+<a name="module_core.OverledgerSDK+sign"></a>
+
+#### *overledgerSDK*.sign(unsignedData)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
+
+Sign the provided transactions
+
+**Returns**: <code>Array.&lt;SignedTransactionRequest&gt;</code> - Array of signed transaction requests wrapped by Overledger metadata  
+<a name="module_core.OverledgerSDK+send"></a>
+
+#### *overledgerSDK*.send(signedTransactions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| signedTransactions | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of Overledger signed transaction data |
+
+Send signed transactions to Overledger
+
+<a name="module_core.OverledgerSDK+getBalances"></a>
+
+#### *overledgerSDK*.getBalances(balancesRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| balancesRequest | <code>Array.&lt;DLTAndAddress&gt;</code> | Array of objects specifing the address and corresponding DLT |
+
+Get the balances of the specified addresses
+
+<a name="module_core.OverledgerSDK+getSequences"></a>
+
+#### *overledgerSDK*.getSequences(sequenceRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sequenceRequest | <code>Array.&lt;SequenceDataRequest&gt;</code> | Request for sequence numbers of the provided addresses |
+
+Get the sequence numbers for the provided addresses
+
+**Returns**: <code>SequenceDataResponse</code> - Sequence response  
+<a name="module_core.OverledgerSDK+readTransactionsByMappId"></a>
+
+#### *overledgerSDK*.readTransactionsByMappId()
+Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+
+<a name="module_core.OverledgerSDK+readOverledgerTransaction"></a>
+
+#### *overledgerSDK*.readOverledgerTransaction(overledgerTransactionId)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| overledgerTransactionId | <code>string</code> | Overledger Transaction ID |
+
+Get the transaction specified by the Overledger Transaction ID
+
+<a name="module_core.OverledgerSDK+setMappId"></a>
+
+#### *overledgerSDK*.setMappId(mappId)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | Multi-Chain Application ID |
+
+Set the Multi-Chain Application ID
+
+<a name="module_core.OverledgerSDK+getMappId"></a>
+
+#### *overledgerSDK*.getMappId()
+Get the Multi-Chain Application ID
+
+<a name="module_core.OverledgerSDK+setBpiKey"></a>
+
+#### *overledgerSDK*.setBpiKey(bpiKey)
+
+| Param | Type |
+| --- | --- |
+| bpiKey | <code>string</code> | 
+
+Set the Overledger Blockchain Programming Interface license key
+
+<a name="module_core.OverledgerSDK+getBpiKey"></a>
+
+#### *overledgerSDK*.getBpiKey()
+Get the Overledger Blockchain Programming Interface license key
+
 <a name="module_dlt-abstract"></a>
 
 ## dlt-abstract
+
+* [dlt-abstract](#module_dlt-abstract)
+
+    * _static_
+        * [.default](#module_dlt-abstract.default)
+
+    * _inner_
+        * [~AbstractDLT](#module_dlt-abstract.AbstractDLT)
+
+            * [new AbstractDLT(sdk, options)](#new_module_dlt-abstract.AbstractDLT_new)
+
+            * [.getBalance(address)](#module_dlt-abstract.AbstractDLT+getBalance)
+
+            * [.getSequence(address)](#module_dlt-abstract.AbstractDLT+getSequence)
+
+            * [.sign(toAddress, message, options)](#module_dlt-abstract.AbstractDLT+sign)
+
+            * [.send(signedTransaction)](#module_dlt-abstract.AbstractDLT+send)
+
+            * [.buildSignedTransactionsApiCall(signedTransaction)](#module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+
+
 <a name="module_dlt-abstract.default"></a>
 
 ### *dlt-abstract*.default
 Abstract class for DLT modules. All DLT packages need to extend this class.
 
+<a name="module_dlt-abstract.AbstractDLT"></a>
+
+### *dlt-abstract*~AbstractDLT
+
+* [~AbstractDLT](#module_dlt-abstract.AbstractDLT)
+
+    * [new AbstractDLT(sdk, options)](#new_module_dlt-abstract.AbstractDLT_new)
+
+    * [.getBalance(address)](#module_dlt-abstract.AbstractDLT+getBalance)
+
+    * [.getSequence(address)](#module_dlt-abstract.AbstractDLT+getSequence)
+
+    * [.sign(toAddress, message, options)](#module_dlt-abstract.AbstractDLT+sign)
+
+    * [.send(signedTransaction)](#module_dlt-abstract.AbstractDLT+send)
+
+    * [.buildSignedTransactionsApiCall(signedTransaction)](#module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+
+
+<a name="new_module_dlt-abstract.AbstractDLT_new"></a>
+
+#### new AbstractDLT(sdk, options)
+
+| Param | Type |
+| --- | --- |
+| sdk | <code>any</code> | 
+| options | <code>Object</code> | 
+
+<a name="module_dlt-abstract.AbstractDLT+getBalance"></a>
+
+#### *abstractDLT*.getBalance(address)
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| address | <code>string</code> | <code>null</code> | The address to query for |
+
+Get the balance for a specific address
+
+<a name="module_dlt-abstract.AbstractDLT+getSequence"></a>
+
+#### *abstractDLT*.getSequence(address)
+
+| Param | Type |
+| --- | --- |
+| address | <code>string</code> \| <code>Array.&lt;string&gt;</code> | 
+
+Get the sequence for a specific address
+
+<a name="module_dlt-abstract.AbstractDLT+sign"></a>
+
+#### *abstractDLT*.sign(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Sign a transaction for the DLT
+
+<a name="module_dlt-abstract.AbstractDLT+send"></a>
+
+#### *abstractDLT*.send(signedTransaction)
+
+| Param | Type |
+| --- | --- |
+| signedTransaction | <code>SignedTransactionRequest</code> | 
+
+Send an Overledger signed transaction
+
+<a name="module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall"></a>
+
+#### *abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)
+
+| Param | Type |
+| --- | --- |
+| signedTransaction | <code>SignedTransactionRequest</code> | 
+
+Wrap a specific DLT signed transaction with the Overledger required fields
+
 <a name="module_dlt-ethereum"></a>
 
 ## dlt-ethereum
+
+* [dlt-ethereum](#module_dlt-ethereum)
+
+    * _static_
+        * [.default](#module_dlt-ethereum.default)
+
+    * _inner_
+        * [~Ethereum](#module_dlt-ethereum.Ethereum)
+
+            * [new Ethereum(sdk, options)](#new_module_dlt-ethereum.Ethereum_new)
+
+            * [.name](#module_dlt-ethereum.Ethereum+name)
+
+            * [.symbol](#module_dlt-ethereum.Ethereum+symbol)
+
+            * [.createAccount()](#module_dlt-ethereum.Ethereum+createAccount)
+
+            * [.setAccount(privateKey)](#module_dlt-ethereum.Ethereum+setAccount)
+
+            * [.buildTransaction(toAddress, message, options)](#module_dlt-ethereum.Ethereum+buildTransaction)
+
+            * [._sign(toAddress, message, options)](#module_dlt-ethereum.Ethereum+_sign)
+
+
 <a name="module_dlt-ethereum.default"></a>
 
 ### *dlt-ethereum*.default
 Development package for Ethereum.
 
+<a name="module_dlt-ethereum.Ethereum"></a>
+
+### *dlt-ethereum*~Ethereum
+
+* [~Ethereum](#module_dlt-ethereum.Ethereum)
+
+    * [new Ethereum(sdk, options)](#new_module_dlt-ethereum.Ethereum_new)
+
+    * [.name](#module_dlt-ethereum.Ethereum+name)
+
+    * [.symbol](#module_dlt-ethereum.Ethereum+symbol)
+
+    * [.createAccount()](#module_dlt-ethereum.Ethereum+createAccount)
+
+    * [.setAccount(privateKey)](#module_dlt-ethereum.Ethereum+setAccount)
+
+    * [.buildTransaction(toAddress, message, options)](#module_dlt-ethereum.Ethereum+buildTransaction)
+
+    * [._sign(toAddress, message, options)](#module_dlt-ethereum.Ethereum+_sign)
+
+
+<a name="new_module_dlt-ethereum.Ethereum_new"></a>
+
+#### new Ethereum(sdk, options)
+
+| Param | Type |
+| --- | --- |
+| sdk | <code>any</code> | 
+| options | <code>Object</code> | 
+
+<a name="module_dlt-ethereum.Ethereum+name"></a>
+
+#### *ethereum*.name
+Name of the DLT
+
+<a name="module_dlt-ethereum.Ethereum+symbol"></a>
+
+#### *ethereum*.symbol
+Symbol of the DLT
+
+<a name="module_dlt-ethereum.Ethereum+createAccount"></a>
+
+#### *ethereum*.createAccount()
+Create an account for a specific DLT
+
+<a name="module_dlt-ethereum.Ethereum+setAccount"></a>
+
+#### *ethereum*.setAccount(privateKey)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+
+Set an account for signing transactions for a specific DLT
+
+<a name="module_dlt-ethereum.Ethereum+buildTransaction"></a>
+
+#### *ethereum*.buildTransaction(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Build the transaction
+
+<a name="module_dlt-ethereum.Ethereum+_sign"></a>
+
+#### *ethereum*._sign(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Sign the transaction
+
 <a name="module_dlt-ripple"></a>
 
 ## dlt-ripple
+
+* [dlt-ripple](#module_dlt-ripple)
+
+    * _static_
+        * [.default](#module_dlt-ripple.default)
+
+    * _inner_
+        * [~Ripple](#module_dlt-ripple.Ripple)
+
+            * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
+
+            * [.name](#module_dlt-ripple.Ripple+name)
+
+            * [.symbol](#module_dlt-ripple.Ripple+symbol)
+
+            * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
+
+            * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
+
+            * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
+
+            * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
+
+
 <a name="module_dlt-ripple.default"></a>
 
 ### *dlt-ripple*.default
 Development package for Ripple (XRP Ledger).
+
+<a name="module_dlt-ripple.Ripple"></a>
+
+### *dlt-ripple*~Ripple
+
+* [~Ripple](#module_dlt-ripple.Ripple)
+
+    * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
+
+    * [.name](#module_dlt-ripple.Ripple+name)
+
+    * [.symbol](#module_dlt-ripple.Ripple+symbol)
+
+    * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
+
+    * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
+
+    * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
+
+    * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
+
+
+<a name="new_module_dlt-ripple.Ripple_new"></a>
+
+#### new Ripple(sdk, options)
+
+| Param | Type |
+| --- | --- |
+| sdk | <code>any</code> | 
+| options | <code>Object</code> | 
+
+<a name="module_dlt-ripple.Ripple+name"></a>
+
+#### *ripple*.name
+Name of the DLT
+
+<a name="module_dlt-ripple.Ripple+symbol"></a>
+
+#### *ripple*.symbol
+Symbol of the DLT
+
+<a name="module_dlt-ripple.Ripple+createAccount"></a>
+
+#### *ripple*.createAccount()
+Create an account for a specific DLT
+
+<a name="module_dlt-ripple.Ripple+setAccount"></a>
+
+#### *ripple*.setAccount(privateKey)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+
+Set an account for signing for a specific DLT
+
+<a name="module_dlt-ripple.Ripple+buildTransaction"></a>
+
+#### *ripple*.buildTransaction(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Build the transaction
+
+<a name="module_dlt-ripple.Ripple+_sign"></a>
+
+#### *ripple*._sign(toAddress, message, options)
+
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | <code>TransactionOptions</code> | 
+
+Sign the transaction
 
 <a name="module_provider"></a>
 
@@ -78,11 +591,15 @@ Development package for Ripple (XRP Ledger).
 
 * [provider](#module_provider)
 
-    * [.TESTNET](#module_provider.TESTNET)
+    * _static_
+        * [.TESTNET](#module_provider.TESTNET)
 
-    * [.MAINNET](#module_provider.MAINNET)
+        * [.MAINNET](#module_provider.MAINNET)
 
-    * [.default](#module_provider.default)
+        * [.default](#module_provider.default)
+
+    * _inner_
+        * [~Provider](#module_provider.Provider)
 
 
 <a name="module_provider.TESTNET"></a>
@@ -100,6 +617,9 @@ Constant for the mainnet URL (placeholder).
 ### *provider*.default
 Network provider package.
 
+<a name="module_provider.Provider"></a>
+
+### *provider*~Provider
 <a name="module_search"></a>
 
 ## search
@@ -107,417 +627,6 @@ Network provider package.
 
 ### *search*.default
 Search support package.
-
-<a name="OverledgerSDK"></a>
-
-## OverledgerSDK
-
-* [OverledgerSDK](#OverledgerSDK)
-
-    * [new OverledgerSDK(mappId, bpiKey, options)](#new_OverledgerSDK_new)
-
-    * [.dlts](#OverledgerSDK+dlts)
-
-    * [.loadDlt(config)](#OverledgerSDK+loadDlt)
-
-    * [.validateOptions(options)](#OverledgerSDK+validateOptions)
-
-    * [.buildWrapperApiCall(signedTransactionRequest)](#OverledgerSDK+buildWrapperApiCall)
-
-    * [.sign(unsignedData)](#OverledgerSDK+sign)
-
-    * [.send(signedTransactions)](#OverledgerSDK+send)
-
-    * [.getBalances(balancesRequest)](#OverledgerSDK+getBalances)
-
-    * [.getSequences(sequenceRequest)](#OverledgerSDK+getSequences)
-
-    * [.readTransactionsByMappId()](#OverledgerSDK+readTransactionsByMappId)
-
-    * [.readOverledgerTransaction(overledgerTransactionId)](#OverledgerSDK+readOverledgerTransaction)
-
-    * [.setMappId(mappId)](#OverledgerSDK+setMappId)
-
-    * [.getMappId()](#OverledgerSDK+getMappId)
-
-    * [.setBpiKey(bpiKey)](#OverledgerSDK+setBpiKey)
-
-    * [.getBpiKey()](#OverledgerSDK+getBpiKey)
-
-
-<a name="new_OverledgerSDK_new"></a>
-
-### new OverledgerSDK(mappId, bpiKey, options)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| mappId | <code>string</code> | The Multi-chain Application ID |
-| bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
-| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
-
-Create the Overledger SDK
-
-<a name="OverledgerSDK+dlts"></a>
-
-### *overledgerSDK*.dlts
-The object storing the DLTs loaded by the Overledger SDK
-
-<a name="OverledgerSDK+loadDlt"></a>
-
-### *overledgerSDK*.loadDlt(config)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| config | <code>DLTOptions</code> | DLT name and an optional Private Key to use as the main account |
-
-Load the DLT in the Overledger SDK
-
-**Returns**: [<code>AbstractDLT</code>](#AbstractDLT) - The loaded DLT class  
-<a name="OverledgerSDK+validateOptions"></a>
-
-### *overledgerSDK*.validateOptions(options)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
-
-Validate the provided Overledger SDK Options
-
-<a name="OverledgerSDK+buildWrapperApiCall"></a>
-
-### *overledgerSDK*.buildWrapperApiCall(signedTransactionRequest)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| signedTransactionRequest | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of signed transactions |
-
-Wrap the DLT Data with the API schema
-
-**Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
-<a name="OverledgerSDK+sign"></a>
-
-### *overledgerSDK*.sign(unsignedData)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
-
-Sign the provided transactions
-
-**Returns**: <code>Array.&lt;SignedTransactionRequest&gt;</code> - Array of signed transaction requests wrapped by Overledger metadata  
-<a name="OverledgerSDK+send"></a>
-
-### *overledgerSDK*.send(signedTransactions)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| signedTransactions | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of Overledger signed transaction data |
-
-Send signed transactions to Overledger
-
-<a name="OverledgerSDK+getBalances"></a>
-
-### *overledgerSDK*.getBalances(balancesRequest)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| balancesRequest | <code>Array.&lt;DLTAndAddress&gt;</code> | Array of objects specifing the address and corresponding DLT |
-
-Get the balances of the specified addresses
-
-<a name="OverledgerSDK+getSequences"></a>
-
-### *overledgerSDK*.getSequences(sequenceRequest)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| sequenceRequest | <code>Array.&lt;SequenceDataRequest&gt;</code> | Request for sequence numbers of the provided addresses |
-
-Get the sequence numbers for the provided addresses
-
-**Returns**: <code>SequenceDataResponse</code> - Sequence response  
-<a name="OverledgerSDK+readTransactionsByMappId"></a>
-
-### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
-
-<a name="OverledgerSDK+readOverledgerTransaction"></a>
-
-### *overledgerSDK*.readOverledgerTransaction(overledgerTransactionId)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| overledgerTransactionId | <code>string</code> | Overledger Transaction ID |
-
-Get the transaction specified by the Overledger Transaction ID
-
-<a name="OverledgerSDK+setMappId"></a>
-
-### *overledgerSDK*.setMappId(mappId)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| mappId | <code>string</code> | Multi-Chain Application ID |
-
-Set the Multi-Chain Application ID
-
-<a name="OverledgerSDK+getMappId"></a>
-
-### *overledgerSDK*.getMappId()
-Get the Multi-Chain Application ID
-
-<a name="OverledgerSDK+setBpiKey"></a>
-
-### *overledgerSDK*.setBpiKey(bpiKey)
-
-| Param | Type |
-| --- | --- |
-| bpiKey | <code>string</code> | 
-
-Set the Overledger Blockchain Programming Interface license key
-
-<a name="OverledgerSDK+getBpiKey"></a>
-
-### *overledgerSDK*.getBpiKey()
-Get the Overledger Blockchain Programming Interface license key
-
-<a name="AbstractDLT"></a>
-
-## AbstractDLT
-
-* [AbstractDLT](#AbstractDLT)
-
-    * [new AbstractDLT(sdk, options)](#new_AbstractDLT_new)
-
-    * [.getBalance(address)](#AbstractDLT+getBalance)
-
-    * [.getSequence(address)](#AbstractDLT+getSequence)
-
-    * [.sign(toAddress, message, options)](#AbstractDLT+sign)
-
-    * [.send(signedTransaction)](#AbstractDLT+send)
-
-    * [.buildSignedTransactionsApiCall(signedTransaction)](#AbstractDLT+buildSignedTransactionsApiCall)
-
-
-<a name="new_AbstractDLT_new"></a>
-
-### new AbstractDLT(sdk, options)
-
-| Param | Type |
-| --- | --- |
-| sdk | <code>any</code> | 
-| options | <code>Object</code> | 
-
-<a name="AbstractDLT+getBalance"></a>
-
-### *abstractDLT*.getBalance(address)
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| address | <code>string</code> | <code>null</code> | The address to query for |
-
-Get the balance for a specific address
-
-<a name="AbstractDLT+getSequence"></a>
-
-### *abstractDLT*.getSequence(address)
-
-| Param | Type |
-| --- | --- |
-| address | <code>string</code> \| <code>Array.&lt;string&gt;</code> | 
-
-Get the sequence for a specific address
-
-<a name="AbstractDLT+sign"></a>
-
-### *abstractDLT*.sign(toAddress, message, options)
-
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
-
-Sign a transaction for the DLT
-
-<a name="AbstractDLT+send"></a>
-
-### *abstractDLT*.send(signedTransaction)
-
-| Param | Type |
-| --- | --- |
-| signedTransaction | <code>SignedTransactionRequest</code> | 
-
-Send an Overledger signed transaction
-
-<a name="AbstractDLT+buildSignedTransactionsApiCall"></a>
-
-### *abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)
-
-| Param | Type |
-| --- | --- |
-| signedTransaction | <code>SignedTransactionRequest</code> | 
-
-Wrap a specific DLT signed transaction with the Overledger required fields
-
-<a name="Ethereum"></a>
-
-## Ethereum
-
-* [Ethereum](#Ethereum)
-
-    * [new Ethereum(sdk, options)](#new_Ethereum_new)
-
-    * [.name](#Ethereum+name)
-
-    * [.symbol](#Ethereum+symbol)
-
-    * [.createAccount()](#Ethereum+createAccount)
-
-    * [.setAccount(privateKey)](#Ethereum+setAccount)
-
-    * [.buildTransaction(toAddress, message, options)](#Ethereum+buildTransaction)
-
-    * [._sign(toAddress, message, options)](#Ethereum+_sign)
-
-
-<a name="new_Ethereum_new"></a>
-
-### new Ethereum(sdk, options)
-
-| Param | Type |
-| --- | --- |
-| sdk | <code>any</code> | 
-| options | <code>Object</code> | 
-
-<a name="Ethereum+name"></a>
-
-### *ethereum*.name
-Name of the DLT
-
-<a name="Ethereum+symbol"></a>
-
-### *ethereum*.symbol
-Symbol of the DLT
-
-<a name="Ethereum+createAccount"></a>
-
-### *ethereum*.createAccount()
-Create an account for a specific DLT
-
-<a name="Ethereum+setAccount"></a>
-
-### *ethereum*.setAccount(privateKey)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-
-Set an account for signing transactions for a specific DLT
-
-<a name="Ethereum+buildTransaction"></a>
-
-### *ethereum*.buildTransaction(toAddress, message, options)
-
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
-
-Build the transaction
-
-<a name="Ethereum+_sign"></a>
-
-### *ethereum*._sign(toAddress, message, options)
-
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
-
-Sign the transaction
-
-<a name="Ripple"></a>
-
-## Ripple
-
-* [Ripple](#Ripple)
-
-    * [new Ripple(sdk, options)](#new_Ripple_new)
-
-    * [.name](#Ripple+name)
-
-    * [.symbol](#Ripple+symbol)
-
-    * [.createAccount()](#Ripple+createAccount)
-
-    * [.setAccount(privateKey)](#Ripple+setAccount)
-
-    * [.buildTransaction(toAddress, message, options)](#Ripple+buildTransaction)
-
-    * [._sign(toAddress, message, options)](#Ripple+_sign)
-
-
-<a name="new_Ripple_new"></a>
-
-### new Ripple(sdk, options)
-
-| Param | Type |
-| --- | --- |
-| sdk | <code>any</code> | 
-| options | <code>Object</code> | 
-
-<a name="Ripple+name"></a>
-
-### *ripple*.name
-Name of the DLT
-
-<a name="Ripple+symbol"></a>
-
-### *ripple*.symbol
-Symbol of the DLT
-
-<a name="Ripple+createAccount"></a>
-
-### *ripple*.createAccount()
-Create an account for a specific DLT
-
-<a name="Ripple+setAccount"></a>
-
-### *ripple*.setAccount(privateKey)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-
-Set an account for signing for a specific DLT
-
-<a name="Ripple+buildTransaction"></a>
-
-### *ripple*.buildTransaction(toAddress, message, options)
-
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
-
-Build the transaction
-
-<a name="Ripple+_sign"></a>
-
-### *ripple*._sign(toAddress, message, options)
-
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
-
-Sign the transaction
 
 <a name="OverledgerSearch"></a>
 

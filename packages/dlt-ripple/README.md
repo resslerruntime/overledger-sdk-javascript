@@ -17,76 +17,86 @@ yarn add @overledger/dlt-ripple
 
 ## API Reference
 
-## Modules
-
-<dl>
-<dt><a href="#module_dlt-ripple">dlt-ripple</a></dt>
-<dd></dd>
-</dl>
-
-## Classes
-
-<dl>
-<dt><a href="#Ripple">Ripple</a></dt>
-<dd></dd>
-</dl>
-
 <a name="module_dlt-ripple"></a>
 
 ## dlt-ripple
+
+* [dlt-ripple](#module_dlt-ripple)
+
+    * _static_
+        * [.default](#module_dlt-ripple.default)
+
+    * _inner_
+        * [~Ripple](#module_dlt-ripple.Ripple)
+
+            * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
+
+            * [.name](#module_dlt-ripple.Ripple+name)
+
+            * [.symbol](#module_dlt-ripple.Ripple+symbol)
+
+            * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
+
+            * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
+
+            * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
+
+            * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
+
+
 <a name="module_dlt-ripple.default"></a>
 
 ### *dlt-ripple*.default
 Development package for Ripple (XRP Ledger).
 
-<a name="Ripple"></a>
+<a name="module_dlt-ripple.Ripple"></a>
 
-## Ripple
+### *dlt-ripple*~Ripple
 
-* [Ripple](#Ripple)
+* [~Ripple](#module_dlt-ripple.Ripple)
 
-    * [new Ripple(sdk, options)](#new_Ripple_new)
+    * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
 
-    * [.name](#Ripple+name)
+    * [.name](#module_dlt-ripple.Ripple+name)
 
-    * [.symbol](#Ripple+symbol)
+    * [.symbol](#module_dlt-ripple.Ripple+symbol)
 
-    * [.createAccount()](#Ripple+createAccount)
+    * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
 
-    * [.setAccount(privateKey)](#Ripple+setAccount)
+    * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
 
-    * [.buildTransaction(toAddress, message, options)](#Ripple+buildTransaction)
+    * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
 
-    * [._sign(toAddress, message, options)](#Ripple+_sign)
+    * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
 
 
-<a name="new_Ripple_new"></a>
+<a name="new_module_dlt-ripple.Ripple_new"></a>
 
-### new Ripple(sdk, options)
+#### new Ripple(sdk, options)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
 
-<a name="Ripple+name"></a>
+<a name="module_dlt-ripple.Ripple+name"></a>
 
-### *ripple*.name
+#### *ripple*.name
 Name of the DLT
 
-<a name="Ripple+symbol"></a>
+<a name="module_dlt-ripple.Ripple+symbol"></a>
 
-### *ripple*.symbol
+#### *ripple*.symbol
 Symbol of the DLT
 
-<a name="Ripple+createAccount"></a>
+<a name="module_dlt-ripple.Ripple+createAccount"></a>
 
-### *ripple*.createAccount()
+#### *ripple*.createAccount()
 Create an account for a specific DLT
 
-<a name="Ripple+setAccount"></a>
+<a name="module_dlt-ripple.Ripple+setAccount"></a>
 
-### *ripple*.setAccount(privateKey)
+#### *ripple*.setAccount(privateKey)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -94,9 +104,9 @@ Create an account for a specific DLT
 
 Set an account for signing for a specific DLT
 
-<a name="Ripple+buildTransaction"></a>
+<a name="module_dlt-ripple.Ripple+buildTransaction"></a>
 
-### *ripple*.buildTransaction(toAddress, message, options)
+#### *ripple*.buildTransaction(toAddress, message, options)
 
 | Param | Type |
 | --- | --- |
@@ -106,9 +116,9 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
-<a name="Ripple+_sign"></a>
+<a name="module_dlt-ripple.Ripple+_sign"></a>
 
-### *ripple*._sign(toAddress, message, options)
+#### *ripple*._sign(toAddress, message, options)
 
 | Param | Type |
 | --- | --- |

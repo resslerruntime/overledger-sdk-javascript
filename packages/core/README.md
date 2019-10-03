@@ -17,68 +17,94 @@ yarn add @overledger/core
 
 ## API Reference
 
-## Modules
-
-<dl>
-<dt><a href="#module_core">core</a></dt>
-<dd></dd>
-</dl>
-
-## Classes
-
-<dl>
-<dt><a href="#OverledgerSDK">OverledgerSDK</a></dt>
-<dd></dd>
-</dl>
-
 <a name="module_core"></a>
 
 ## core
+
+* [core](#module_core)
+
+    * _static_
+        * [.default](#module_core.default)
+
+    * _inner_
+        * [~OverledgerSDK](#module_core.OverledgerSDK)
+
+            * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
+
+            * [.dlts](#module_core.OverledgerSDK+dlts)
+
+            * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
+
+            * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
+
+            * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
+
+            * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
+
+            * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
+
+            * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
+
+            * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
+
+            * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
+
+            * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
+
+            * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
+
+            * [.getMappId()](#module_core.OverledgerSDK+getMappId)
+
+            * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
+
+            * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
+
+
 <a name="module_core.default"></a>
 
 ### *core*.default
 Core Overledger SDK class. Individual dlt packages must be installed manually.
 
-<a name="OverledgerSDK"></a>
+<a name="module_core.OverledgerSDK"></a>
 
-## OverledgerSDK
+### *core*~OverledgerSDK
 
-* [OverledgerSDK](#OverledgerSDK)
+* [~OverledgerSDK](#module_core.OverledgerSDK)
 
-    * [new OverledgerSDK(mappId, bpiKey, options)](#new_OverledgerSDK_new)
+    * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
 
-    * [.dlts](#OverledgerSDK+dlts)
+    * [.dlts](#module_core.OverledgerSDK+dlts)
 
-    * [.loadDlt(config)](#OverledgerSDK+loadDlt)
+    * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
 
-    * [.validateOptions(options)](#OverledgerSDK+validateOptions)
+    * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
 
-    * [.buildWrapperApiCall(signedTransactionRequest)](#OverledgerSDK+buildWrapperApiCall)
+    * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
 
-    * [.sign(unsignedData)](#OverledgerSDK+sign)
+    * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
 
-    * [.send(signedTransactions)](#OverledgerSDK+send)
+    * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
 
-    * [.getBalances(balancesRequest)](#OverledgerSDK+getBalances)
+    * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
 
-    * [.getSequences(sequenceRequest)](#OverledgerSDK+getSequences)
+    * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
 
-    * [.readTransactionsByMappId()](#OverledgerSDK+readTransactionsByMappId)
+    * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
 
-    * [.readOverledgerTransaction(overledgerTransactionId)](#OverledgerSDK+readOverledgerTransaction)
+    * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
 
-    * [.setMappId(mappId)](#OverledgerSDK+setMappId)
+    * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
 
-    * [.getMappId()](#OverledgerSDK+getMappId)
+    * [.getMappId()](#module_core.OverledgerSDK+getMappId)
 
-    * [.setBpiKey(bpiKey)](#OverledgerSDK+setBpiKey)
+    * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
 
-    * [.getBpiKey()](#OverledgerSDK+getBpiKey)
+    * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
 
 
-<a name="new_OverledgerSDK_new"></a>
+<a name="new_module_core.OverledgerSDK_new"></a>
 
-### new OverledgerSDK(mappId, bpiKey, options)
+#### new OverledgerSDK(mappId, bpiKey, options)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -88,14 +114,14 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
 
 Create the Overledger SDK
 
-<a name="OverledgerSDK+dlts"></a>
+<a name="module_core.OverledgerSDK+dlts"></a>
 
-### *overledgerSDK*.dlts
+#### *overledgerSDK*.dlts
 The object storing the DLTs loaded by the Overledger SDK
 
-<a name="OverledgerSDK+loadDlt"></a>
+<a name="module_core.OverledgerSDK+loadDlt"></a>
 
-### *overledgerSDK*.loadDlt(config)
+#### *overledgerSDK*.loadDlt(config)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -104,9 +130,9 @@ The object storing the DLTs loaded by the Overledger SDK
 Load the DLT in the Overledger SDK
 
 **Returns**: <code>AbstractDLT</code> - The loaded DLT class  
-<a name="OverledgerSDK+validateOptions"></a>
+<a name="module_core.OverledgerSDK+validateOptions"></a>
 
-### *overledgerSDK*.validateOptions(options)
+#### *overledgerSDK*.validateOptions(options)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -114,9 +140,9 @@ Load the DLT in the Overledger SDK
 
 Validate the provided Overledger SDK Options
 
-<a name="OverledgerSDK+buildWrapperApiCall"></a>
+<a name="module_core.OverledgerSDK+buildWrapperApiCall"></a>
 
-### *overledgerSDK*.buildWrapperApiCall(signedTransactionRequest)
+#### *overledgerSDK*.buildWrapperApiCall(signedTransactionRequest)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -125,9 +151,9 @@ Validate the provided Overledger SDK Options
 Wrap the DLT Data with the API schema
 
 **Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
-<a name="OverledgerSDK+sign"></a>
+<a name="module_core.OverledgerSDK+sign"></a>
 
-### *overledgerSDK*.sign(unsignedData)
+#### *overledgerSDK*.sign(unsignedData)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -136,9 +162,9 @@ Wrap the DLT Data with the API schema
 Sign the provided transactions
 
 **Returns**: <code>Array.&lt;SignedTransactionRequest&gt;</code> - Array of signed transaction requests wrapped by Overledger metadata  
-<a name="OverledgerSDK+send"></a>
+<a name="module_core.OverledgerSDK+send"></a>
 
-### *overledgerSDK*.send(signedTransactions)
+#### *overledgerSDK*.send(signedTransactions)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -146,9 +172,9 @@ Sign the provided transactions
 
 Send signed transactions to Overledger
 
-<a name="OverledgerSDK+getBalances"></a>
+<a name="module_core.OverledgerSDK+getBalances"></a>
 
-### *overledgerSDK*.getBalances(balancesRequest)
+#### *overledgerSDK*.getBalances(balancesRequest)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -156,9 +182,9 @@ Send signed transactions to Overledger
 
 Get the balances of the specified addresses
 
-<a name="OverledgerSDK+getSequences"></a>
+<a name="module_core.OverledgerSDK+getSequences"></a>
 
-### *overledgerSDK*.getSequences(sequenceRequest)
+#### *overledgerSDK*.getSequences(sequenceRequest)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -167,14 +193,14 @@ Get the balances of the specified addresses
 Get the sequence numbers for the provided addresses
 
 **Returns**: <code>SequenceDataResponse</code> - Sequence response  
-<a name="OverledgerSDK+readTransactionsByMappId"></a>
+<a name="module_core.OverledgerSDK+readTransactionsByMappId"></a>
 
-### *overledgerSDK*.readTransactionsByMappId()
+#### *overledgerSDK*.readTransactionsByMappId()
 Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
 
-<a name="OverledgerSDK+readOverledgerTransaction"></a>
+<a name="module_core.OverledgerSDK+readOverledgerTransaction"></a>
 
-### *overledgerSDK*.readOverledgerTransaction(overledgerTransactionId)
+#### *overledgerSDK*.readOverledgerTransaction(overledgerTransactionId)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -182,9 +208,9 @@ Get transactions submitted through Oberledger by the Multi-Chain Application ID 
 
 Get the transaction specified by the Overledger Transaction ID
 
-<a name="OverledgerSDK+setMappId"></a>
+<a name="module_core.OverledgerSDK+setMappId"></a>
 
-### *overledgerSDK*.setMappId(mappId)
+#### *overledgerSDK*.setMappId(mappId)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -192,14 +218,14 @@ Get the transaction specified by the Overledger Transaction ID
 
 Set the Multi-Chain Application ID
 
-<a name="OverledgerSDK+getMappId"></a>
+<a name="module_core.OverledgerSDK+getMappId"></a>
 
-### *overledgerSDK*.getMappId()
+#### *overledgerSDK*.getMappId()
 Get the Multi-Chain Application ID
 
-<a name="OverledgerSDK+setBpiKey"></a>
+<a name="module_core.OverledgerSDK+setBpiKey"></a>
 
-### *overledgerSDK*.setBpiKey(bpiKey)
+#### *overledgerSDK*.setBpiKey(bpiKey)
 
 | Param | Type |
 | --- | --- |
@@ -207,8 +233,8 @@ Get the Multi-Chain Application ID
 
 Set the Overledger Blockchain Programming Interface license key
 
-<a name="OverledgerSDK+getBpiKey"></a>
+<a name="module_core.OverledgerSDK+getBpiKey"></a>
 
-### *overledgerSDK*.getBpiKey()
+#### *overledgerSDK*.getBpiKey()
 Get the Overledger Blockchain Programming Interface license key
 

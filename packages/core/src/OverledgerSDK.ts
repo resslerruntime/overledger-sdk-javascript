@@ -4,6 +4,9 @@ import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { SignedTransactionRequest, SDKOptions, DLTOptions, UnsignedData, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@overledger/types';
 
+/** 
+ * @memberof module:core
+*/
 class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger SDK

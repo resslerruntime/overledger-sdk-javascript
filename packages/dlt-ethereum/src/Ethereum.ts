@@ -4,6 +4,9 @@ import { MAINNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 
+/** 
+ * @memberof module:dlt-ethereum
+*/
 class Ethereum extends AbstractDLT {
   chainId: number;
   account: Accounts;
