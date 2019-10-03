@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/core
 
-Core package for interacting with Overledger.
+Core [Overledger SDK][repo] package.
 
 ## Installation
 

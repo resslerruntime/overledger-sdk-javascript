@@ -1,5 +1,8 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
 
+/**
+ * @memberof module:search
+ */
 class OverledgerSearch {
   sdk: any;
   request: AxiosInstance;

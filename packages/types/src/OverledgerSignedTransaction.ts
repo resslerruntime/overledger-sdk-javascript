@@ -1,3 +1,6 @@
+/**
+ * @memberof module:types
+ */
 type OverledgerSignedTransaction = {
   transactions: string[],
   signatures: string[],

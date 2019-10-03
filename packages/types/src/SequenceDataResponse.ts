@@ -1,3 +1,6 @@
+/**
+ * @memberof module:types
+ */
 type SequenceDataResponse = [{
   dlt: string,
   address: string,

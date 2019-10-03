@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/dlt-abstract
 
-Abstract class for dlt functions.
+[Overledger SDK][repo] abstract class for dlt functions.
 
 ## Installation
 

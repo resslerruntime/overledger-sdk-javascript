@@ -1,6 +1,7 @@
 /**
  * @module types
  */
+
 import Account from './Account';
 import APICallWrapper from './APICallWrapper';
 import DLTAndAddress from './DLTAndAddress';
@@ -16,6 +17,9 @@ import SignedTransactionRequest from './SignedTransactionRequest';
 import UnsignedData from './UnsignedData';
 import TransactionOptions from './TransactionOptions';
 
+/**
+ * Types used by the Overledger SDK packages.
+ */
 export {
   Account,
   APICallWrapper,

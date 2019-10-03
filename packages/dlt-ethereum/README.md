@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/dlt-ethereum
 
-Module for interaction with the Ethereum distributed ledger technology.
+[Overledger SDK][repo] module for interaction with the Ethereum distributed ledger technology.
 
 ## Installation
 

@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/dlt-ripple
 
-Module for interaction with the Ripple distributed ledger technology.
+[Overledger SDK][repo] module for interaction with the Ripple distributed ledger technology.
 
 ## Installation
 

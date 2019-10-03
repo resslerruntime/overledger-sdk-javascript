@@ -1,6 +1,7 @@
 /**
  * @module search
  */
+
 import OverledgerSearch from './OverledgerSearch';
 
 /**

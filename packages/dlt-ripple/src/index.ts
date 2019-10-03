@@ -1,6 +1,7 @@
 /**
  * @module dlt-ripple
  */
+
 import Ripple from './Ripple';
 
 /**

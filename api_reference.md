@@ -15,13 +15,19 @@
 <dd></dd>
 <dt><a href="#module_search">search</a></dt>
 <dd></dd>
+<dt><a href="#module_types">types</a></dt>
+<dd></dd>
 </dl>
 
-## Classes
+## Typedefs
 
 <dl>
-<dt><a href="#OverledgerSearch">OverledgerSearch</a></dt>
-<dd></dd>
+<dt><a href="#Account">Account</a> : <code>Object</code></dt>
+<dd><p>An Overledger Account instance for a single DLT.</p>
+</dd>
+<dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
+<dd><p>DLT transaction options.</p>
+</dd>
 </dl>
 
 <a name="module_bundle"></a>
@@ -339,7 +345,7 @@ Get the sequence for a specific address
 | --- | --- |
 | toAddress | <code>string</code> | 
 | message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Sign a transaction for the DLT
 
@@ -458,7 +464,7 @@ Set an account for signing transactions for a specific DLT
 | --- | --- |
 | toAddress | <code>string</code> | 
 | message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Build the transaction
 
@@ -470,7 +476,7 @@ Build the transaction
 | --- | --- |
 | toAddress | <code>string</code> | 
 | message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Sign the transaction
 
@@ -569,7 +575,7 @@ Set an account for signing for a specific DLT
 | --- | --- |
 | toAddress | <code>string</code> | 
 | message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Build the transaction
 
@@ -581,7 +587,7 @@ Build the transaction
 | --- | --- |
 | toAddress | <code>string</code> | 
 | message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Sign the transaction
 
@@ -623,39 +629,59 @@ Network provider package.
 <a name="module_search"></a>
 
 ## search
+
+* [search](#module_search)
+
+    * _static_
+        * [.default](#module_search.default)
+
+    * _inner_
+        * [~OverledgerSearch](#module_search.OverledgerSearch)
+
+            * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
+
+            * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
+
+            * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
+
+            * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
+
+            * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
+
+
 <a name="module_search.default"></a>
 
 ### *search*.default
 Search support package.
 
-<a name="OverledgerSearch"></a>
+<a name="module_search.OverledgerSearch"></a>
 
-## OverledgerSearch
+### *search*~OverledgerSearch
 
-* [OverledgerSearch](#OverledgerSearch)
+* [~OverledgerSearch](#module_search.OverledgerSearch)
 
-    * [new OverledgerSearch(sdk)](#new_OverledgerSearch_new)
+    * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
 
-    * [.getTransaction(transactionHash)](#OverledgerSearch+getTransaction)
+    * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
 
-    * [.getTransactionType(hash)](#OverledgerSearch+getTransactionType)
+    * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
 
-    * [.getBlockByDltAndNumber(dlt, blockNumber)](#OverledgerSearch+getBlockByDltAndNumber)
+    * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
 
-    * [.getBlockByDltAndHash(dlt, hash)](#OverledgerSearch+getBlockByDltAndHash)
+    * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
 
 
-<a name="new_OverledgerSearch_new"></a>
+<a name="new_module_search.OverledgerSearch_new"></a>
 
-### new OverledgerSearch(sdk)
+#### new OverledgerSearch(sdk)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>Object</code> | 
 
-<a name="OverledgerSearch+getTransaction"></a>
+<a name="module_search.OverledgerSearch+getTransaction"></a>
 
-### *overledgerSearch*.getTransaction(transactionHash)
+#### *overledgerSearch*.getTransaction(transactionHash)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -663,9 +689,9 @@ Search support package.
 
 Get transaction by transaction hash (non-deterministic)
 
-<a name="OverledgerSearch+getTransactionType"></a>
+<a name="module_search.OverledgerSearch+getTransactionType"></a>
 
-### *overledgerSearch*.getTransactionType(hash)
+#### *overledgerSearch*.getTransactionType(hash)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -673,9 +699,9 @@ Get transaction by transaction hash (non-deterministic)
 
 Get the transaction type based on the hash
 
-<a name="OverledgerSearch+getBlockByDltAndNumber"></a>
+<a name="module_search.OverledgerSearch+getBlockByDltAndNumber"></a>
 
-### *overledgerSearch*.getBlockByDltAndNumber(dlt, blockNumber)
+#### *overledgerSearch*.getBlockByDltAndNumber(dlt, blockNumber)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -684,9 +710,9 @@ Get the transaction type based on the hash
 
 Get block by DLT and number
 
-<a name="OverledgerSearch+getBlockByDltAndHash"></a>
+<a name="module_search.OverledgerSearch+getBlockByDltAndHash"></a>
 
-### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
+#### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -694,4 +720,31 @@ Get block by DLT and number
 | hash | <code>string</code> | The block hash |
 
 Get block by DLT and hash
+
+<a name="module_types"></a>
+
+## types
+<a name="Account"></a>
+
+## Account
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
+| address | <code>string</code> | The address or public key of the account, used for receiving messages. |
+
+An Overledger Account instance for a single DLT.
+
+<a name="TransactionOptions"></a>
+
+## TransactionOptions
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| sequence | <code>number</code> | This transaction's sequence in relation to the initiating account. |
+| amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
+
+DLT transaction options.
 

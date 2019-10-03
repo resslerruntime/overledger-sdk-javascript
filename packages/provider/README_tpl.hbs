@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/provider
 
-Class used for the Overledger Gateway connection.
+Class used for the [Overledger SDK][repo] Gateway connection.
 
 ## Installation
 

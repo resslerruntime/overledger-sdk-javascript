@@ -1,6 +1,7 @@
 /**
  * @module bundle
  */
+
 import OverledgerSDK from '@overledger/core';
 
 /**

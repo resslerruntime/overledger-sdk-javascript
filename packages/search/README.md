@@ -1,6 +1,9 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/search
 
-Class encompassing Overledger search functions.
+Class encompassing [Overledger SDK][repo] search functions.
 
 ## Installation
 
@@ -17,56 +20,62 @@ yarn add @overledger/search
 
 ## API Reference
 
-## Modules
-
-<dl>
-<dt><a href="#module_search">search</a></dt>
-<dd></dd>
-</dl>
-
-## Classes
-
-<dl>
-<dt><a href="#OverledgerSearch">OverledgerSearch</a></dt>
-<dd></dd>
-</dl>
-
 <a name="module_search"></a>
 
 ## search
+
+* [search](#module_search)
+
+    * _static_
+        * [.default](#module_search.default)
+
+    * _inner_
+        * [~OverledgerSearch](#module_search.OverledgerSearch)
+
+            * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
+
+            * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
+
+            * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
+
+            * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
+
+            * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
+
+
 <a name="module_search.default"></a>
 
 ### *search*.default
 Search support package.
 
-<a name="OverledgerSearch"></a>
+<a name="module_search.OverledgerSearch"></a>
 
-## OverledgerSearch
+### *search*~OverledgerSearch
 
-* [OverledgerSearch](#OverledgerSearch)
+* [~OverledgerSearch](#module_search.OverledgerSearch)
 
-    * [new OverledgerSearch(sdk)](#new_OverledgerSearch_new)
+    * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
 
-    * [.getTransaction(transactionHash)](#OverledgerSearch+getTransaction)
+    * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
 
-    * [.getTransactionType(hash)](#OverledgerSearch+getTransactionType)
+    * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
 
-    * [.getBlockByDltAndNumber(dlt, blockNumber)](#OverledgerSearch+getBlockByDltAndNumber)
+    * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
 
-    * [.getBlockByDltAndHash(dlt, hash)](#OverledgerSearch+getBlockByDltAndHash)
+    * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
 
 
-<a name="new_OverledgerSearch_new"></a>
+<a name="new_module_search.OverledgerSearch_new"></a>
 
-### new OverledgerSearch(sdk)
+#### new OverledgerSearch(sdk)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>Object</code> | 
 
-<a name="OverledgerSearch+getTransaction"></a>
+<a name="module_search.OverledgerSearch+getTransaction"></a>
 
-### *overledgerSearch*.getTransaction(transactionHash)
+#### *overledgerSearch*.getTransaction(transactionHash)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -74,9 +83,9 @@ Search support package.
 
 Get transaction by transaction hash (non-deterministic)
 
-<a name="OverledgerSearch+getTransactionType"></a>
+<a name="module_search.OverledgerSearch+getTransactionType"></a>
 
-### *overledgerSearch*.getTransactionType(hash)
+#### *overledgerSearch*.getTransactionType(hash)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -84,9 +93,9 @@ Get transaction by transaction hash (non-deterministic)
 
 Get the transaction type based on the hash
 
-<a name="OverledgerSearch+getBlockByDltAndNumber"></a>
+<a name="module_search.OverledgerSearch+getBlockByDltAndNumber"></a>
 
-### *overledgerSearch*.getBlockByDltAndNumber(dlt, blockNumber)
+#### *overledgerSearch*.getBlockByDltAndNumber(dlt, blockNumber)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -95,9 +104,9 @@ Get the transaction type based on the hash
 
 Get block by DLT and number
 
-<a name="OverledgerSearch+getBlockByDltAndHash"></a>
+<a name="module_search.OverledgerSearch+getBlockByDltAndHash"></a>
 
-### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
+#### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
 
 | Param | Type | Description |
 | --- | --- | --- |

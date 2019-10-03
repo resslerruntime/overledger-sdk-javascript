@@ -1,6 +1,9 @@
-# bundle
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
 
-This is the bundle package of the Overledger SDK. It bundles together packages for supporting all availabled DLTS. Please read the official documentation for more.
+# @overledger/bundle
+
+This is the suite of packages of the [Overledger SDK][repo]. It bundles together the packages required for support of all availabled DLTS. Please read the official [documentation][docs] for more.
 
 ## Installation
 

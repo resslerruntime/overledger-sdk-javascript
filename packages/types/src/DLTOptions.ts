@@ -1,3 +1,6 @@
+/**
+ * @memberof module:types
+ */
 type DLTOptions = {
   dlt: string,
   privateKey?: string,

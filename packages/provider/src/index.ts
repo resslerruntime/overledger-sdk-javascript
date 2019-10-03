@@ -1,6 +1,7 @@
 /**
  * @module provider
  */
+
 import Provider, { TESTNET as testnet, MAINNET as mainnet} from './Provider';
 
 /**

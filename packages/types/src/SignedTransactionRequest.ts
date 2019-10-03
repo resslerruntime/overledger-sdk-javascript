@@ -1,5 +1,8 @@
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 
+/**
+ * @memberof module:types
+ */
 type SignedTransactionRequest = {
   dlt: string,
   fromAddress: string,

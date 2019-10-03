@@ -1,3 +1,6 @@
+/**
+ * @memberof module:types
+ */
 type Options = {
   privateKey?: string,
 };
