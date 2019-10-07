@@ -3,6 +3,9 @@
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger Ethereum software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest --runInBand",
     "clean": "rm -rf dist && mkdir dist",
@@ -43,8 +46,5 @@
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
