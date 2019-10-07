@@ -3,7 +3,7 @@
     "bluebird-global"
   ],
   "lib": [
-    "es2015",
+    "es2015"
   ],
   "compilerOptions": {
     "module": "commonjs",
@@ -22,7 +22,7 @@
     // Search under node_modules for non-relative imports.
     "moduleResolution": "node",
     // Enable strictest settings like strictNullChecks & noImplicitAny.
-    "strict": false,
+    "strict": false
   },
   "exclude": [
     "node_modules",

@@ -8,7 +8,6 @@ describe('Dlt/Common', () => {
   [
     {type: 'ethereum', symbol: 'ETH'},
     {type: 'ripple', symbol: 'XRP'},
-    {type: 'bitcoin', symbol: 'XBT'},
   ].forEach(dlt => {
     describe(dlt.type, () => {
       let overledger;
@@ -16,11 +15,7 @@ describe('Dlt/Common', () => {
 
       beforeAll(() => {
         overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-          dlts: [
-            {
-              dlt: dlt.type,
-            },
-          ],
+          dlts: [{ dlt: dlt.type, },],
         });
 
         account = overledger.dlts[dlt.type].createAccount();
@@ -66,17 +61,11 @@ describe('Dlt/Common', () => {
 
       test('Cannot sign a transaction without an account set up', () => {
         expect(() =>
-          overledger.dlts[dlt.type].sign(account.address, 'QNT tt3'),
+          overledger.dlts[dlt.type].sign(account.address, 'message'),
         ).toThrow(`The ${dlt.type} account must be set up`);
       });
 
-      test('Cannot fund without the address parameter if no account are set up', async () => {
-        expect(() => overledger.dlts[dlt.type].fundAccount()).toThrow(
-          'The account must be set up',
-        );
-      });
-
-      test('Cannot getBalance without the address parameter if no account are set up', async () => {
+      test('Cannot getBalance without the address parameter if no account is set up', async () => {
         expect(() => overledger.dlts[dlt.type].getBalance()).toThrow(
           'The account must be set up',
         );
@@ -88,35 +77,10 @@ describe('Dlt/Common', () => {
         expect(overledger.dlts[dlt.type].account.address).toBe(account.address);
       });
 
-      test('Can fund the set up account with a specific amount', () => {
-        overledger.dlts[dlt.type].fundAccount('10');
-
-        mockedAxios.post.mockResolvedValue({
-          status: 'ok',
-          message: 'successfully added to the queue',
-        });
-        expect(mockedAxios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${account.address}/10`,
-        );
-      });
-
-      test('Can fund an account with a specific amount', () => {
-        const newAccount = overledger.dlts[dlt.type].createAccount();
-        overledger.dlts[dlt.type].fundAccount('10', newAccount.address);
-
-        mockedAxios.post.mockResolvedValue({
-          status: 'ok',
-          message: 'successfully added to the queue',
-        });
-        expect(mockedAxios.post).toBeCalledWith(
-          `/faucet/fund/${dlt.type}/${newAccount.address}/10`,
-        );
-      });
-
       test('Can getBalance of the set up account', () => {
         overledger.dlts[dlt.type].getBalance();
 
-        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'} as any);
         expect(mockedAxios.get).toBeCalledWith(
           `/balances/${dlt.type}/${account.address}`,
         );
@@ -126,7 +90,7 @@ describe('Dlt/Common', () => {
         const newAccount = overledger.dlts[dlt.type].createAccount();
         overledger.dlts[dlt.type].getBalance(newAccount.address);
 
-        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'});
+        mockedAxios.post.mockResolvedValue({unit: 'wei', value: '0'} as any);
         expect(mockedAxios.get).toBeCalledWith(
           `/balances/${dlt.type}/${newAccount.address}`,
         );

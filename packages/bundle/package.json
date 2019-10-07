@@ -3,18 +3,31 @@
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest --runInBand",
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && tsc --declaration",
+    "build": "yarn run clean && tsc --declaration",
     "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/bundle",
-  "author": "Sebastien Bramille <support@quant.network>",
+  "contributors": [
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
+    },
+    {
+      "name": "Alexandru Chiriac",
+      "email": "alexandru.chiriac@quant.network",
+      "url": "https://github.com/alexchiriac"
+    }
+  ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "@overledger/dlt-bitcoin": "^1.0.0-beta.1",
     "@overledger/core": "^1.0.0-beta.1",
     "@overledger/dlt-ethereum": "^1.0.0-beta.1",
     "@overledger/dlt-ripple": "^1.0.0-beta.1"
@@ -29,8 +42,5 @@
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

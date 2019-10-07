@@ -11,9 +11,7 @@ describe('Dlt/Ripple', () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-      dlts: [{
-        dlt: 'ripple',
-      }],
+      dlts: [{ dlt: 'ripple', }],
     });
   });
 
@@ -25,44 +23,35 @@ describe('Dlt/Ripple', () => {
     expect(account.address).toMatch(/r[1-9A-HJ-NP-Za-km-z]{25,34}/);
   });
 
-  test('Can fund the set up account with the default amount', () => {
-    overledger.dlts.ripple.fundAccount();
-
-    mockedAxios.post.mockResolvedValue({ status: 'OK',
-    message:
-     'The transaction was applied. Only final in a validated ledger.',
-    transactionHash:
-     '1CF917EBBA27CA477878E8386C404EC9851CA39237BB3433CCD79C6172D12788',
-    address: 'rfkP2KXi9G8GEsMHgUm2NS4ip4QbU4jga',
-    amount: '1000000000' });
-    expect(mockedAxios.post).toBeCalledWith(`/faucet/fund/ripple/${account.address}/1000000000`);
+  test('Cannot sign a ripple transaction without defining the options', () => {
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message')).toThrow('Transaction options must be defined.');
   });
 
   test('Cannot sign a ripple transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be set up');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {})).toThrow('options.amount must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a feePrice', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
       amount: '1',
     })).toThrow('options.feePrice must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: '1', feePrice: '0.000012',
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12',
     })).toThrow('options.sequence must be set up');
   });
 
   test('Cannot sign a ripple transaction without specifying a maxLedgerVersion', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: '1', feePrice: '0.000012', sequence: '1',
-    })).toThrow('options.maxLedgerVersion must be set up');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12', maxLedgerVersion: '4294967295',
+    })).toThrow('options.sequence must be set up');
   });
 
   test('Can sign a ripple transaction', async () => {
-    signedTransaction = await overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: '1', feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
+    signedTransaction = await overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'message', {
+      amount: '1', feePrice: '12', sequence: 1, maxLedgerVersion: '100000000',
     });
 
     expect(signedTransaction.length).toBeGreaterThan(200);
@@ -70,31 +59,27 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Can send a ripple signedTransaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
-    await overledger.dlts.ripple.send(signedTransaction);
+    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' } as any);
+    const signedTransactionRequest = {
+      dlt: 'ripple',
+      fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+      amount: 1,
+      signedTransaction: {
+        signatures: [],
+        transactions: [signedTransaction],
+      },
+    }
+    
+    await overledger.dlts.ripple.send(signedTransactionRequest);
 
     expect(mockedAxios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
       dltData:
         [{
           dlt: 'ripple',
-          signedTransaction: expect.any(String),
-        }],
-    });
-  });
-
-  test('Can signAndSend a ripple transaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
-    await overledger.dlts.ripple.signAndSend('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3', {
-      amount: '1', feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
-    });
-
-    expect(mockedAxios.post).toBeCalledWith('/transactions', {
-      mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ripple',
-          signedTransaction: expect.any(String),
+          fromAddress: expect.any(String),
+          amount: expect.any(Number),
+          signedTransaction: expect.any(Object),
         }],
     });
   });

@@ -1,3 +1,4 @@
+// Replace the dependency by @overledger/bundle if you're in your own project
 const OverledgerSDK = require("../../packages/bundle").default;
 
 //  ---------------------------------------------------------
@@ -11,9 +12,9 @@ const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // TODO: research if the transaction call on bitcoin can return the block it was included in
 // blockchain.com seems to have this capability
-const bitcoinBlockNumber = '200';
-const ethereumBlockNumber = '75970';
-const rippleBlockNumber = '379468';
+// const bitcoinBlockNumber = '<block number>';
+const ethereumBlockNumber = '<block number>';
+const rippleBlockNumber = '<block number>';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -22,16 +23,10 @@ const rippleBlockNumber = '379468';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
-            // TODO: Set this to 'testnet' once the release is live
-            provider: { network: 'http://10.7.4.236:30020/v1' },
+            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+            provider: { network: 'testnet' },
 
         });
-
-
-        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
-        console.log('Bitcoin block: ', bitcoinBlock.data);
-        console.log('\n');
 
         const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);

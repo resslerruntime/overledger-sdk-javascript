@@ -1,21 +1,57 @@
+[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
+[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+
 # @overledger/provider
 
-This is a sub package of [overledger-sdk][repo]
-
-This is the search package to be used with the `overledger-sdk` package. Please read the [overledger-sdk][doc] for more.
+Class used for the [Overledger SDK][repo] Gateway connection.
 
 ## Installation
 
-```bash
+Install using [npm](https://www.npmjs.org/):
+```
 npm install @overledger/provider
 ```
 
-**Can't be used on it's own**
+Or, if you prefer using [yarn](https://yarnpkg.com/):
 
-## Types 
+```
+yarn add @overledger/provider
+```
 
-All the typescript typings are placed in the types folder. 
-#TODO: Add the typings
+## API Reference
 
-[docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
-[repo]: https://github.com/quantnetwork/overledger-sdk-javascript
+<a name="module_provider"></a>
+
+## provider
+
+* [provider](#module_provider)
+
+    * _static_
+        * [.TESTNET](#module_provider.TESTNET)
+
+        * [.MAINNET](#module_provider.MAINNET)
+
+        * [.default](#module_provider.default)
+
+    * _inner_
+        * [~Provider](#module_provider.Provider)
+
+
+<a name="module_provider.TESTNET"></a>
+
+### *provider*.TESTNET
+Constant for the testnet URL.
+
+<a name="module_provider.MAINNET"></a>
+
+### *provider*.MAINNET
+Constant for the mainnet URL (placeholder).
+
+<a name="module_provider.default"></a>
+
+### *provider*.default
+Network provider package.
+
+<a name="module_provider.Provider"></a>
+
+### *provider*~Provider

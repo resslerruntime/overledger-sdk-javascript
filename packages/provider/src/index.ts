@@ -1,44 +1,20 @@
-import axios, { AxiosInstance } from 'axios';
-import { NetworkOptions, ProviderOptions } from '@overledger/types';
+/**
+ * @module provider
+ */
 
-export const TESTNET: NetworkOptions = 'testnet';
-export const MAINNET: NetworkOptions = 'mainnet';
+import Provider, { TESTNET as testnet, MAINNET as mainnet} from './Provider';
 
-class Provider {
-  mappId: string;
-  bpiKey: string;
-  options: ProviderOptions;
-  network: NetworkOptions;
+/**
+ * Constant for the testnet URL.
+ */
+export const TESTNET = testnet;
 
-  constructor(mappId: string, bpiKey: string, options: ProviderOptions = {}) {
-    this.mappId = mappId;
-    this.bpiKey = bpiKey;
-    this.options = options;
-    this.network = this.options.network || TESTNET;
-  }
+/**
+ * Constant for the mainnet URL (placeholder).
+ */
+export const MAINNET = mainnet;
 
-  createRequest(path?: string): AxiosInstance {
-    let overledgerUri: string;
-
-    if (this.network === TESTNET) {
-      overledgerUri = 'https://bpi.testnet.overledger.io/v1';
-    } else if (this.network === MAINNET) {
-      overledgerUri = 'https://bpi.overledger.io/v1';
-    } else {
-      overledgerUri = this.network;
-    }
-
-    const baseUrl: string = path ? overledgerUri + path : overledgerUri;
-
-    return axios.create({
-      baseURL: baseUrl,
-      timeout: this.options.timeout || 5000,
-      headers: {
-        Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
-        'Content-type': 'application/json',
-      },
-    });
-  }
-}
-
+/**
+ * Network provider package.
+ */
 export default Provider;

@@ -3,8 +3,10 @@ import Web3 from 'web3';
 import { MAINNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
-import { AxiosResponse } from 'axios';
 
+/** 
+ * @memberof module:dlt-ethereum
+*/
 class Ethereum extends AbstractDLT {
   chainId: number;
   account: Accounts;
@@ -22,9 +24,10 @@ class Ethereum extends AbstractDLT {
   symbol: string = 'ETH';
 
   /**
-   * @inheritdoc
+   * @param {any} sdk
+   * @param {Object} options
    */
-    // @TODO: add options statement
+  // @TODO: add options statement
   constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
 
@@ -38,8 +41,26 @@ class Ethereum extends AbstractDLT {
     if (sdk.network === MAINNET) {
       this.chainId = 1;
     } else {
-      this.chainId = 500;
+      this.chainId = 3;
     }
+  }
+
+  /**
+   * Create an account for a specific DLT
+   * 
+   * @return {Account}
+   */
+  createAccount(): Account {
+    return this.web3.eth.accounts.create();
+  }
+
+  /**
+   * Set an account for signing transactions for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
+   */
+  setAccount(privateKey: string): void {
+    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
   }
 
   /**
@@ -50,6 +71,10 @@ class Ethereum extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
+    if (typeof options === 'undefined') {
+      throw new Error('Transaction options must be defined.');
+    }
+
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be set up');
     }
@@ -98,27 +123,6 @@ class Ethereum extends AbstractDLT {
         return resolve(data.rawTransaction);
       });
     });
-  }
-
-  /**
-   * @inheritdoc
-   */
-  createAccount(): Account {
-    return this.web3.eth.accounts.create();
-  }
-
-  /**
-   * @inheritdoc
-   */
-  setAccount(privateKey: string): void {
-    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  fundAccount(amount: string = '1000000000000000000', address: string = null): Promise<AxiosResponse> {
-    return super.fundAccount(amount, address);
   }
 }
 

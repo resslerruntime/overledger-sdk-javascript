@@ -9,17 +9,7 @@ describe("Balances", () => {
 
   beforeAll(() => {
     overledger = new OverledgerSDK("testmappid", "testbpikey", {
-      dlts: [
-        {
-          dlt: "bitcoin"
-        },
-        {
-          dlt: "ethereum"
-        },
-        {
-          dlt: "ripple"
-        }
-      ]
+      dlts: [{ dlt: "ethereum", }, { dlt: "ripple", },]
     });
   });
 
@@ -50,7 +40,7 @@ describe("Balances", () => {
         unit: "drop",
         value: "202995413"
       }
-    ]);
+    ] as any);
     expect(mockedAxios.post).toBeCalledWith("/balances", array);
   });
 });

@@ -19,7 +19,6 @@ describe('Dlt', () => {
     const dlt = new Dlt(sdk, options);
 
     expect(sdk.dlts.ripple.name).toEqual(dlt.name);
-    expect(sdk.dlts.ripple.rippleAPI).toEqual(dlt.rippleAPI);
     expect(sdk.dlts.ripple.account).toEqual(dlt.account);
   });
 });

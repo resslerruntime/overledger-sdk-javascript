@@ -5,8 +5,10 @@ import AbstractDLT from '@overledger/dlt-abstract';
 import { Account, Options, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
-import { AxiosResponse } from 'axios';
 
+/** 
+ * @memberof module:dlt-ripple
+*/
 class Ripple extends AbstractDLT {
   rippleAPI: RippleAPI;
   account: Account;
@@ -22,7 +24,8 @@ class Ripple extends AbstractDLT {
   symbol: string = 'XRP';
 
   /**
-   * @inheritdoc
+   * @param {any} sdk
+   * @param {Object} options
    */
   // @TODO: add options statement
   constructor(sdk: any, options: Options = {}) {
@@ -38,6 +41,37 @@ class Ripple extends AbstractDLT {
   }
 
   /**
+   * Create an account for a specific DLT
+   * 
+   * @return {Account}
+   */
+  createAccount(): Account {
+    const generated = this.rippleAPI.generateAddress();
+
+    const account = {
+      address: generated.address,
+      privateKey: generated.secret,
+    };
+
+    return account;
+  }
+
+  /**
+   * Set an account for signing for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
+   */
+  setAccount(privateKey: string): void {
+    const keypair = deriveKeypair(privateKey);
+    const account = {
+      privateKey,
+      address: keypair.publicKey,
+    };
+    account.address = deriveAddress(keypair.publicKey);
+    this.account = account;
+  }
+
+  /**
    * Build the transaction
    *
    * @param {string} toAddress
@@ -45,19 +79,28 @@ class Ripple extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
+    if (typeof options === 'undefined') {
+      throw new Error('Transaction options must be defined.');
+    }
+
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be set up');
     }
+
     if (typeof options.feePrice === 'undefined') {
       throw new Error('options.feePrice must be set up');
     }
+
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
     }
+
     if (typeof options.maxLedgerVersion === 'undefined') {
       throw new Error('options.maxLedgerVersion must be set up');
     }
+    const maxLedgerVersion = Number(options.maxLedgerVersion);
     const amountInXRP = dropsToXrp(options.amount);
+    const feeInXRP = dropsToXrp(options.feePrice);
 
     const address = this.account.address;
     const payment = {
@@ -80,9 +123,9 @@ class Ripple extends AbstractDLT {
       }],
     };
     const instructions = {
-      maxLedgerVersion: options.maxLedgerVersion,
+      maxLedgerVersion,
       sequence: options.sequence,
-      fee: options.feePrice,
+      fee: feeInXRP,
     };
 
     return { address, payment, instructions };
@@ -103,42 +146,6 @@ class Ripple extends AbstractDLT {
         prepared => this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction,
       );
   }
-
-  /**
-   * @inheritdoc
-   */
-  // @TODO: add return statement
-  createAccount(): Account {
-    const generated = this.rippleAPI.generateAddress();
-
-    const account = {
-      address: generated.address,
-      privateKey: generated.secret,
-    };
-
-    return account;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  // @TODO: add return statement
-  setAccount(privateKey: string): void {
-    const keypair = deriveKeypair(privateKey);
-    const account = {
-      privateKey,
-      address: keypair.publicKey,
-    };
-    account.address = deriveAddress(keypair.publicKey);
-    this.account = account;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  fundAccount(amount: string = '1000000000', address: string = null): Promise<AxiosResponse> {
-    return super.fundAccount(amount, address);
-  }
 }
 
 export type Transaction = {
@@ -149,7 +156,7 @@ export type Transaction = {
 
 interface TransactionOptions extends BaseTransactionOptions {
   feePrice: string;
-  maxLedgerVersion: number;
+  maxLedgerVersion: string;
   amount: string;
 }
 
