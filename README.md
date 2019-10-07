@@ -1,532 +1,107 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM package version](https://img.shields.io/npm/v/@quantnetwork/overledger-sdk.svg)](https://www.npmjs.com/package/@quantnetwork/overledger-sdk)
 
-# Overledger Javascript SDK
+# Overledger JavaScript SDK
 
-Developer's guide to use Overledger SDK written in Javascript by Quant Network.
+Welcome to the developer's guide to use the Overledger SDK written in Javascript by Quant Network.
 
 ## Introduction to the Overledger SDK
 
-Overledger is an operating system that allows distributed apps(MApps) to connect to multiple distributed ledger technologies (DLTs) or blockchains. The Overledger SDK allows developers to create signed transactions & send them simultaneously to all supported DLTs.
+Overledger is a blockchain operating system that allows applications to connect to multiple distributed ledger technologies (DLTs) or blockchains, thus becoming Multi-chain Applications (MApps). The Overledger SDK enables developers to create signed transactions and send them simultaneously to all supported DLTs through the Overledger Blockchain Programming Interface (BPI).
 
 ## Technologies
 
-The Overledger SDK is a node module written in Javascript/ES6.
+The Overledger SDK is a collection of node packages written in Typescript. Currently, the supported DLTs are Ethereum and Ripple. Bitcoin support will be re-enabled once the migration to the public testnet is complete.
 
 ## Prerequisites
 
 - Register for a free developer account on [Quant Developer's Portal](https://developer.quant.network)
-- You will require a MAppId and BPI key:
+- You will require a MApp ID and BPI key:
   - Register your application in order to get a free MApp ID.
   - Verify your Quant token, and create a BPI key.
+- Node.js 10
 
 ## Installation
 
-The Overledger SDK can be easily installed as an npm module. This will ensure that all required dependencies are automatically included.
+The Overledger SDK can be installed as a node module. If all supported DLTs are necessary, 
+the bundle package can be installed, which will include all required dependencies.
 
 ```
-npm install @quantnetwork/overledger-sdk
+npm install @overledger/bundle
 ```
 
-Or if you prefer Yarn as the package manager.
+Alternatively, the suite of packages allows developers to chose which blockchains/DLTs they would like to utilise by installing the core package and the individual DLT packages.
 
 ```
-yarn add @quantnetwork/overledger-sdk
+npm install @overledger/core
 ```
 
-## Development
+```
+npm install @overledger/ethereum
+```
 
-To run the SDK in development mode, run the command `npm run dev` and every change will be automatically built.
 
 ## Getting started
 
-NodeJS with babel
+Initialize the SDK with the available DLTs. Optionally, a timeout period can be specified (by default it is 5000ms).
 
 ```javascript
-import OverledgerSDK from "@quantnetwork/overledger-sdk";
-```
+const OverledgerSDK = require("@overledger/bundle").default;
 
-NodeJS
-
-```javascript
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
-```
-
-Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 5000ms).
-
-```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }],
-  network: 'testnet',
+  dlts: [{ dlt: "ethereum" }, { dlt: "ripple" }],
   timeout: 1500, // Optional
+  provider: { network: 'testnet' }, // Optional
 });
 ```
 
-## Usage
+## API Reference
 
-The SDK provides the following functions which return a promise with a standard axios response which includes the BPI data in the `data` field:
+The SDK packages provide functions for interacting with the Overledger BPI Gateway as well as support for offline account generation and transaction signing.
+The functions which interact with the Overldger BPI (send, get) return a promise with a standard Axios response which includes the BPI data in the `data` field.
 
-- Main functions
-  - [configure](#configure)
-  - [sign](#sign)
-  - [send](#send)
-  - [loadDlt](#loadDlt)
-  - [readByMappId](#readByMappId)
-  - [readByTrannsactionId](#readByTransactionId)
-  - [setMappId](#setMappId)
-  - [getMappId](#getMappId)
-  - [setBpiKey](#setBpiKey)
-  - [getBpiKey](#getBpiKey)
-  - [getBalances](#getBalances)
-  - [getSequences](#getSequences)
-- DLT functions
-  - [Account](#account)
-  - [getBalance](#getBalance)
-  - [getSequence](#getSequence)
+Please check the examples folder for details on how to sign and send transactions, as well as do account queries. The api reference page can be found [here](api_reference.md).
 
+## Examples
 
-### configure
+Examples can be found in the examples folder.
 
-Configure DLTs.
+Don't forget to setup your `mappId` and `bpiKey`, you can get these on the [developer portal](https://developer.quant.network).
 
-Usage: `configure(options)`
+## Development
 
-#### Parameters
-
-This function has DLT Names as parameter.
-
-| Name      | Type   | Description                |
-| --------- | ------ | -------------------------- |
-| `options` | Object | Object of the options type |
-
-#### Return Value
-
-This function does not have a return value.
-
-### sign
-
-Sign a transaction for a DLT.
-
-Usage: `sign(dlts)`
-
-#### Parameters
-
-This function takes an array of DLT transaction data.
-
-| Name   | Type  | Description                                                                 |
-| ------ | ----- | --------------------------------------------------------------------------- |
-| `dlts` | array | Array of DLT transaction data (DLT Name, From Address, To Address and Data) |
-
-Example of DLT transaction data:
-
-*Because the data differs between blockchain, the `options` object contains all the non-generic variables and can be different in each blockchain.*
-
-```javascript
-[
-  {
-    dlt: "bitcoin",
-    toAddress: "2NFj2CVhE5ru7werwXUNCbirUW6KDo2d",
-    message: "QNT test",
-    options: {
-      amount: 1,
-      sequence: 2, // VOUT
-      previousTransactionHash: '77b04805f40a7cba6ed49be10d200f41462bfa266f24db91114798178c802058',
-      feePrice: 1e5,
-      value: 1
-    }
-  },
-  {
-    dlt: "ethereum",
-    toAddress: "0x0000000000000000000000000000000000000000",
-    message: "QNT test",
-    options: {
-      amount: '1', // Amount in wei (1 ETH = 10^18 wei)
-      sequence: 0, // nonce
-      feeLimit: '10',
-      feePrice: '10',
-    }
-  },
-  {
-    dlt: "ripple",
-    toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
-    message: "QNT test",
-    options: {
-      amount: '1', // Amount in drops (1 XRP = 1,000,000 drops)
-      feePrice: '0.000012', // Standard fee price on the XRP network
-      sequence: 1, // Transaction index number for this account (e.g if it's the first transaction after funding the address, sequence is 1)
-      maxLedgerVersion: 4294967295, // This is the maximum value that this option field can take
-    }
-  }
-];
-```
-
-#### Return Value
-
-This function returns a Promise which resolves with a signedTransaction string.
-
-### send
-
-Send the signed transaction to the blockchain.
-
-Usage: `send(signedTransactions)`
-
-#### Parameters
-
-This function takes Signed Transaction Hash as parameter.
-
-| Name                         | Type   | Description                  |
-| ---------------------------- | ------ | ---------------------------- |
-| `signedTransactions[object]` | object | Object of signed transaction |
+The Overledger JavaScript SDK manages multiple packages through [Lerna](https://lerna.js.org/). To develop the SDK, first install lerna:
 
 ```
-signedTransactions = [
-  {
-    dlt: 'bitcoin',
-    signedTransaction: 'SIGNEDTRANSACTIONHASH',
-  },
-  {
-    dlt: 'ethereum',
-    signedTransaction: 'SIGNEDTRANSACTIONHASH',
-  },
-]
+npm install -g lerna
 ```
 
-#### Return Value
-
-This function returns `Transaction Hash`
-
-### readTransactionsByMappId
-
-Read all transactions submitted by the mapp connected to the current API session.
-
-#### Parameters
-
-This function has no parameters.
-
-#### Return value
-
-This function returns a promise that resolves with an array of Overledger transaction objects with the following fields:
-
-| Name                      | Type   | Description                                                        |
-| ------------------------- | ------ | ------------------------------------------------------------------ |
-| `mappId`                  | string | Identifier of a multi-chain application                            |
-| `overledgerTransactionId` | string | A transaction hash used to identify it, represented in hexadecimal |
-| `timestamp`               | string | The timestamp when the transaction was received by Overledger      |
-| `dltData`                 | array  | Array of dltData type objects                                      |
-
-### readByTransactionId
-
-Read an Overledger transaction by its ID.
-
-#### Parameters
-
-| Name | Type   | Description                                                        |
-| ---- | ------ | ------------------------------------------------------------------ |
-| `id` | String | A transaction hash used to identify it, represented in hexadecimal |
-
-#### Return value
-
-This function returns a promise that resolves with an Overledger transaction containing the following fields:
-
-| Name                      | Type   | Description                                                        |
-| ------------------------- | ------ | ------------------------------------------------------------------ |
-| `mappId`                  | string | Identifier of a multi-chain application                            |
-| `overledgerTransactionId` | string | A transaction hash used to identify it, represented in hexadecimal |
-| `timestamp`               | string | The timestamp when the transaction was received by Overledger      |
-| `dltData`                 | array  | Array of objects of the dltData type                               |
-
-### setMappId
-
-Set the multi-chain application ID.
-Usage: `setMappId('network.quant.helloworld');`
-
-#### Parameters
-
-| Name | Type   | Description                                          |
-| ---- | ------ | ---------------------------------------------------- |
-| `id` | String | String representation of a multichain application id |
-
-#### Return value
-
-This functionns has no return value
-
-### getMappId
-
-Get the multi-chain application identifier.
-Usage: `const mappId = getMappId();`
-
-#### Parameters
-
-This function has no parameters.
-
-#### Return value
-
-This function returns a string representing the multi-chain application identifier.
-
-| Name | Type   | Description                                          |
-| ---- | ------ | ---------------------------------------------------- |
-| `id` | string | String representation of a multichain application id |
-
-### setBpiKey
-
-Set the Blockchain Programming Interface key.
-Usage: `setBpiKey('bpiKey');`
-
-#### Parameters
-
-| Name     | Type   | Description                         |
-| -------- | ------ | ----------------------------------- |
-| `bpiKey` | string | String representation of a BPI key. |
-
-#### Return value
-
-This functions has no return value
-
-### getBpiKey
-
-Get the currently set Blockchain Programming Interface key.
-Usage: `const bpiKey = getBpiKey();`
-
-#### Parameters
-
-This function has no parameters
-
-#### Return value
-
-This function returns a string representing the bpi key that is currently used.
-
-| Name     | Type   | Description                           |
-| -------- | ------ | ------------------------------------- |
-| `bpiKey` | string | String representation of the BPI key. |
-
-### getBalances
-
-Get the balances of multiple addresses
-Usage:
+To build the project, download the yarn package manager and run:
 
 ```
-const request = [
-	{
-		"dlt": "ethereum",
-		"address": "0x0000000000000000000000000000000000000000"
-	},
-	{
-		"dlt": "ripple",
-		"address": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
-	}
-]
-
-overledger.getBalances(request);
+yarn run build
 ```
 
-#### Parameters
+This will build and link the packages together.
 
-This function accepts an array of objects with the following fields:
+### Running tests
 
-| Name      | Type   | Description                                      |
-| --------- | ------ | ------------------------------------------------ |
-| `dlt`     | string | The dlt where this address should be searched on |
-| `address` | string | The address for the balance query                |
-
-#### Return value
-
-This function returns an array of objects with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `address` | string | The address holding the balance                                   |
-| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
-| `value`   | string | The amount of units this address holds                            |
-
-### getSequences
-
-Get the sequences of multiple addresses
-Usage:
+Make your changes and then from the root directory:
 
 ```
-const request = [
-	{
-		"dlt": "ethereum",
-		"address": "0x0000000000000000000000000000000000000000"
-	},
-	{
-		"dlt": "ripple",
-		"address": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
-	}
-]
-
-overledger.getSequences(request);
+yarn test
 ```
 
-#### Parameters
+To run tests on a specific package, change directories to that specific package and run the test command there.
 
-This function accepts an array of objects with the following fields:
+### Documentation
 
-| Name          | Type   | Description                                      |
-| ------------- | ------ | ------------------------------------------------ |
-| `dlt`         | string | The dlt where this address should be searched on |
-| `address` | string | The address for the sequence query               |
-
-#### Return value
-
-This function returns an array of objects with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `sequence`| string | The sequence number of this address                               |
-
-
-
-## Types
-
-In this section we will provide a description of the common object types.
-
-- [overledgerTransaction](#overledgerTransaction)
-- [dltData](#dltData)
-
-### overledgerTransaction
-
-| Name                      | Type   | Description                                                        |
-| ------------------------- | ------ | ------------------------------------------------------------------ |
-| `mappId`                  | string | Identifier of a multi-chain application                            |
-| `overledgerTransactionId` | string | A transaction hash used to identify it, represented in hexadecimal |
-| `timestamp`               | string | The timestamp when the transaction was received by Overledger      |
-| `dltData`                 | array  | Array of objects of the dltData type                               |
-
-### dltData
-
-| Name                | Type   | Description                                                                                                  |
-| ------------------- | ------ | ------------------------------------------------------------------------------------------------------------ |
-| `dlt`               | string | String representation of the BPI key.                                                                        |
-| `message`           | string | Data to be sent to the DLT                                                                                   |
-| `fromAddres`        | string | Sender address                                                                                               |
-| `toAddress`         | string | Destination address                                                                                          |
-| `changeAddress`     | string | Address for the change to be submitted to                                                                    |
-| `fee`               | string | Fee to pay for the transaction, represented in the lowest unit on the network (e.g.: satoshi, wei, drop etc) |
-| `feeLimit`          | string | Maximum fee to pay for the transaction to be submitted on the DLT                                            |
-| `callbackUrl`       | string | Endpoint provided by the Mapp for the BPI layer to call back                                                 |
-| `signedTransaction` | string | Hexadecimal string representation of a signed transaction                                                    |
-
-### Account
-From the DLT level `overledger.dlts.[dlt]`
-
-#### Set Account
-This function sets the default account for the specified blockchain into the SDK, every transaction will be signed by this account
-Usage: `setAccount(privateKey)`
-*Must be a WIF key for bitcoin*
-
-##### Parameters
-
-This function takes:
-- privateKey: the privateKey belonging to the specified blockchain
-
-##### Return Value
-
-This function has no return value.
-
-#### Get Account
-This function gets the default account for the specified blockchain from the SDK
-Usage: `overledger.dlts.[dlt].account`
-
-##### Return Value
-
-This function returns
-```
-{
-  privateKey: 'string' // The privateKey belonging to the specified blockchain
-  address: 'string' // The address belonging to this privateKey
-}
-```
-*For bitcoin, the privateKey is in the WIF format*
-
-#### Create Account
-This function creates an account for the specified blockchain from the SDK
-Usage: `overledger.dlts.[dlt].createAccount()`
-
-##### Return Value
-
-This function returns
-```
-{
-  privateKey: 'string' // The privateKey belonging to the specified blockchain
-  address: 'string' // The address belonging to this privateKey
-}
-```
-*For bitcoin, the privateKey is in the WIF format*
-
-### getBalance
-
-Get the balance of an address or, by default, the account that is currently set.
-
-Usage: `overledger.dlts.{dltName}.getBalance(address);`
-
-#### Parameters
-
-| Name      | Type   | Description       |
-| --------- | ------ | ------------------|
-| `address` | string | Optional address. |
-
-#### Return value
-
-This function returns an object with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `address` | string | The address holding the balance                                   |
-| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
-| `value`   | string | The amount of units this address holds                            |
-
-
-### getSequence
-
-Get the sequence of an address
-Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000000000000');`
-
-#### Parameters
-
-| Name          | Type   | Description                                      |
-| ------------- | ------ | ------------------------------------------------ |
-| `address` | string | The address for the sequence query               |
-
-#### Return value
-
-This function returns an array of objects with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `sequence`| string | The sequence number of this address                               |
-
-
-## Usage Example
-
-In this simple usage example we will call the `getBalance` method to request the balance of the genesis address on Ripple (created by the blockchain on startup).
+Please update the documentation after your changes by editing the JSDoc annotations inside the source files and then run the following command from the root directory:
 
 ```
-npm install @quantnetwork/overledger-sdk
+yarn run docs
 ```
 
-```
-// Boilerplate
-const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
-// Replace mappId and bipKey with your own credentials.
-const overledger = new OverledgerSDK("mappId", "bpiKey", {
-  dlts: [{ dlt: "bitcoin" }, { dlt: "ethereum" }, { dlt: "ripple" }]
-});
+License
 
-// Method call
-;(async () => {
-
-  const rippleAddress = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
-
-  const response = await overledger.dlts.ripple.getBalance(rippleAddress);
-
-  var rippleGenesisBalance = response.data
-  // The lowest unit in XRP is called 'drop'
-  console.log("The balance of the genesis address on the Quant Ripple Testnet is", rippleGenesisBalance.value, rippleGenesisBalance.unit);
-
-})();
-```
+The Apache 2.0 license can be found [here](LICENSE).
