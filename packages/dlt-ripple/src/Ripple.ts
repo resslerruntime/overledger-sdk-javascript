@@ -6,7 +6,7 @@ import { Account, Options, TransactionOptions as BaseTransactionOptions } from '
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 
-/** 
+/**
  * @memberof module:dlt-ripple
 */
 class Ripple extends AbstractDLT {
@@ -42,7 +42,7 @@ class Ripple extends AbstractDLT {
 
   /**
    * Create an account for a specific DLT
-   * 
+   *
    * @return {Account}
    */
   createAccount(): Account {
