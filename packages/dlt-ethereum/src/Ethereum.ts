@@ -4,7 +4,7 @@ import { MAINNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { Options, Account, TransactionOptions as BaseTransactionOptions } from '@overledger/types';
 
-/** 
+/**
  * @memberof module:dlt-ethereum
 */
 class Ethereum extends AbstractDLT {
@@ -47,7 +47,7 @@ class Ethereum extends AbstractDLT {
 
   /**
    * Create an account for a specific DLT
-   * 
+   *
    * @return {Account}
    */
   createAccount(): Account {

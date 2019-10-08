@@ -42,5 +42,6 @@
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
-  }
+  },
+  "gitHead": "7cac7209c58dcbf0204f1887a48647843609c667"
 }

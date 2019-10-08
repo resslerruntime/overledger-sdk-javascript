@@ -4,7 +4,7 @@ import Provider, { TESTNET } from '@overledger/provider';
 import AbstractDLT from '@overledger/dlt-abstract';
 import { SignedTransactionRequest, SDKOptions, DLTOptions, UnsignedData, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@overledger/types';
 
-/** 
+/**
  * @memberof module:core
 */
 class OverledgerSDK {
@@ -22,7 +22,7 @@ class OverledgerSDK {
 
   /**
    * Create the Overledger SDK
-   * 
+   *
    * @constructor
    * @param {string} mappId The Multi-chain Application ID
    * @param {string} bpiKey The Overledger Blockchain Programming Interface license key
@@ -81,7 +81,7 @@ class OverledgerSDK {
    * Wrap the DLT Data with the API schema
    *
    * @param {SignedTransactionRequest[]} signedTransactionRequest Array of signed transactions
-   * 
+   *
    * @return {APICallWrapper} Object conforming to the API schema
    */
   private buildWrapperApiCall(signedTransactionRequest: SignedTransactionRequest[]): APICallWrapper {
@@ -95,7 +95,7 @@ class OverledgerSDK {
    * Sign the provided transactions
    *
    * @param {UnsignedData[]} unsignedData Array of unsigned data
-   * 
+   *
    * @return {SignedTransactionRequest[]} Array of signed transaction requests wrapped by Overledger metadata
    */
   public async sign(unsignedData: UnsignedData[]): Promise<SignedTransactionRequest[]> {
@@ -129,10 +129,10 @@ class OverledgerSDK {
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
 
-    /**
+  /**
    * Get the balances of the specified addresses
-   * 
-   * @param {DLTAndAddress[]} balancesRequest Array of objects specifing the address and corresponding DLT 
+   *
+   * @param {DLTAndAddress[]} balancesRequest Array of objects specifing the address and corresponding DLT
    */
   public getBalances(balancesRequest: DLTAndAddress[]): AxiosPromise<Object> {
     return this.request.post('/balances', balancesRequest);
@@ -142,7 +142,7 @@ class OverledgerSDK {
    * Get the sequence numbers for the provided addresses
    *
    * @param {SequenceDataRequest[]} sequenceRequest Request for sequence numbers of the provided addresses
-   * 
+   *
    * @return {SequenceDataResponse} Sequence response
    */
   public getSequences(sequenceRequest: SequenceDataRequest[]): AxiosPromise<SequenceDataResponse> {
@@ -154,7 +154,7 @@ class OverledgerSDK {
 
   /**
    * Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
-   * 
+   *
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {
     return this.request.get(`/transactions/mappid/${this.mappId}`);
@@ -180,7 +180,7 @@ class OverledgerSDK {
 
   /**
    * Get the Multi-Chain Application ID
-   * 
+   *
    */
   public getMappId(): string {
     return this.mappId;
@@ -197,7 +197,7 @@ class OverledgerSDK {
 
   /**
    * Get the Overledger Blockchain Programming Interface license key
-   * 
+   *
    */
   public getBpiKey(): string {
     return this.bpiKey;
