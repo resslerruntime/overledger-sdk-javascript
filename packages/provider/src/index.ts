@@ -2,7 +2,7 @@
  * @module provider
  */
 
-import Provider, { TESTNET as testnet, MAINNET as mainnet} from './Provider';
+import Provider, { TESTNET as testnet, MAINNET as mainnet } from './Provider';
 
 /**
  * Constant for the testnet URL.

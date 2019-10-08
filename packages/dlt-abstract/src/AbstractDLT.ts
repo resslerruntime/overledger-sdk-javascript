@@ -1,7 +1,7 @@
 import { TransactionOptions, SignedTransactionRequest, Account } from '@overledger/types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
-/** 
+/**
  * @memberof module:dlt-abstract
 */
 abstract class AbstractDLT {
@@ -28,7 +28,7 @@ abstract class AbstractDLT {
 
   /**
    * Create an account for a specific DLT
-   * 
+   *
    * @return {Account}
    */
   abstract createAccount(): Account;
