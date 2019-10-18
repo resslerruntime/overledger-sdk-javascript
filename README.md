@@ -1,6 +1,3 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![NPM package version](https://img.shields.io/npm/v/@quantnetwork/overledger-sdk.svg)](https://www.npmjs.com/package/@quantnetwork/overledger-sdk)
-
 # Overledger JavaScript SDK
 
 Welcome to the developer's guide to use the Overledger SDK written in Javascript by Quant Network.
@@ -27,17 +24,17 @@ The Overledger SDK can be installed as a node module. If all supported DLTs are 
 the bundle package can be installed, which will include all required dependencies.
 
 ```
-npm install @overledger/bundle
+npm install @quantnetwork/overledger-bundle
 ```
 
 Alternatively, the suite of packages allows developers to chose which blockchains/DLTs they would like to utilise by installing the core package and the individual DLT packages.
 
 ```
-npm install @overledger/core
+npm install @quantnetwork/overledger-core
 ```
 
 ```
-npm install @overledger/ethereum
+npm install @quantnetwork/overledger-ethereum
 ```
 
 
@@ -46,7 +43,7 @@ npm install @overledger/ethereum
 Initialize the SDK with the available DLTs. Optionally, a timeout period can be specified (by default it is 5000ms).
 
 ```javascript
-const OverledgerSDK = require("@overledger/bundle").default;
+const OverledgerSDK = require("@quantnetwork/overledger-bundle").default;
 
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "ethereum" }, { dlt: "ripple" }],
@@ -102,6 +99,6 @@ Please update the documentation after your changes by editing the JSDoc annotati
 yarn run docs
 ```
 
-License
+### License
 
 The Apache 2.0 license can be found [here](LICENSE).

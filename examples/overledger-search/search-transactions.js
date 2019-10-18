@@ -1,5 +1,5 @@
-// Replace the dependency by @overledger/bundle if you're in your own project
-const OverledgerSDK = require("../../packages/bundle").default;
+// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
+const OverledgerSDK = require('../../packages/overledger-bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
