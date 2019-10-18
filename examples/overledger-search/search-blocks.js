@@ -1,5 +1,5 @@
-// Replace the dependency by @overledger/bundle if you're in your own project
-const OverledgerSDK = require("../../packages/bundle").default;
+// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
+const OverledgerSDK = require('../../packages/overledger-bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -8,11 +8,7 @@ const mappId = '<ENTER YOUR MAPPID>';
 const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Take these from the search-transaction scripts, as the response
-// includes what block the transaction is included in (except for bitcoin);
-
-// TODO: research if the transaction call on bitcoin can return the block it was included in
-// blockchain.com seems to have this capability
-// const bitcoinBlockNumber = '<block number>';
+// includes what block the transaction is included in
 const ethereumBlockNumber = '<block number>';
 const rippleBlockNumber = '<block number>';
 
