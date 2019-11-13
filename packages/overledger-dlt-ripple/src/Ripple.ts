@@ -87,7 +87,7 @@ class Ripple extends AbstractDLT {
     let escrowCreation: EscrowCreation;
     let escrowExecution: EscrowExecution;
     let escrowCancellation: EscrowCancellation;
-    
+
     if (typeof options === 'undefined') {
       throw new Error('Transaction options must be defined.');
     }
@@ -147,20 +147,19 @@ class Ripple extends AbstractDLT {
           escrowCreation = {
             amount: options.amount,
             destination: toAddress,
-            allowCancelAfter: this.computeCreateEscrowCancelAfter(paramsCreate.allowCancelAfter),
-            allowExecuteAfter: this.computeCreateEscrowCancelAfter(paramsCreate.allowExecuteAfter),
+            allowCancelAfter: paramsCreate.allowCancelAfter,
+            allowExecuteAfter: paramsCreate.allowExecuteAfter,
             condition: this.computeEscrowConditionFulfillment(paramsCreate.condition).escrowCondition
           }
           console.log('escrowCreation', escrowCreation);
-          console.log('allowCancelAfter', escrowCreation.allowCancelAfter);
           break;
         case "ESCROW_EXECUTION":
           let paramsExecute = params as AtomicSwapExecuteOptions;
           escrowExecution = {
             owner: address,
             escrowSequence: parseInt(paramsExecute.escrowSequence),
-            condition: this.computeEscrowConditionFulfillment(paramsCreate.condition).escrowCondition,
-            fulfillment: this.computeEscrowConditionFulfillment(paramsCreate.condition).escrowFulfillment
+            condition: this.computeEscrowConditionFulfillment(paramsExecute.condition).escrowCondition,
+            fulfillment: this.computeEscrowConditionFulfillment(paramsExecute.condition).escrowFulfillment
           }
           console.log('escrowExecution', escrowExecution);
           break;
@@ -187,11 +186,20 @@ class Ripple extends AbstractDLT {
     return { escrowCondition, escrowFulfillment };
   }
 
-  computeCreateEscrowCancelAfter(timeDelay: string): string {
+  /*computeCreateEscrowCancelAfter(timeDelay: string): string {
     let cancelAfter = new Date();
     return new Date(cancelAfter.setHours(cancelAfter.getHours() + parseInt(timeDelay))).toISOString();
   }
 
+  isValidISODateFormat(dateTime: string): boolean {
+    try {
+    const d = new Date(dateTime);
+      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateTime)) return false;
+      return d.toISOString() === dateTime;
+    } catch(e){
+      console.log('Wrong date format');
+    }
+  }*/
 
   /**
    * Sign the transaction
@@ -246,7 +254,7 @@ interface TransactionOptions extends BaseTransactionOptions {
   atomicSwapParameters?: AtomicSwapCreateOptions | AtomicSwapExecuteOptions | AtomicSwapCancelOptions;
 }
 
-enum TransactionTypes {
+export enum TransactionTypes {
   payment = "PAYMENT",
   escrowCreation = "ESCROW_CREATION",
   escrowExecution = "ESCROW_EXECUTION",
@@ -262,14 +270,11 @@ interface AtomicSwapCreateOptions extends AtomicSwapOptions {
 }
 
 interface AtomicSwapExecuteOptions extends AtomicSwapOptions {
-  owner: string;
   escrowSequence: string;
   condition?: string;
-  fulfillment?: string;
 }
 
 interface AtomicSwapCancelOptions extends AtomicSwapOptions {
-  owner: string;
   escrowSequence: string;
 }
 

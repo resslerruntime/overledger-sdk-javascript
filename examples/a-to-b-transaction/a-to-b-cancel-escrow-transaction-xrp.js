@@ -50,11 +50,9 @@ const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
-        transactionType: TransactionTypes.escrowCreation,
+        transactionType: TransactionTypes.escrowCancellation,
         atomicSwapParameters: {
-          allowCancelAfter: '2019-11-13T12:45:01.325Z',
-          allowExecuteAfter: '2019-11-13T12:40:01.325Z',
-          condition: 'Test'
+          escrowSequence: '12'
         }
       },
     },]);
