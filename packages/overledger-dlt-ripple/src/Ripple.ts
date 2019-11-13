@@ -149,17 +149,24 @@ class Ripple extends AbstractDLT {
             destination: toAddress,
             allowCancelAfter: paramsCreate.allowCancelAfter,
             allowExecuteAfter: paramsCreate.allowExecuteAfter,
-            condition: this.computeEscrowConditionFulfillment(paramsCreate.condition).escrowCondition
+            condition: this.computeEscrowConditionFulfillment(paramsCreate.condition).escrowCondition,
+            memos: [{
+              data: message,
+            }]
           }
           console.log('escrowCreation', escrowCreation);
           break;
         case "ESCROW_EXECUTION":
           let paramsExecute = params as AtomicSwapExecuteOptions;
+          let conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.condition);
           escrowExecution = {
             owner: address,
             escrowSequence: parseInt(paramsExecute.escrowSequence),
-            condition: this.computeEscrowConditionFulfillment(paramsExecute.condition).escrowCondition,
-            fulfillment: this.computeEscrowConditionFulfillment(paramsExecute.condition).escrowFulfillment
+            condition: conditionAndFulfillment.escrowCondition,
+            fulfillment: conditionAndFulfillment.escrowFulfillment,
+            memos: [{
+              data: message,
+            }]
           }
           console.log('escrowExecution', escrowExecution);
           break;
@@ -167,7 +174,10 @@ class Ripple extends AbstractDLT {
           let paramsCancel = params as AtomicSwapCancelOptions;
           escrowCancellation = {
             owner: address,
-            escrowSequence: parseInt(paramsCancel.escrowSequence)
+            escrowSequence: parseInt(paramsCancel.escrowSequence),
+            memos: [{
+              data: message,
+            }]
           }
           console.log('escrowCancellation', escrowCancellation);
           break;
@@ -186,21 +196,6 @@ class Ripple extends AbstractDLT {
     return { escrowCondition, escrowFulfillment };
   }
 
-  /*computeCreateEscrowCancelAfter(timeDelay: string): string {
-    let cancelAfter = new Date();
-    return new Date(cancelAfter.setHours(cancelAfter.getHours() + parseInt(timeDelay))).toISOString();
-  }
-
-  isValidISODateFormat(dateTime: string): boolean {
-    try {
-    const d = new Date(dateTime);
-      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateTime)) return false;
-      return d.toISOString() === dateTime;
-    } catch(e){
-      console.log('Wrong date format');
-    }
-  }*/
-
   /**
    * Sign the transaction
    *
@@ -214,17 +209,17 @@ class Ripple extends AbstractDLT {
       let prepared;
       console.log('transaction type', options.transactionType);
       switch (options.transactionType) {
-        case "PAYMENT":
+        case 'PAYMENT':
           prepared = await this.rippleAPI.preparePayment(built.address, built.payment, built.instructions);
           break;
-        case "ESCROW_CREATION":
+        case 'ESCROW_CREATION':
           prepared = await this.rippleAPI.prepareEscrowCreation(built.address, built.escrowCreation, built.instructions);
           break;
-        case "ESCROW_EXECUTION":
+        case 'ESCROW_EXECUTION':
           prepared = await this.rippleAPI.prepareEscrowExecution(built.address, built.escrowExecution, built.instructions);
           break;
-        case "ESCROW_CANCELLATION":
-          prepared = await this.rippleAPI.prepareEscrowCancellation(built.address, built.escrowCancellation, built.instructions)
+        case 'ESCROW_CANCELLATION':
+          prepared = await this.rippleAPI.prepareEscrowCancellation(built.address, built.escrowCancellation, built.instructions);
           break;
         default:
           prepared = await this.rippleAPI.preparePayment(built.address, built.payment, built.instructions);

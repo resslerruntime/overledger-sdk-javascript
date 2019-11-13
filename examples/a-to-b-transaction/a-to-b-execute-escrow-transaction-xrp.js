@@ -48,11 +48,11 @@ const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
       options: {
         amount: '100', // Minimum allowed amount of drops is 1.
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
-        feePrice: '400', // Minimum feePrice on Ripple is 12 drops.
+        feePrice: '2000000', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
         transactionType: TransactionTypes.escrowExecution,
         atomicSwapParameters: {
-          escrowSequence: '10',
+          escrowSequence: '24',
           condition: 'Test'
         }
       },

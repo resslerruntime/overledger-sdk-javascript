@@ -52,8 +52,8 @@ const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
         transactionType: TransactionTypes.escrowCreation,
         atomicSwapParameters: {
-          allowCancelAfter: '2019-11-13T12:45:01.325Z',
-          allowExecuteAfter: '2019-11-13T12:40:01.325Z',
+          allowCancelAfter: '2019-11-13T15:20:01.325Z',
+          allowExecuteAfter: '2019-11-13T15:12:01.325Z',
           condition: 'Test'
         }
       },
