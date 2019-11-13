@@ -227,7 +227,12 @@ class Ripple extends AbstractDLT {
       return this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction;
 
     } catch (e) {
+      console.log(JSON.stringify(e));
       console.error(`Error while sending a ripple transaction`, e);
+      if(e.toString().includes(`does not conform to the "date-time" format`)){
+        console.log(`Date allowCancelAfter and allowExecuteAfter should follow the ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ`);
+      }
+
     }
   }
 }
