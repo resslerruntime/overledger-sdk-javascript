@@ -9,6 +9,11 @@ import { EscrowCreation } from 'ripple-lib/dist/npm/transaction/escrow-creation'
 import { EscrowExecution } from 'ripple-lib/dist/npm/transaction/escrow-execution';
 import { EscrowCancellation } from 'ripple-lib/dist/npm/transaction/escrow-cancellation';
 import * as cc from 'five-bells-condition';
+import { isValidClassicAddress, isValidXAddress } from 'ripple-address-codec';
+// import * as base58check from 'base58check';
+
+const DEFAULT_FEE_PRICE = 12;
+const BASE_ESCROW_EXECUTION_FEE_PRICE = 330;
 
 /**
  * @memberof module:overledger-dlt-ripple
@@ -72,6 +77,9 @@ class Ripple extends AbstractDLT {
       address: keypair.publicKey,
     };
     account.address = deriveAddress(keypair.publicKey);
+    if (!this.isValidRippleAddress(account.address)) {
+      throw new Error(`The account's address must be in a base58 format and of length ??`)
+    }
     this.account = account;
   }
 
@@ -109,10 +117,10 @@ class Ripple extends AbstractDLT {
     }
     const maxLedgerVersion = Number(options.maxLedgerVersion);
     const amountInXRP = dropsToXrp(options.amount);
-    const feeInXRP = dropsToXrp(options.feePrice);
-
+    let fee;
     const address = this.account.address;
     if (options.transactionType === "PAYMENT") {
+      fee = this.computeFeePrice(options.feePrice, TransactionTypes.payment);
       payment = {
         source: {
           address: this.account.address,
@@ -132,14 +140,7 @@ class Ripple extends AbstractDLT {
           data: message,
         }],
       };
-    }
-    const instructions = {
-      maxLedgerVersion,
-      sequence: options.sequence,
-      fee: feeInXRP,
-    };
-
-    if (options.atomicSwapParameters) {
+    } else if (options.atomicSwapParameters) {
       const params = options.atomicSwapParameters;
       switch (options.transactionType) {
         case "ESCROW_CREATION":
@@ -154,13 +155,14 @@ class Ripple extends AbstractDLT {
               data: message,
             }]
           }
+          fee = this.computeFeePrice(options.feePrice, TransactionTypes.escrowCreation);
           console.log('escrowCreation', escrowCreation);
           break;
         case "ESCROW_EXECUTION":
           let paramsExecute = params as AtomicSwapExecuteOptions;
           let conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.condition);
           escrowExecution = {
-            owner: address,
+            owner: paramsExecute.owner,
             escrowSequence: parseInt(paramsExecute.escrowSequence),
             condition: conditionAndFulfillment.escrowCondition,
             fulfillment: conditionAndFulfillment.escrowFulfillment,
@@ -168,33 +170,35 @@ class Ripple extends AbstractDLT {
               data: message,
             }]
           }
+          fee = this.computeFeePrice(options.feePrice, TransactionTypes.escrowExecution, escrowExecution.fulfillment!);
           console.log('escrowExecution', escrowExecution);
           break;
         case "ESCROW_CANCELLATION":
           let paramsCancel = params as AtomicSwapCancelOptions;
           escrowCancellation = {
-            owner: address,
+            owner: paramsCancel.owner,
             escrowSequence: parseInt(paramsCancel.escrowSequence),
             memos: [{
               data: message,
             }]
           }
+          fee = this.computeFeePrice(options.feePrice, TransactionTypes.escrowCancellation);
           console.log('escrowCancellation', escrowCancellation);
           break;
       }
     }
 
+    const feeInXRP = dropsToXrp(fee.toString());
+    const instructions = {
+      maxLedgerVersion,
+      sequence: options.sequence,
+      fee: feeInXRP,
+    };
+
     return { address, payment, instructions, escrowCreation, escrowExecution, escrowCancellation };
   }
 
-  computeEscrowConditionFulfillment(condition: string): { escrowCondition: string, escrowFulfillment: string } {
-    const preImageData = Buffer.from(condition, 'utf-8');
-    const myFulfillment = new cc.PreimageSha256();
-    myFulfillment.setPreimage(preImageData);
-    const escrowCondition = myFulfillment.getConditionBinary().toString('hex').toUpperCase();
-    const escrowFulfillment = myFulfillment.serializeBinary().toString('hex').toUpperCase();
-    return { escrowCondition, escrowFulfillment };
-  }
+
 
   /**
    * Sign the transaction
@@ -204,6 +208,8 @@ class Ripple extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   async _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
+    const swapOptions = options.atomicSwapParameters;
+    this.validateSignArgs(toAddress, options.sequence, options.transactionType, swapOptions);
     try {
       const built = this.buildTransaction(toAddress, message, options);
       let prepared;
@@ -229,12 +235,72 @@ class Ripple extends AbstractDLT {
     } catch (e) {
       console.log(JSON.stringify(e));
       console.error(`Error while sending a ripple transaction`, e);
-      if(e.toString().includes(`does not conform to the "date-time" format`)){
-        console.log(`Date allowCancelAfter and allowExecuteAfter should follow the ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ`);
-      }
-
     }
   }
+
+  computeEscrowConditionFulfillment(condition: string): { escrowCondition: string, escrowFulfillment: string } {
+    const preImageData = Buffer.from(condition, 'utf-8');
+    const myFulfillment = new cc.PreimageSha256();
+    myFulfillment.setPreimage(preImageData);
+    const escrowCondition = myFulfillment.getConditionBinary().toString('hex').toUpperCase();
+    const escrowFulfillment = myFulfillment.serializeBinary().toString('hex').toUpperCase();
+    return { escrowCondition, escrowFulfillment };
+  }
+
+  isValidRippleAddress(address: string): boolean {
+    return isValidClassicAddress(address) || isValidXAddress(address);
+  }
+
+  validateSignArgs(toAddress: string, sequence: number, transactionType: TransactionTypes, swapOptions: AtomicSwapOptions): boolean {
+    if (!this.isValidRippleAddress(toAddress)) {
+      throw new Error(`The toAddress must be in a base58 format and of length ??`);
+    }
+    if ((swapOptions as AtomicSwapCreateOptions).allowCancelAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
+      throw new Error(`allowCancelAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} date format is not valid`);
+    }
+    if ((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter)) {
+      throw new Error(`allowExecuteAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} date format is not valid`);
+    }
+    if ((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).condition && (((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).condition.length <= 0) || (typeof (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).condition !== 'string'))) {
+      throw new Error(`condition must be a non null string`);
+    }
+    if (!(typeof parseInt((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).escrowSequence, 10) === 'number')) {
+      throw new Error(`escrow sequence must be a number`);
+    }
+    if (!(typeof sequence === 'number')) {
+      throw new Error(`sequence must be a number`);
+    }
+    if (((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner) && !this.isValidRippleAddress((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner)) {
+      console.log(`owner`, (swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner);
+      throw new Error(`the owner address is not valid as a ripple address format`);
+    }
+    if (!transactionType || !(typeof transactionType === 'string') || (transactionType.length === 0)) {
+      throw new Error(`The transactionType must be set up from the enum TransactionTypes`);
+    }
+    return true;
+  }
+
+  computeFeePrice(initialFee: string, transactionType: TransactionTypes, fulfillment?: string): number {
+    const fee = parseInt(initialFee, 10);
+    if (transactionType === TransactionTypes.payment && fee < DEFAULT_FEE_PRICE) {
+      console.log(`Fee price is too low to perform the transaction; set by default to 12`);
+      return DEFAULT_FEE_PRICE;
+    } else if (transactionType === TransactionTypes.escrowExecution) {
+      // compute the fee
+      console.log(`Fee price depends on the sent data`);
+      const fulfillmentLength = Buffer.from(fulfillment, "hex").length;
+      const addedDrops = fulfillmentLength * 10 / 16;
+      return BASE_ESCROW_EXECUTION_FEE_PRICE + Math.ceil(addedDrops);
+    }
+    return fee;
+  }
+
+  isValidISODateFormat(dateTime: string): boolean {
+    const d = new Date(dateTime);
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateTime)) return false;
+    return d.toISOString() === dateTime;
+  }
+
 }
 
 export type Transaction = {
@@ -251,8 +317,10 @@ interface TransactionOptions extends BaseTransactionOptions {
   maxLedgerVersion: string;
   amount: string;
   transactionType: TransactionTypes;
-  atomicSwapParameters?: AtomicSwapCreateOptions | AtomicSwapExecuteOptions | AtomicSwapCancelOptions;
+  atomicSwapParameters?: AtomicSwapOptions;
 }
+
+export type AtomicSwapOptions = AtomicSwapCreateOptions | AtomicSwapExecuteOptions | AtomicSwapCancelOptions;
 
 export enum TransactionTypes {
   payment = "PAYMENT",
@@ -261,20 +329,20 @@ export enum TransactionTypes {
   escrowCancellation = "ESCROW_CANCELLATION"
 }
 
-interface AtomicSwapOptions { }
-
-interface AtomicSwapCreateOptions extends AtomicSwapOptions {
+interface AtomicSwapCreateOptions {
   allowCancelAfter?: string; //in ISOString format
   allowExecuteAfter?: string;
   condition?: string; //this is the sha256 hashOutput
 }
 
-interface AtomicSwapExecuteOptions extends AtomicSwapOptions {
+interface AtomicSwapExecuteOptions {
+  owner: string;
   escrowSequence: string;
   condition?: string;
 }
 
-interface AtomicSwapCancelOptions extends AtomicSwapOptions {
+interface AtomicSwapCancelOptions {
+  owner: string;
   escrowSequence: string;
 }
 

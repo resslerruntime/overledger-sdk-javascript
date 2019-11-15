@@ -77,7 +77,9 @@ abstract class AbstractDLT {
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
     }
-
+    if (parseInt(options.amount, 10) <= 0){
+      throw new Error(`The amount must be strictly positive (> 0)`);
+    }
     return this._sign(toAddress, message, options);
   }
 
@@ -114,6 +116,12 @@ abstract class AbstractDLT {
       signedTransaction: stx.signedTransaction,
     };
   }
+}
+
+export enum DltNames {
+  xrp = "ripple",
+  ethereum = "ethereum",
+  bitcoin = "bitcoin"
 }
 
 export default AbstractDLT;

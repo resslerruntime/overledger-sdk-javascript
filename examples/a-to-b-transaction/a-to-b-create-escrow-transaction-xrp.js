@@ -1,17 +1,23 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
 const TransactionTypes = require('../../packages/overledger-dlt-ripple/dist/Ripple').TransactionTypes;
+const DltNames = require('../../packages/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
+
 const mappId = 'network.quant.software';
 const bpiKey = 'bpikeytest';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-const partyARipplePrivateKey = 'saw8418BRjNQkWiDak8szCySyDHvF';
-const partyARippleAddress = 'r38zfh4yzthZ51rGKzsGQgrUoQMiEzQx38'
+// const partyARipplePrivateKey = 'saw8418BRjNQkWiDak8szCySyDHvF';
+// const partyARippleAddress = 'r38zfh4yzthZ51rGKzsGQgrUoQMiEzQx38'
+
+const partyARipplePrivateKey = 'sstGk6CTepVHFkhGzJMnbiD5nPpCX';
+const partyARippleAddress = 'rG2SF9T3M9Zbq6nBS5rbFn4MuZxB47VVk2'
+
 
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
 const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
@@ -24,7 +30,7 @@ const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ripple' }],
+      dlts: [{ dlt: DltNames.xrp }],
       provider: { network: 'testnet' },
     });
 
@@ -42,18 +48,18 @@ const partyBRippleAddress = 'rP4MrmQcxnAAZusXGgnyZD4WR1Es5wjmLE';
     const signedTransactions = await overledger.sign([
     {
       // In order to prepare a ripple transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
-      dlt: 'ripple',
+      dlt: DltNames.xrp,
       toAddress: partyBRippleAddress,
       message: transactionMessage,
       options: {
-        amount: '100', // Minimum allowed amount of drops is 1.
+        amount: '30', // Minimum allowed amount of drops is 1.
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
         transactionType: TransactionTypes.escrowCreation,
         atomicSwapParameters: {
-          allowCancelAfter: '2019-11-13T15:30:01.325Z',
-          allowExecuteAfter: '2019-11-13T15:25:01.325Z',
+          allowCancelAfter: '2019-11-15T18:00:01.325Z',
+          allowExecuteAfter: '2019-11-15T15:22:01.325Z',
           condition: 'Test'
         }
       },
