@@ -119,7 +119,7 @@ class Ripple extends AbstractDLT {
     const amountInXRP = dropsToXrp(options.amount);
     let fee;
     const address = this.account.address;
-    if (options.transactionType === "PAYMENT") {
+    if (options.transactionType === TransactionTypes.payment) {
       fee = this.computeFeePrice(options.feePrice, TransactionTypes.payment);
       payment = {
         source: {
