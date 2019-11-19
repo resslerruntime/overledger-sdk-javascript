@@ -36,7 +36,8 @@
     "axios": "^0.18.0",
     "ripple-address-codec": "^4.0.0",
     "ripple-keypairs": "^0.11.0",
-    "ripple-lib": "^1.2.3"
+    "ripple-lib": "^1.2.3",
+    "five-bells-condition": "^5.0.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",

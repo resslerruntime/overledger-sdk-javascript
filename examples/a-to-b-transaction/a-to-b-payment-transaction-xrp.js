@@ -1,7 +1,7 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
 const TransactionTypes = require('../../packages/overledger-dlt-ripple/dist/Ripple').TransactionTypes;
-const DltNames = require('../../packages/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
+const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -35,7 +35,7 @@ const partyBRippleAddress = '<ENTER YOUR XRP PARTY B ADDRESS>';
     });
 
     //You can add a message that will be encorporated into the transaction (this is additional to the escrow functionality):
-    const transactionMessage = 'Overledger JavaScript SDK Escrow Creation Test';
+    const transactionMessage = 'Overledger JavaScript SDK Payment Test';
 
     // SET party A's corresponding private key that will be used for signing messages from his account;
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
@@ -43,12 +43,6 @@ const partyBRippleAddress = '<ENTER YOUR XRP PARTY B ADDRESS>';
     // Get party A's account sequences. XRP requires transactions to be sent from an account in seqeunce order, overledger finds the next correct sequence number
     const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
     const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
-
-    //create time variables for use in the escrow
-    let escrowExecutionAfter = new Date(Date.now() + (1*60000)); //set escrow execution 1 mins into the future
-    let escrowCancelationAfter = new Date(Date.now() + (2*60000)); //set escrow cancelation 2 mins into the future
-    console.log('escrowExecutionAfter: ' + escrowExecutionAfter.toISOString());
-    console.log('escrowCancelationAfter: ' + escrowCancelationAfter.toISOString());
 
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
@@ -58,16 +52,11 @@ const partyBRippleAddress = '<ENTER YOUR XRP PARTY B ADDRESS>';
       toAddress: partyBRippleAddress, //which address/account this message is being sent to
       message: transactionMessage, //any message you want to write
       options: {
-        amount: '30000000', // The amount of Drops you want to send. Minimum send is 1 drop. 1 drop = 0.000001 XRP.
+        amount: '50', // The amount of Drops you want to send. Minimum send is 1 drop. 1 drop = 0.000001 XRP.
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet. As previously discussed OVL finds the correct sequence
         feePrice: '12', // FeePrice is denoted in drops. Minimum feePrice on XRP is 12 drops for escrowCreation (also for the other transaction types of escrowCancelation & payment).
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
-        transactionType: TransactionTypes.escrowCreation, //what type of transaction are we signing? See the enum for options
-        atomicSwapParameters: {
-          allowExecuteAfter: escrowExecutionAfter.toISOString(),//'2019-19-15T15:36:01.325Z', //from when can the escrow be executed?
-          allowCancelAfter: escrowCancelationAfter.toISOString(),//'2019-19-14T18:00:01.325Z', //from when can the escrow be cancelled?
-          hashAlgorithmInput: 'Test' //This is the input to the hashing algorithm used to lock the escrow. This input will not be revealed on the ledger until escrow execution.
-        }
+        transactionType: TransactionTypes.payment, //what type of transaction are we signing? See the enum for options
       },
     },]);
 
