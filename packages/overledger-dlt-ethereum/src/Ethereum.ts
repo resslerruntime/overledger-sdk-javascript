@@ -72,7 +72,6 @@ class Ethereum extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions, dataMessageType?: DataMessageOptions): Transaction {
-    console.log(`------------ build transaction ethereum ----------`);
     if (typeof options === 'undefined') {
       throw new Error('Transaction options must be defined.');
     }
@@ -93,24 +92,35 @@ class Ethereum extends AbstractDLT {
       throw new Error('options.sequence must be set up');
     }
 
+    if (toAddress && dataMessageType === DataMessageOptions.smartContractCreation) {
+      throw new Error('The toAddress must be undefined for smart contract creation');
+    }
+
+    if (!toAddress && dataMessageType === DataMessageOptions.smartContractInvocation) {
+      throw new Error('The toAddress must be defined for smart contract invocation');
+    }
+
     let transactionData = "";
+    let invocationType = options.functionDetails.functionType;
     console.log(`dataMessageType`, dataMessageType);
     if (dataMessageType === DataMessageOptions.ascii) {
       if (DataMessageOptions.ascii.toString().localeCompare('ascii') === 0) {
         transactionData = this.web3.utils.asciiToHex(message);
       }
     } else if (dataMessageType === DataMessageOptions.smartContractCreation) {
-      // check if toAddress empty
-      transactionData = message;
+      if (toAddress === undefined) {
+        invocationType = options.functionDetails.functionType;
+        if (invocationType === FunctionTypes.constructorNoParams) {
+          transactionData = message;
+        } else if (invocationType === FunctionTypes.constructorWithParams) {
+          const paramsList = options.functionDetails.functionParameters;
+          transactionData = this.computeTransactionDataForConstructorWithParams(message, paramsList);
+          console.log('constructor with params transaction data', transactionData);
+        }
+      }
     } else if (dataMessageType === DataMessageOptions.smartContractInvocation) {
-      const invocationType = options.functionDetails.functionType;
-      if (invocationType === FunctionTypes.constructorNoParams) {
-        transactionData = message;
-      } else if (invocationType === FunctionTypes.constructorWithParams) {
-        const paramsList = options.functionDetails.functionParameters;
-        transactionData = this.computeTransactionDataForConstructorWithParams(message, paramsList);
-        console.log('constructor with params transaction data', transactionData);
-      } else if (invocationType === FunctionTypes.functionCall) {
+      invocationType = options.functionDetails.functionType;
+      if (invocationType === FunctionTypes.functionCall) {
         const paramsList = options.functionDetails.functionParameters;
         const functionName = options.functionDetails.functionName;
         transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
@@ -127,7 +137,7 @@ class Ethereum extends AbstractDLT {
       value: options.amount,
       data: transactionData,
     };
-
+    console.log(`transaction `, transaction);
     return transaction;
   }
 
@@ -138,7 +148,7 @@ class Ethereum extends AbstractDLT {
       paramsValues[0].push(paramType);
       paramsValues[1].push(p.value);
       return paramsValues;
-    }, [[],[]]);
+    }, [[], []]);
     console.log(`computeTransactionDataForConstructorWithParams typesAndValues `, typesAndValues);
     const encodedParams = this.web3.eth.abi.encodeParameters(typesAndValues[0], typesAndValues[1]).slice(2);
     console.log(`computeTransactionDataForConstructorWithParams encodedParams `, encodedParams);
@@ -151,7 +161,7 @@ class Ethereum extends AbstractDLT {
       paramsValues[0].push({ type: paramType.toString(), name: p.name });
       paramsValues[1].push(p.value);
       return paramsValues;
-    }, [[],[]]);
+    }, [[], []]);
 
     const jsonFunctionCall: IJsonFunctionCall = {
       name: functionName,
@@ -167,11 +177,12 @@ class Ethereum extends AbstractDLT {
   }
 
   computeParamType(param: SmartContractParameter): string {
+    console.log(`param `, param);
     let paramType = param.type.toString();
     if (paramType === (TypeOptions.bytesM || TypeOptions.bytesMArray)) {
       paramType = (param.bytesMValue === '1') ? paramType.replace('M', '') : paramType.replace('M', param.bytesMValue);
     } else if (param.type === (TypeOptions.uintM || TypeOptions.intM || TypeOptions.intMArray || TypeOptions.uintMArray)) {
-      paramType = paramType.replace('M',param.uintIntMValue);
+      paramType = paramType.replace('M', param.uintIntMValue);
     }
     return paramType.replace('Array', '[]');
   }
