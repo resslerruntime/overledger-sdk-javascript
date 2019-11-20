@@ -242,7 +242,7 @@ const web3 = new Web3(
     {
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
       dlt: 'ethereum',
-      toAddress: "0x7ce20477742404A834C0d9eDb8BDBaf91D0C2BEF", //THIS MUST BE EMPTY FOR CONTRACT CREATION AND PRESENT FOR THE OTHER TWO
+      toAddress: contractSetUintArrayIntArray, //THIS MUST BE EMPTY FOR CONTRACT CREATION AND PRESENT FOR THE OTHER TWO
       dataMessageType: DataMessageOptions.smartContractInvocation,
       message: thisSolidityByteCodeNoConstructor,
       options: {
@@ -252,7 +252,7 @@ const web3 = new Web3(
         feeLimit: '600000', // must be an integer
         functionDetails: { //if contractCreation or contractInvocation is used this is necessary 
           functionType: FunctionTypes.functionCall,
-          functionName: 'vote', //necesary only if functionType (line above) is function
+          functionName: 'setVariable1', //necesary only if functionType (line above) is function
           payable: Payable.notPayable, //default is false
           functionParameters:  //Both contract creation and invocation use function parameters
             [/*{  
@@ -266,10 +266,10 @@ const web3 = new Web3(
                 value: 'true',
                 }*/
                 {
-                  type: TypeOptions.uintM,
-                  uintIntMValue: UintIntMOptions.m8,
-                  name: 'toProposal',
-                  value: '346'
+                  type: TypeOptions.uintMArray,
+                  uintIntMValue: UintIntMOptions.m1,
+                  name: 'newUintArray',
+                  value: ['346']
                 }
 
             ]       
