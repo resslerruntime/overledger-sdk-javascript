@@ -73,12 +73,12 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  public sign(toAddress: string, message: string, options: TransactionOptions, dataType?: DataMessageOptions): Promise<string> {
+  public sign(toAddress: string, message: string, options: TransactionOptions, dataMessageType?: DataMessageOptions): Promise<string> {
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
     }
-
-    return this._sign(toAddress, message, options, dataType);
+    console.log(`dataMessageType `, dataMessageType);
+    return this._sign(toAddress, message, options, dataMessageType);
   }
 
   /**
@@ -97,7 +97,7 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  abstract _sign(toAddress: string, message: string, options?: TransactionOptions, dataType?: DataMessageOptions): Promise<string>;
+  abstract _sign(toAddress: string, message: string, options?: TransactionOptions, dataMessageType?: DataMessageOptions): Promise<string>;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields
@@ -117,9 +117,9 @@ abstract class AbstractDLT {
 }
 
 export enum DataMessageOptions {
-  ascii,
-  smartContractCreation,
-  smartContractInvocation
+  ascii = "ASCII",
+  smartContractCreation = "SMART_CONTRACT_CREATION",
+  smartContractInvocation = "SMART_CONTRACT_INVOCATION"
 };
 
 export default AbstractDLT;

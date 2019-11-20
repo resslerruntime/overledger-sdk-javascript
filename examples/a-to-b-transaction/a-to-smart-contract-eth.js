@@ -1,7 +1,13 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 //const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
-const OverledgerSDK = require('../overledger-sdk-javascript/packages/overledger-bundle/dist').default;
+// const OverledgerSDK = require('../overledger-sdk-javascript/packages/overledger-bundle/dist').default;
+const OverledgerSDK = require('../../packages/overledger-bundle').default;
 const Web3 = require('web3');
+const FunctionTypes = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').FunctionTypes;
+const DataMessageOptions = require('../../packages/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
+const TypeOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').TypeOptions;
+const UintIntMOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').UintIntMOptions;
+const Payable = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').Payable;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -13,14 +19,8 @@ const bpiKey = 'bpiKeyTest';
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '0xcbf05d5215b7f37b3cd1577280c45381393116a81c053abbe21afdbd5d0e504d';
 const partyAEthereumAddress = '0x0E4e8278ACa5EFEc8430692108B5271961A00ec7'
-// For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC'
-
 
 const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
-// Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 //EDIT: MAIN DIFFERENCE OF CODE BASE, THIS IS BYTECODE OF CONTRACTS TO CREATE, THEY ARE NOT TO GO IN THE SDK
 const thisSolidityByteCode =  "608060405234801561001057600080fd5b5060405161023d38038061023d8339818101604052602081101561003357600080fd5b81019080805190602001909291905050508060ff166000816100559190610066565b508060ff16600181905550506100b7565b81548183558181111561008d5781836000526020600020918201910161008c9190610092565b5b505050565b6100b491905b808211156100b0576000816000905550600101610098565b5090565b90565b610177806100c66000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c8063609ff1bd1461003b578063b3f98adc1461005f575b600080fd5b610043610090565b604051808260ff1660ff16815260200191505060405180910390f35b61008e6004803603602081101561007557600080fd5b81019080803560ff169060200190929190505050610102565b005b6000806000905060008090505b6000805490508160ff1610156100fd578160008260ff16815481106100be57fe5b906000526020600020015411156100f05760008160ff16815481106100df57fe5b906000526020600020015491508092505b808060010191505061009d565b505090565b8060ff1660015412156101145761013f565b60008160ff168154811061012457fe5b90600052602060002001600081548092919060010191905055505b5056fea265627a7a723158207c50743b4934c935bd8b283f0b99ffe894d130fc02bbce8eb7d9b75d936685cf64736f6c634300050b0032";
@@ -51,7 +51,7 @@ const web3 = new Web3(
       dlts: [{ dlt: 'ethereum' }],
       provider: { network: 'testnet' },
     });
-
+  
     const transactionMessage = 'Overledger JavaScript SDK Test';
 
     // SET partyA accounts for signing;
@@ -59,13 +59,9 @@ const web3 = new Web3(
 
     // Get the address sequences.
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
     const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
 
     console.error('ethereumAccountSequence:' + ethereumAccountSequence);
-    console.error('rippleAccountSequence:' + rippleAccountSequence);
-
 
     //EDIT THIS ENCODING METHOD IS TO GO INTO THE SDK
     //BUT WE NEED TO CREATE PROPERITIES IN THE TRANSACTION OPTIONS OF ETHEREUM TO MAKE THIS USER FRIENDLY
@@ -247,34 +243,31 @@ const web3 = new Web3(
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
       dlt: 'ethereum',
       toAddress: contractSetAddressBool, //THIS MUST BE EMPTY FOR CONTRACT CREATION AND PRESENT FOR THE OTHER TWO
-      messageType: contractInvocation,
-      message: thisSolidityByteCode,
+      dataMessageType: DataMessageOptions.smartContractInvocation,
+      message: smallSolidityConstructorAddrBool,
       options: {
         amount: '0', // must be an integer >= 0
         sequence: ethereumAccountSequence, // must be an integer >= 0
         feePrice: '8000000000', // must be an integer
         feeLimit: '600000', // must be an integer
-        functionDetails?: { //if contractCreation or contractInvocation is used this is necessary 
-          functionType: CallTypes.function 
-          functionName?: functionNameInClearText, //necesary only if functionType (line above) is function
-          payable?: Payable.payable, //default is false
-          functionParameters?:  //Both contract creation and invocation use function parameters
+        functionDetails: { //if contractCreation or contractInvocation is used this is necessary 
+          functionType: FunctionTypes.functionCall,
+          functionName: 'setVariable1', //necesary only if functionType (line above) is function
+          payable: Payable.notPayable, //default is false
+          functionParameters:  //Both contract creation and invocation use function parameters
             [{  
-              type: choose from typeOptions enum
-              name?: 'djdjdj'
-              value: the value of the parameter is set here
-              uintMValue?: if uintM or uintMArray is chosen, then a mValue chosen from UintIntMOptions enum must be provided
-              intMValue?: if intM or intMArray is chosen then a mValue chosen from UintIntMOptions enum must be provided
-              bytesMValue?: if bytesMArray is chosen then a mValue chosen from bytesMOptions enum must be provided
-              }, {
-              type: choose from typeOptions enum
-              value: the value of the parameter is set here
-              uintMValue?: if uintM or uintMArray is chosen, then a mValue chosen from UintIntMOptions enum must be provided
-              intMValue?: if intM or intMArray is chosen then a mValue chosen from UintIntMOptions enum must be provided
-              bytesMValue?: if bytesMArray is chosen then a mValue chosen from bytesMOptions enum must be provided
-              }...]       
-        }
+              type: TypeOptions.address,
+              name: 'newAddress',
+              value: '0x7e0A65af0Dae83870Ce812F34C3A3D8626530d10',
+              },
+              /*{  
+                type: TypeOptions.bool,
+                name: 'testbool',
+                value: 'true',
+                }*/
 
+            ]       
+        }
       },
     },
     ]);

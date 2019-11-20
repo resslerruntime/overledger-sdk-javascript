@@ -17,6 +17,13 @@ type UnsignedData = {
   toAddress: string,
   message: string,
   options: TransactionOptions,
+  dataMessageType?: DataMessageOptions
+};
+
+export enum DataMessageOptions {
+  ascii = "ASCII",
+  smartContractCreation = "SMART_CONTRACT_CREATION",
+  smartContractInvocation = "SMART_CONTRACT_INVOCATION"
 };
 
 export default UnsignedData;
