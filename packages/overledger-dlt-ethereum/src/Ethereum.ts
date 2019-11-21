@@ -96,6 +96,12 @@ class Ethereum extends AbstractDLT {
       throw new Error('The toAddress must be defined for smart contract invocation');
     }
 
+    if (parseInt(options.amount, 10) > 0
+      && (dataMessageType === DataMessageOptions.smartContractCreation || dataMessageType === DataMessageOptions.smartContractInvocation)
+      && options.functionDetails.payable === "false") {
+      throw new Error('the amount must be equal to zero for smart contract creation/invocation when non payable');
+    }
+
     let transactionData = "";
     let invocationType = options.functionDetails.functionType;
     console.log(`dataMessageType`, dataMessageType);
@@ -109,29 +115,38 @@ class Ethereum extends AbstractDLT {
         if (invocationType === FunctionTypes.constructorNoParams) {
           transactionData = message;
         } else if (invocationType === FunctionTypes.constructorWithParams) {
-          const paramsList = options.functionDetails.functionParameters;
-          if (!paramsList) {
-            throw new Error(`functionParameters must be defined in the functionDetails; at least with an emty array []`);
+          const paramsList: [SmartContractParameter] = options.functionDetails.functionParameters;
+          if (!paramsList || paramsList.length <= 0) {
+            throw new Error(`functionParameters must be defined with a non-null length in the functionDetails`);
           }
           transactionData = this.computeTransactionDataForConstructorWithParams(message, paramsList);
           console.log('constructor with params transaction data', transactionData);
+        } else {
+          throw new Error(`The function type must be constructorNoParams or constructorWithParams`);
         }
       } else {
         throw new Error('The toAddress must be undefined for smart contract creation');
       }
     } else if (dataMessageType === DataMessageOptions.smartContractInvocation) {
       invocationType = options.functionDetails.functionType;
-      if (invocationType === FunctionTypes.functionCall) {
-        const paramsList = options.functionDetails.functionParameters;
-        if (!paramsList) {
-          throw new Error(`functionParameters must be defined in the functionDetails; at least with an emty array []`);
+      if (toAddress) {
+        if (invocationType === FunctionTypes.functionCall) {
+          const paramsList: [SmartContractParameter] = options.functionDetails.functionParameters;
+          if (!paramsList) {
+            throw new Error(`functionParameters must be defined in the functionDetails; at least with an emty array []`);
+          }
+          const functionName = options.functionDetails.functionName;
+          if (!functionName) {
+            throw new Error(`The name of the called function must be given for smart contract invocation`);
+          }
+          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
+          console.log('function call transaction data', transactionData);
         }
-        const functionName = options.functionDetails.functionName;
-        if (!functionName) {
-          throw new Error(`The name of the called function must be given for smart contract invocation`);
+        else {
+          throw new Error(`The function type must be functionCall`);
         }
-        transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
-        console.log('function call transaction data', transactionData);
+      } else {
+        throw new Error('The toAddress of the contract must be given');
       }
     }
 
@@ -195,9 +210,7 @@ class Ethereum extends AbstractDLT {
     } else if (param.type === TypeOptions.uintM || param.type === TypeOptions.intM || param.type === TypeOptions.intMArray || param.type === TypeOptions.uintMArray) {
       console.log('tata');
       paramType = paramType.replace('M', param.uintIntMValue);
-      console.log(`paramType inside `, paramType);
     }
-    console.log(`paramType changed 1`, paramType);
     return paramType.replace('Array', '[]');
   }
 
