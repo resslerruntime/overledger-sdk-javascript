@@ -203,7 +203,7 @@ class Ethereum extends AbstractDLT {
     console.log(`M bytes value `, param.bytesMValue === BytesMOptions.m1);
 
     let paramType = param.type.toString();
-    if (paramType === (TypeOptions.bytesM || TypeOptions.bytesMArray)) {
+    if (paramType === TypeOptions.bytesM || paramType === TypeOptions.bytesMArray) {
       console.log('toto');
       paramType = (param.bytesMValue === BytesMOptions.m1) ? paramType.replace('M', '') : paramType.replace('M', param.bytesMValue);
       // } else if (param.type === (TypeOptions.uintM || TypeOptions.intM || TypeOptions.intMArray || TypeOptions.uintMArray)) {
