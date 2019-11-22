@@ -1,10 +1,10 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 //const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 // const OverledgerSDK = require('../overledger-sdk-javascript/packages/overledger-bundle/dist').default;
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
 const Web3 = require('web3');
 const FunctionTypes = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').FunctionTypes;
-const DataMessageOptions = require('../../packages/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
+const DataMessageOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
 const TypeOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').TypeOptions;
 const UintIntMOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').UintIntMOptions;
 const BytesMOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').BytesMOptions;

@@ -285,6 +285,19 @@ interface IJsonFunctionCall {
   inputs: [{ type: string, name: string }];
 }
 
+export interface IContractQueryRequestDto {
+  fromAddress: string;
+  contractAddress: string;
+  funcName: string;
+  inputValues?: [ContractArgument];
+  outputTypes?: [ContractArgument];
+}
+
+interface ContractArgument {
+   type: string;
+   value: string;
+}
+
 export enum TypeOptions { uintM = "uintM", intM = "intM", address = "address", bool = "bool", bytesM = "bytesM", string = "string", uintMArray = "uintMArray", intMArray = "intMArray", addressArray = "addressArray", boolArray = "boolArray", bytesMArray = "bytesMArray" };
 export enum UintIntMOptions { m8 = "8", m16 = "16", m32 = "32", m40 = "40", m48 = "48", m56 = "56", m64 = "64", m72 = "72", m80 = "80", m88 = "88", m96 = "96", m140 = "104", m112 = "112", m120 = "120", m128 = "128", m136 = "136", m144 = "144", m152 = "152", m160 = "160", m168 = "168", m176 = "176", m184 = "184", m192 = "192", m200 = "200", m208 = "208", m216 = "216", m224 = "224", m232 = "232", m240 = "240", m248 = "248", m256 = "256" };
 export enum BytesMOptions { m1 = "1", m2 = "2", m3 = "3", m4 = "4", m5 = "5", m6 = "6", m7 = "7", m8 = "8", m9 = "9", m10 = "10", m11 = "11", m12 = "12", m13 = "13", m14 = "14", m15 = "15", m16 = "16", m17 = "17", m18 = "18", m19 = "19", m20 = "20", m21 = "21", m22 = "22", m23 = "23", m24 = "24", m25 = "25", m26 = "26", m27 = "27", m28 = "28", m29 = "29", m30 = "30", m31 = "31", m32 = "32" };

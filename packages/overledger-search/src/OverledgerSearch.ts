@@ -68,6 +68,32 @@ class OverledgerSearch {
       return e.response;
     }
   }
+
+  queryContract(dlt: string, dataQuery: IContractQueryRequestDto): AxiosPromise {
+    try {
+      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(dataQuery));
+    } catch (e) {
+      return e.response;
+    }
+  }
+
+}
+
+export interface IContractQueryRequestDto {
+  fromAddress: string;
+  contractAddress: string;
+  funcName: string;
+  inputValues?: [ContractInputArgument];
+  outputTypes?: [ContractTypeOutput];
+}
+
+interface ContractInputArgument {
+   type: string;
+   value: string;
+}
+
+interface ContractTypeOutput {
+  type: string;
 }
 
 export default OverledgerSearch;
