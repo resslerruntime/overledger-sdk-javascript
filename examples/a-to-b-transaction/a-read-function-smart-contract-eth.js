@@ -3,12 +3,16 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
 const UintIntMOptions = require('@quantnetwork/overledger-types').UintIntMOptions;
 const BytesMOptions = require('@quantnetwork/overledger-types').BytesMOptions;
+const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
 const mappId = 'network.quant.software';
 const bpiKey = 'bpiKeyTest';
+//The following are found from your Overledger Account:
+// const mappId = '<ENTER YOUR MAPPID>';
+// const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
@@ -25,7 +29,7 @@ const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }],
+      dlts: [{ dlt: DltNames.ethereum }],
       provider: { network: 'testnet' },
     });
 
@@ -63,7 +67,7 @@ const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
   }
   }  
 
-  const returnedValues = await overledger.search.queryContract('ethereum', input.fromAddress, input.contractAddress, input.functionName, input.functionParameters.inputValues, input.functionParameters.outputTypes);
+  const returnedValues = await overledger.search.queryContract(DltNames.ethereum, input.fromAddress, input.contractAddress, input.functionName, input.functionParameters.inputValues, input.functionParameters.outputTypes);
   console.log(`returned output values `,  returnedValues);
 
   } catch (e) {
