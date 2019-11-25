@@ -1,4 +1,5 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
+import { TypeOptions, BytesMOptions, UintIntMOptions, computeParamType } from '@quantnetwork/overledger-types';
 
 /**
  * @memberof module:overledger-search
@@ -69,12 +70,42 @@ class OverledgerSearch {
     }
   }
 
-  queryContract(dlt: string, dataQuery: IContractQueryRequestDto): AxiosPromise {
+  queryContract(dlt: string, fromAddress: string, contractAddress: string, functionName: string, inputValues: [ReadSmartContractInputValue], outputTypes: [ReadSmartContractOutputType]): AxiosPromise {
+    console.log(`input values `, inputValues);
+    console.log(`outputTypes `, outputTypes);
     try {
-      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(dataQuery));
+      const data = {
+        fromAddress,
+        contractAddress,
+        funcName: functionName,
+        inputValues: this.computeInputValuesList(inputValues),
+        outputTypes: this.computeOutputTypesList(outputTypes)
+      }
+      console.log(`data`, data);
+      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(data));
     } catch (e) {
       return e.response;
     }
+  }
+
+  computeInputValuesList(inputFunctionParams: [ReadSmartContractInputValue]) {
+    const inputValues = inputFunctionParams.reduce((inputParams, p) => {
+      const paramType = computeParamType(p);
+      inputParams.push(<ContractInputArgument>{type: paramType, value: p.value});
+      return inputParams;
+    }, []);
+    console.log(`input values `, inputValues);
+    return inputValues;
+  }
+
+  computeOutputTypesList(outputFunctionTypes: [ReadSmartContractOutputType]) {
+    const outputTypes = outputFunctionTypes.reduce((outputTypes, p) => {
+      const paramType = computeParamType(p);
+      outputTypes.push(<ContractTypeOutput>{type: paramType});
+      return outputTypes;
+    }, []);
+    console.log(`output values `, outputTypes);
+    return outputTypes;
   }
 
 }
@@ -87,9 +118,22 @@ export interface IContractQueryRequestDto {
   outputTypes?: [ContractTypeOutput];
 }
 
+export interface ReadSmartContractInputValue {
+  type: TypeOptions;
+  uintIntMValue?: UintIntMOptions;
+  bytesMValue?: BytesMOptions;
+  value: string;
+}
+
+export interface ReadSmartContractOutputType {
+  type: TypeOptions;
+  uintIntMValue: UintIntMOptions;
+  bytesMValue?: BytesMOptions;
+}
+
 interface ContractInputArgument {
-   type: string;
-   value: string;
+  type: string;
+  value: string;
 }
 
 interface ContractTypeOutput {

@@ -16,6 +16,10 @@ import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
 import UnsignedData from './UnsignedData';
 import TransactionOptions from './TransactionOptions';
+import TypeOptions from './TypeOptions';
+import UintIntMOptions from './UintIntMOptions';
+import BytesMOptions from './BytesMOptions';
+import computeParamType from './ParamType';
 
 /**
  * Types used by the Overledger SDK packages.
@@ -35,4 +39,8 @@ export {
   SignedTransactionRequest,
   UnsignedData,
   TransactionOptions,
+  TypeOptions,
+  UintIntMOptions,
+  BytesMOptions,
+  computeParamType
 };
