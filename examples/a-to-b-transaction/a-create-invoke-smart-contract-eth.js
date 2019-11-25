@@ -2,19 +2,22 @@
 //const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 // const OverledgerSDK = require('../overledger-sdk-javascript/packages/overledger-bundle/dist').default;
 const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
-const Web3 = require('web3');
 const FunctionTypes = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').FunctionTypes;
 const DataMessageOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
 const TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
 const UintIntMOptions = require('@quantnetwork/overledger-types').UintIntMOptions;
 const BytesMOptions = require('@quantnetwork/overledger-types').BytesMOptions;
 const Payable = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').Payable;
+const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
 const mappId = 'network.quant.software';
 const bpiKey = 'bpiKeyTest';
+//The following are found from your Overledger Account:
+// const mappId = '<ENTER YOUR MAPPID>';
+// const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
@@ -40,16 +43,11 @@ const smallSolidityConstructorBytes16ArrayBytes32Array = "0x60806040523480156100
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
 
-//EDIT:
-const web3 = new Web3(
-  //this cannot go into our production, we need to find another web3 source to encode the parameters (I think we imported the web3 package)
-  new Web3.providers.HttpProvider('https://ropsten.infura.io/')
-);
 
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }],
+      dlts: [{ dlt: DltNames.ethereum }],
       provider: { network: 'testnet' },
     });
 
@@ -90,7 +88,7 @@ const web3 = new Web3(
     const signedTransactions = await overledger.sign([
       {
         // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
-        dlt: 'ethereum',
+        dlt: DltNames.ethereum,
         // toAddress: contractSetUintArrayIntArray, //THIS MUST BE EMPTY FOR CONTRACT CREATION AND PRESENT FOR THE OTHER TWO
         toAddress: "0x0F3EcB81bc77d84201AC46fC3822ab7fd093Ff86", // metamask
         dataMessageType: DataMessageOptions.smartContractInvocation,
