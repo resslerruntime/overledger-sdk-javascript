@@ -8,11 +8,10 @@ const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpiKeyTest';
+
 //The following are found from your Overledger Account:
-// const mappId = '<ENTER YOUR MAPPID>';
-// const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '<ENTER YOUR MAPPID>';
+const bpiKey = '<ENTER YOUR BPIKEY>';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
