@@ -1,9 +1,8 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
-// const Web3 = require('web3');
-TypeOptions = require('../../packages/overledger-types').TypeOptions;
-const UintIntMOptions = require('../../packages/overledger-types').UintIntMOptions;
-const BytesMOptions = require('../../packages/overledger-types').BytesMOptions;
+TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
+const UintIntMOptions = require('@quantnetwork/overledger-types').UintIntMOptions;
+const BytesMOptions = require('@quantnetwork/overledger-types').BytesMOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -43,25 +42,6 @@ const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 
     let contractAddress = "0xBDA545C5Fc4c5DFD385AC5E6c3513eDDD74AB028";
 
-    // Sign the transactions.
-    /*const input = {
-        fromAddress: partyAEthereumAddress,
-        contractAddress,
-        funcName: 'getVariable1',
-        inputValues: [{
-            type: "uint256",          
-            value: "3"
-        }],
-        outputTypes: [{
-            type:'uint256'
-        }]
-    }
-    const returnedValues = await overledger.search.queryContract('ethereum', input);
-
-    console.log(`returnedValues `,returnedValues);
-    console.log(`output values `, returnedValues.data.results);
- */
-
   const input = {
     fromAddress: partyAEthereumAddress,
     contractAddress,
@@ -84,7 +64,7 @@ const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
   }  
 
   const returnedValues = await overledger.search.queryContract('ethereum', input.fromAddress, input.contractAddress, input.functionName, input.functionParameters.inputValues, input.functionParameters.outputTypes);
-  console.log(`returned values `,  returnedValues);
+  console.log(`returned output values `,  returnedValues);
 
   } catch (e) {
     console.error('error:', e);

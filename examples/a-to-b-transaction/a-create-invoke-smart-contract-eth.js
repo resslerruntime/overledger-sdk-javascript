@@ -5,9 +5,9 @@ const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
 const Web3 = require('web3');
 const FunctionTypes = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').FunctionTypes;
 const DataMessageOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
-const TypeOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').TypeOptions;
-const UintIntMOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').UintIntMOptions;
-const BytesMOptions = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').BytesMOptions;
+const TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
+const UintIntMOptions = require('@quantnetwork/overledger-types').UintIntMOptions;
+const BytesMOptions = require('@quantnetwork/overledger-types').BytesMOptions;
 const Payable = require('../../packages/overledger-dlt-ethereum/dist/Ethereum').Payable;
 
 //  ---------------------------------------------------------
@@ -67,12 +67,7 @@ const web3 = new Web3(
     //EDIT THIS ENCODING METHOD IS TO GO INTO THE SDK
     //BUT WE NEED TO CREATE PROPERITIES IN THE TRANSACTION OPTIONS OF ETHEREUM TO MAKE THIS USER FRIENDLY
     //prepare real with constructor parameters
-    let hexParamsAddressBool = web3.eth.abi.encodeParameters(['address', 'bool'], ['0x236Ee9aE9d5dC66d39Db4f0395Fd868ed4a83E11', true]); //we should do some valid address checking??
-    let hexParamsStringBytes = web3.eth.abi.encodeParameters(['string', 'bytes'], ['my new string', '0x6d79206e657720737472696e67']); //we should do some valid string + bytes checking -> check they are in hex format?
-    let MforUintInt = '16';
-    if (!((parseInt(MforUintInt) % 8 == 0) && (MforUintInt >= 8) && (MforUintInt <= 256))) {
-      throw "M not valid";
-    }
+   
     let hexParametersUintMIntM = web3.eth.abi.encodeParameters(['uint' + MforUintInt, 'int' + MforUintInt], ['7234', '2459']); //uints and ints added by user need to be checked against their max value
     //we need to support all bytes of size s, where 1 < s <= 32, we can do this by running an if check similar to above
     //but for the following I will just just code 2 explict byte
@@ -97,132 +92,6 @@ const web3 = new Web3(
     //(3) Invoke smart contract function with or without parameters -> done with code above -> not all parameters so far, consider removal of uint, int, uint[], int[] from typeOptions
     //(4) Call smart contract view/pure function with or without parameters -> done in app.get('/getVote) https://github.com/Luker501/WebsiteNodejsBlockchain/blob/master/WithRopstenTestNet/server.js
 
-    let jsonInterfaceSetAddress = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //type: "function" or "constructor" //this is optional default is function
-      payable: true, //if the function takes in ether -> i.e. if amount option is > 0, this must be true
-      inputs: [{
-        type: 'address',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-    let jsonInterfaceSetBool = {
-      name: 'setVariable2', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'bool',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-    let jsonInterfaceSetUintArray = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'uint256[]', //cannot use int[] in here!!
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetString = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'string',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    ///To test:
-    let jsonInterfaceSetUintM = {
-      name: 'setVariable2', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'string',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetIntM = {
-      name: 'setVariable2', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'string',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetBytes = {
-      name: 'setVariable2', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'string',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetBytesM = {
-      name: 'setVariable2', //name needs to match a function inside the contract interface
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'string',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetAddressArray = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //type: "function" or "constructor" //this is optional default is function
-      //payable: true/false if the function takes in ether -> i.e. if amount option is > 0, this must be true
-      inputs: [{
-        type: 'address',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetBytesMArray = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //type: "function" or "constructor" //this is optional default is function
-      //payable: true/false if the function takes in ether -> i.e. if amount option is > 0, this must be true
-      inputs: [{
-        type: 'address',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetBoolMArray = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //type: "function" or "constructor" //this is optional default is function
-      //payable: true/false if the function takes in ether -> i.e. if amount option is > 0, this must be true
-      inputs: [{
-        type: 'address',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceSetIntMArray = {
-      name: 'setVariable1', //name needs to match a function inside the contract interface
-      //type: "function" or "constructor" //this is optional default is function
-      //payable: true/false if the function takes in ether -> i.e. if amount option is > 0, this must be true
-      inputs: [{
-        type: 'address',
-        name: 'anyName' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-    let jsonInterfaceConstructAddressBool = { //CONSTRUCTOR DOES NOT SEEM TO WORK FOR SOME REASON????
-      //name: 'setVariable1', //name needs to match a function inside the contract interface
-      type: 'constructor',// or "constructor" //this is optional default is function
-      //i don't think the function variable is required
-      inputs: [{
-        type: 'address',
-        name: 'anyAddress' //this is a useless variable but it is required to be in or it throws an error
-      }, {
-        type: 'bool',
-        name: 'anyBool' //this is a useless variable but it is required to be in or it throws an error
-      }]
-    };
-
-
 
     let contractSetAddressBool = '0x301A99BE619b23B2fC941cD1F4b1A9C9e5F51Bee'; //this is for address/bool
     let contractSetUintArrayIntArray = '0xd55fC08CC6fc3C744Aea53426dFadD45b4755220'; //this is for uint[]/int[]
@@ -230,13 +99,7 @@ const web3 = new Web3(
     let contractSetStringBytes = '0xe364CA952622cf4C440f172d075a8F34700e17c9';
     let contractSetUintInt = '0xF1D976a95047E6F4b1de529645Fc5209aAD3775F';
     let contractSetBytes16ArrayBytes32Array = '0x08722482466bc44D9750Fa68C2Adf62F86E936Ec';
-    let uints = ['5', '14809', '865', '6549'];
-    let hexDataSetAddress = web3.eth.abi.encodeFunctionCall(jsonInterfaceSetAddress, [contractSetAddressBool]);
-    let hexDataSetBool = web3.eth.abi.encodeFunctionCall(jsonInterfaceSetBool, [false]);
-    let hexDataSetUintArray = web3.eth.abi.encodeFunctionCall(jsonInterfaceSetUintArray, [uints]);
-    let hexDataSetString = web3.eth.abi.encodeFunctionCall(jsonInterfaceSetString, ["encodeFunctionCall"]);
-    // let hexDataConstructorAddressBool = web3.eth.abi.encodeFunctionCall(jsonInterfaceConstructAddressBool,['0xd55fC08CC6fc3C744Aea53426dFadD45b4755220',true]); DOES NOT SEEM TO WORK -> REGENERATED BYTES SEEM TO BE SLIGHTLY OFF SEE: https://ropsten.etherscan.io/address/0x1cddc866ba809073a450349f11f4d6f1f6eb0bff
-    console.log("hexData: " + hexDataSetString);
+
 
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
