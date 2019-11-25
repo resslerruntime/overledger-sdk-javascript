@@ -1,15 +1,16 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
+const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+//The following are found from your Overledger Account:
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
-// If looking for transaction hashes, they can be returned by running the 'a-to-b-transaction' example
-const ethereumTransactionHash = '0x4016406d985f0273d841353c95e88906fc805c700b7a5bf4c79124df1dd53985';
-const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E0756D1D7EBA287F';
+// After creating a transaction from a file in the a-to-b-transaction, you can put the transaction hash here to query its details
+const rippleTransactionHash = '170D6BC2A823B1B8042CD9A613E94F6D9F408B88E01C8BAE8ABA21011C7DCC8F';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -17,18 +18,16 @@ const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E
 
 ; (async () => {
     try {
+        //connect to overledger and choose the XRP distributed ledger:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: DltNames.xrp }],
             provider: { network: 'testnet' },
-
         });
 
-        const ethereumTransaction = await overledger.search.getTransaction(ethereumTransactionHash);
+        //get details on the transaction
         const rippleTransaction = await overledger.search.getTransaction(rippleTransactionHash);
 
-        console.log('Ethereum transaction: ', ethereumTransaction.data);
-        console.log('\n');
-        console.log('Ripple transaction: ', rippleTransaction.data);
+        console.log('XRP transaction: ', rippleTransaction.data);
         console.log('\n');
     } catch (e) {
         console.error('error', e.response.data);

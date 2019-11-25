@@ -121,5 +121,10 @@ export enum DataMessageOptions {
   smartContractCreation = "SMART_CONTRACT_CREATION",
   smartContractInvocation = "SMART_CONTRACT_INVOCATION"
 };
+export enum DltNames {
+  xrp = "ripple",
+  ethereum = "ethereum",
+  bitcoin = "bitcoin"
+}
 
 export default AbstractDLT;
