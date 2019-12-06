@@ -256,7 +256,10 @@ class Ripple extends AbstractDLT {
    * @param hashAlgorithmInput 
    */
   computeEscrowConditionFulfillment(hashAlgorithmInput: string): { escrowCondition: string, escrowFulfillment: string } {
-    const preImageData = Buffer.from(hashAlgorithmInput, 'utf-8');
+    const data = Buffer.from(hashAlgorithmInput, 'utf-8');
+    const dataStr = data.toString('hex');
+    const preImageDataStr = dataStr.padStart(64, '0');
+    const preImageData = Buffer.from(preImageDataStr, 'hex');
     const myFulfillment = new cc.PreimageSha256();
     myFulfillment.setPreimage(preImageData);
     const escrowCondition = myFulfillment.getConditionBinary().toString('hex').toUpperCase();
