@@ -125,7 +125,6 @@ class OverledgerSDK {
     const apiCall = signedTransactions.map(
       stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
-
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
 

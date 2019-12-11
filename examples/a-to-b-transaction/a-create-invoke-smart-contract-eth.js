@@ -21,7 +21,7 @@ const bpiKey = '<ENTER YOUR BPIKEY>';
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '0xcbf05d5215b7f37b3cd1577280c45381393116a81c053abbe21afdbd5d0e504d';
-const partyAEthereumAddress = '0x0E4e8278ACa5EFEc8430692108B5271961A00ec7'
+const partyAEthereumAddress = '0x0E4e8278ACa5EFEc8430692108B5271961A00ec7';
 
 const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 

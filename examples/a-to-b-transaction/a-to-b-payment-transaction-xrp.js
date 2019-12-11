@@ -8,19 +8,19 @@ const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT
 //  ---------------------------------------------------------
 
 //The following are found from your Overledger Account:
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
 // This example, shows how to create an escrow on XRP between two parties A and B.
 // Paste in the two parties XRP addresses (also known as account) and party A's private key.
 // To generate XRP test accounts, you can go to the official Ripple Testnet Faucet to get a prefunded one.
 
 //Party A will be the creator of the escrow. Party A's details are as follows:
-const partyARipplePrivateKey = '<ENTER YOUR XRP PARTY A PRIVATE KEY>';
-const partyARippleAddress = '<ENTER YOUR XRP PARTY A ADDRESS>';
+const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
+const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 
 // Party B's details are as follows:
-const partyBRippleAddress = '<ENTER YOUR XRP PARTY B ADDRESS>';
+const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------

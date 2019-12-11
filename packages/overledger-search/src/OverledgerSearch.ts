@@ -56,6 +56,20 @@ class OverledgerSearch {
     }
   }
 
+
+  /**
+   * Get block by DLT and number
+   *
+   * @param {string} dlt The DLT name
+   */
+  getBlockHeightByDlt(dlt: string): AxiosPromise {
+    try {
+      return this.request.get(`/${dlt}/block/height`);
+    } catch (e) {
+      return e.response;
+    }
+  }
+
   /**
    * Get block by DLT and hash
    *

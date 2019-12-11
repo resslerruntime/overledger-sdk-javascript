@@ -104,9 +104,9 @@ class Ethereum extends AbstractDLT {
     }
 
     let transactionData = "";
-    let invocationType = options.functionDetails.functionType;
+    let invocationType;
     if (dataMessageType === DataMessageOptions.ascii) {
-      if (DataMessageOptions.ascii.toString().localeCompare('ascii') === 0) {
+      if (DataMessageOptions.ascii.toString().localeCompare('ascii') === 0) { //??
         transactionData = this.web3.utils.asciiToHex(message);
       }
     } else if (dataMessageType === DataMessageOptions.smartContractCreation) {
@@ -214,6 +214,7 @@ class Ethereum extends AbstractDLT {
   }
 
 }
+
 
 export type Transaction = {
   nonce: number,

@@ -1,23 +1,25 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const TransactionTypes = require('../../packages/overledger-dlt-ripple/dist/Ripple').TransactionTypes;
+const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
+const DataMessageOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3';
-const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761'
+const partyAEthereumPrivateKey = '4ec9ae181d4cd52167bdbc57a097ac8fff5db5bb8afa5cb8719ec9bb6a1c3131';
+const partyAEthereumAddress = '0x600c95B9C7dbE8F1De52bbaB75582b3EeA2BAAc6';
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC'
+const partyARipplePrivateKey = 'ssMCrzD2j1GjXmy3KuLaAd7MUVZph';
+const partyARippleAddress = 'rMQbAYHCjRsb6TT58ujn4o2jTfXdF2fQdx';
 
-
-const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
+const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 //  ---------------------------------------------------------
@@ -31,7 +33,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       provider: { network: 'testnet' },
     });
 
-    const transactionMessage = 'Overledger JavaScript SDK Test';
+    const transactionMessage = 'Lukes Test';
 
     // SET partyA accounts for signing;
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
@@ -48,19 +50,20 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
     const signedTransactions = await overledger.sign([
     {
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
-      dlt: 'ethereum',
+      dlt: DltNames.ethereum,
       toAddress: partyBEthereumAddress,
+      dataMessageType: DataMessageOptions.ascii,
       message: transactionMessage,
       options: {
         amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
         sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
-        feePrice: '1000', // Price for each individual gas unit this transaction will consume
+        feePrice: '8000000000', // Price for each individual gas unit this transaction will consume
         feeLimit: '80000', // The maximum fee that this transaction will use
       },
     },
     {
       // In order to prepare a ripple transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
-      dlt: 'ripple',
+      dlt: DltNames.xrp,
       toAddress: partyBRippleAddress,
       message: transactionMessage,
       options: {
@@ -68,14 +71,18 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
+        transactionType: TransactionTypes.payment, //what type of transaction are we signing? See the enum for options
       },
     },]);
 
+    console.log("Signed transactions: ");
+    console.log(JSON.stringify(signedTransactions, null, 2));
+
     // Send the transactions to Overledger.
-    const result = (await overledger.send(signedTransactions)).data;
+    //const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
-    console.log(JSON.stringify(result, null, 2));
+    //console.log(JSON.stringify(result, null, 2));
 
   } catch (e) {
     console.error('error:', e);

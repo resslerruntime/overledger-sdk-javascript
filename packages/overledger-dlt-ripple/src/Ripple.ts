@@ -103,6 +103,7 @@ class Ripple extends AbstractDLT {
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be set up');
     }
+    console.log("options.amount:" + options.amount);
 
     if (parseFloat(options.amount) < 0.000001){
       throw new Error(`The amount must be at least 1 drop (i.e at least 0.000001)`);
@@ -111,19 +112,21 @@ class Ripple extends AbstractDLT {
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
     }
+    console.log("options.sequence:" + options.sequence);
 
     if (typeof options.maxLedgerVersion === 'undefined') {
       throw new Error('options.maxLedgerVersion must be set up');
     }
+    console.log("options.maxLedgerVersion" + options.maxLedgerVersion);
 
     if (!(typeof options.sequence === 'number')) {
       throw new Error(`sequence must be a number`);
     }
 
-    if (!this.isValidRippleAddress(toAddress)) {
-      throw new Error(`The toAddress must be a valid XRP address`);
+    if (!this.isValidRippleAddress(toAddress)) { //this seemed to throw me errors
+      throw new Error(`The toAddress must be a valid XRP address: ` + toAddress);
     }
-
+    console.log("options.toAddress:" + toAddress);
     const maxLedgerVersion = Number(options.maxLedgerVersion);
     let fee;
     const amountInXRP = dropsToXrp(options.amount);
@@ -154,12 +157,26 @@ class Ripple extends AbstractDLT {
       switch (options.transactionType) {
         case "ESCROW_CREATION":
           let paramsCreate = params as AtomicSwapCreateOptions;
+          console.log("paramsCreate: " + Object.keys(paramsCreate));
+          let thisCondition;
+          if (!(paramsCreate.hashAlgorithmOutput == "")){
+            thisCondition = paramsCreate.hashAlgorithmOutput;
+            console.log("thisCondition Output" + thisCondition);
+          } else {
+            thisCondition = paramsCreate.hashAlgorithmInput;
+            console.log("thisCondition Input" + thisCondition);
+            thisCondition = this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition;
+          }
+          console.log("amountInXRP:" + amountInXRP);
+          console.log("paramsCreate.allowCancelAfter1:" + paramsCreate.allowCancelAfter);
+          console.log("paramsCreate.allowExecuteAfter:" + paramsCreate.allowExecuteAfter);
+          console.log("thisCondition1:" + thisCondition);
           escrowCreation = {
             amount: amountInXRP,
             destination: toAddress,
             allowCancelAfter: paramsCreate.allowCancelAfter,
             allowExecuteAfter: paramsCreate.allowExecuteAfter,
-            condition: paramsCreate.condition ? paramsCreate.condition : this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition,
+            condition: thisCondition ? thisCondition : this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition,
             memos: [{
               data: message,
             }]
@@ -401,11 +418,14 @@ export enum TransactionTypes {
   escrowCancellation = "ESCROW_CANCELLATION"
 }
 
+/**
+ * One of hashAlgorithmInput or hashAlgorithmOutput should be choosen depending on if you are starting the swap on this chain or another chain respectively
+ */
 interface AtomicSwapCreateOptions {
   allowCancelAfter: string; //from when can the escrow be executed? In ISOString format
   allowExecuteAfter: string; ////from when can the escrow be cancelled? In ISOString format
-  hashAlgorithmInput: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
-  condition?: string;
+  hashAlgorithmInput?: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
+  hashAlgorithmOutput?: string; //this is if there has been a hash string placed onto another chain and now we want to add it to this chain.
 }
 
 interface AtomicSwapExecuteOptions {
