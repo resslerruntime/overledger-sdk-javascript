@@ -159,7 +159,7 @@ class Ripple extends AbstractDLT {
             destination: toAddress,
             allowCancelAfter: paramsCreate.allowCancelAfter,
             allowExecuteAfter: paramsCreate.allowExecuteAfter,
-            condition: this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition,
+            condition: paramsCreate.condition ? paramsCreate.condition : this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition,
             memos: [{
               data: message,
             }]
@@ -405,6 +405,7 @@ interface AtomicSwapCreateOptions {
   allowCancelAfter: string; //from when can the escrow be executed? In ISOString format
   allowExecuteAfter: string; ////from when can the escrow be cancelled? In ISOString format
   hashAlgorithmInput: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
+  condition?: string;
 }
 
 interface AtomicSwapExecuteOptions {
