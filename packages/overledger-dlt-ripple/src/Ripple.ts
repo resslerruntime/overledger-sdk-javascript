@@ -158,25 +158,23 @@ class Ripple extends AbstractDLT {
         case "ESCROW_CREATION":
           let paramsCreate = params as AtomicSwapCreateOptions;
           console.log("paramsCreate: " + Object.keys(paramsCreate));
-          let thisCondition;
-          if (!(paramsCreate.hashAlgorithmOutput == "")){
-            thisCondition = paramsCreate.hashAlgorithmOutput;
-            console.log("thisCondition Output" + thisCondition);
+          let createCondition;
+          if (paramsCreate.hashAlgorithmCondition !== ""){
+            createCondition = paramsCreate.hashAlgorithmCondition;
+            console.log("createCondition Output" + createCondition);
           } else {
-            thisCondition = paramsCreate.hashAlgorithmInput;
-            console.log("thisCondition Input" + thisCondition);
-            thisCondition = this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition;
+            createCondition = this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInputString).escrowCondition;
           }
           console.log("amountInXRP:" + amountInXRP);
           console.log("paramsCreate.allowCancelAfter1:" + paramsCreate.allowCancelAfter);
           console.log("paramsCreate.allowExecuteAfter:" + paramsCreate.allowExecuteAfter);
-          console.log("thisCondition1:" + thisCondition);
+          console.log("thisCondition1:" + createCondition);
           escrowCreation = {
             amount: amountInXRP,
             destination: toAddress,
             allowCancelAfter: paramsCreate.allowCancelAfter,
             allowExecuteAfter: paramsCreate.allowExecuteAfter,
-            condition: thisCondition ? thisCondition : this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInput).escrowCondition,
+            condition: createCondition,
             memos: [{
               data: message,
             }]
@@ -186,12 +184,23 @@ class Ripple extends AbstractDLT {
           break;
         case "ESCROW_EXECUTION":
           let paramsExecute = params as AtomicSwapExecuteOptions;
-          let conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.hashAlgorithmInput);
+          let execCondition;
+          let execFulfillment;
+          if (paramsExecute.hashAlgorithmCondition !== "" && paramsExecute.hashAlgorithmFulfillment !== ""){
+            execCondition = paramsExecute.hashAlgorithmCondition;
+            execFulfillment = paramsExecute.hashAlgorithmFulfillment;
+            console.log("execCondition Output" + execCondition);
+            console.log("execFulfillment Output" + execFulfillment);
+          } else {
+            const conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.hashAlgorithmInputString);
+            execCondition = conditionAndFulfillment.escrowCondition;
+            execFulfillment = conditionAndFulfillment.escrowFulfillment;
+          }
           escrowExecution = {
             owner: paramsExecute.owner,
             escrowSequence: parseInt(paramsExecute.escrowSequence),
-            condition: conditionAndFulfillment.escrowCondition,
-            fulfillment: conditionAndFulfillment.escrowFulfillment,
+            condition: execCondition,
+            fulfillment: execFulfillment,
             memos: [{
               data: message,
             }]
@@ -424,14 +433,16 @@ export enum TransactionTypes {
 interface AtomicSwapCreateOptions {
   allowCancelAfter: string; //from when can the escrow be executed? In ISOString format
   allowExecuteAfter: string; ////from when can the escrow be cancelled? In ISOString format
-  hashAlgorithmInput?: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
-  hashAlgorithmOutput?: string; //this is if there has been a hash string placed onto another chain and now we want to add it to this chain.
+  hashAlgorithmInputString?: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
+  hashAlgorithmCondition?: string; //this is if there has been a hash string placed onto another chain and now we want to add it to this chain.
 }
 
 interface AtomicSwapExecuteOptions {
   owner: string; //Who address of who created the escrow
   escrowSequence: string; //The sequence number of the escrow you are executing
-  hashAlgorithmInput: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
+  hashAlgorithmInputString?: string; //this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. 
+  hashAlgorithmCondition?: string;
+  hashAlgorithmFulfillment?: string;
 }
 
 interface AtomicSwapCancelOptions {
