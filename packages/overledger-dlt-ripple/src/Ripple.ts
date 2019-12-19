@@ -189,8 +189,8 @@ class Ripple extends AbstractDLT {
           if (paramsExecute.hashAlgorithmCondition !== "" && paramsExecute.hashAlgorithmFulfillment !== ""){
             execCondition = paramsExecute.hashAlgorithmCondition;
             execFulfillment = paramsExecute.hashAlgorithmFulfillment;
-            console.log("execCondition Output" + execCondition);
-            console.log("execFulfillment Output" + execFulfillment);
+            console.log("execCondition Output " + execCondition);
+            console.log("execFulfillment Output " + execFulfillment);
           } else {
             const conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.hashAlgorithmInputString);
             execCondition = conditionAndFulfillment.escrowCondition;
@@ -320,7 +320,7 @@ class Ripple extends AbstractDLT {
     if ((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidDate((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter, (swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
       throw new Error(`allowExecuteAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} and allowCancelAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} need to be after the current date and allowExecuteAfter needs to be before allowCancelAfter`);
     }
-    if ((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInput && (((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInput.length <= 0) || (typeof (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInput !== 'string'))) {
+    if ((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString && (((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString.length <= 0) || (typeof (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString !== 'string'))) {
       throw new Error(`condition must be a non null string`);
     }
     if (!(typeof parseInt((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).escrowSequence, 10) === 'number')) {

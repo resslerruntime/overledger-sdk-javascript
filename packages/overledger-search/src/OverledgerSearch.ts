@@ -84,19 +84,6 @@ class OverledgerSearch {
     }
   }
 
-  /**
-   * Get block by DLT and number
-   *
-   * @param {string} dlt The DLT name
-   */
-  getBlockHeightByDlt(dlt: string): AxiosPromise {
-    try {
-      return this.request.get(`/${dlt}/block/height`);
-    } catch (e) {
-      return e.response;
-    }
-  }
-
   queryContract(dlt: string, fromAddress: string, contractAddress: string, functionName: string, inputValues: [ReadSmartContractInputValue], outputTypes: [ReadSmartContractOutputType]): AxiosPromise {
     console.log(`input values `, inputValues);
     console.log(`outputTypes `, outputTypes);
@@ -121,7 +108,7 @@ class OverledgerSearch {
       inputParams.push(<ContractInputArgument>{type: paramType, value: p.value});
       return inputParams;
     }, []);
-    console.log(`input values `, inputValues);
+     console.log(`input values `, inputValues);
     return inputValues;
   }
 
@@ -131,7 +118,7 @@ class OverledgerSearch {
       outputTypes.push(<ContractTypeOutput>{type: paramType});
       return outputTypes;
     }, []);
-    console.log(`output values `, outputTypes);
+     console.log(`output values `, outputTypes);
     return outputTypes;
   }
 
