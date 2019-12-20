@@ -155,8 +155,14 @@ class OverledgerSDK {
    * Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
    *
    */
-  public readTransactionsByMappId(): AxiosPromise<Object> {
-    return this.request.get(`/transactions/mappid/${this.mappId}`);
+  public readTransactionsByMappId(offset: string, length: string): AxiosPromise<Object> {
+    let url = "";
+    if (offset && offset !== "" && length && length !== "") {
+      url = `/transactions/mappid/${this.mappId}?offset=${offset}&length=${length}`;
+    } else {
+      url = `/transactions/mappid/${this.mappId}`;
+    }
+    return this.request.get(url);
   }
 
   /**
