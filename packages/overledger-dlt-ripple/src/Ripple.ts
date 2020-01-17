@@ -10,6 +10,7 @@ import { EscrowExecution } from 'ripple-lib/dist/npm/transaction/escrow-executio
 import { EscrowCancellation } from 'ripple-lib/dist/npm/transaction/escrow-cancellation';
 import * as cc from 'five-bells-condition';
 import { isValidClassicAddress, isValidXAddress } from 'ripple-address-codec';
+import { FormattedTrustlineSpecification } from 'ripple-lib/dist/npm/common/types/objects';
 // import * as base58check from 'base58check';
 
 const DEFAULT_FEE_PRICE = 12;
@@ -95,6 +96,7 @@ class Ripple extends AbstractDLT {
     let escrowCreation: EscrowCreation;
     let escrowExecution: EscrowExecution;
     let escrowCancellation: EscrowCancellation;
+    let trustLine: FormattedTrustlineSpecification;
 
     if (typeof options === 'undefined') {
       throw new Error('Transaction options must be defined.');
@@ -221,6 +223,22 @@ class Ripple extends AbstractDLT {
           console.log('escrowCancellation', escrowCancellation);
           break;
       }
+    } else if (options.trustlineParameters){
+      const paramsTrustline: TrustLineOptions = options.trustlineParameters;
+      fee = this.computeFeePrice(options.feePrice, TransactionTypes.paymentAsset);
+      trustLine = {
+        currency: paramsTrustline.asset,
+        counterparty: toAddress,
+        limit: paramsTrustline.maxCredit,
+        authorized: paramsTrustline.authorized,
+        frozen: paramsTrustline.frozen,
+        ripplingDisabled: paramsTrustline.ripplingDisabled,
+        memos: [{
+          data: message,
+        }]
+
+      }
+
     }
 
     const feeInXRP = dropsToXrp(fee.toString());
@@ -231,7 +249,7 @@ class Ripple extends AbstractDLT {
       fee: feeInXRP,
     };
 
-    return { address, payment, instructions, escrowCreation, escrowExecution, escrowCancellation };
+    return { address, payment, instructions, escrowCreation, escrowExecution, escrowCancellation, trustLine };
   }
 
 
@@ -245,7 +263,7 @@ class Ripple extends AbstractDLT {
    */
   async _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
     const swapOptions = options.atomicSwapParameters;
-
+    const trustlineOptions = options.trustlineParameters;
     try {
       const built = this.buildTransaction(toAddress, message, options);
       let prepared;
@@ -265,6 +283,10 @@ class Ripple extends AbstractDLT {
         case 'ESCROW_CANCELLATION':
           this.validateSignArgs(options.transactionType, swapOptions);
           prepared = await this.rippleAPI.prepareEscrowCancellation(built.address, built.escrowCancellation, built.instructions);
+          break;
+        case 'TRUSTLINE':
+          this.validateSignArgs(options.transactionType, undefined, trustlineOptions);
+          prepared = await this.rippleAPI.prepareTrustline(built.address, built.trustLine, built.instructions);
           break;
         default:
           prepared = await this.rippleAPI.preparePayment(built.address, built.payment, built.instructions);
@@ -306,7 +328,7 @@ class Ripple extends AbstractDLT {
    * @param transactionType - this transaction type
    * @param swapOptions - any options for the atomic swap
    */
-  validateSignArgs(transactionType: TransactionTypes, swapOptions: AtomicSwapOptions): boolean {
+  validateSignArgs(transactionType: TransactionTypes, swapOptions?: AtomicSwapOptions, trustlineOptions?: TrustLineOptions): boolean {
 
     if (!transactionType || !(typeof transactionType === 'string') || (transactionType.length === 0)) {
       throw new Error(`The transactionType must be set from the enum TransactionTypes`);
@@ -330,6 +352,10 @@ class Ripple extends AbstractDLT {
       console.log(`owner`, (swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner);
       throw new Error(`the escrow owner address is not a valid XRP address`);
     }
+    if(trustlineOptions && !this.isValidCurrency(trustlineOptions.asset)){
+      console.log(`currency asset`, trustlineOptions.asset);
+      throw new Error(`the format of the asset ${trustlineOptions.asset} is not valid`);
+    }
     return true;
   }
 
@@ -346,7 +372,7 @@ class Ripple extends AbstractDLT {
     } else {
       fee = parseInt(initialFee, 10);
     }
-    if (transactionType === TransactionTypes.payment && (fee < DEFAULT_FEE_PRICE)) {
+    if ((transactionType === TransactionTypes.payment || transactionType === TransactionTypes.paymentAsset) && (fee < DEFAULT_FEE_PRICE)) {
       console.log(`Fee price is too low to perform the transaction; set by default to 12`);
       return DEFAULT_FEE_PRICE;
     } else if (transactionType === TransactionTypes.escrowCreation && fee < DEFAULT_FEE_PRICE) {
@@ -357,7 +383,7 @@ class Ripple extends AbstractDLT {
       return DEFAULT_FEE_PRICE;
     } else if (transactionType === TransactionTypes.escrowExecution) {
       // compute the minimum fee
-      console.log(`Fee price depends on the sent data to fulfil the escrow`);
+      console.log(`Fee price depends on the sent data to fulfill the escrow`);
       const fulfillmentLength = Buffer.from(fulfillment, "hex").length;
       const addedDrops = fulfillmentLength * 10 / 16;
       let minFee = BASE_ESCROW_EXECUTION_FEE_PRICE + Math.ceil(addedDrops);
@@ -398,6 +424,10 @@ class Ripple extends AbstractDLT {
       return true;
   }
 
+  isValidCurrency(currency: string): boolean {
+    console.log(`currency ${currency}`);
+    return ( currency.length === 3 && (/(kr|$|£|€)/.test(currency)));
+  }
 }
 
 export type Transaction = {
@@ -406,7 +436,8 @@ export type Transaction = {
   instructions?: Instructions,
   escrowCreation?: EscrowCreation,
   escrowExecution?: EscrowExecution,
-  escrowCancellation?: EscrowCancellation
+  escrowCancellation?: EscrowCancellation,
+  trustLine?: FormattedTrustlineSpecification
 };
 
 interface TransactionOptions extends BaseTransactionOptions {
@@ -416,6 +447,7 @@ interface TransactionOptions extends BaseTransactionOptions {
   amount: string; //the amount to transfer to the receiving address in XRP.
   transactionType: TransactionTypes; //what type of XRP transaction is this?
   atomicSwapParameters?: AtomicSwapOptions; //If you have selected an escrow transaction then these parameters needed to be filled in
+  trustlineParameters?: TrustLineOptions;
 }
 
 export type AtomicSwapOptions = AtomicSwapCreateOptions | AtomicSwapExecuteOptions | AtomicSwapCancelOptions;
@@ -424,7 +456,8 @@ export enum TransactionTypes {
   payment = "PAYMENT",  //simple XRP transfer between addresses
   escrowCreation = "ESCROW_CREATION",
   escrowExecution = "ESCROW_EXECUTION",
-  escrowCancellation = "ESCROW_CANCELLATION"
+  escrowCancellation = "ESCROW_CANCELLATION",
+  paymentAsset = "TRUSTLINE"
 }
 
 /**
@@ -448,6 +481,14 @@ interface AtomicSwapExecuteOptions {
 interface AtomicSwapCancelOptions {
   owner: string; //Who address of who created the escrow
   escrowSequence: string;  //The sequence number of the escrow you are executing
+}
+
+interface TrustLineOptions {
+  asset: string;
+  maxCredit: string;
+  authorized?: boolean;
+  frozen?: boolean;
+  ripplingDisabled?: boolean;
 }
 
 export default Ripple;
