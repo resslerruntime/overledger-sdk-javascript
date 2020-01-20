@@ -2,6 +2,7 @@
 const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
 const TransactionTypes = require('../../packages/overledger-dlt-ripple/dist/Ripple').TransactionTypes;
 const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
+const DataMessageOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DataMessageOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -46,21 +47,25 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
-    {
-      // In order to prepare an XRP transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
-      dlt: DltNames.xrp, //which DLT to use
-      toAddress: partyBRippleAddress, //which address/account this message is being sent to
-      message: transactionMessage, //any message you want to write
-      options: {
-        amount: '1', // The amount of Drops you want to send. Minimum send is 1 drop. 1 drop = 0.000001 XRP.
-        sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet. As previously discussed OVL finds the correct sequence
-        feePrice: '12', // FeePrice is denoted in drops. Minimum feePrice on XRP is 12 drops for escrowCreation (also for the other transaction types of escrowCancelation & payment).
-        asset: 'ETH',
-        maxCredit: '1000',
-        maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
-        transactionType: TransactionTypes.paymentAsset, //what type of transaction are we signing? See the enum for options
-      },
-    },]);
+      {
+        // In order to prepare an XRP transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
+        dlt: DltNames.xrp, //which DLT to use
+        toAddress: partyBRippleAddress, //which address/account this message is being sent to
+        dataMessageType: DataMessageOptions.ascii,
+        message: transactionMessage, //any message you want to write
+        options: {
+          amount: '1', // The amount of Drops you want to send. Minimum send is 1 drop. 1 drop = 0.000001 XRP.
+          sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet. As previously discussed OVL finds the correct sequence
+          feePrice: '12', // FeePrice is denoted in drops. Minimum feePrice on XRP is 12 drops for escrowCreation (also for the other transaction types of escrowCancelation & payment).
+          maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
+          transactionType: TransactionTypes.paymentAsset, //what type of transaction are we signing? See the enum for options
+          trustlineParameters: {
+            asset: 'ETH',
+            maxCredit: '1000',
+            ripplingDisabled: true
+          }
+        },
+      },]);
 
     // The signed transaction can now be sent to Overledger.
     const result = (await overledger.send(signedTransactions)).data;

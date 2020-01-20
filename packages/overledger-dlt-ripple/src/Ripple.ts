@@ -98,6 +98,8 @@ class Ripple extends AbstractDLT {
     let escrowCancellation: EscrowCancellation;
     let trustLine: FormattedTrustlineSpecification;
 
+    console.log(`toAddress ${toAddress} message ${message} options ${JSON.stringify(options)}`);
+
     if (typeof options === 'undefined') {
       throw new Error('Transaction options must be defined.');
     }
@@ -225,6 +227,7 @@ class Ripple extends AbstractDLT {
       }
     } else if (options.trustlineParameters){
       const paramsTrustline: TrustLineOptions = options.trustlineParameters;
+      console.log(`paramsTrustline ${JSON.stringify(paramsTrustline)}`);
       fee = this.computeFeePrice(options.feePrice, TransactionTypes.paymentAsset);
       trustLine = {
         currency: paramsTrustline.asset,
@@ -262,12 +265,15 @@ class Ripple extends AbstractDLT {
    * @param {TransactionOptions} options - any transaction options
    */
   async _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
+    console.log(`inside _sign`);
     const swapOptions = options.atomicSwapParameters;
     const trustlineOptions = options.trustlineParameters;
+    console.log(`transactionType ${options.transactionType}`);
+    console.log(`swapOptions ${JSON.stringify(swapOptions)}, trustlineOptions ${JSON.stringify(trustlineOptions)}`);
     try {
       const built = this.buildTransaction(toAddress, message, options);
       let prepared;
-      console.log('transaction type', options.transactionType);
+      console.log(`transaction type ${options.transactionType}`);
       switch (options.transactionType) {
         case 'PAYMENT':
           prepared = await this.rippleAPI.preparePayment(built.address, built.payment, built.instructions);
@@ -285,6 +291,7 @@ class Ripple extends AbstractDLT {
           prepared = await this.rippleAPI.prepareEscrowCancellation(built.address, built.escrowCancellation, built.instructions);
           break;
         case 'TRUSTLINE':
+          console.log(`_sign trustline case`);
           this.validateSignArgs(options.transactionType, undefined, trustlineOptions);
           prepared = await this.rippleAPI.prepareTrustline(built.address, built.trustLine, built.instructions);
           break;
@@ -329,26 +336,26 @@ class Ripple extends AbstractDLT {
    * @param swapOptions - any options for the atomic swap
    */
   validateSignArgs(transactionType: TransactionTypes, swapOptions?: AtomicSwapOptions, trustlineOptions?: TrustLineOptions): boolean {
-
+    console.log(`validateSignArgs swapOptions ${JSON.stringify(swapOptions)}, trustlineOptions ${JSON.stringify(trustlineOptions)}`);
     if (!transactionType || !(typeof transactionType === 'string') || (transactionType.length === 0)) {
       throw new Error(`The transactionType must be set from the enum TransactionTypes`);
     }
-    if ((swapOptions as AtomicSwapCreateOptions).allowCancelAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
+    if (swapOptions && (swapOptions as AtomicSwapCreateOptions).allowCancelAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
       throw new Error(`allowCancelAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} date format is not valid. ISO date format is required.`);
     }
-    if ((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter)) {
+    if (swapOptions && (swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidISODateFormat((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter)) {
       throw new Error(`allowExecuteAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} date format is not valid. ISO date format is required.`);
     }
-    if ((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidDate((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter, (swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
+    if (swapOptions && (swapOptions as AtomicSwapCreateOptions).allowExecuteAfter && !this.isValidDate((swapOptions as AtomicSwapCreateOptions).allowExecuteAfter, (swapOptions as AtomicSwapCreateOptions).allowCancelAfter)) {
       throw new Error(`allowExecuteAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} and allowCancelAfter ${(swapOptions as AtomicSwapCreateOptions).allowCancelAfter} need to be after the current date and allowExecuteAfter needs to be before allowCancelAfter`);
     }
-    if ((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString && (((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString.length <= 0) || (typeof (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString !== 'string'))) {
+    if (swapOptions && (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString && (((swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString.length <= 0) || (typeof (swapOptions as AtomicSwapCreateOptions | AtomicSwapExecuteOptions).hashAlgorithmInputString !== 'string'))) {
       throw new Error(`condition must be a non null string`);
     }
-    if (!(typeof parseInt((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).escrowSequence, 10) === 'number')) {
+    if (swapOptions && !(typeof parseInt((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).escrowSequence, 10) === 'number')) {
       throw new Error(`escrowSequence must be an integer`);
     }
-    if (((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner) && !this.isValidRippleAddress((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner)) {
+    if (swapOptions && ((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner) && !this.isValidRippleAddress((swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner)) {
       console.log(`owner`, (swapOptions as AtomicSwapExecuteOptions | AtomicSwapCancelOptions).owner);
       throw new Error(`the escrow owner address is not a valid XRP address`);
     }
