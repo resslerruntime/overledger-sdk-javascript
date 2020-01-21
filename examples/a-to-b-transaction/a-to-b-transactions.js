@@ -15,12 +15,21 @@ const bpiKey = 'bpikeytest';
 const partyAEthereumPrivateKey = '4ec9ae181d4cd52167bdbc57a097ac8fff5db5bb8afa5cb8719ec9bb6a1c3131';
 const partyAEthereumAddress = '0x600c95B9C7dbE8F1De52bbaB75582b3EeA2BAAc6';
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-const partyARipplePrivateKey = 'ssMCrzD2j1GjXmy3KuLaAd7MUVZph';
+/*const partyARipplePrivateKey = 'ssMCrzD2j1GjXmy3KuLaAd7MUVZph';
 const partyARippleAddress = 'rMQbAYHCjRsb6TT58ujn4o2jTfXdF2fQdx';
 
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
 const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
+*/
+
+//Party A will be the creator of the escrow. Party A's details are as follows:
+const partyARipplePrivateKey = 'shcnvvdzwtgURsmFEF7SzPH6XG7qx';
+const partyARippleAddress = 'rsnZ9fAGKKkuP1d36oWZDjDAGFQkBGtLha';
+
+// Party B's details are as follows:
+const partyBRippleAddress = 'rpV9zFXPXH4ejhe11X4wcfatiAJj69xPrr';
+const partyBRipplePrivateKey = 'ss1f9UQKnoMtNyoGVq9yqBqCpC8cx';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -29,26 +38,26 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: 'ripple' }],
       provider: { network: 'testnet' },
     });
 
-    const transactionMessage = 'Lukes Test';
+    const transactionMessage = 'najla Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
+    // overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
+    overledger.dlts.ripple.setAccount(partyBRipplePrivateKey);
 
     // Get the address sequences.
-    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
-    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
+    // const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
+    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyBRippleAddress);
+    // const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
     const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
 
 
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
-    {
+    /*{
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
       dlt: DltNames.ethereum,
       toAddress: partyBEthereumAddress,
@@ -60,14 +69,15 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         feePrice: '8000000000', // Price for each individual gas unit this transaction will consume
         feeLimit: '80000', // The maximum fee that this transaction will use
       },
-    },
+    },*/
     {
       // In order to prepare a ripple transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
       dlt: DltNames.xrp,
-      toAddress: partyBRippleAddress,
+      toAddress: partyARippleAddress,
       message: transactionMessage,
       options: {
-        amount: '1', // Minimum allowed amount of drops is 1.
+        amount: '192', // In the XRP currency case, the minimum allowed amount of drops is 1.
+        currency: 'ETH', // In case of a non-XRP currency a trustline must be created betwwen the sender and the issuer of that currency (issued currency on the XRP Ledger)
         sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
@@ -79,10 +89,10 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
     console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
-    //const result = (await overledger.send(signedTransactions)).data;
+    const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
-    //console.log(JSON.stringify(result, null, 2));
+    console.log(JSON.stringify(result, null, 2));
 
   } catch (e) {
     console.error('error:', e);
