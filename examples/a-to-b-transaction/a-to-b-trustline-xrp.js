@@ -17,11 +17,12 @@ const bpiKey = 'bpikeytest';
 // To generate XRP test accounts, you can go to the official Ripple Testnet Faucet to get a prefunded one.
 
 //Party A will be the creator of the escrow. Party A's details are as follows:
-const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
+const partyARipplePrivateKey = 'shcnvvdzwtgURsmFEF7SzPH6XG7qx';
+const partyARippleAddress = 'rsnZ9fAGKKkuP1d36oWZDjDAGFQkBGtLha';
 
 // Party B's details are as follows:
-const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
+const partyBRippleAddress = 'rpV9zFXPXH4ejhe11X4wcfatiAJj69xPrr';
+const partyBRipplePrivateKey = 'ss1f9UQKnoMtNyoGVq9yqBqCpC8cx';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -36,7 +37,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
     });
 
     //You can add a message that will be encorporated into the transaction (this is additional to the escrow functionality):
-    const transactionMessage = 'Overledger JavaScript SDK Payment Test';
+    const transactionMessage = 'Overledger JavaScript SDK Trustline Test';
 
     // SET party A's corresponding private key that will be used for signing messages from his account;
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
@@ -51,7 +52,6 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         // In order to prepare an XRP transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
         dlt: DltNames.xrp, //which DLT to use
         toAddress: partyBRippleAddress, //which address/account this message is being sent to
-        dataMessageType: DataMessageOptions.ascii,
         message: transactionMessage, //any message you want to write
         options: {
           amount: '1', // The amount of Drops you want to send. Minimum send is 1 drop. 1 drop = 0.000001 XRP.
@@ -61,8 +61,9 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
           transactionType: TransactionTypes.paymentAsset, //what type of transaction are we signing? See the enum for options
           trustlineParameters: {
             asset: 'ETH',
-            maxCredit: '1000',
-            ripplingDisabled: true
+            maxCredit: '100',
+            ripplingDisabled: true,
+            frozen: false
           }
         },
       },]);

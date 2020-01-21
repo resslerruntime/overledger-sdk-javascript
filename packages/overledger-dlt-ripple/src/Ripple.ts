@@ -133,23 +133,28 @@ class Ripple extends AbstractDLT {
     console.log("options.toAddress:" + toAddress);
     const maxLedgerVersion = Number(options.maxLedgerVersion);
     let fee;
-    const amountInXRP = dropsToXrp(options.amount);
+    const currency = options.currency ? options.currency : 'XRP';
+    const amountInXRP = currency === 'XRP' ? dropsToXrp(options.amount) : options.amount;
     const address = this.account.address;
     if (options.transactionType === TransactionTypes.payment) {
+      const issuer = currency !== 'XRP' ? address : undefined;
+      console.log(`currency ${currency} issuer ${issuer}`);
       fee = this.computeFeePrice(options.feePrice, TransactionTypes.payment);
       payment = {
         source: {
-          address: this.account.address,
-          amount: {
+          address,
+          maxAmount: {
             value: amountInXRP,
-            currency: 'XRP',
+            currency,
+            counterparty: issuer
           },
         },
         destination: {
           address: toAddress,
-          minAmount: {
+          amount: {
             value: amountInXRP,
-            currency: 'XRP',
+            currency,
+            counterparty: issuer
           },
         },
         memos: [{
@@ -433,7 +438,7 @@ class Ripple extends AbstractDLT {
 
   isValidCurrency(currency: string): boolean {
     console.log(`currency ${currency}`);
-    return ( currency.length === 3 && (/(kr|$|£|€)/.test(currency)));
+    return (/^([0-9A-Za-z]{3})$/.test(currency));
   }
 }
 
@@ -452,6 +457,7 @@ interface TransactionOptions extends BaseTransactionOptions {
   sequence: number; //the sequence number of the sending account
   maxLedgerVersion: string; //The highest ledger version for the transaction to be confirmed into
   amount: string; //the amount to transfer to the receiving address in XRP.
+  currency: string; //the currency used in XRP Legder: XRP or non-XRP currency (default is XRP)
   transactionType: TransactionTypes; //what type of XRP transaction is this?
   atomicSwapParameters?: AtomicSwapOptions; //If you have selected an escrow transaction then these parameters needed to be filled in
   trustlineParameters?: TrustLineOptions;
