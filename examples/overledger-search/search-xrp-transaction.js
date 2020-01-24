@@ -1,5 +1,5 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
 const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
 
 //  ---------------------------------------------------------

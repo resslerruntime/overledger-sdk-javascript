@@ -16,10 +16,15 @@ import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
 import UnsignedData from './UnsignedData';
 import TransactionOptions from './TransactionOptions';
+import TransactionTypeOptions from './TransactionTypeOptions';
 import TypeOptions from './TypeOptions';
-import UintIntMOptions from './UintIntMOptions';
-import BytesMOptions from './BytesMOptions';
+import UintIntBOptions from './UintIntBOptions';
+import BytesBOptions from './BytesBOptions';
 import computeParamType from './ParamType';
+import PayableOptions from './PayableOptions';
+import SCFunctionalityOptions from './SCFunctionalityOptions';
+import SCFunctionTypeOptions from './SCFunctionTypeOptions';
+import SCParameterOptions from './SCParameterOptions';
 
 /**
  * Types used by the Overledger SDK packages.
@@ -39,8 +44,13 @@ export {
   SignedTransactionRequest,
   UnsignedData,
   TransactionOptions,
+  TransactionTypeOptions,
   TypeOptions,
-  UintIntMOptions,
-  BytesMOptions,
-  computeParamType
+  UintIntBOptions,
+  BytesBOptions,
+  computeParamType,
+  PayableOptions,
+  SCFunctionalityOptions,
+  SCFunctionTypeOptions,
+  SCParameterOptions
 };

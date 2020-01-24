@@ -1,4 +1,4 @@
-import { TransactionOptions, SignedTransactionRequest, Account } from '@quantnetwork/overledger-types';
+import { TransactionOptions, SignedTransactionRequest, Account, TransactionTypeOptions} from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -73,12 +73,11 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  public sign(toAddress: string, message: string, options: TransactionOptions, dataMessageType?: DataMessageOptions): Promise<string> {
+  public sign(toAddress: string, message: string, options: TransactionOptions, transactionType?: TransactionTypeOptions): Promise<string> {
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
     }
-    console.log(`dataMessageType `, dataMessageType);
-    return this._sign(toAddress, message, options, dataMessageType);
+    return this._sign(toAddress, message, options, transactionType);
   }
 
   /**
@@ -97,7 +96,7 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  abstract _sign(toAddress: string, message: string, options?: TransactionOptions, dataMessageType?: DataMessageOptions): Promise<string>;
+  abstract _sign(toAddress: string, message: string, options?: TransactionOptions, TransactionType?: TransactionTypeOptions): Promise<string>;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields
@@ -116,11 +115,6 @@ abstract class AbstractDLT {
   }
 }
 
-export enum DataMessageOptions {
-  ascii = "ASCII",
-  smartContractCreation = "SMART_CONTRACT_CREATION",
-  smartContractInvocation = "SMART_CONTRACT_INVOCATION"
-};
 export enum DltNames {
   xrp = "ripple",
   ethereum = "ethereum",

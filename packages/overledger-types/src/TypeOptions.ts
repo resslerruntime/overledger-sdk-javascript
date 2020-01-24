@@ -4,7 +4,7 @@
  * @memberof module:overledger-types
  */
 
-export enum TypeOptions { uintM = "uintM", intM = "intM", address = "address", bool = "bool", bytesM = "bytesM", string = "string", uintMArray = "uintMArray", intMArray = "intMArray", addressArray = "addressArray", boolArray = "boolArray", bytesMArray = "bytesMArray" };
+export enum TypeOptions { uintB = "uintB", intB = "intB", address = "address", bool = "bool", bytesB = "bytesB", string = "string", uintBArray = "uintBArray", intBArray = "intBArray", addressArray = "addressArray", boolArray = "boolArray", bytesBArray = "bytesBArray" };
 
 
 export default TypeOptions;

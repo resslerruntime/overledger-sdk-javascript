@@ -2,8 +2,7 @@ import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Options, Account, TransactionOptions as BaseTransactionOptions, TypeOptions, BytesMOptions, UintIntMOptions } from '@quantnetwork/overledger-types';
-import { DataMessageOptions } from '@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT';
+import { Options, Account, TransactionOptions as BaseTransactionOptions, TransactionTypeOptions, PayableOptions, SCFunctionTypeOptions, SCParameterOptions } from '@quantnetwork/overledger-types';
 import { computeParamType } from '@quantnetwork/overledger-types';
 
 /**
@@ -72,7 +71,7 @@ class Ethereum extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  buildTransaction(toAddress: string, message: string, options: TransactionOptions, dataMessageType?: DataMessageOptions): Transaction {
+  buildTransaction(toAddress: string, message: string, options: TransactionOptions, transactionType?: TransactionTypeOptions): Transaction {
     if (typeof options === 'undefined') {
       throw new Error('Transaction options must be defined.');
     }
@@ -93,29 +92,27 @@ class Ethereum extends AbstractDLT {
       throw new Error('options.sequence must be set up');
     }
 
-    if (!toAddress && dataMessageType === DataMessageOptions.smartContractInvocation) {
+    if (!toAddress && transactionType === TransactionTypeOptions.smartContractInvocation) {
       throw new Error('The toAddress must be defined for smart contract invocation');
     }
 
     if (parseInt(options.amount, 10) > 0
-      && (dataMessageType === DataMessageOptions.smartContractCreation || dataMessageType === DataMessageOptions.smartContractInvocation)
+      && (transactionType === TransactionTypeOptions.smartContractDeploy || transactionType === TransactionTypeOptions.smartContractInvocation)
       && options.functionDetails.payable === "false") {
       throw new Error('the amount must be equal to zero for smart contract creation/invocation when non payable');
     }
 
     let transactionData = "";
     let invocationType;
-    if (dataMessageType === DataMessageOptions.ascii) {
-      if (DataMessageOptions.ascii.toString().localeCompare('ascii') === 0) { //??
+     if (transactionType === TransactionTypeOptions.valueTransfer) {
         transactionData = this.web3.utils.asciiToHex(message);
-      }
-    } else if (dataMessageType === DataMessageOptions.smartContractCreation) {
+    } else if (transactionType === TransactionTypeOptions.smartContractDeploy) {
       if (!toAddress) {
         invocationType = options.functionDetails.functionType;
-        if (invocationType === FunctionTypes.constructorNoParams) {
+        if (invocationType === SCFunctionTypeOptions.constructorNoParams) {
           transactionData = message;
-        } else if (invocationType === FunctionTypes.constructorWithParams) {
-          const paramsList: [SmartContractParameter] = options.functionDetails.functionParameters;
+        } else if (invocationType === SCFunctionTypeOptions.constructorWithParams) {
+          const paramsList: [SCParameterOptions] = options.functionDetails.functionParameters;
           if (!paramsList || paramsList.length <= 0) {
             throw new Error(`functionParameters must be defined with a non-null length in the functionDetails`);
           }
@@ -126,11 +123,11 @@ class Ethereum extends AbstractDLT {
       } else {
         throw new Error('The toAddress must be undefined for smart contract creation');
       }
-    } else if (dataMessageType === DataMessageOptions.smartContractInvocation) {
+    } else if (transactionType === TransactionTypeOptions.smartContractInvocation) {
       invocationType = options.functionDetails.functionType;
       if (toAddress) {
-        if (invocationType === FunctionTypes.functionCall) {
-          const paramsList: [SmartContractParameter] = options.functionDetails.functionParameters;
+        if (invocationType === SCFunctionTypeOptions.functionCall) {
+          const paramsList: [SCParameterOptions] = options.functionDetails.functionParameters;
           if (!paramsList) {
             throw new Error(`functionParameters must be defined in the functionDetails; at least with an emty array []`);
           }
@@ -139,7 +136,6 @@ class Ethereum extends AbstractDLT {
             throw new Error(`The name of the called function must be given for smart contract invocation`);
           }
           transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
-          console.log('function call transaction data', transactionData);
         }
         else {
           throw new Error(`The function type must be functionCall`);
@@ -158,14 +154,12 @@ class Ethereum extends AbstractDLT {
       value: options.amount,
       data: transactionData,
     };
-    console.log(`transaction `, transaction);
     return transaction;
   }
 
-  computeTransactionDataForConstructorWithParams(message: string, paramsList: [SmartContractParameter]): string {
+  computeTransactionDataForConstructorWithParams(message: string, paramsList: [SCParameterOptions]): string {
     const typesAndValues = paramsList.reduce((paramsValues, p) => {
       const paramType = computeParamType(p);
-      console.log(`computeTransactionDataForConstructorWithParams paramType `, paramType);
       paramsValues[0].push(paramType);
       paramsValues[1].push(p.value);
       return paramsValues;
@@ -174,7 +168,7 @@ class Ethereum extends AbstractDLT {
     return message + encodedParams;
   }
 
-  computeTransactionDataForFunctionCall(functionName: string, paramsList: [SmartContractParameter]): string {
+  computeTransactionDataForFunctionCall(functionName: string, paramsList: [SCParameterOptions]): string {
     const inputsAndValues = paramsList.reduce((paramsValues, p) => {
       const paramType = computeParamType(p);
       paramsValues[0].push({ type: paramType.toString(), name: p.name });
@@ -198,9 +192,11 @@ class Ethereum extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  _sign(toAddress: string, message: string, options: TransactionOptions, dataMessageType?: DataMessageOptions): Promise<string> {
-    console.log(`data type _sign`, dataMessageType);
-    const transaction = this.buildTransaction(toAddress, message, options, dataMessageType);
+  _sign(toAddress: string, message: string, options: TransactionOptions, transactionType?: TransactionTypeOptions): Promise<string> {
+    if (typeof transactionType === 'undefined') {
+      transactionType = TransactionTypeOptions.valueTransfer;
+    }
+    const transaction = this.buildTransaction(toAddress, message, options, transactionType);
 
     return new Promise((resolve, reject) => {
       this.account.signTransaction(transaction, (err, data) => {
@@ -233,29 +229,10 @@ interface TransactionOptions extends BaseTransactionOptions {
 }
 
 interface FunctionOptions {
-  functionType: FunctionTypes;
+  functionType: SCFunctionTypeOptions;
   functionName?: string;
-  payable: Payable;
-  functionParameters?: [SmartContractParameter];
-}
-
-export enum Payable {
-  payable = "true",
-  notPayable = "false"
-};
-
-export enum FunctionTypes {
-  constructorNoParams = "CONSTRUCTOR_NO_PARAMS",
-  constructorWithParams = "CONSTRUCTOR_WITH_PARAMS",
-  functionCall = "FUNCTION_CALL"
-};
-
-export interface SmartContractParameter {
-  type: TypeOptions;
-  value: string;
-  uintIntMValue?: UintIntMOptions;
-  bytesMValue?: BytesMOptions;
-  name?: string;
+  payable: PayableOptions;
+  functionParameters?: [SCParameterOptions];
 }
 
 interface IJsonFunctionCall {

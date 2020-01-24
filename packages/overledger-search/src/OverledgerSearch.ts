@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
-import { TypeOptions, BytesMOptions, UintIntMOptions, computeParamType } from '@quantnetwork/overledger-types';
+import { TypeOptions, BytesBOptions, UintIntBOptions, computeParamType } from '@quantnetwork/overledger-types';
 
 /**
  * @memberof module:overledger-search
@@ -85,8 +85,6 @@ class OverledgerSearch {
   }
 
   queryContract(dlt: string, fromAddress: string, contractAddress: string, functionName: string, inputValues: [ReadSmartContractInputValue], outputTypes: [ReadSmartContractOutputType]): AxiosPromise {
-    console.log(`input values `, inputValues);
-    console.log(`outputTypes `, outputTypes);
     try {
       const data = {
         fromAddress,
@@ -95,7 +93,6 @@ class OverledgerSearch {
         inputValues: this.computeInputValuesList(inputValues),
         outputTypes: this.computeOutputTypesList(outputTypes)
       }
-      console.log(`data`, data);
       return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(data));
     } catch (e) {
       return e.response;
@@ -108,7 +105,6 @@ class OverledgerSearch {
       inputParams.push(<ContractInputArgument>{type: paramType, value: p.value});
       return inputParams;
     }, []);
-     console.log(`input values `, inputValues);
     return inputValues;
   }
 
@@ -118,7 +114,6 @@ class OverledgerSearch {
       outputTypes.push(<ContractTypeOutput>{type: paramType});
       return outputTypes;
     }, []);
-     console.log(`output values `, outputTypes);
     return outputTypes;
   }
 
@@ -134,15 +129,15 @@ export interface IContractQueryRequestDto {
 
 export interface ReadSmartContractInputValue {
   type: TypeOptions;
-  uintIntMValue?: UintIntMOptions;
-  bytesMValue?: BytesMOptions;
+  uintIntBValue?: UintIntBOptions;
+  bytesBValue?: BytesBOptions;
   value: string;
 }
 
 export interface ReadSmartContractOutputType {
   type: TypeOptions;
-  uintIntMValue: UintIntMOptions;
-  bytesMValue?: BytesMOptions;
+  uintIntBValue: UintIntBOptions;
+  bytesBValue?: BytesBOptions;
 }
 
 interface ContractInputArgument {

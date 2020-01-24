@@ -1,11 +1,11 @@
-import { TypeOptions, BytesMOptions } from ".";
+import { TypeOptions, BytesBOptions } from ".";
 
 function computeParamType(param: any): string {
     let paramType = param.type.toString();
-    if (paramType === TypeOptions.bytesM || paramType === TypeOptions.bytesMArray) {
-      paramType = (param.bytesMValue === BytesMOptions.m1) ? paramType.replace('M', '') : paramType.replace('M', param.bytesMValue);
-    } else if (param.type === TypeOptions.uintM || param.type === TypeOptions.intM || param.type === TypeOptions.intMArray || param.type === TypeOptions.uintMArray) {
-      paramType = paramType.replace('M', param.uintIntMValue);
+    if (paramType === TypeOptions.bytesB || paramType === TypeOptions.bytesBArray) {
+      paramType = (param.bytesBValue === BytesBOptions.b1) ? paramType.replace('B', '') : paramType.replace('B', param.bytesMValue);
+    } else if (param.type === TypeOptions.uintB || param.type === TypeOptions.intB || param.type === TypeOptions.intBArray || param.type === TypeOptions.uintBArray) {
+      paramType = paramType.replace('B', param.uintIntBValue);
     }
     return paramType.replace('Array', '[]');
   }

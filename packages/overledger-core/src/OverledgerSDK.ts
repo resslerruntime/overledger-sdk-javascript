@@ -100,7 +100,7 @@ class OverledgerSDK {
    */
   public async sign(unsignedData: UnsignedData[]): Promise<SignedTransactionRequest[]> {
     const signedTransactionRequest = Promise.all(unsignedData.map(async (data) => {
-      const signedTransaction = await this.dlts[data.dlt].sign(data.toAddress, data.message, data.options, data.dataMessageType);
+      const signedTransaction = await this.dlts[data.dlt].sign(data.toAddress, data.message, data.options, data.transactionType);
 
       return {
         dlt: data.dlt,
