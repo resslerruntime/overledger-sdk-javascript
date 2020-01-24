@@ -4,13 +4,14 @@ const OverledgerSDK = require('../../packages/overledger-bundle').default;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
 // Take these from the search-transaction scripts, as the response
 // includes what block the transaction is included in
-const ethereumBlockNumber = '<block number>';
-const rippleBlockNumber = '<block number>';
+const ethereumBlockNumber = '1000000';
+const rippleBlockNumber = '1000001';
+const bitcoinBlockNumber = '1000002';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -19,11 +20,15 @@ const rippleBlockNumber = '<block number>';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
             provider: { network: 'testnet' },
 
         });
 
+        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
+        console.log('Bitcoin block: ', bitcoinBlock.data);
+        console.log('\n');
+        
         const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
         console.log('\n');

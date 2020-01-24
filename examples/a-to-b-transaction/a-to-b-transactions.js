@@ -27,7 +27,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
       provider: { network: 'testnet' },
     });
 
@@ -46,6 +46,19 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
+      //{
+        //         dlt: 'bitcoin',
+        //         toAddress: partyBBitcoinAddress,
+        //         message: transactionMessage,
+        //         options: {
+        //             amount: 546, // Minimum allowed amount of satoshi
+        //             sequence: 0, //Bitcoin Faucet Message Vout, from when funding the address
+        //             // TODO: This fee price is required when you put the output of the transaction
+        //             feePrice: 100000, // is this fee price set? Should an endpoint be called beforehand? How is it calculated?
+        //             previousTransactionHash: bitcoinFaucetMessageTxnHash,
+        //             value: bitcoinFaucetMessageAmount, // This value is used to calculate the output amount
+        //         }
+        //     },
     {
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
       dlt: 'ethereum',
