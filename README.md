@@ -44,7 +44,7 @@ Or, if you prefer using [yarn](https://yarnpkg.com/):
 
 ```
 yarn add @quantnetwork/overledger-core
-yarn add @quantnetwork/overledger-ethereum
+yarn add @quantnetwork/overledger-dlt-ethereum
 ```
 
 
