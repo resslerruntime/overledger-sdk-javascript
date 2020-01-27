@@ -95,8 +95,9 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ripple.Ripple+createAccount"></a>
 
 #### *ripple*.createAccount()
-Create an account for a specific DLT
+Create an XRP account
 
+**Returns**: <code>Account</code> - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
 #### *ripple*.setAccount(privateKey)
@@ -119,15 +120,16 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)
 
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| toAddress | <code>string</code> | receiver address |
+| message | <code>string</code> | message in memos to display in the resulting transaction |
+| options | <code>TransactionOptions</code> | DLT transaction options |
 
 Sign the transaction
 

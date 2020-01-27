@@ -23,25 +23,48 @@
 
 <dl>
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
+<dt><a href="#APICallWrapper">APICallWrapper</a> : <code>Object</code></dt>
+<dd><p>A wrapper object for the dlt data to be sent to Overledger.</p>
+</dd>
 <dt><a href="#DLTAndAddress">DLTAndAddress</a> : <code>Object</code></dt>
-<dd><p>DLT and Address pair</p>
+<dd><p>DLT and Address pair.</p>
 </dd>
 <dt><a href="#DLTOptions">DLTOptions</a> : <code>Object</code></dt>
-<dd><p>Options for loading a DLT in the SDK</p>
+<dd><p>Options for loading a DLT in the SDK.</p>
 </dd>
 <dt><a href="#NetworkOptions">NetworkOptions</a> : <code>string</code></dt>
-<dd><p>Overledger network options</p>
+<dd><p>Overledger network options.</p>
+</dd>
+<dt><a href="#Options">Options</a> : <code>Object</code></dt>
+<dd><p>Options for instantiating the SDK.</p>
+</dd>
+<dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
+<dd><p>Overledger signed transaction data.</p>
+</dd>
+<dt><a href="#ProviderOptions">ProviderOptions</a> : <code>Object</code></dt>
+<dd><p>Overledger network provider options.</p>
+</dd>
+<dt><a href="#SDKOptions">SDKOptions</a> : <code>Object</code></dt>
+<dd><p>Overledger SDK options.</p>
 </dd>
 <dt><a href="#SequenceDataRequest">SequenceDataRequest</a> : <code>Object</code></dt>
-<dd><p>Overledger sequence request</p>
+<dd><p>Overledger sequence request.</p>
 </dd>
 <dt><a href="#SequenceDataResponse">SequenceDataResponse</a> : <code>Array.&lt;Object&gt;</code></dt>
-<dd><p>Overledger sequence data response</p>
+<dd><p>Overledger sequence data response.</p>
+</dd>
+<dt><a href="#SignedTransactionRequest">SignedTransactionRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger signed transaction request object.</p>
 </dd>
 <dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
 <dd><p>DLT transaction options.</p>
+</dd>
+<dt><a href="#UnsignedData">UnsignedData</a> : <code>Object</code></dt>
+<dd><p>Unsigned transaction data.</p>
 </dd>
 </dl>
 
@@ -146,7 +169,7 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
 | --- | --- | --- |
 | mappId | <code>string</code> | The Multi-chain Application ID |
 | bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
-| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
+| options | [<code>SDKOptions</code>](#SDKOptions) | The DLT Options and Provider Options |
 
 Create the Overledger SDK
 
@@ -172,7 +195,7 @@ Load the DLT in the Overledger SDK
 
 | Param | Type | Description |
 | --- | --- | --- |
-| options | <code>SDKOptions</code> | The DLT Options and Provider Options |
+| options | [<code>SDKOptions</code>](#SDKOptions) | The DLT Options and Provider Options |
 
 Validate the provided Overledger SDK Options
 
@@ -182,29 +205,29 @@ Validate the provided Overledger SDK Options
 
 | Param | Type | Description |
 | --- | --- | --- |
-| signedTransactionRequest | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of signed transactions |
+| signedTransactionRequest | [<code>Array.&lt;SignedTransactionRequest&gt;</code>](#SignedTransactionRequest) | Array of signed transactions |
 
 Wrap the DLT Data with the API schema
 
-**Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
+**Returns**: [<code>APICallWrapper</code>](#APICallWrapper) - Object conforming to the API schema  
 <a name="module_overledger-core.OverledgerSDK+sign"></a>
 
 #### *overledgerSDK*.sign(unsignedData)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
+| unsignedData | [<code>Array.&lt;UnsignedData&gt;</code>](#UnsignedData) | Array of unsigned data |
 
 Sign the provided transactions
 
-**Returns**: <code>Array.&lt;SignedTransactionRequest&gt;</code> - Array of signed transaction requests wrapped by Overledger metadata  
+**Returns**: [<code>Array.&lt;SignedTransactionRequest&gt;</code>](#SignedTransactionRequest) - Array of signed transaction requests wrapped by Overledger metadata  
 <a name="module_overledger-core.OverledgerSDK+send"></a>
 
 #### *overledgerSDK*.send(signedTransactions)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| signedTransactions | <code>Array.&lt;SignedTransactionRequest&gt;</code> | Array of Overledger signed transaction data |
+| signedTransactions | [<code>Array.&lt;SignedTransactionRequest&gt;</code>](#SignedTransactionRequest) | Array of Overledger signed transaction data |
 
 Send signed transactions to Overledger
 
@@ -232,7 +255,7 @@ Get the sequence numbers for the provided addresses
 <a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
 
 <a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 
@@ -288,6 +311,10 @@ Get the Overledger Blockchain Programming Interface license key
 
             * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+            * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+
+            * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+
             * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
             * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -312,6 +339,10 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
     * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+    * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+
+    * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+
     * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
     * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -331,6 +362,25 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 | --- | --- |
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
+
+#### *abstractDLT*.createAccount()
+Create an account for a specific DLT
+
+Abstract method to be implemented in each DLT
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+setAccount"></a>
+
+#### *abstractDLT*.setAccount(privateKey)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+
+Set an account for signing transactions for a specific DLT
+
+Abstract method to be implemented in each DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
 
@@ -370,7 +420,7 @@ Sign a transaction for the DLT
 
 | Param | Type |
 | --- | --- |
-| signedTransaction | <code>SignedTransactionRequest</code> | 
+| signedTransaction | [<code>SignedTransactionRequest</code>](#SignedTransactionRequest) | 
 
 Send an Overledger signed transaction
 
@@ -380,7 +430,7 @@ Send an Overledger signed transaction
 
 | Param | Type |
 | --- | --- |
-| signedTransaction | <code>SignedTransactionRequest</code> | 
+| signedTransaction | [<code>SignedTransactionRequest</code>](#SignedTransactionRequest) | 
 
 Wrap a specific DLT signed transaction with the Overledger required fields
 
@@ -459,8 +509,9 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
 
 #### *ethereum*.createAccount()
-Create an account for a specific DLT
+Create an Ethereum account
 
+**Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)
@@ -483,6 +534,7 @@ Set an account for signing transactions for a specific DLT
 
 Build the transaction
 
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
 
 #### *ethereum*._sign(toAddress, message, options)
@@ -570,8 +622,9 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ripple.Ripple+createAccount"></a>
 
 #### *ripple*.createAccount()
-Create an account for a specific DLT
+Create an XRP account
 
+**Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
 #### *ripple*.setAccount(privateKey)
@@ -594,15 +647,16 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)
 
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| Param | Type | Description |
+| --- | --- | --- |
+| toAddress | <code>string</code> | receiver address |
+| message | <code>string</code> | message in memos to display in the resulting transaction |
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | DLT transaction options |
 
 Sign the transaction
 
@@ -621,6 +675,10 @@ Sign the transaction
 
     * _inner_
         * [~Provider](#module_overledger-provider.Provider)
+
+            * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+            * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
 
 
 <a name="module_overledger-provider.TESTNET"></a>
@@ -641,6 +699,32 @@ Network provider package.
 <a name="module_overledger-provider.Provider"></a>
 
 ### *overledger-provider*~Provider
+
+* [~Provider](#module_overledger-provider.Provider)
+
+    * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+    * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
+
+
+<a name="new_module_overledger-provider.Provider_new"></a>
+
+#### new Provider(mappId, bpiKey, ProviderOptions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The Multi-chain Application ID |
+| bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
+| ProviderOptions | [<code>ProviderOptions</code>](#ProviderOptions) | Overledger network provider options |
+
+<a name="module_overledger-provider.Provider+createRequest"></a>
+
+#### *provider*.createRequest(path)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Request endpoint resource path |
+
 <a name="module_overledger-search"></a>
 
 ## overledger-search
@@ -702,7 +786,7 @@ Search support package.
 | --- | --- | --- |
 | transactionHash | <code>string</code> | Transaction hash |
 
-Get transaction by transaction hash (non-deterministic)
+Get transaction by transaction hash
 
 <a name="module_overledger-search.OverledgerSearch+getTransactionType"></a>
 
@@ -746,10 +830,32 @@ Get block by DLT and hash
 
 | Name | Type | Description |
 | --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+| address | <code>string</code> | The address |
+
+<a name="Account"></a>
+
+## Account
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
 | privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
 | address | <code>string</code> | The address or public key of the account, used for receiving messages. |
 
 An Overledger Account instance for a single DLT.
+
+<a name="APICallWrapper"></a>
+
+## APICallWrapper
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The unique multi-chain application ID received from the Overledger Developer Portal. |
+| dltData | [<code>Array.&lt;SignedTransactionRequest&gt;</code>](#SignedTransactionRequest) \| [<code>Array.&lt;SequenceDataRequest&gt;</code>](#SequenceDataRequest) | The dlt data to be sent to Overledger |
+
+A wrapper object for the dlt data to be sent to Overledger.
 
 <a name="DLTAndAddress"></a>
 
@@ -761,7 +867,7 @@ An Overledger Account instance for a single DLT.
 | dlt | <code>string</code> | The distributed ledger technology. |
 | address | <code>string</code> | The address on the respective dlt network. |
 
-DLT and Address pair
+DLT and Address pair.
 
 <a name="DLTOptions"></a>
 
@@ -773,12 +879,59 @@ DLT and Address pair
 | dlt | <code>string</code> | The distributed ledger technology. |
 | [privateKey] | <code>string</code> | The private key of an account for the respecitve dlt. |
 
-Options for loading a DLT in the SDK
+Options for loading a DLT in the SDK.
 
 <a name="NetworkOptions"></a>
 
 ## NetworkOptions
-Overledger network options
+Overledger network options.
+
+<a name="Options"></a>
+
+## Options
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| [privateKey] | <code>string</code> | The private key of the user account. |
+
+Options for instantiating the SDK.
+
+<a name="OverledgerSignedTransaction"></a>
+
+## OverledgerSignedTransaction
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| transactions | <code>Array.&lt;string&gt;</code> | The signed transaction blobs. |
+| signatures | <code>Array.&lt;string&gt;</code> | The signasture blobs. |
+
+Overledger signed transaction data.
+
+<a name="ProviderOptions"></a>
+
+## ProviderOptions
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| [network] | [<code>NetworkOptions</code>](#NetworkOptions) | The network, either testnet, mainnet or custom. |
+| [timeout] | <code>number</code> | Request timeout period specified in milliseconds. |
+
+Overledger network provider options.
+
+<a name="SDKOptions"></a>
+
+## SDKOptions
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlts | [<code>Array.&lt;DLTOptions&gt;</code>](#DLTOptions) | The dlts to be loaded. |
+| [provider] | [<code>ProviderOptions</code>](#ProviderOptions) | The network provider options. |
+
+Overledger SDK options.
 
 <a name="SequenceDataRequest"></a>
 
@@ -788,9 +941,9 @@ Overledger network options
 | Name | Type | Description |
 | --- | --- | --- |
 | dlt | <code>string</code> | The distributed ledger technology. |
-| address- | <code>string</code> | The address to search for. |
+| address | <code>string</code> | The address to search for. |
 
-Overledger sequence request
+Overledger sequence request.
 
 <a name="SequenceDataResponse"></a>
 
@@ -803,7 +956,21 @@ Overledger sequence request
 | address | <code>string</code> | The address the request was made for. |
 | sequence | <code>number</code> | The sequence number for the respective address. |
 
-Overledger sequence data response
+Overledger sequence data response.
+
+<a name="SignedTransactionRequest"></a>
+
+## SignedTransactionRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| fromAddress | <code>string</code> | The address initiating the transaction. |
+| amount | <code>string</code> | The token amount in the lowest unit for the respective DLT. |
+| signedTransaction | [<code>OverledgerSignedTransaction</code>](#OverledgerSignedTransaction) | The signed transaction object. |
+
+Overledger signed transaction request object.
 
 <a name="TransactionOptions"></a>
 
@@ -816,4 +983,18 @@ Overledger sequence data response
 | amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
 
 DLT transaction options.
+
+<a name="UnsignedData"></a>
+
+## UnsignedData
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The DLT used for this transaction. |
+| toAddress | <code>string</code> | The recipient for this transaction. |
+| message | <code>string</code> | The transaction message. |
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | The specific transaction options. |
+
+Unsigned transaction data.
 
