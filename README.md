@@ -37,7 +37,7 @@ Alternatively, the suite of packages allows developers to chose which blockchain
 
 ```
 npm install @quantnetwork/overledger-core
-npm install @quantnetwork/overledger-ethereum
+npm install @quantnetwork/overledger-dlt-ethereum
 ```
 
 Or, if you prefer using [yarn](https://yarnpkg.com/):
