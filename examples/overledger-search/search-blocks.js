@@ -11,7 +11,7 @@ const bpiKey = 'bpikeytest';
 // includes what block the transaction is included in
 const ethereumBlockNumber = '1000000';
 const rippleBlockNumber = '1000001';
-const bitcoinBlockNumber = '1000002';
+//const bitcoinBlockNumber = '1000002';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
