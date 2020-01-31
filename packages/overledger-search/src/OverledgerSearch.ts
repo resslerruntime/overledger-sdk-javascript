@@ -82,68 +82,15 @@ class OverledgerSearch {
       return e.response;
     }
   }
-/*
-  queryContract(dlt: string, fromAddress: string, contractAddress: string, functionName: string, inputValues: [ReadSmartContractInputValue], outputTypes: [ReadSmartContractOutputType]): AxiosPromise {
+
+
+  smartContractQuery(dlt: string, contractQueryDetails: Object): AxiosPromise {
     try {
-      const data = {
-        fromAddress,
-        contractAddress,
-        funcName: functionName,
-        inputValues: this.computeInputValuesList(inputValues),
-        outputTypes: this.computeOutputTypesList(outputTypes)
-      }
-      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(data));
+      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(contractQueryDetails));
     } catch (e) {
       return e.response;
     }
   }
 
-  computeInputValuesList(inputFunctionParams: [ReadSmartContractInputValue]) {
-    const inputValues = inputFunctionParams.reduce((inputParams, p) => {
-      const paramType = computeParamType(p);
-      inputParams.push(<ContractInputArgument>{type: paramType, value: p.value});
-      return inputParams;
-    }, []);
-    return inputValues;
-  }
-
-  computeOutputTypesList(outputFunctionTypes: [ReadSmartContractOutputType]) {
-    const outputTypes = outputFunctionTypes.reduce((outputTypes, p) => {
-      const paramType = computeParamType(p);
-      outputTypes.push(<ContractTypeOutput>{type: paramType});
-      return outputTypes;
-    }, []);
-    return outputTypes;
-  }
-
-}
-
-/*export interface IContractQueryRequestDto {
-  fromAddress: string,
-  contractAddress: string,
-  funcName: string,
-  inputValues?: [ContractInputArgument],
-  outputTypes?: [ContractTypeOutput],
-}
-
-export interface ReadSmartContractInputValue {
-  type: TypeOptions;
-  value: string;
-  extraFields: Object
-}
-
-export interface ReadSmartContractOutputType {
-  type: TypeOptions;
-  extraFields: Object
-}
-
-interface ContractInputArgument {
-  type: string;
-  value: string;
-}
-
-interface ContractTypeOutput {
-  type: string;
-}*/
 }
 export default OverledgerSearch;

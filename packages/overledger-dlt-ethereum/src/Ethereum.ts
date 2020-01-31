@@ -8,6 +8,10 @@ import TransactionEthereumRequest from './DLTSpecificTypes/TransactionEthereumRe
 import SCEthereumParam from './DLTSpecificTypes/SCEthereumParam';
 import SmartContractEthereum from './DLTSpecificTypes/SmartContractEthereum';
 import computeParamType from './DLTSpecificTypes/ParamType';
+import SCQueryParams from './DLTSpecificTypes/SCQueryParams';
+import {AxiosPromise } from 'axios';
+import SCQueryInputValue from './DLTSpecificTypes/SCQueryInputValue';
+import SCQueryOutputValue from './DLTSpecificTypes/SCQueryOutputValue';
 
 /**
  * @memberof module:overledger-dlt-ethereum
@@ -213,7 +217,52 @@ class Ethereum extends AbstractDLT {
     });
   }
 
+  buildSmartContractQuery(contractQueryDetails: SCQueryParams): Object {
+    try {
+      const data = {
+        fromAddress: contractQueryDetails.fromAddress,
+        contractAddress: contractQueryDetails.contractAddress,
+        funcName: contractQueryDetails.functionName,
+        inputValues: this.computeInputValuesList(contractQueryDetails.inputValues),
+        outputTypes: this.computeOutputTypesList(contractQueryDetails.outputTypes)
+      }
+      return {success: true, response: data};
+    } catch (e) {
+      return {success: false, response: e.response};
+    }
+  }
+  
+  computeInputValuesList(inputFunctionParams: SCQueryInputValue[]) {
+    const inputValues = inputFunctionParams.reduce((inputParams, p) => {
+      const paramType = computeParamType(p);
+      inputParams.push(<QueryInput>{type: paramType, value: p.value});
+      return inputParams;
+    }, []);
+    return inputValues;
+  }
+  
+  computeOutputTypesList(outputFunctionTypes: SCQueryOutputValue[]) {
+    const outputTypes = outputFunctionTypes.reduce((outputTypes, p) => {
+      const paramType = computeParamType(p);
+      outputTypes.push(<QueryOutput>{type: paramType});
+      return outputTypes;
+    }, []);
+    return outputTypes;
+  }
+
 }
+
+
+
+interface QueryInput {
+  type: string;
+  value: string;
+}
+
+interface QueryOutput {
+  type: string;
+}
+
 
 
 export type Transaction = {

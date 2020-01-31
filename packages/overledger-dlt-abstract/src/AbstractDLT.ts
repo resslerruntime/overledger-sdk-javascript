@@ -21,12 +21,6 @@ abstract class AbstractDLT {
   }
 
   /**
-   * @typedef {Object} Account
-   * @property {string} privateKey The privateKey
-   * @property {string} address The address
-   */
-
-  /**
    * Create an account for a specific DLT
    *
    * @return {Account}
@@ -90,14 +84,17 @@ abstract class AbstractDLT {
     return this.sdk.send([this.buildSignedTransactionsApiCall(signedTransaction)]);
   }
 
-  /**
-   * Internal method to sign a transaction for the DLT
-   *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
-   */
+   /**
+    * Internal method to sign a transaction for the DLT
+    * @param thisTransaction 
+    */
   abstract _sign(thisTransaction: TransactionRequest): Promise<string>;
+
+  /**
+   * Allows a smart contract to be queried.
+   * @param contractQueryDetails - The details on the query
+   */
+  abstract buildSmartContractQuery(contractQueryDetails: Object): Object;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields
