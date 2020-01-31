@@ -1,5 +1,4 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
-import { TypeOptions, BytesBOptions, UintIntBOptions, computeParamType } from '@quantnetwork/overledger-types';
 
 /**
  * @memberof module:overledger-search
@@ -83,7 +82,7 @@ class OverledgerSearch {
       return e.response;
     }
   }
-
+/*
   queryContract(dlt: string, fromAddress: string, contractAddress: string, functionName: string, inputValues: [ReadSmartContractInputValue], outputTypes: [ReadSmartContractOutputType]): AxiosPromise {
     try {
       const data = {
@@ -119,25 +118,23 @@ class OverledgerSearch {
 
 }
 
-export interface IContractQueryRequestDto {
-  fromAddress: string;
-  contractAddress: string;
-  funcName: string;
-  inputValues?: [ContractInputArgument];
-  outputTypes?: [ContractTypeOutput];
+/*export interface IContractQueryRequestDto {
+  fromAddress: string,
+  contractAddress: string,
+  funcName: string,
+  inputValues?: [ContractInputArgument],
+  outputTypes?: [ContractTypeOutput],
 }
 
 export interface ReadSmartContractInputValue {
   type: TypeOptions;
-  uintIntBValue?: UintIntBOptions;
-  bytesBValue?: BytesBOptions;
   value: string;
+  extraFields: Object
 }
 
 export interface ReadSmartContractOutputType {
   type: TypeOptions;
-  uintIntBValue: UintIntBOptions;
-  bytesBValue?: BytesBOptions;
+  extraFields: Object
 }
 
 interface ContractInputArgument {
@@ -147,6 +144,6 @@ interface ContractInputArgument {
 
 interface ContractTypeOutput {
   type: string;
+}*/
 }
-
 export default OverledgerSearch;

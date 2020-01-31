@@ -1,4 +1,4 @@
-import { TransactionOptions, SignedTransactionRequest, Account, TransactionTypeOptions} from '@quantnetwork/overledger-types';
+import {TransactionRequest, SignedTransactionRequest, Account } from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -73,11 +73,12 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  public sign(toAddress: string, message: string, options: TransactionOptions, transactionType?: TransactionTypeOptions): Promise<string> {
+  public sign(thisTransaction: TransactionRequest): Promise<string> {
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
     }
-    return this._sign(toAddress, message, options, transactionType);
+
+    return this._sign(thisTransaction);
   }
 
   /**
@@ -96,7 +97,7 @@ abstract class AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  abstract _sign(toAddress: string, message: string, options?: TransactionOptions, TransactionType?: TransactionTypeOptions): Promise<string>;
+  abstract _sign(thisTransaction: TransactionRequest): Promise<string>;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields
@@ -109,16 +110,10 @@ abstract class AbstractDLT {
     return {
       dlt: stx.dlt,
       fromAddress: stx.fromAddress,
-      amount: stx.amount,
+      //amount: stx.amount,
       signedTransaction: stx.signedTransaction,
     };
   }
-}
-
-export enum DltNames {
-  xrp = "ripple",
-  ethereum = "ethereum",
-  bitcoin = "bitcoin"
 }
 
 export default AbstractDLT;

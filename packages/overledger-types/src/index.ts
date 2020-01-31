@@ -16,16 +16,20 @@ import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
 import UnsignedData from './UnsignedData';
 import TransactionOptions from './TransactionOptions';
-import TransactionTypeOptions from './TransactionTypeOptions';
-import TypeOptions from './TypeOptions';
-import UintIntBOptions from './UintIntBOptions';
-import BytesBOptions from './BytesBOptions';
-import computeParamType from './ParamType';
-import PayableOptions from './PayableOptions';
-import SCFunctionalityOptions from './SCFunctionalityOptions';
-import SCFunctionTypeOptions from './SCFunctionTypeOptions';
-import SCParameterOptions from './SCParameterOptions';
-
+import SmartContract from './SmartContract';
+import TransactionAccountsRequest from './TransactionAccountsRequest';
+import TransactionAccountsResponse from './TransactionAccountsResponse';
+import TransactionInput from './TransactionInput';
+import TransactionOutput from './TransactionOutput';
+import TransactionRequest from './TransactionRequest';
+import TransactionResponse from './TransactionResponse';
+import TransactionUtxoRequest from './TransactionUtxoRequest';
+import TransactionUtxoResponse from './TransactionUtxoResponse';
+import TransactionTypeOptions from './associatedEnums/TransactionTypeOptions';
+import TransactionSubTypeOptions from './associatedEnums/TransactionSubTypeOptions';
+import SCFunctionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
+import SCFunctionDefinition from './SCFunctionDefinition';
+import SCFunctionParam from './SCFunctionParam';
 /**
  * Types used by the Overledger SDK packages.
  */
@@ -44,13 +48,18 @@ export {
   SignedTransactionRequest,
   UnsignedData,
   TransactionOptions,
+  SmartContract,
+  TransactionAccountsRequest,
+  TransactionAccountsResponse,
+  TransactionInput,
+  TransactionOutput,
+  TransactionRequest,
+  TransactionResponse,
+  TransactionUtxoRequest,
+  TransactionUtxoResponse,
   TransactionTypeOptions,
-  TypeOptions,
-  UintIntBOptions,
-  BytesBOptions,
-  computeParamType,
-  PayableOptions,
-  SCFunctionalityOptions,
+  TransactionSubTypeOptions,
   SCFunctionTypeOptions,
-  SCParameterOptions
+  SCFunctionDefinition,
+  SCFunctionParam
 };

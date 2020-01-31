@@ -1,4 +1,5 @@
 import TransactionOptions from './TransactionOptions';
+import TransactionTypeOptions from './associatedEnums/TransactionTypeOptions';
 
 /**
  * Unsigned transaction data.
@@ -18,12 +19,6 @@ type UnsignedData = {
   message: string,
   options: TransactionOptions,
   transactionType?: TransactionTypeOptions
-};
-
-export enum TransactionTypeOptions {
-  valueTransfer = "VALUE_TRANSFER",
-  smartContractDeploy = "SMART_CONTRACT_DEPLOY",
-  smartContractInvocation = "SMART_CONTRACT_INVOCATION"
 };
 
 export default UnsignedData;

@@ -2,9 +2,10 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Account, Options, TransactionOptions as BaseTransactionOptions } from '@quantnetwork/overledger-types';
+import { Account, Options, TransactionRequest } from '@quantnetwork/overledger-types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
+import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
 
 /**
  * @memberof module:overledger-dlt-ripple
@@ -78,29 +79,29 @@ class Ripple extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
-    if (typeof options === 'undefined') {
+  buildTransaction(thisTransaction: TransactionXRPRequest): Transaction {
+    if (typeof thisTransaction.extraFields === 'undefined') {   
       throw new Error('Transaction options must be defined.');
     }
 
-    if (typeof options.amount === 'undefined') {
-      throw new Error('options.amount must be set up');
+    if (typeof thisTransaction.amount === 'undefined') {
+      throw new Error('A transaction.amount must be given');
     }
 
-    if (typeof options.feePrice === 'undefined') {
-      throw new Error('options.feePrice must be set up');
+    if (typeof thisTransaction.extraFields.feePrice === 'undefined') {
+      throw new Error('A transaction.extraFields.feePrice must be given');
     }
 
-    if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be set up');
+    if (typeof thisTransaction.sequence === 'undefined') {
+      throw new Error('A transaction.sequence must be given');
     }
 
-    if (typeof options.maxLedgerVersion === 'undefined') {
-      throw new Error('options.maxLedgerVersion must be set up');
+    if (typeof thisTransaction.extraFields.maxLedgerVersion === 'undefined') {
+      throw new Error('A transactions.extraFields.maxLedgerVersion must be set up');
     }
-    const maxLedgerVersion = Number(options.maxLedgerVersion);
-    const amountInXRP = dropsToXrp(options.amount);
-    const feeInXRP = dropsToXrp(options.feePrice);
+    const maxLedgerVersion = Number(thisTransaction.extraFields.maxLedgerVersion);
+    const amountInXRP = dropsToXrp(thisTransaction.amount.toString());
+    const feeInXRP = dropsToXrp(thisTransaction.extraFields.feePrice);
 
     const address = this.account.address;
     const payment = {
@@ -112,19 +113,19 @@ class Ripple extends AbstractDLT {
         },
       },
       destination: {
-        address: toAddress,
+        address: thisTransaction.toAddress,
         minAmount: {
           value: amountInXRP,
           currency: 'XRP',
         },
       },
       memos: [{
-        data: message,
+        data: thisTransaction.message,
       }],
     };
     const instructions = {
       maxLedgerVersion,
-      sequence: options.sequence,
+      sequence: thisTransaction.sequence,
       fee: feeInXRP,
     };
 
@@ -138,8 +139,9 @@ class Ripple extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    */
-  _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
-    const built = this.buildTransaction(toAddress, message, options);
+  _sign(thisTransaction: TransactionRequest): Promise<string> {
+    
+    const built = this.buildTransaction(<TransactionXRPRequest>thisTransaction);
 
     return this.rippleAPI.preparePayment(built.address, built.payment, built.instructions)
       .then(
@@ -154,10 +156,6 @@ export type Transaction = {
   instructions?: Instructions,
 };
 
-interface TransactionOptions extends BaseTransactionOptions {
-  feePrice: string;
-  maxLedgerVersion: string;
-  amount: string;
-}
+
 
 export default Ripple;

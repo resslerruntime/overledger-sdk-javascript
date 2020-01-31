@@ -1,6 +1,6 @@
 /**
  * DLT transaction options.
- * @typedef {Object} TransactionOptions
+ * @typedef {Object} extraFields
  * @property {number=} sequence - This transaction's sequence in relation to the initiating account.
  * @property {string} amount - The amount of tokens in the lowest unit available on the DLT.
  */
@@ -8,9 +8,9 @@
 /**
  * @memberof module:overledger-types
  */
-type TransactionOptions = {
-  sequence?: number,
-  amount: string,
+type extraFields = {
+  fee?: number
+  //any other standards
 };
 
-export default TransactionOptions;
+export default extraFields;
