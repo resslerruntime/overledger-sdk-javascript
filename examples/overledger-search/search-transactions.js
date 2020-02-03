@@ -1,6 +1,6 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
-const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -10,8 +10,8 @@ const mappId = 'network.quant.software';
 const bpiKey = 'bpikeytest';
 
 // After creating a transaction from a file in the a-to-b-transaction, you can put the transaction hash here to query its details
-const rippleTransactionHash = '170D6BC2A823B1B8042CD9A613E94F6D9F408B88E01C8BAE8ABA21011C7DCC8F';
-
+const ethereumTransactionHash = '0x77d2f7f2413f465c85a2af8f62f44cad1c98d494d03800fa30b569c7391b12a4';
+const rippleTransactionHash = '67D7AA9D1A0273E3FDB8264D78476571C3D3CDD5C9E5FA12DD0E7C990EC88620';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -20,16 +20,19 @@ const rippleTransactionHash = '170D6BC2A823B1B8042CD9A613E94F6D9F408B88E01C8BAE8
     try {
         //connect to overledger and choose the XRP distributed ledger:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: DltNames.xrp }],
+            dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
         //get details on the transaction
+        const ethereumTransaction = await overledger.search.getTransaction(ethereumTransactionHash);
         const rippleTransaction = await overledger.search.getTransaction(rippleTransactionHash);
 
-        console.log('XRP transaction: ', rippleTransaction.data);
+        console.log('Ethereum transaction: ', ethereumTransaction.data);
+        console.log('\n');
+        console.log('Ripple transaction: ', rippleTransaction.data);
         console.log('\n');
     } catch (e) {
-        console.error('error', e.response.data);
+        console.error('error', e);
     }
 })();

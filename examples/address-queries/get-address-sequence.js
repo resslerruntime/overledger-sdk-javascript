@@ -1,14 +1,15 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
-const ethereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
-const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
+const ethereumAddress = '0xb5edb7f5F4e8133E90c2DEcF16cbeCD72C39621F';
+const rippleAddress = 'rMQbAYHCjRsb6TT58ujn4o2jTfXdF2fQdx';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -17,7 +18,7 @@ const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
@@ -30,6 +31,6 @@ const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
         console.log('\n');
 
     } catch (e) {
-        console.error('error', e.response.data);
+        console.error('error', e);
     }
 })();

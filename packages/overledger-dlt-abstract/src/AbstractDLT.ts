@@ -1,4 +1,4 @@
-import {TransactionRequest, SignedTransactionRequest, Account } from '@quantnetwork/overledger-types';
+import {TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions, TransactionAccountsRequest , TransactionUtxoRequest} from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -65,12 +65,44 @@ abstract class AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
    */
   public sign(thisTransaction: TransactionRequest): Promise<string> {
+    
+    //input validation for the user account then a generic transaction
     if (!this.account) {
       throw new Error(`The ${this.name} account must be set up`);
+    } else if (thisTransaction.dlt === null) {
+      throw new Error(`All transactions must have a dlt field`);
+    } else if (thisTransaction.type === null) {
+      throw new Error(`All transactions must have a type field`);
+    } else if (thisTransaction.subType === null) {
+      throw new Error(`All transactions must have a subType field`);
+    } else if ((thisTransaction.message === 'undefined')||(thisTransaction.message == null)) {
+      throw new Error(`All transactions must have a message field. If no message is required, assign message to the empty string, i.e. message: ""`);
     }
+
+    //now input validation on a generic accounts-based transaction or utxo-based transaction
+    if (thisTransaction.type == TransactionTypeOptions.accounts){
+
+      let thisAccountsTx = <TransactionAccountsRequest> thisTransaction;
+      if ((thisAccountsTx.fromAddress == "")||(thisAccountsTx.fromAddress == null)||(thisAccountsTx.fromAddress === 'undefined')){
+        throw new Error(`All transactions for accounts distributed ledgers must have the fromAddress field`);      
+      } else if ((thisAccountsTx.toAddress == null)||(thisAccountsTx.toAddress === 'undefined')){
+        throw new Error(`All transactions for accounts distributed ledgers must have the toAddress field. If you do not want to set a toAddress (maybe you are creating an on-chain smart contract?), assign toAddress to the empty string, i.e. toAddress = ""`);      
+      } else if ((thisAccountsTx.sequence == null)){
+        throw new Error(`All transactions for accounts distributed ledgers must have the sequence field as a number`);      
+      }
+
+    } else if (thisTransaction.type == TransactionTypeOptions.utxo){
+      
+      let thisUtxoTx = <TransactionUtxoRequest> thisTransaction;
+      if (thisUtxoTx.txInputs == null){
+        throw new Error(`All transactions for utxo distributed ledgers must have the txInputs field`);      
+      } else if (thisUtxoTx.txOutputs == null){
+        throw new Error(`All transactions for utxo distributed ledgers must have the txOutputs field`);      
+      }
+    }
+
 
     return this._sign(thisTransaction);
   }

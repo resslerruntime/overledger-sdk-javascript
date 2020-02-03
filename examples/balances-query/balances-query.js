@@ -1,5 +1,6 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -17,17 +18,17 @@ const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
-            provider: { network: 'testnet' },
+          dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+          provider: { network: 'testnet' },
         });
 
         const array = [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ethereum,
             address: ethereumAddress,
           },
           {
-            dlt: 'ripple',
+            dlt: DltNameOptions.xrp,
             address: rippleAddress,
           },
         ];

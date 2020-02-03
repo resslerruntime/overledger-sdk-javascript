@@ -1,7 +1,8 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
-const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
-const TransactionTypeOptions = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').TransactionTypeOptions;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionSubTypeOptions = require('@quantnetwork/overledger-types').TransactionSubTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -28,7 +29,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
     });
 
@@ -49,33 +50,42 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
     const signedTransactions = await overledger.sign([
     {
       // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
-      dlt: DltNames.ethereum,
-      toAddress: partyBEthereumAddress,
-      transactionType: TransactionTypeOptions.valueTransfer,
+      //from TransactionRequest:
+      dlt: DltNameOptions.ethereum,
+      type: TransactionTypeOptions.accounts,
+      subType: TransactionSubTypeOptions.valueTransfer,
       message: transactionMessage,
-      options: {
-        amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
-        sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
-        feePrice: '8000000000', // Price for each individual gas unit this transaction will consume
-        feeLimit: '80000', // The maximum fee that this transaction will use
+      //from TransactionAccountsRequest:
+      fromAddress: partyAEthereumAddress,
+      toAddress: partyBEthereumAddress,
+      sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
+      extraFields: {
+        //from TransactionEthereumRequest:
+        compUnitPrice: '8000000000', // Price for each individual gas unit this transaction will consume
+        compLimit: '80000', // The maximum fee that this transaction will use
       },
     },
     {
       // In order to prepare a ripple transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
-      dlt: DltNames.xrp,
-      toAddress: partyBRippleAddress,
+      //from TransactionRequest:
+      dlt: DltNameOptions.xrp,
+      type: TransactionTypeOptions.accounts,
+      subType: TransactionTypeOptions.valueTransfer,
       message: transactionMessage,
-      transactionType: TransactionTypeOptions.valueTransfer,
-      options: {
-        amount: '1', // Minimum allowed amount of drops is 1.
-        sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
+      //from TransactionAccountsRequest:
+      fromAddress: partyARippleAddress,
+      toAddress: partyBRippleAddress,
+      sequence: rippleAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '1', // Minimum allowed amount of drops is 1.      
+      extraFields: {
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       },
     },]);
 
     //console.log("Signed transactions: ");
-    //console.log(JSON.stringify(signedTransactions, null, 2));
+    console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
     const result = (await overledger.send(signedTransactions)).data;

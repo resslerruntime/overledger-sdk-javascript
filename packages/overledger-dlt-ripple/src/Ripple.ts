@@ -77,7 +77,6 @@ class Ripple extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
    */
   buildTransaction(thisTransaction: TransactionXRPRequest): Transaction {
     if (typeof thisTransaction.extraFields === 'undefined') {   
@@ -137,18 +136,32 @@ class Ripple extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
     
-    const built = this.buildTransaction(<TransactionXRPRequest>thisTransaction);
+    //now input validation on an XRP transaction
+    let thisXRPTx = <TransactionXRPRequest> thisTransaction;
+    if ((thisXRPTx.extraFields.feePrice == "")||(thisXRPTx.extraFields.feePrice == null)||(thisXRPTx.extraFields.feePrice === 'undefined')){
+      throw new Error(`All transactions for XRP must have the extraFields.feePrice field set`);      
+    } else if ((thisXRPTx.extraFields.maxLedgerVersion == "")||(thisXRPTx.extraFields.maxLedgerVersion == null)||(thisXRPTx.extraFields.maxLedgerVersion === 'undefined')){
+      throw new Error(`All transactions for XRP must have the extraFields.maxLedgerVersion field set`);      
+    }
+
+    const built = this.buildTransaction(thisXRPTx);
 
     return this.rippleAPI.preparePayment(built.address, built.payment, built.instructions)
       .then(
         prepared => this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction,
       );
   }
+
+  buildSmartContractQuery(contractQueryDetails: Object): Object {
+
+    return {success: false, response: contractQueryDetails};
+  }
+
 }
+
 
 export type Transaction = {
   address: string,

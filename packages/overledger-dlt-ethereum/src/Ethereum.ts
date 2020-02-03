@@ -9,7 +9,6 @@ import SCEthereumParam from './DLTSpecificTypes/SCEthereumParam';
 import SmartContractEthereum from './DLTSpecificTypes/SmartContractEthereum';
 import computeParamType from './DLTSpecificTypes/ParamType';
 import SCQueryParams from './DLTSpecificTypes/SCQueryParams';
-import {AxiosPromise } from 'axios';
 import SCQueryInputValue from './DLTSpecificTypes/SCQueryInputValue';
 import SCQueryOutputValue from './DLTSpecificTypes/SCQueryOutputValue';
 
@@ -77,7 +76,6 @@ class Ethereum extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
    */
   buildTransaction(thisTransaction: TransactionEthereumRequest): Transaction {
     let ethereumSC = <SmartContractEthereum>thisTransaction.smartContract; //recasting for extra fields
@@ -200,11 +198,18 @@ class Ethereum extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
-    const transaction = this.buildTransaction(<TransactionEthereumRequest>thisTransaction);
+    //now input validation on an Ethereum transaction
+    let thisEthereumTx = <TransactionEthereumRequest> thisTransaction;
+    if ((thisEthereumTx.extraFields.compLimit == "")||(thisEthereumTx.extraFields.compLimit == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
+      throw new Error(`All transactions for Ethereum must have the extraFields.compLimit field set`);      
+    } else if ((thisEthereumTx.extraFields.compUnitPrice == "")||(thisEthereumTx.extraFields.compUnitPrice == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
+      throw new Error(`All transactions for Ethereum must have the extraFields.compUnitPrice field set`);      
+    }
+
+    const transaction = this.buildTransaction(thisEthereumTx);
 
     return new Promise((resolve, reject) => {
       this.account.signTransaction(transaction, (err, data) => {

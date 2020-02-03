@@ -15,8 +15,8 @@ import SCFunctionDefinition from "./SCFunctionDefinition";
  * @memberof module:overledger-types
  */
 type SmartContract = {
-    id: string,
     code: string,
+    id?: string,
     interface?: SCFunctionDefinition[],
     functionCall?: SCFunctionDefinition[],
     extraFields?: Object

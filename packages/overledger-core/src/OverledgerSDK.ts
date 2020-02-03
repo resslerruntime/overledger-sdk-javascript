@@ -94,8 +94,6 @@ class OverledgerSDK {
   /**
    * Sign the provided transactions
    *
-   * @param {UnsignedData[]} unsignedData Array of unsigned data
-   *
    * @return {SignedTransactionRequest[]} Array of signed transaction requests wrapped by Overledger metadata
    */
   public async sign(unsignedData: TransactionRequest[]): Promise<SignedTransactionRequest[]> {
@@ -128,6 +126,7 @@ class OverledgerSDK {
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
+
 
   /**
    * Get the balances of the specified addresses

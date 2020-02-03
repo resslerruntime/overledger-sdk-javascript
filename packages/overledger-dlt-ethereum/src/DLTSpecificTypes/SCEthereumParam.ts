@@ -4,10 +4,8 @@ import UintIntBOptions from './associatedEnums/UintIntBOptions';
 import {SCFunctionParam} from '@quantnetwork/overledger-types';
 
 interface SCEthereumParam extends SCFunctionParam {
-    type: {value: TypeOptions};
-    value: {value: string};
-    uintIntBValue?: UintIntBOptions;
-    bytesBValue?: BytesBOptions;
+    type: {selectedType: TypeOptions, selectedIntegerLength?: UintIntBOptions, selectedBytesLength?: BytesBOptions};
+    value: Object;
     name?: string;
   }
 

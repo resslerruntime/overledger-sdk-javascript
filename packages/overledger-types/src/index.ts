@@ -14,8 +14,6 @@ import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
-import UnsignedData from './UnsignedData';
-import TransactionOptions from './TransactionOptions';
 import SmartContract from './SmartContract';
 import TransactionAccountsRequest from './TransactionAccountsRequest';
 import TransactionAccountsResponse from './TransactionAccountsResponse';
@@ -30,36 +28,38 @@ import TransactionSubTypeOptions from './associatedEnums/TransactionSubTypeOptio
 import SCFunctionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
 import SCFunctionDefinition from './SCFunctionDefinition';
 import SCFunctionParam from './SCFunctionParam';
+import InteropSCFunctionOptions from './InteropSCFunctionOptions';
+import DltNameOptions from './associatedEnums/DltNameOptions';
 /**
  * Types used by the Overledger SDK packages.
  */
 export {
-  Account,
-  APICallWrapper,
-  DLTAndAddress,
-  DLTOptions,
-  NetworkOptions,
-  Options,
-  ProviderOptions,
-  SDKOptions,
-  SequenceDataRequest,
-  SequenceDataResponse,
+  Account, 
+  APICallWrapper, 
+  DLTAndAddress, 
+  DLTOptions, 
+  NetworkOptions, 
+  Options, 
+  ProviderOptions, 
+  SDKOptions, 
+  SequenceDataRequest, 
+  SequenceDataResponse, 
   OverledgerSignedTransaction,
   SignedTransactionRequest,
-  UnsignedData,
-  TransactionOptions,
-  SmartContract,
-  TransactionAccountsRequest,
-  TransactionAccountsResponse,
+  SmartContract, 
+  TransactionAccountsRequest, 
+  TransactionAccountsResponse, 
   TransactionInput,
   TransactionOutput,
-  TransactionRequest,
-  TransactionResponse,
-  TransactionUtxoRequest,
-  TransactionUtxoResponse,
+  TransactionRequest, 
+  TransactionResponse, 
+  TransactionUtxoRequest, 
+  TransactionUtxoResponse, 
   TransactionTypeOptions,
-  TransactionSubTypeOptions,
-  SCFunctionTypeOptions,
-  SCFunctionDefinition,
-  SCFunctionParam
+  TransactionSubTypeOptions, 
+  SCFunctionTypeOptions, 
+  SCFunctionDefinition, 
+  SCFunctionParam, 
+  InteropSCFunctionOptions,
+  DltNameOptions
 };

@@ -15,6 +15,7 @@
  */
 type SCFunctionParam = {
     type: object,
+    name?: string,
     value?: object,
     options?: object
   };

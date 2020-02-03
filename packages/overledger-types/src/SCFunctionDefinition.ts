@@ -20,7 +20,7 @@ type SCFunctionDefinition = {
     newDLTxRequired?: boolean,
     code?: string,
     inputParams?: SCFunctionParam[],
-    outParams?: SCFunctionParam[]
+    outputParams?: SCFunctionParam[]
   };
   
   export default SCFunctionDefinition;
