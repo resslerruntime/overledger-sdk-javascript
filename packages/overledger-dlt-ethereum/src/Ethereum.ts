@@ -168,6 +168,7 @@ class Ethereum extends AbstractDLT {
   computeTransactionDataForConstructorWithParams(message: string, paramsList: SCEthereumParam[]): string {
     const typesAndValues = paramsList.reduce((paramsValues, p) => {
       const paramType = computeParamType(p);
+      console.log("paramType: " + paramType);
       paramsValues[0].push(paramType);
       paramsValues[1].push(p.value);
       return paramsValues;
