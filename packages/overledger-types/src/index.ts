@@ -26,9 +26,9 @@ import TransactionUtxoResponse from './TransactionUtxoResponse';
 import TransactionTypeOptions from './associatedEnums/TransactionTypeOptions';
 import TransactionSubTypeOptions from './associatedEnums/TransactionSubTypeOptions';
 import SCFunctionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
-import SCFunctionDefinition from './SCFunctionDefinition';
-import SCFunctionParam from './SCFunctionParam';
-import InteropSCFunctionOptions from './InteropSCFunctionOptions';
+import SCFunctionDefinition from './SmartContractFunctionDefinition';
+import SCFunctionParam from './SmartContractFunctionParam';
+import InteropSCFunctionOptions from './SmartContractInteropOptions';
 import DltNameOptions from './associatedEnums/DltNameOptions';
 /**
  * Types used by the Overledger SDK packages.

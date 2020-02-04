@@ -1,5 +1,9 @@
 
 /**
+ * The list of distributed ledger options to use.
+ * /
+
+/**
  * @memberof module:overledger-types
  */
 
@@ -12,7 +16,6 @@ export enum DltNameOptions {
     quorum = "quorum",
     stellar = "stellar",
     iota = "iota",
-    neo = "neo",
     other = "other"
 
 };

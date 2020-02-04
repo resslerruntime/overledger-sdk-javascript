@@ -5,17 +5,18 @@ import TransactionStatus from "./associatedEnums/TransactionStatusOptions";
 import TimeStampUnits from "./associatedEnums/TimeStampUnitsOptions";
 
 /**
- * A generic object used to describe a utxo or an account based transaction for a distributed ledger.
+ * A generic object used to describe an Overledger transaction response for any type of distributed ledger. 
  * @typedef {Object} TransactionResponse
- * @property {DltNames} distributedLedger - the distributed ledger this transaction is for
+ * @property {DltNames} dlt - the distributed ledger this transaction is for
  * @property {TransactionType} type - the type of distributed ledger this transaction is for
  * @property {TransactionSubType} subType - further details on the actions of this transaction
- * @property {number} amount - Is any value being transferred by this transaction
  * @property {string} message - is there any message (e.g. hash) to embed within this transaction (possibly for auditability purposes)
- * @property {number} identifier - the id (e.g. hash) of this transaction on the ledger
+ * @property {number} id - the id (e.g. hash) of this transaction on the ledger
  * @property {string} timestamp - the timestamp (e.g. confirmation time)
  * @property {TimeStampUnits} timestampUnit - the timestamp unit.
- * @property {Object} additionalFields - are there any distributed ledger specific fields required for building the transaction? Check the documentation for information on this 
+ * @property {TransactionStatus} status - the status of the transaction (e.g. broadcast, confirmed, etc)
+ * @property {string[]} signature - what are the signatures of the transaction
+ * @property {Object} additionalFields - are there any distributed ledger specific fields required for the transaction? Before a field is added here, the other objects that extend this one should be inspected to see if there is a parameter that is suitable embedded within them. Check the documentation for more information on this
  */
 
 /**
@@ -26,7 +27,7 @@ type TransactionResponse = {
     type: TransactionType,
     subType: TransactionSubType,
     message: string,
-    id: number,  
+    id: string,  
     timestamp: string,   
     timestampUnit: TimeStampUnits,  
     status: TransactionStatus,  

@@ -3,14 +3,13 @@ import TransactionType from "./associatedEnums/TransactionTypeOptions";
 import TransactionSubType from "./associatedEnums/TransactionSubTypeOptions";
 
 /**
- * A generic object used to denote the core features of building a utxo or an account based transaction for a distributed ledger.
+ * A generic object used to describe an Overledger transaction request for any type of distributed ledger. 
  * @typedef {Object} TransactionRequest
- * @property {DltNames} distributedLedger - the distributed ledger this transaction is for
- * @property {TransactionType} type - the type of distributed ledger this transaction is for
- * @property {TransactionSubType} subType - further details on the actions of this transaction
- * @property {number} amount - Is any value being transferred by this transaction
+ * @property {DltNames} dlt - the distributed ledger technology this transaction is for
+ * @property {TransactionType} type - the type of storage model this distributed ledger uses. Transactions for this distributed ledger will follow this format
+ * @property {TransactionSubType} subType - further details on the action this transaction is performing
  * @property {string} message - is there any message (e.g. hash) to embed within this transaction (possibly for auditability purposes)
- * @property {Object} additionalFields - are there any distributed ledger specific fields required for building the transaction? Check the documentation for information on this
+ * @property {Object} additionalFields - are there any distributed ledger specific fields required for building the transaction? Before adding a field here, inspect the objects that extend this one to see if there is a parameter that is suitable embedded within them. Check the documentation for more information on this
  */
 
 /**

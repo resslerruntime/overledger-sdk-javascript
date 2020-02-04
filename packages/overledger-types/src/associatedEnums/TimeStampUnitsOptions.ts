@@ -1,4 +1,8 @@
 /**
+ * The list of timestamp options. If other is chosen, make sure to clarify this in the additionFields section.
+ * /
+
+/**
  * @memberof module:overledger-types
  */
 

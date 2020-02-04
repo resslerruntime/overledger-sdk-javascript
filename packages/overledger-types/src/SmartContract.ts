@@ -1,14 +1,13 @@
-import SCFunctionDefinition from "./SCFunctionDefinition";
+import SCFunctionDefinition from "./SmartContractFunctionDefinition";
 
 /**
- * A smart contract object.
+ * A generic object to describe a smart contract.
  * @typedef {Object} SmartContract
- * @property {DltNames} distributedLedger - the distributed ledger this transaction is for
- * @property {TransactionType} type - the type of distributed ledger this transaction is for
- * @property {TransactionSubType} subType - further details on the actions of this transaction
- * @property {number} amount - Is any value being transferred by this transaction
- * @property {string} message - is there any message (e.g. hash) to embed within this transaction (possibly for auditability purposes)
- * @property {Object} additionalFields - are there any distributed ledger specific fields required for building the transaction? Check the documentation for information on this
+ * @property {string} code - the code of this smart contract
+ * @property {string} id - the identifier of this smart contract
+ * @property {SCFunctionDefinition[]} interface - the interface of this smart contract, defined one function at a time
+ * @property {SCFunctionDefinition[]} functionCall - information on what function of the smart contract to call, and with what parameters. Defined one function at a time
+ * @property {Object} additionalFields - are there any distributed ledger specific fields required to describe this smart contract? Before adding a field here, inspect the objects that extend this one to see if there is a parameter that is suitable embedded within them. Check the documentation for more information on this
  */
 
 /**

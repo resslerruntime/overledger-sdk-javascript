@@ -1,7 +1,7 @@
 /**
  * @memberof module:overledger-types
  */
-export enum InteropSCFunctionOptions {
+export enum SmartContractInteropOptions {
     escrowCreation = "escrow_create",
     escrowExecution = "escrow_execute",
     escrowCancellation = "escrow_cancel",
@@ -13,4 +13,4 @@ export enum InteropSCFunctionOptions {
     other = "other" 
   };
 
-export default InteropSCFunctionOptions;
+export default SmartContractInteropOptions;

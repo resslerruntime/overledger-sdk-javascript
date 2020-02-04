@@ -3,10 +3,10 @@ import TransactionInput from "./TransactionInput";
 import TransactionOutput from "./TransactionOutput";
 
 /**
- * Object used to build a transaction for utxo based distributed ledgers.
+ * A generic object used to describe an Overledger transaction request for utxo based distributed ledgers. 
  * @typedef {Object} TransactionUtxoRequest
- * @property {Object[]} txInputs - the inputs of this transaction
- * @property {Object[]} txOutputs - the outputs of this transaction
+ * @property {TransactionInput[]} txInputs - the inputs of this transaction
+ * @property {TransactionOutput[]} txOutputs - the outputs of this transaction
  */
 
 /**

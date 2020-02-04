@@ -1,5 +1,4 @@
-import functionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
-import SCFunctionParam from './SCFunctionParam';
+
 /**
  * A smart contract object.
  * @typedef {Object} SmartContract
@@ -14,14 +13,12 @@ import SCFunctionParam from './SCFunctionParam';
 /**
  * @memberof module:overledger-types
  */
-type SCFunctionDefinition = {
-    functionType: functionTypeOptions,
-    functionName: string,
-    newDLTxRequired?: boolean,
-    code?: string,
-    inputParams?: SCFunctionParam[],
-    outputParams?: SCFunctionParam[]
+type SmartContractFunctionParam = {
+    type: object,
+    name?: string,
+    value?: object,
+    options?: object
   };
   
-  export default SCFunctionDefinition;
+  export default SmartContractFunctionParam;
   

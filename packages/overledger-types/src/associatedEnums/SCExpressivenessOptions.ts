@@ -1,3 +1,6 @@
+/**
+ * The list of smart contract expressiveness options. If other is chosen, make sure to clarify this in the additionFields section.
+ * /
 
 /**
  * @memberof module:overledger-types
