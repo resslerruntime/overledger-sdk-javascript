@@ -1,7 +1,7 @@
 
 /**
- * The list of distributed ledger options to use.
- * /
+ * The list of distributed ledger options.
+ */
 
 /**
  * @memberof module:overledger-types

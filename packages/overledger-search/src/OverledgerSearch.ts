@@ -84,6 +84,11 @@ class OverledgerSearch {
   }
 
 
+  /**
+   * Query a smart contract 
+   * @param dlt - the distributed ledger that this smart contract is on
+   * @param contractQueryDetails - details on this smart contract query
+   */
   smartContractQuery(dlt: string, contractQueryDetails: Object): AxiosPromise {
     try {
       return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(contractQueryDetails));

@@ -119,7 +119,7 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
     console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
-    //const result = (await overledger.send(signedTransactions)).data;
+    const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
     console.log('OVL result:');

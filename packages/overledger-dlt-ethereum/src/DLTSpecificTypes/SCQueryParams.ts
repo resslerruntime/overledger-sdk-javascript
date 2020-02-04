@@ -1,13 +1,14 @@
-import SCQueryInputValue from './SCQueryInputValue';
-import SCQueryOutputValue from './SCQueryOutputValue';
+import SCEthereumParam from './SCEthereumParam';
 
-
+/**
+ * @memberof module:overledger-dlt-ethereum
+ */ 
 interface SCQueryParams {
     fromAddress: string,
     contractAddress: string,
     functionName: string,
-    inputValues: SCQueryInputValue[],
-    outputTypes: SCQueryOutputValue[],
+    inputValues: SCEthereumParam[],
+    outputTypes: SCEthereumParam[],
   }
 
 export default SCQueryParams;

@@ -126,14 +126,14 @@ abstract class AbstractDLT {
    * Allows a smart contract to be queried.
    * @param contractQueryDetails - The details on the query
    */
-  abstract buildSmartContractQuery(contractQueryDetails: Object): Object;
+  abstract buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): Object;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields
    *
    * @param {SignedTransactionRequest} signedTransaction
    *
-   * @return {ApiCall}
+   * @return {SignedTransactionRequest}
    */
   public buildSignedTransactionsApiCall(stx: SignedTransactionRequest): SignedTransactionRequest {
     return {

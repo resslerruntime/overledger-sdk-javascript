@@ -73,10 +73,9 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Build the transaction
-   *
-   * @param {string} toAddress
-   * @param {string} message
+   * Takes the Overledger definition of a transaction and converts it into a specific XRP transaction
+   * @param {TransactionXRPRequest} thisTransaction - details on the information to include in this transaction for the XRP distributed ledger
+   * @return {Transaction} the XRP transaction
    */
   buildTransaction(thisTransaction: TransactionXRPRequest): Transaction {
     if (typeof thisTransaction.extraFields === 'undefined') {   
@@ -132,10 +131,8 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Sign the transaction
-   *
-   * @param {string} toAddress
-   * @param {string} message
+   * Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+   * @param {TransactionRequest} thisTransaction - an instantiated overledger definition of an XRP transaction
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
     
@@ -155,9 +152,16 @@ class Ripple extends AbstractDLT {
       );
   }
 
-  buildSmartContractQuery(contractQueryDetails: Object): Object {
+  /**
+   * Allows a user to build a smart contract query for the XRP distributed ledger (currently not supported for XRP)
+   * @param {string} dltAddress - the user's XRP address
+   * @param {Object} contractQueryDetails - the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call.
+   *
+   * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
+   */
+  buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): Object {
 
-    return {success: false, response: contractQueryDetails};
+    return {success: false, response: dltAddress.toString() + contractQueryDetails.toString()};
   }
 
 }

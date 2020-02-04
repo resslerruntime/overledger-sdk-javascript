@@ -1,22 +1,19 @@
 import {TransactionAccountsRequest} from "@quantnetwork/overledger-types";
 
 /**
- * A generic object used to build a transaction for accounts based distributed ledgers. 
+* A generic object used to describe an Overledger transaction request for the Ethereum blockchain. Note that this object inherits many parameters from TransactionAccountsRequest.
  * @typedef {Object} TransactionAccountsRequest
- * @property {string} fromAddress - who is sending this transaction
- * @property {string} toAddress - where is this transaction being sent to. This property may not be used for deploying smart contracts onto some distributed ledgers - check documentation
- * @property {number} sequence - used to order transactions sent from this address. You should set the sequence to the next increment value
- * @property {string} asset - what asset are you transfering between users. No need to use if you are transferring the native asset of the distributed ledger (e.g. Eth on Ethereum) 
- * @property {Object} smartContract - information on what smart contract you want to deploy or invoke
+ * @property {string} compUnitPrice - the price to pay per gas unit (in wei)
+ * @property {string} compLimit - the maximum amount of gas units that this transaction can use, so maximum transaction price is: (compUnitPrice*compLimit)
  */
 
 /**
- * @memberof module:overledger-types
- */
+ * @memberof module:overledger-dlt-ethereum
+ */ 
 interface TransactionEthereumRequest extends TransactionAccountsRequest {
         extraFields: {
-            compLimit: string,
-            compUnitPrice: string
+            compUnitPrice: string,
+            compLimit: string
         }
   };
   

@@ -2,7 +2,7 @@ import TransactionRequest from "./TransactionRequest";
 import SmartContract from "./SmartContract";
 
 /**
- * A generic object used to describe an Overledger transaction request for accounts based distributed ledgers. 
+ * A generic object used to describe an Overledger transaction request for accounts based distributed ledgers. Note that this object inherits many parameters from TransactionRequest.
  * @typedef {Object} TransactionAccountsRequest
  * @property {string} fromAddress - who is sending this transaction
  * @property {string} toAddress - where is this transaction being sent to. 

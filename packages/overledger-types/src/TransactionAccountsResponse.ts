@@ -2,7 +2,7 @@ import TransactionResponse from "./TransactionResponse";
 import SmartContract from "./SmartContract";
 
 /**
- * A generic object used to describe an Overledger transaction response for accounts based distributed ledgers.  
+ * A generic object used to describe an Overledger transaction response for accounts based distributed ledgers. Note that this object inherits many parameters from TransactionResponse.
  * @typedef {Object} TransactionAccountsResponse
  * @property {string} fromAddress - who sent this transaction
  * @property {string} toAddress - where this transaction was sent to. 

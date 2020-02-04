@@ -1,8 +1,12 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
-TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
-const UintIntBOptions = require('@quantnetwork/overledger-types').UintIntBOptions;
-const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
+const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionSubTypeOptions = require('@quantnetwork/overledger-types').TransactionSubTypeOptions;
+const EthereumUintIntOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumUintIntOptions;
+const EthereumBytesOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumBytesOptions;
+const EthereumTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumTypeOptions;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -26,7 +30,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNames.ethereum }],
+      dlts: [{ dlt: DltNameOptions.ethereum }],
       provider: { network: 'testnet' },
     });
 
@@ -34,47 +38,68 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
 
     //query with no input
-  const input = {
-    fromAddress: partyAEthereumAddress,
-    contractAddress: smartContractAddress,
-    functionName: 'getOVLTestUint',
-    functionParameters: {
-     inputValues: [
-    ],
-    outputTypes: [
-      {  
-        type: TypeOptions.uintB,
-        uintIntBValue: UintIntBOptions.b16,
-        }
-    ]
-  }
-  }  
+    let smartContractQuery1 = {
+      id: smartContractAddress,
+      code: "", //no need to put code here if you are declaring the function call
+      functionCall: [{
+        functionType: SCFunctionTypeOptions.functionCallWithNoParameters,
+        functionName: "getOVLTestUint", //not needed for constructor
+        inputParams: [],
+        outputParams: [
+          {  
+            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.b256}, //first parameter is an integer
+          }
+        ]
+      }],
+      extraFields: {
+        //from SmartContractEthereum
+        payable: false
+      }
+    } 
 
-  const returnedValues = await overledger.search.queryContract(DltNames.ethereum, input.fromAddress, input.contractAddress, input.functionName, input.functionParameters.inputValues, input.functionParameters.outputTypes);
+  const ethereumSmartContractQueryBuild1 = overledger.dlts.ethereum.buildSmartContractQuery(partyAEthereumAddress,smartContractQuery1);
+
+  console.log("ethereumSmartContractQueryBuild1: "  + JSON.stringify(ethereumSmartContractQueryBuild1));
+  if (ethereumSmartContractQueryBuild1.success == false){
+    throw new Error(`Ethereum smart contract build unsuccessful: ` + ethereumSmartContractQueryBuild1.response);      
+  }
+  const returnedValues = await overledger.search.smartContractQuery(DltNameOptions.ethereum, ethereumSmartContractQueryBuild1.response);
   console.log(`returned output values for getOVLTestUint`,  returnedValues.data);
 
-      //query with input
-      const input2 = {
-        fromAddress: partyAEthereumAddress,
-        contractAddress: smartContractAddress,
-        functionName: 'getTestArray',
-        functionParameters: {
-         inputValues: [
+    //query with input
+    let smartContractQuery2 = {
+      id: smartContractAddress,
+      code: "", //no need to put code here if you are declaring the function call
+      functionCall: [{
+        functionType: SCFunctionTypeOptions.functionCallWithParameters,
+        functionName: "getTestArray", //not needed for constructor
+        inputParams: [
           {  
-            type: TypeOptions.uintB,
-            uintIntBValue: UintIntBOptions.b256,
-            value: '0',
-            }
+            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.b256},
+            value: '0'
+          }
         ],
-        outputTypes: [
+        outputParams: [
           {  
-            type: TypeOptions.bool,
-            }
+            type: {selectedType: EthereumTypeOptions.bool}
+          }
         ]
+      }],
+      extraFields: {
+        //from SmartContractEthereum
+        payable: false
       }
-      }  
+    } 
+
+    const ethereumSmartContractQueryBuild2 = overledger.dlts.ethereum.buildSmartContractQuery(partyAEthereumAddress,smartContractQuery2);
+
+    console.log("ethereumSmartContractQueryBuild2: "  + JSON.stringify(ethereumSmartContractQueryBuild2));
+    if (ethereumSmartContractQueryBuild2.success == false){
+      throw new Error(`Ethereum smart contract build unsuccessful: ` + ethereumSmartContractQueryBuild2.response);      
+    }
+ 
       console.log('\n');
-      const returnedValues2 = await overledger.search.queryContract(DltNames.ethereum, input2.fromAddress, input2.contractAddress, input2.functionName, input2.functionParameters.inputValues, input2.functionParameters.outputTypes);
+      const returnedValues2 = await overledger.search.smartContractQuery(DltNameOptions.ethereum, ethereumSmartContractQueryBuild2.response);
       console.log(`returned output values for getTestArray`,  returnedValues2.data);
 
   } catch (e) {

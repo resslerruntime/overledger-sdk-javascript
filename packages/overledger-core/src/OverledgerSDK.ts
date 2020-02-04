@@ -53,7 +53,7 @@ class OverledgerSDK {
    * @return {AbstractDLT} The loaded DLT class
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
-    // TODO: improve this loading
+
     const dltName = `overledger-dlt-${config.dlt}`;
     try {
       const provider = require(`@quantnetwork/${dltName}`).default;
@@ -94,6 +94,8 @@ class OverledgerSDK {
   /**
    * Sign the provided transactions
    *
+   * @param {TransactionRequest[]} - the provided transactions in the standard overledger form
+   * 
    * @return {SignedTransactionRequest[]} Array of signed transaction requests wrapped by Overledger metadata
    */
   public async sign(unsignedData: TransactionRequest[]): Promise<SignedTransactionRequest[]> {
@@ -152,7 +154,7 @@ class OverledgerSDK {
   }
 
   /**
-   * Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+   * Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
    *
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {

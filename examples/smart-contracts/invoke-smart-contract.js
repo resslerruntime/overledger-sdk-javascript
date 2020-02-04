@@ -1,8 +1,11 @@
 const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
 const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
-const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;const TypeOptions = require('@quantnetwork/overledger-types').TypeOptions;
-const DltNames = require('@quantnetwork/overledger-dlt-abstract/dist/AbstractDLT').DltNames;
-const PayableOptions = require('@quantnetwork/overledger-types').PayableOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionSubTypeOptions = require('@quantnetwork/overledger-types').TransactionSubTypeOptions;
+//const EthereumUintIntOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumUintIntOptions;
+//const EthereumBytesOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumBytesOptions;
+const EthereumTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').EthereumTypeOptions;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -25,7 +28,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNames.ethereum }],
+      dlts: [{ dlt: DltNameOptions.ethereum }],
       provider: { network: 'testnet' },
     });
 
@@ -41,34 +44,46 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     // Sign the transactions.
     const signedTransactions = await overledger.sign([
       {
-        // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
-        dlt: DltNames.ethereum,
-        toAddress: smartContractAddress, // the smart contract address
-        transactionType: TransactionTypeOptions.smartContractInvocation,
-        options: {
-          amount: '0', // must be an integer >= 0
-          sequence: ethereumAccountSequence, // must be an integer >= 0
-          feePrice: '80000000', // must be an integer
-          feeLimit: '6000000', // must be an integer
-          functionDetails: { //when smartContractInvocation is used, this section is necessary 
-            functionType: SCFunctionTypeOptions.functionCall,
-            functionName: 'setOVLTestArray', //when smartContractInvocation is used, this section is necessary 
-            payable: PayableOptions.notPayable, //default is false
-            functionParameters:  //Both contract deploy and invocation use function parameters
-              [
-                {  
-                  type: TypeOptions.boolArray,
-                  name: 'newArray',
-                  value: [false,true,false],
-                }
-              ]
+        //from TransactionRequest:
+        dlt: DltNameOptions.ethereum,
+        type: TransactionTypeOptions.accounts,
+        subType: TransactionSubTypeOptions.smartContractInvocation,
+        message: "",  //This must be empty for a contractInvocation transaction
+        //from TransactionAccountsRequest:
+        fromAddress: partyAEthereumAddress,
+        toAddress: smartContractAddress, 
+        sequence: ethereumAccountSequence, // must be an integer >= 0
+        amount: '0', // must be an integer >= 0
+        smartContract: {
+          code: "", //no need to put code here if you are declaring the function call
+          functionCall: [{
+            functionType: SCFunctionTypeOptions.functionCallWithParameters,
+            functionName: "setOVLTestArray", //not needed for constructor
+            inputParams: [
+              {  
+                type: {selectedType: EthereumTypeOptions.boolArray}, //first parameter is a boolean
+                name: 'newArray', //name of parameter
+                value: [true,false,true], //value of the boolean (only options are 'true' or 'false')
+              }
+            ]
+          }
+
+          ],
+          extraFields: {
+            //from SmartContractEthereum
+            payable: false
           }
         },
+        extraFields: {
+            //from TransactionEthereumRequest:
+            compLimit: '6000000', // must be an integer
+            compUnitPrice: '80000000' // must be an integer
+        }
       },
     ]);
 
     //console.log('signedTransactions:');
-    //console.log(JSON.stringify(signedTransactions, null, 2));
+    console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
     const result = (await overledger.send(signedTransactions)).data;

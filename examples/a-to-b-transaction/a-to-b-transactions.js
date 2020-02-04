@@ -10,6 +10,7 @@ const TransactionSubTypeOptions = require('@quantnetwork/overledger-types').Tran
 const mappId = 'network.quant.software';
 const bpiKey = 'bpikeytest';
 
+
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '0xD63E032AB4D8CDA9C29BD7DD331F69E400FF7FBDB590FC6DA5AEE32975E53EAB'; //should have 0x in front
@@ -28,7 +29,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 ; (async () => {
   try {
-    const overledger = new OverledgerSDK(mappId, bpiKey, {
+    const overledger = new OverledgerSDK(mappIdDev, bpiKeyDev, {
       dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
     });
