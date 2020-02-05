@@ -19,7 +19,7 @@ interface TransactionAccountsResponse extends TransactionResponse {
         fromAddress: string,
         toAddress: string,
         sequence: number,
-        amount: number,
+        amount?: number,
         asset?: string,
         smartContract?: SmartContract,
   };

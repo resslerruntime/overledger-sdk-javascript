@@ -7,7 +7,6 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 //  ---------------------------------------------------------
 const mappId = 'network.quant.software';
 const bpiKey = 'bpikeytest';
-
 const ethereumAddress = '0xb5edb7f5F4e8133E90c2DEcF16cbeCD72C39621F';
 const rippleAddress = 'rMQbAYHCjRsb6TT58ujn4o2jTfXdF2fQdx';
 

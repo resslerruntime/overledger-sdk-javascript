@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Options, Account, TransactionRequest } from '@quantnetwork/overledger-types';
-import {TransactionSubTypeOptions, SCFunctionTypeOptions} from '@quantnetwork/overledger-types';
+import {TransactionSubTypeOptions, SCFunctionTypeOptions, TransactionValidationCheck} from '@quantnetwork/overledger-types';
 import TransactionEthereumRequest from './DLTSpecificTypes/TransactionEthereumRequest';
 import SCEthereumParam from './DLTSpecificTypes/SCEthereumParam';
 import SmartContractEthereum from './DLTSpecificTypes/SmartContractEthereum';
@@ -74,37 +74,8 @@ class Ethereum extends AbstractDLT {
    * @return {Transaction} the Ethereum transaction
    */
   buildTransaction(thisTransaction: TransactionEthereumRequest): Transaction {
-    let ethereumSC = <SmartContractEthereum>thisTransaction.smartContract; //recasting for extra fields
-
-    if (typeof thisTransaction.extraFields === 'undefined') {
-      throw new Error('Transaction extraFields must be defined.');
-    }
-
-    if (typeof thisTransaction.amount === 'undefined') {
-      throw new Error('A transaction.amount must be given');
-    }
-
-    if (typeof thisTransaction.extraFields.compLimit === 'undefined') {
-      throw new Error('A transaction.extraFields.compLimit must be given');
-    }
-
-    if (typeof thisTransaction.extraFields.compUnitPrice === 'undefined') {
-      throw new Error('A transaction.extraFields.compUnitPrice must be given');
-    }
-
-    if (typeof thisTransaction.sequence === 'undefined') {
-      throw new Error('A transaction.sequence must be given');
-    }
-
-    if (!thisTransaction.toAddress && thisTransaction.subType === TransactionSubTypeOptions.smartContractInvocation) {
-      throw new Error('If Transaction.subType === TransactionSubTypeOptions.smartContractInvocation then a transaction.toAddress, indicating the address of the smart contract to invoke.');
-    }
-
-    if (thisTransaction.amount > 0
-      && (thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy || thisTransaction.subType === TransactionSubTypeOptions.smartContractInvocation)
-      && ethereumSC.extraFields.payable === false) {
-      throw new Error('If deploying or invoking a smart contract and ethereumSC.extraFields.payable === "false", then transaction.amount must be set to 0');
-    }
+    
+    super.transactionValidation(thisTransaction);
 
     let transactionData = "";
     let invocationType;
@@ -147,6 +118,7 @@ class Ethereum extends AbstractDLT {
       } else {
         throw new Error('When invoking a smart contract, the toAddress must be set to a non empty string, equal to the ethereum address of the smart contract, i.e. Transaction.toAddress = "0x..." ');
       }
+
     }
 
     const transaction = {
@@ -159,6 +131,83 @@ class Ethereum extends AbstractDLT {
       data: transactionData,
     };
     return transaction;
+  }
+
+  _transactionValidation(thisTransaction: TransactionRequest): TransactionValidationCheck {
+    
+    //now input validation on an Ethereum transaction
+    let thisEthereumTx = <TransactionEthereumRequest> thisTransaction;
+    let ethereumSC = <SmartContractEthereum>thisEthereumTx.smartContract; //recasting for extra fields
+
+    if ((!thisEthereumTx.extraFields)||(thisEthereumTx.extraFields == null)){
+      return {
+        success: false,
+        failingField: "extraFields",
+        error: 'All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it'
+      } 
+    } else if ((thisEthereumTx.extraFields.compLimit == "")||(thisEthereumTx.extraFields.compLimit == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
+      return {
+        success: false,
+        failingField: "extraFields.compLimit",
+        error: 'All transactions for Ethereum must have the extraFields.compLimit field set'
+      }     
+    } else if ((thisEthereumTx.extraFields.compUnitPrice == "")||(thisEthereumTx.extraFields.compUnitPrice == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
+      return {
+        success: false,
+        failingField: "extraFields.compUnitPrice",
+        error: 'All transactions for Ethereum must have the extraFields.compUnitPrice field set'
+      }       
+    } else if ((thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy)&&(!thisEthereumTx.smartContract)){
+      return {
+        success: false,
+        failingField: "smartContract",
+        error: 'To deploy a smart contract on Ethereum, you need to define a smartContract object'
+      }   
+    } else if ((thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy)&&(!ethereumSC.code)){
+      return {
+        success: false,
+        failingField: "smartContract.code",
+        error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.code field'
+      }   
+    } else if ((thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy)&&(!ethereumSC.functionCall)){
+      return {
+        success: false,
+        failingField: "smartContract.functionCall",
+        error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.functionCall field'
+      }   
+    } else if ((thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy)&&(!ethereumSC.functionCall[0].functionType)){
+      return {
+        success: false,
+        failingField: "smartContract.functionCall[0].functionType",
+        error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.functionCall[0].functionType field and set it equal to constructorWithNoParameters or constructorWithParameters'
+      }   
+    } else if ((thisTransaction.subType === TransactionSubTypeOptions.smartContractDeploy)&&(ethereumSC.functionCall[0].functionType == SCFunctionTypeOptions.constructorWithParameters)&&(!ethereumSC.functionCall[0].inputParams)){
+      return {
+        success: false,
+        failingField: "smartContract.functionCall[0].inputParams",
+        error: 'To deploy a smart contract on Ethereum that has parameters in its constructor, you need to provide them in the smartContract.functionCall[0].inputParams field'
+      }   
+    } else if (!thisEthereumTx.toAddress && thisTransaction.subType === TransactionSubTypeOptions.smartContractInvocation) {
+      return {
+        success: false,
+        failingField: "toAddress",
+        error: 'If Transaction.subType === TransactionSubTypeOptions.smartContractInvocation then a transaction.toAddress needs to be set indicating the address of the smart contract to invoke.'
+      } 
+    }
+
+    if (thisEthereumTx.amount > 0
+      && (thisEthereumTx.subType === TransactionSubTypeOptions.smartContractDeploy || thisEthereumTx.subType === TransactionSubTypeOptions.smartContractInvocation)
+      && ethereumSC.extraFields.payable === false) {
+      return {
+        success: false,
+        failingField: "extraFields.payable",
+        error: 'If deploying or invoking a smart contract and ethereumSC.extraFields.payable === "false", then transaction.amount must be set to 0'
+      } 
+    }
+
+    //for each parameter in the smart contract inputs and outputs
+    //...
+    return {success: true};
   }
 
   /**
@@ -209,15 +258,7 @@ class Ethereum extends AbstractDLT {
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
-    //now input validation on an Ethereum transaction
-    let thisEthereumTx = <TransactionEthereumRequest> thisTransaction;
-    if ((thisEthereumTx.extraFields.compLimit == "")||(thisEthereumTx.extraFields.compLimit == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
-      throw new Error(`All transactions for Ethereum must have the extraFields.compLimit field set`);      
-    } else if ((thisEthereumTx.extraFields.compUnitPrice == "")||(thisEthereumTx.extraFields.compUnitPrice == null)||(thisEthereumTx.extraFields.compLimit === 'undefined')){
-      throw new Error(`All transactions for Ethereum must have the extraFields.compUnitPrice field set`);      
-    }
-
-    const transaction = this.buildTransaction(thisEthereumTx);
+    const transaction = this.buildTransaction(<TransactionEthereumRequest>thisTransaction);
 
     return new Promise((resolve, reject) => {
       this.account.signTransaction(transaction, (err, data) => {
