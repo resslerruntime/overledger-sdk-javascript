@@ -1,4 +1,4 @@
-import {TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions, TransactionAccountsRequest , TransactionUtxoRequest, TransactionValidationCheck, TransactionInput, TransactionOutput} from '@quantnetwork/overledger-types';
+import {TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions, TransactionSubTypeOptions, TransactionAccountsRequest , TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract} from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -78,11 +78,11 @@ abstract class AbstractDLT {
    * Takes the given transaction and validates it
    * @param thisTransaction - the transaction to check the formatting of
    * 
-   * @return {Object} - returns an object {success: boolean, failingField: string, error: string}.
+   * @return {ValidationCheck} - returns an object {success: boolean, failingField: string, error: string}.
    *  If 'success' = true, the validation passes, otherwise, the 'failingField' parameter will contain
    *  the first failing transaction field and error will contain information on this problem
    */
-  public transactionValidation(thisTransaction: TransactionRequest): TransactionValidationCheck {
+  public transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
         //input validation for the user account 
         if (!this.account) {
           return {
@@ -104,11 +104,23 @@ abstract class AbstractDLT {
             failingField: "type",
             error: "All transactions must have a type field"
           }
+        } else if (!Object.values(TransactionTypeOptions).includes(thisTransaction.type)) {
+          return {
+            success: false,
+            failingField: "type",
+            error: "You must select a type from TransactionTypeOptions"
+          }
         } else if ((!thisTransaction.subType)||(thisTransaction.subType === null)) {
           return {
             success: false,
             failingField: "subType",
             error: "All transactions must have a subType field"
+          }
+        }  else if (!Object.values(TransactionSubTypeOptions).includes(thisTransaction.subType)) {
+          return {
+            success: false,
+            failingField: "subType",
+            error: "You must select a subType from TransactionSubTypeOptions"
           }
         } else if ((!this.conversionTest(thisTransaction.message))||(thisTransaction.message === 'undefined')||(thisTransaction.message == null)) {
           return {
@@ -222,24 +234,70 @@ abstract class AbstractDLT {
     return this.sdk.send([this.buildSignedTransactionsApiCall(signedTransaction)]);
   }
 
+  /**
+   * Allows a smart contract to be queried.
+   * @param {string} dltAddress - the user's dlt address
+   * @param {smartContract} contractQueryDetails - The details on the smart contract query
+   * 
+   */
+  public buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContract): Object {
+    
+    let smartContractQueryValidation = this.smartContractQueryValidation(contractQueryDetails);
+    if (smartContractQueryValidation.success == false){
+      throw new Error("Error parameter: " + smartContractQueryValidation.failingField + ". Error is: " + smartContractQueryValidation.error);
+    }
+    return this._buildSmartContractQuery(dltAddress, contractQueryDetails);
+  }
+
+  /**
+   * Takes the given smartContractQuery and validates it
+   * @param thisTransaction - the transaction to check the formatting of
+   * 
+   * @return {ValidationCheck} - returns an object {success: boolean, failingField: string, error: string}.
+   *  If 'success' = true, the validation passes, otherwise, the 'failingField' parameter will contain
+   *  the first failing transaction field and error will contain information on this problem
+   */
+  public smartContractQueryValidation(contractQueryDetails: SmartContract): ValidationCheck {
+  
+    //must be calling a function
+    if ((!contractQueryDetails.functionCall)||(contractQueryDetails.functionCall.length == 0)){
+      return {
+        success: false,
+        failingField: "smartContract.functionCall",
+        error: 'To query a smart contract, you need to provide the smartContract.functionCall field'
+      }   
+    }
+    //now go to ledger specific validation
+    return this._smartContractQueryValidation(contractQueryDetails);
+
+  }
+
+
    /**
     * Internal method to sign a transaction for the DLT
-    * @param thisTransaction 
+    * @param {TransactionRequest} thisTransaction 
     */
   abstract _sign(thisTransaction: TransactionRequest): Promise<string>;
 
      /**
     * Internal method to validate a transaction for the DLT
-    * @param thisTransaction 
+    * @param {TransactionRequest} thisTransaction 
     */
-   abstract _transactionValidation(thisTransaction: TransactionRequest): TransactionValidationCheck;
+   abstract _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck;
+
+    /**
+    * Internal method to validate a smart contract query for the DLT
+    * @param {SmartContract} contractQueryDetails the query
+    */
+   abstract _smartContractQueryValidation(contractQueryDetails: SmartContract): ValidationCheck;
 
 
   /**
-   * Allows a smart contract to be queried.
-   * @param contractQueryDetails - The details on the query
+   * Allows a smart contract to be queried on the specific distributed ledger.
+   * @param {string} dltAddress - the user's dlt address
+   * @param {smartContract} contractQueryDetails - The details on the smart contract query
    */
-  abstract buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): Object;
+  abstract _buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContract): Object;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields

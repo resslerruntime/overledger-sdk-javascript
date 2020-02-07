@@ -36,8 +36,16 @@ describe('Dlt/Ripple', () => {
     expect(() => overledger.dlts.ripple.sign({any: '...', dlt: DltNameOptions.xrp})).toThrow('Error parameter: type. Error is: All transactions must have a type field');
   });
 
+  test('Cannot sign a ripple transaction by providing an incorrect type parameter', () => {
+    expect(() => overledger.dlts.ripple.sign({any: '...', dlt: DltNameOptions.xrp, type: "..."})).toThrow('Error parameter: type. Error is: You must select a type from TransactionTypeOptions');
+  });
+
   test('Cannot sign a ripple transaction without providing the subType parameter', () => {
     expect(() => overledger.dlts.ripple.sign({any: '...', dlt: DltNameOptions.xrp, type: TransactionTypeOptions.accounts})).toThrow('Error parameter: subType. Error is: All transactions must have a subType field');
+  });
+
+  test('Cannot sign a ripple transaction by providing an incorrect subtype parameter', () => {
+    expect(() => overledger.dlts.ripple.sign({any: '...', dlt: DltNameOptions.xrp, type: TransactionTypeOptions.accounts, subType: "..."})).toThrow('Error parameter: subType. Error is: You must select a subType from TransactionSubTypeOptions');
   });
 
   test('Cannot sign a ripple transaction without providing the message parameter', () => {

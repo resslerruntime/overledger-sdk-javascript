@@ -72,7 +72,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       //from TransactionRequest:
       dlt: DltNameOptions.xrp,
       type: TransactionTypeOptions.accounts,
-      subType: TransactionTypeOptions.valueTransfer,
+      subType: TransactionSubTypeOptions.valueTransfer,
       message: transactionMessage,
       //from TransactionAccountsRequest:
       fromAddress: partyARippleAddress,

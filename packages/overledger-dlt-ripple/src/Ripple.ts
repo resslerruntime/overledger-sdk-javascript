@@ -2,7 +2,7 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Account, Options, TransactionRequest, TransactionValidationCheck } from '@quantnetwork/overledger-types';
+import { Account, Options, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
@@ -114,7 +114,7 @@ class Ripple extends AbstractDLT {
     return { address, payment, instructions };
   }
 
-_transactionValidation(thisTransaction: TransactionRequest): TransactionValidationCheck {
+_transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
 
   let thisXRPTx = <TransactionXRPRequest> thisTransaction;
   //check for the presence of XRP specific fields
@@ -188,9 +188,29 @@ _transactionValidation(thisTransaction: TransactionRequest): TransactionValidati
    *
    * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
    */
-  buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): Object {
+  _buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): ValidationCheck {
 
-    return {success: false, response: dltAddress.toString() + contractQueryDetails.toString()};
+    return {
+      success: false,
+      failingField: dltAddress + " " + JSON.stringify(contractQueryDetails),
+      error: "The XRP Ledger does not currently support smart contract queries",
+    }
+  }
+
+
+  /**
+   * validates an OVL smart contract query according to XRP specific rules
+   * @param contractQueryDetails - the query details
+   * 
+   * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
+   */
+  _smartContractQueryValidation(contractQueryDetails: Object): ValidationCheck{
+    
+    return {
+      success: false,
+      failingField: JSON.stringify(contractQueryDetails),
+      error: "The XRP Ledger does not currently support smart contract validation"
+    }
   }
 
 }

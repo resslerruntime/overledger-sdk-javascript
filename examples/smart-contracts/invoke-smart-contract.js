@@ -17,8 +17,8 @@ const bpiKey = 'bpikeytest';
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xB4949F205AEAFB7E61E3C2D4BE42F6703A79FED92FAD2B5EC6DA4A118486B3C7';
-const partyAEthereumAddress = '0x20c109A79d0c161e6AE72E8c8e5A0aFeD28e8bd0';
+const partyAEthereumPrivateKey = '0xD63E032AB4D8CDA9C29BD7DD331F69E400FF7FBDB590FC6DA5AEE32975E53EAB'; //should have 0x in front
+const partyAEthereumAddress = '0xb5edb7f5F4e8133E90c2DEcF16cbeCD72C39621F';
 const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -63,7 +63,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
               {  
                 type: {selectedType: EthereumTypeOptions.boolArray}, //first parameter is a boolean
                 name: 'newArray', //name of parameter
-                value: [true,false,true], //value of the boolean (only options are 'true' or 'false')
+                value: [true,true,true], //value of the boolean (only options are 'true' or 'false')
               }
             ]
           }
@@ -76,8 +76,8 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
         },
         extraFields: {
             //from TransactionEthereumRequest:
-            compLimit: '6000000', // must be an integer
-            compUnitPrice: '80000000' // must be an integer
+            compLimit: '4000000', // must be an integer
+            compUnitPrice: '8000000000' // must be an integer
         }
       },
     ]);
