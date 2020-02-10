@@ -414,12 +414,6 @@ class Ethereum extends AbstractDLT {
             failingField: "functionCall[0].outputParams[counter].type.selectedBytesLength",
             error: 'To query a smart contract on Ethereum that has output parameters, where some are bytes, you need to provide the type.selectedBytesLength field for each byte parameter, stating how many bytes length it should use, selected from BytesBOptions in the Ethereum package'
           } 
-        } else if (!thisSCEthereumParam.name){
-          return {
-            success: false,
-            failingField: "functionCall[0].outputParams[counter].name",
-            error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the name field for each smart contract output parameter'
-          } 
         }
         counter++
       }

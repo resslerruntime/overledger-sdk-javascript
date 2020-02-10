@@ -29,6 +29,7 @@ Now that once you have created a transaction to deploy a smart contract, you wil
 node read-smart-contract.js
 ```
 
+### Smart Contract Invocation 
 Finally, you may also want to call smart contract functions that change the state of the distributed ledger. To do so, a new transaction will have to be added onto the ledger. We have provided the following example script that does so. Again you will need to initialise a few variables placed in the 'VARIABLES TO UPDATE' section. For this script you will need to set your mappId, BPI key, Ethereum address and Ethereum private key.
 
 ```
