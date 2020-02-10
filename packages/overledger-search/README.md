@@ -40,7 +40,11 @@ yarn add @quantnetwork/overledger-search
 
             * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
+            * [.getBlockHeightByDlt(dlt)](#module_overledger-search.OverledgerSearch+getBlockHeightByDlt)
+
             * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
+
+            * [.smartContractQuery(dlt, contractQueryDetails)](#module_overledger-search.OverledgerSearch+smartContractQuery)
 
 
 <a name="module_overledger-search.default"></a>
@@ -62,7 +66,11 @@ Search support package.
 
     * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
+    * [.getBlockHeightByDlt(dlt)](#module_overledger-search.OverledgerSearch+getBlockHeightByDlt)
+
     * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
+
+    * [.smartContractQuery(dlt, contractQueryDetails)](#module_overledger-search.OverledgerSearch+smartContractQuery)
 
 
 <a name="new_module_overledger-search.OverledgerSearch_new"></a>
@@ -104,6 +112,16 @@ Get the transaction type based on the hash
 
 Get block by DLT and number
 
+<a name="module_overledger-search.OverledgerSearch+getBlockHeightByDlt"></a>
+
+#### *overledgerSearch*.getBlockHeightByDlt(dlt)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The DLT name |
+
+Get block by DLT and number
+
 <a name="module_overledger-search.OverledgerSearch+getBlockByDltAndHash"></a>
 
 #### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
@@ -114,4 +132,15 @@ Get block by DLT and number
 | hash | <code>string</code> | The block hash |
 
 Get block by DLT and hash
+
+<a name="module_overledger-search.OverledgerSearch+smartContractQuery"></a>
+
+#### *overledgerSearch*.smartContractQuery(dlt, contractQueryDetails)
+
+| Param | Description |
+| --- | --- |
+| dlt | the distributed ledger that this smart contract is on |
+| contractQueryDetails | details on this smart contract query |
+
+Query a smart contract
 

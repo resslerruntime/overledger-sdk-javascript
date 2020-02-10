@@ -48,14 +48,31 @@ yarn add @quantnetwork/overledger-types
 <dt><a href="#SequenceDataResponse">SequenceDataResponse</a> : <code>Array.&lt;Object&gt;</code></dt>
 <dd><p>Overledger sequence data response</p>
 </dd>
-<dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
-<dd><p>DLT transaction options.</p>
+<dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a smart contract function parameter.</p>
+</dd>
+<dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a validationCheck.</p>
 </dd>
 </dl>
 
 <a name="module_overledger-types"></a>
 
 ## overledger-types
+
+* [overledger-types](#module_overledger-types)
+
+    * [.DltNameOptions](#module_overledger-types.DltNameOptions)
+
+    * [.SCInteropOptions](#module_overledger-types.SCInteropOptions)
+
+
+<a name="module_overledger-types.DltNameOptions"></a>
+
+### *overledger-types*.DltNameOptions
+<a name="module_overledger-types.SCInteropOptions"></a>
+
+### *overledger-types*.SCInteropOptions
 <a name="Account"></a>
 
 ## Account
@@ -122,15 +139,30 @@ Overledger sequence request
 
 Overledger sequence data response
 
-<a name="TransactionOptions"></a>
+<a name="SmartContractFunctionParam"></a>
 
-## TransactionOptions
+## SmartContractFunctionParam
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [sequence] | <code>number</code> | This transaction's sequence in relation to the initiating account. |
-| amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
+| type | <code>object</code> | information on the parameter's type |
+| name | <code>string</code> | the parameter's name |
+| value | <code>object</code> | information on the parameter's value |
+| options | <code>object</code> | information the valid values that this parameter can take |
 
-DLT transaction options.
+A generic object to describe a smart contract function parameter.
+
+<a name="validationCheck"></a>
+
+## validationCheck
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| success | <code>boolean</code> | was the validation check successful? |
+| failingField | <code>string</code> | if it was not successful, what was the first field that failed? |
+| error | <code>string</code> | Is there any more information on this error? |
+
+A generic object to describe a validationCheck.
 

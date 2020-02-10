@@ -19,6 +19,14 @@
 <dd></dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#computeParamType">computeParamType(param)</a></dt>
+<dd><p>This function is used to prepare the parameter definition for the web3 package</p>
+</dd>
+</dl>
+
 ## Typedefs
 
 <dl>
@@ -40,8 +48,11 @@
 <dt><a href="#SequenceDataResponse">SequenceDataResponse</a> : <code>Array.&lt;Object&gt;</code></dt>
 <dd><p>Overledger sequence data response</p>
 </dd>
-<dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
-<dd><p>DLT transaction options.</p>
+<dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a smart contract function parameter.</p>
+</dd>
+<dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a validationCheck.</p>
 </dd>
 </dl>
 
@@ -193,7 +204,7 @@ Wrap the DLT Data with the API schema
 
 | Param | Type | Description |
 | --- | --- | --- |
-| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
+| unsignedData | <code>Array.&lt;TransactionRequest&gt;</code> | the provided transactions in the standard overledger form |
 
 Sign the provided transactions
 
@@ -232,7 +243,7 @@ Get the sequence numbers for the provided addresses
 <a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
 
 <a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 
@@ -292,9 +303,15 @@ Get the Overledger Blockchain Programming Interface license key
 
             * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
 
-            * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+            * [.sign(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+
+            * [.transactionValidation(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+transactionValidation)
 
             * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
+
+            * [.buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-abstract.AbstractDLT+buildSmartContractQuery)
+
+            * [.smartContractQueryValidation(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+smartContractQueryValidation)
 
             * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
 
@@ -316,9 +333,15 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
     * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
 
-    * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+    * [.sign(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+
+    * [.transactionValidation(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+transactionValidation)
 
     * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
+
+    * [.buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-abstract.AbstractDLT+buildSmartContractQuery)
+
+    * [.smartContractQueryValidation(thisTransaction)](#module_overledger-dlt-abstract.AbstractDLT+smartContractQueryValidation)
 
     * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
 
@@ -354,16 +377,27 @@ Get the sequence for a specific address
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+sign"></a>
 
-#### *abstractDLT*.sign(toAddress, message, options)
+#### *abstractDLT*.sign(thisTransaction)
 
-| Param | Type |
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | the transaction information |
+
+Converts an Overledger transaction to the correct format for the DLT in question and signs it
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+transactionValidation"></a>
+
+#### *abstractDLT*.transactionValidation(thisTransaction)
+
+| Param | Description |
 | --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| thisTransaction | the transaction to check the formatting of |
 
-Sign a transaction for the DLT
+Takes the given transaction and validates it
 
+**Returns**: <code>ValidationCheck</code> - - returns an object {success: boolean, failingField: string, error: string}.
+ If 'success' = true, the validation passes, otherwise, the 'failingField' parameter will contain
+ the first failing transaction field and error will contain information on this problem  
 <a name="module_overledger-dlt-abstract.AbstractDLT+send"></a>
 
 #### *abstractDLT*.send(signedTransaction)
@@ -374,6 +408,30 @@ Sign a transaction for the DLT
 
 Send an Overledger signed transaction
 
+<a name="module_overledger-dlt-abstract.AbstractDLT+buildSmartContractQuery"></a>
+
+#### *abstractDLT*.buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's dlt address |
+| contractQueryDetails | <code>smartContract</code> | The details on the smart contract query |
+
+Allows a smart contract to be queried.
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+smartContractQueryValidation"></a>
+
+#### *abstractDLT*.smartContractQueryValidation(thisTransaction)
+
+| Param | Description |
+| --- | --- |
+| thisTransaction | the transaction to check the formatting of |
+
+Takes the given smartContractQuery and validates it
+
+**Returns**: <code>ValidationCheck</code> - - returns an object {success: boolean, failingField: string, error: string}.
+ If 'success' = true, the validation passes, otherwise, the 'failingField' parameter will contain
+ the first failing transaction field and error will contain information on this problem  
 <a name="module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall"></a>
 
 #### *abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)
@@ -391,6 +449,12 @@ Wrap a specific DLT signed transaction with the Overledger required fields
 * [overledger-dlt-ethereum](#module_overledger-dlt-ethereum)
 
     * _static_
+        * [.EthereumBytesOptions](#module_overledger-dlt-ethereum.EthereumBytesOptions)
+
+        * [.EthereumTypeOptions](#module_overledger-dlt-ethereum.EthereumTypeOptions)
+
+        * [.EthereumUintIntOptions](#module_overledger-dlt-ethereum.EthereumUintIntOptions)
+
         * [.default](#module_overledger-dlt-ethereum.default)
 
     * _inner_
@@ -406,11 +470,34 @@ Wrap a specific DLT signed transaction with the Overledger required fields
 
             * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
-            * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
+            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
-            * [._sign(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
+
+            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
+
+            * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
+
+            * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
+
+            * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+
+            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
+
+            * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
+
+            * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
 
 
+<a name="module_overledger-dlt-ethereum.EthereumBytesOptions"></a>
+
+### *overledger-dlt-ethereum*.EthereumBytesOptions
+<a name="module_overledger-dlt-ethereum.EthereumTypeOptions"></a>
+
+### *overledger-dlt-ethereum*.EthereumTypeOptions
+<a name="module_overledger-dlt-ethereum.EthereumUintIntOptions"></a>
+
+### *overledger-dlt-ethereum*.EthereumUintIntOptions
 <a name="module_overledger-dlt-ethereum.default"></a>
 
 ### *overledger-dlt-ethereum*.default
@@ -432,19 +519,33 @@ Development package for Ethereum.
 
     * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
-    * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
+    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
-    * [._sign(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
+
+    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
+
+    * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
+
+    * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+
+    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
+
+    * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
+
+    * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
 
 
 <a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
 
 #### new Ethereum(sdk, options)
 
-| Param | Type |
-| --- | --- |
-| sdk | <code>any</code> | 
-| options | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| sdk | <code>any</code> | the sdk instance |
+| options | <code>Object</code> | any additional options to instantiate this dlt |
 
 <a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
 
@@ -461,6 +562,7 @@ Symbol of the DLT
 #### *ethereum*.createAccount()
 Create an account for a specific DLT
 
+**Returns**: [<code>Account</code>](#Account) - the new Ethereum account  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)
@@ -473,27 +575,100 @@ Set an account for signing transactions for a specific DLT
 
 <a name="module_overledger-dlt-ethereum.Ethereum+buildTransaction"></a>
 
-#### *ethereum*.buildTransaction(toAddress, message, options)
+#### *ethereum*.buildTransaction(thisTransaction)
 
-| Param | Type |
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Ethereum distributed ledger |
+
+Takes the Overledger definition of a transaction and converts it into a specific Ethereum transaction
+
+**Returns**: <code>Transaction</code> - the Ethereum transaction  
+<a name="module_overledger-dlt-ethereum.Ethereum+_transactionValidation"></a>
+
+#### *ethereum*._transactionValidation(thisTransaction)
+
+| Param | Description |
 | --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| thisTransaction | The transaction request |
 
-Build the transaction
+validates an OVL transactionRequest according to Ethereum specific rules
 
+<a name="module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation"></a>
+
+#### *ethereum*._smartContractQueryValidation(contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| contractQueryDetails | <code>SmartContract</code> | The transaction request |
+
+validates an OVL smart contract query according to Ethereum specific rules
+
+<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams"></a>
+
+#### *ethereum*.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| smartContractCode | <code>string</code> | the bytecode of the smart contract (without the byte code information on the constructor variables) |
+| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this constructor takes as input |
+
+Convert Overledger object description of a smart contract constructor and parameters into Ethereum versions
+
+**Returns**: <code>string</code> - the bytecode of the smart contract and the parameters  
+<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall"></a>
+
+#### *ethereum*.computeTransactionDataForFunctionCall(functionName, paramsList)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| functionName | <code>string</code> | the name of the smart contract function to call |
+| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this function takes as input |
+
+Convert Overledger object description of a smart contract function and parameters into Ethereum versions
+
+**Returns**: <code>string</code> - the bytecode of this function call  
 <a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
 
-#### *ethereum*._sign(toAddress, message, options)
+#### *ethereum*._sign(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an ethereum transaction |
+
+Takes in an overledger definition of a transaction for ethereum, converts it into a form that the Ethereum distributed ledger will understand, and then signs the transaction
+
+<a name="module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery"></a>
+
+#### *ethereum*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's Ethereum address |
+| contractQueryDetails | <code>SmartContractEthereum</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+
+Allows a user to build a smart contract query for the Ethereum distributed ledger
+
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList"></a>
+
+#### *ethereum*.computeSCQueryInputValuesList(inputFunctionParams)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputFunctionParams | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of input parameters |
+
+computes the input parameters into the smart contract function query
+
+<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList"></a>
+
+#### *ethereum*.computeSCQueryOutputTypesList(outputFunctionTypes)
 
 | Param | Type |
 | --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| outputFunctionTypes | <code>Array.&lt;SCEthereumParam&gt;</code> | 
 
-Sign the transaction
+computes the output parameters into the smart contract function query
 
 <a name="module_overledger-dlt-ripple"></a>
 
@@ -517,9 +692,15 @@ Sign the transaction
 
             * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
-            * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
+            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
-            * [._sign(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+_sign)
+            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ripple.Ripple+_transactionValidation)
+
+            * [._sign(thisTransaction)](#module_overledger-dlt-ripple.Ripple+_sign)
+
+            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_buildSmartContractQuery)
+
+            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_smartContractQueryValidation)
 
 
 <a name="module_overledger-dlt-ripple.default"></a>
@@ -543,9 +724,15 @@ Development package for Ripple (XRP Ledger).
 
     * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
-    * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
+    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
-    * [._sign(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+_sign)
+    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ripple.Ripple+_transactionValidation)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-ripple.Ripple+_sign)
+
+    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_buildSmartContractQuery)
+
+    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_smartContractQueryValidation)
 
 
 <a name="new_module_overledger-dlt-ripple.Ripple_new"></a>
@@ -584,28 +771,58 @@ Set an account for signing for a specific DLT
 
 <a name="module_overledger-dlt-ripple.Ripple+buildTransaction"></a>
 
-#### *ripple*.buildTransaction(toAddress, message, options)
+#### *ripple*.buildTransaction(thisTransaction)
 
-| Param | Type |
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionXRPRequest</code> | details on the information to include in this transaction for the XRP distributed ledger |
+
+Takes the Overledger definition of a transaction and converts it into a specific XRP transaction
+
+**Returns**: <code>Transaction</code> - the XRP transaction  
+<a name="module_overledger-dlt-ripple.Ripple+_transactionValidation"></a>
+
+#### *ripple*._transactionValidation(thisTransaction)
+
+| Param | Description |
 | --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| thisTransaction | The transaction request |
 
-Build the transaction
+validates an OVL transactionRequest according to XRP specific rules
 
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
-#### *ripple*._sign(toAddress, message, options)
+#### *ripple*._sign(thisTransaction)
 
-| Param | Type |
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an XRP transaction |
+
+Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+
+<a name="module_overledger-dlt-ripple.Ripple+_buildSmartContractQuery"></a>
+
+#### *ripple*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's XRP address |
+| contractQueryDetails | <code>Object</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+
+Allows a user to build a smart contract query for the XRP distributed ledger (currently not supported for XRP)
+
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="module_overledger-dlt-ripple.Ripple+_smartContractQueryValidation"></a>
+
+#### *ripple*._smartContractQueryValidation(contractQueryDetails)
+
+| Param | Description |
 | --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| contractQueryDetails | the query details |
 
-Sign the transaction
+validates an OVL smart contract query according to XRP specific rules
 
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
 <a name="module_overledger-provider"></a>
 
 ## overledger-provider
@@ -661,7 +878,11 @@ Network provider package.
 
             * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
+            * [.getBlockHeightByDlt(dlt)](#module_overledger-search.OverledgerSearch+getBlockHeightByDlt)
+
             * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
+
+            * [.smartContractQuery(dlt, contractQueryDetails)](#module_overledger-search.OverledgerSearch+smartContractQuery)
 
 
 <a name="module_overledger-search.default"></a>
@@ -683,7 +904,11 @@ Search support package.
 
     * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
+    * [.getBlockHeightByDlt(dlt)](#module_overledger-search.OverledgerSearch+getBlockHeightByDlt)
+
     * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
+
+    * [.smartContractQuery(dlt, contractQueryDetails)](#module_overledger-search.OverledgerSearch+smartContractQuery)
 
 
 <a name="new_module_overledger-search.OverledgerSearch_new"></a>
@@ -725,6 +950,16 @@ Get the transaction type based on the hash
 
 Get block by DLT and number
 
+<a name="module_overledger-search.OverledgerSearch+getBlockHeightByDlt"></a>
+
+#### *overledgerSearch*.getBlockHeightByDlt(dlt)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The DLT name |
+
+Get block by DLT and number
+
 <a name="module_overledger-search.OverledgerSearch+getBlockByDltAndHash"></a>
 
 #### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
@@ -736,9 +971,44 @@ Get block by DLT and number
 
 Get block by DLT and hash
 
+<a name="module_overledger-search.OverledgerSearch+smartContractQuery"></a>
+
+#### *overledgerSearch*.smartContractQuery(dlt, contractQueryDetails)
+
+| Param | Description |
+| --- | --- |
+| dlt | the distributed ledger that this smart contract is on |
+| contractQueryDetails | details on this smart contract query |
+
+Query a smart contract
+
 <a name="module_overledger-types"></a>
 
 ## overledger-types
+
+* [overledger-types](#module_overledger-types)
+
+    * [.DltNameOptions](#module_overledger-types.DltNameOptions)
+
+    * [.SCInteropOptions](#module_overledger-types.SCInteropOptions)
+
+
+<a name="module_overledger-types.DltNameOptions"></a>
+
+### *overledger-types*.DltNameOptions
+<a name="module_overledger-types.SCInteropOptions"></a>
+
+### *overledger-types*.SCInteropOptions
+<a name="computeParamType"></a>
+
+## computeParamType(param)
+
+| Param | Description |
+| --- | --- |
+| param | the parameter definition |
+
+This function is used to prepare the parameter definition for the web3 package
+
 <a name="Account"></a>
 
 ## Account
@@ -805,15 +1075,30 @@ Overledger sequence request
 
 Overledger sequence data response
 
-<a name="TransactionOptions"></a>
+<a name="SmartContractFunctionParam"></a>
 
-## TransactionOptions
+## SmartContractFunctionParam
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [sequence] | <code>number</code> | This transaction's sequence in relation to the initiating account. |
-| amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
+| type | <code>object</code> | information on the parameter's type |
+| name | <code>string</code> | the parameter's name |
+| value | <code>object</code> | information on the parameter's value |
+| options | <code>object</code> | information the valid values that this parameter can take |
 
-DLT transaction options.
+A generic object to describe a smart contract function parameter.
+
+<a name="validationCheck"></a>
+
+## validationCheck
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| success | <code>boolean</code> | was the validation check successful? |
+| failingField | <code>string</code> | if it was not successful, what was the first field that failed? |
+| error | <code>string</code> | Is there any more information on this error? |
+
+A generic object to describe a validationCheck.
 

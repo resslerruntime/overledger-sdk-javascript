@@ -160,7 +160,7 @@ Wrap the DLT Data with the API schema
 
 | Param | Type | Description |
 | --- | --- | --- |
-| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
+| unsignedData | <code>Array.&lt;TransactionRequest&gt;</code> | the provided transactions in the standard overledger form |
 
 Sign the provided transactions
 
@@ -199,7 +199,7 @@ Get the sequence numbers for the provided addresses
 <a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
 
 <a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 
