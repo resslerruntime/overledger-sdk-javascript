@@ -1,12 +1,11 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
+const mappId = '...';
+const bpiKey = '...';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------

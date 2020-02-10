@@ -21,6 +21,7 @@ contract overledgerSCDemo {
         testArray = thisTestArray;
     }
 
+    //the following functions change the state of the distributed ledger
     function setOVLTestBool(bool newBool) external {
         testBool = newBool;
     }
@@ -49,6 +50,7 @@ contract overledgerSCDemo {
         testArray = newArray;
     }
     
+    //the following functions read the state of the distributed ledger
     function getOVLTestBool() external view returns(bool){
         return testBool;
     }

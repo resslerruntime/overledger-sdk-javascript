@@ -1,4 +1,3 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
 const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
@@ -6,11 +5,11 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
 //The following are found from your Overledger Account:
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
+const mappId = '...';
+const bpiKey = '...';
 
 // After creating a transaction from a file in the a-to-b-transaction, you can put the transaction hash here to query its details
-const ethereumTransactionHash = '0x77d2f7f2413f465c85a2af8f62f44cad1c98d494d03800fa30b569c7391b12a4';
+const ethereumTransactionHash = '0xf18c2f363994591c8ca21bdd4cecb58d335736b009e8f36d74bb24527bd2a959';
 const rippleTransactionHash = '67D7AA9D1A0273E3FDB8264D78476571C3D3CDD5C9E5FA12DD0E7C990EC88620';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
