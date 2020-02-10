@@ -114,6 +114,10 @@ class Ripple extends AbstractDLT {
     return { address, payment, instructions };
   }
 
+  /**
+   * validates an OVL transactionRequest according to XRP specific rules
+   * @param thisTransaction - The transaction request
+   */
 _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
 
   let thisXRPTx = <TransactionXRPRequest> thisTransaction;

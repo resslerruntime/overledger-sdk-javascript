@@ -1,6 +1,6 @@
 
 /**
- * A generic object to describe an  object validationCheck.
+ * A generic object to describe a validationCheck.
  * @typedef {Object} validationCheck
  * @property {boolean} success - was the validation check successful?
  * @property {string} failingField - if it was not successful, what was the first field that failed?

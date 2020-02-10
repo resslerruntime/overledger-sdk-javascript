@@ -394,42 +394,37 @@ class Ethereum extends AbstractDLT {
           return {
             success: false,
             failingField: "functionCall[0].outputParams[counter].type",
-            error: 'To query a smart contract on Ethereum that has parameters, you need to provide the type field for each smart contract output parameter'
+            error: 'To query an Ethereum smart contract function that has output parameters, you need to provide the type field for each smart contract output parameter'
           } 
-        } else if (!thisSCEthereumParam.type.selectedType){
+        } else if ((!thisSCEthereumParam.type.selectedType)||(!Object.values(TypeOptions).includes(thisSCEthereumParam.type.selectedType))){
           return {
             success: false,
             failingField: "functionCall[0].outputParams[counter].type.selectedType",
-            error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the selectedType field for each smart contract parameter type'
+            error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the selectedType field for each smart contract output parameter type, selected from TypeOptions in the Ethereum Package'
           } 
-        } else if (((thisSCEthereumParam.type.selectedType == TypeOptions.uintB)||(thisSCEthereumParam.type.selectedType == TypeOptions.intB)||(thisSCEthereumParam.type.selectedType == TypeOptions.intBArray)||(thisSCEthereumParam.type.selectedType == TypeOptions.uintBArray))&&(!thisSCEthereumParam.type.selectedIntegerLength)){
+        } else if (((thisSCEthereumParam.type.selectedType == TypeOptions.uintB)||(thisSCEthereumParam.type.selectedType == TypeOptions.intB)||(thisSCEthereumParam.type.selectedType == TypeOptions.intBArray)||(thisSCEthereumParam.type.selectedType == TypeOptions.uintBArray))&&((!thisSCEthereumParam.type.selectedIntegerLength)||(!Object.values(UintIntBOptions).includes(thisSCEthereumParam.type.selectedIntegerLength)))){
           return {
             success: false,
             failingField: "functionCall[0].outputParams[counter].type.selectedIntegerLength",
-            error: 'To query a smart contract on Ethereum that has output parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use'
+            error: 'To query a smart contract on Ethereum that has output parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use, selected from UintIntOptions in the Ethereum package'
           } 
-        } else if (((thisSCEthereumParam.type.selectedType == TypeOptions.bytesB)||(thisSCEthereumParam.type.selectedType == TypeOptions.bytesBArray))&&(!thisSCEthereumParam.type.selectedBytesLength)){
+        } else if (((thisSCEthereumParam.type.selectedType == TypeOptions.bytesB)||(thisSCEthereumParam.type.selectedType == TypeOptions.bytesBArray))&&((!thisSCEthereumParam.type.selectedBytesLength)||(!Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)))){
           return {
             success: false,
             failingField: "functionCall[0].outputParams[counter].type.selectedBytesLength",
-            error: 'To query a smart contract on Ethereum that has output parameters, where some are bytes, you need to provide the type.selectedBytesLength field for each byte parameter, stating how many bytes length it should use'
+            error: 'To query a smart contract on Ethereum that has output parameters, where some are bytes, you need to provide the type.selectedBytesLength field for each byte parameter, stating how many bytes length it should use, selected from BytesBOptions in the Ethereum package'
           } 
         } else if (!thisSCEthereumParam.name){
           return {
             success: false,
             failingField: "functionCall[0].outputParams[counter].name",
-            error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the name field for each smart contract input parameter'
-          } 
-        } else if (!thisSCEthereumParam.value){
-          return {
-            success: false,
-            failingField: "functionCall[0].outputParams[counter].value",
-            error: 'To query a smart contract on Ethereum that has output  parameters, you need to provide the value field for each smart contract input parameter'
+            error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the name field for each smart contract output parameter'
           } 
         }
         counter++
       }
     }
+    return {success: true};
 
   }
 

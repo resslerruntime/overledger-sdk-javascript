@@ -1,5 +1,5 @@
 /**
- * The list of transaction sub-type options. If other is chosen, make sure to clarify this in the additionFields section.
+ * The list of transaction sub-type options. If other is chosen, make sure to clarify this in the extraFields section.
  * /
 
 /**

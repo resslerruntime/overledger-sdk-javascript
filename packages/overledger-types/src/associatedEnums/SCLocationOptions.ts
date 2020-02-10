@@ -1,5 +1,5 @@
 /**
- * The list of smart contract location options. If other is chosen, make sure to clarify this in the additionFields section.
+ * The list of smart contract location options. If other is chosen, make sure to clarify this in the extraFields section.
  * /
 
 /**

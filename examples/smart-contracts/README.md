@@ -17,10 +17,16 @@ Each script has a section at the beginning where a few variables need to be init
 ```
 node create-smart-contract.js
 ```
-This will deploy your first smart contract through Overledger! This script is deploying the bytecode of the demoSmartContract.sol Solidity smart contract code onto the Ethereum blockchain.
+This will deploy your first smart contract through Overledger! This script is deploying the bytecode of the demoSmartContract.sol Solidity smart contract code onto the Ethereum blockchain (Ropsten testnet).
+
+Now that you have deployed a smart contract, you can call its functions. If a smart contract function does not change the state of the distributed ledger than another transaction is *not* required. Instead the connected node's copy of the current state of the distributed ledger can be looked up. For an example of calling a smart contract function that only reads data we provide the following script. Make sure to first set in the script the mappId, BPI key, Ethereum address, Ethereum private key *and* the address of the contract that you just deployed with the previous script. This contract address can be querying the transaction...
 
 ```
-node get-address-sequence.js
+node read-smart-contract.js
 ```
 
-The first command will print the balances of the addresses declared, while the second one will print the sequences of those addresses.
+Finally, you will also want to call smart contract functions that change the state of the distributed ledger. To do so, a new transaction will have to be added onto the ledger. We have provided the following example script that does so. Again remember to set in the script the mappId, BPI key, Ethereum address, Ethereum private key *and* the address of the smart contract.
+
+```
+node invoke-smart-contract.js
+```

@@ -16,7 +16,7 @@ import TimeStampUnits from "./associatedEnums/TimeStampUnitsOptions";
  * @property {TimeStampUnits} timestampUnit - the timestamp unit.
  * @property {TransactionStatus} status - the status of the transaction (e.g. broadcast, confirmed, etc)
  * @property {string[]} signature - what are the signatures of the transaction
- * @property {Object} additionalFields - are there any distributed ledger specific fields required for the transaction? Before a field is added here, the other objects that extend this one should be inspected to see if there is a parameter that is suitable embedded within them. Check the documentation for more information on this
+ * @property {Object} extraFields - are there any distributed ledger specific fields required for the transaction? Before a field is added here, the other objects that extend this one should be inspected to see if there is a parameter that is suitable embedded within them. Check the documentation for more information on this
  */
 
 /**
