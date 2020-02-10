@@ -2,9 +2,10 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Account, Options, TransactionOptions as BaseTransactionOptions } from '@quantnetwork/overledger-types';
+import { Account, Options, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
+import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
 
 /**
  * @memberof module:overledger-dlt-ripple
@@ -41,9 +42,9 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Create an account for a specific DLT
+   * Create an XRP account
    *
-   * @return {Account}
+   * @return {Account} (privateKey, address)
    */
   createAccount(): Account {
     const generated = this.rippleAPI.generateAddress();
@@ -72,35 +73,17 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Build the transaction
-   *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
+   * Takes the Overledger definition of a transaction and converts it into a specific XRP transaction
+   * @param {TransactionXRPRequest} thisTransaction - details on the information to include in this transaction for the XRP distributed ledger
+   * @return {Transaction} the XRP transaction
    */
-  buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
-    if (typeof options === 'undefined') {
-      throw new Error('Transaction options must be defined.');
-    }
+  buildTransaction(thisTransaction: TransactionXRPRequest): Transaction {
 
-    if (typeof options.amount === 'undefined') {
-      throw new Error('options.amount must be set up');
-    }
+    super.transactionValidation(thisTransaction);
 
-    if (typeof options.feePrice === 'undefined') {
-      throw new Error('options.feePrice must be set up');
-    }
-
-    if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be set up');
-    }
-
-    if (typeof options.maxLedgerVersion === 'undefined') {
-      throw new Error('options.maxLedgerVersion must be set up');
-    }
-    const maxLedgerVersion = Number(options.maxLedgerVersion);
-    const amountInXRP = dropsToXrp(options.amount);
-    const feeInXRP = dropsToXrp(options.feePrice);
+    const maxLedgerVersion = Number(thisTransaction.extraFields.maxLedgerVersion);
+    const amountInXRP = dropsToXrp(thisTransaction.amount.toString());
+    const feeInXRP = dropsToXrp(thisTransaction.extraFields.feePrice);
 
     const address = this.account.address;
     const payment = {
@@ -112,19 +95,19 @@ class Ripple extends AbstractDLT {
         },
       },
       destination: {
-        address: toAddress,
+        address: thisTransaction.toAddress,
         minAmount: {
           value: amountInXRP,
           currency: 'XRP',
         },
       },
       memos: [{
-        data: message,
+        data: thisTransaction.message,
       }],
     };
     const instructions = {
       maxLedgerVersion,
-      sequence: options.sequence,
+      sequence: thisTransaction.sequence,
       fee: feeInXRP,
     };
 
@@ -132,20 +115,108 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Sign the transaction
-   *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
+   * validates an OVL transactionRequest according to XRP specific rules
+   * @param thisTransaction - The transaction request
    */
-  _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
-    const built = this.buildTransaction(toAddress, message, options);
+_transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
+
+  let thisXRPTx = <TransactionXRPRequest> thisTransaction;
+  //check for the presence of XRP specific fields
+  if ((!thisXRPTx.extraFields)||(thisXRPTx.extraFields == null)){
+    return {
+      success: false,
+      failingField: "extraFields",
+      error: 'All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it'
+    } 
+  } else if ((thisXRPTx.extraFields.feePrice == "")||(thisXRPTx.extraFields.feePrice == null)||(thisXRPTx.extraFields.feePrice === 'undefined')){
+    return {
+      success: false,
+      failingField: "extraFields.feePrice",
+      error: 'All transactions for XRP must have the extraFields.feePrice field set'
+    }    
+  } else if ((thisXRPTx.extraFields.maxLedgerVersion == "")||(thisXRPTx.extraFields.maxLedgerVersion == null)||(thisXRPTx.extraFields.maxLedgerVersion === 'undefined')){
+    return {
+      success: false,
+      failingField: "extraFields.maxLedgerVersion",
+      error: 'All transactions for XRP must have the extraFields.maxLedgerVersion field set'
+    } 
+  }
+
+  //there must be a to address
+  if (thisXRPTx.toAddress == ""){
+    return {
+      success: false,
+      failingField: "toAddress",
+      error: 'All transactions for XRP must have the toAddress field set to an address'
+    }       
+  }
+  //sequence number must start at 1
+  if (thisXRPTx.sequence <= 0){
+    return {
+      success: false,
+      failingField: "sequence",
+      error: 'All transactions for XRP must have a sequence number greater than 0'
+    }      
+  }
+
+  if ((typeof thisXRPTx.amount === 'undefined')||(thisXRPTx.amount <= 0)) {
+    return {
+      success: false,
+      failingField: "amount",
+      error: 'A transactions for XRP must have an amount > 0'
+    }    
+  }
+
+  return {success: true};
+}
+
+
+  /**
+   * Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+   * @param {TransactionRequest} thisTransaction - an instantiated overledger definition of an XRP transaction
+   */
+  _sign(thisTransaction: TransactionRequest): Promise<string> {
+    
+    const built = this.buildTransaction(<TransactionXRPRequest> thisTransaction);
 
     return this.rippleAPI.preparePayment(built.address, built.payment, built.instructions)
       .then(
         prepared => this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction,
       );
   }
+
+  /**
+   * Allows a user to build a smart contract query for the XRP distributed ledger (currently not supported for XRP)
+   * @param {string} dltAddress - the user's XRP address
+   * @param {Object} contractQueryDetails - the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call.
+   *
+   * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
+   */
+  _buildSmartContractQuery(dltAddress: string, contractQueryDetails: Object): ValidationCheck {
+
+    return {
+      success: false,
+      failingField: dltAddress + " " + JSON.stringify(contractQueryDetails),
+      error: "The XRP Ledger does not currently support smart contract queries",
+    }
+  }
+
+
+  /**
+   * validates an OVL smart contract query according to XRP specific rules
+   * @param contractQueryDetails - the query details
+   * 
+   * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
+   */
+  _smartContractQueryValidation(contractQueryDetails: Object): ValidationCheck{
+    
+    return {
+      success: false,
+      failingField: JSON.stringify(contractQueryDetails),
+      error: "The XRP Ledger does not currently support smart contract validation"
+    }
+  }
+
 }
 
 export type Transaction = {
@@ -154,10 +225,6 @@ export type Transaction = {
   instructions?: Instructions,
 };
 
-interface TransactionOptions extends BaseTransactionOptions {
-  feePrice: string;
-  maxLedgerVersion: string;
-  amount: string;
-}
+
 
 export default Ripple;

@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { SignedTransactionRequest, SDKOptions, DLTOptions, UnsignedData, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
+import { SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
 
 /**
  * @memberof module:overledger-core
@@ -53,7 +53,7 @@ class OverledgerSDK {
    * @return {AbstractDLT} The loaded DLT class
    */
   private loadDlt(config: DLTOptions): AbstractDLT {
-    // TODO: improve this loading
+
     const dltName = `overledger-dlt-${config.dlt}`;
     try {
       const provider = require(`@quantnetwork/${dltName}`).default;
@@ -94,18 +94,18 @@ class OverledgerSDK {
   /**
    * Sign the provided transactions
    *
-   * @param {UnsignedData[]} unsignedData Array of unsigned data
-   *
+   * @param {TransactionRequest[]} - the provided transactions in the standard overledger form
+   * 
    * @return {SignedTransactionRequest[]} Array of signed transaction requests wrapped by Overledger metadata
    */
-  public async sign(unsignedData: UnsignedData[]): Promise<SignedTransactionRequest[]> {
+  public async sign(unsignedData: TransactionRequest[]): Promise<SignedTransactionRequest[]> {
     const signedTransactionRequest = Promise.all(unsignedData.map(async (data) => {
-      const signedTransaction = await this.dlts[data.dlt].sign(data.toAddress, data.message, data.options);
+      const signedTransaction = await this.dlts[data.dlt].sign(data);
 
       return {
         dlt: data.dlt,
         fromAddress: this.dlts[data.dlt].account.address,
-        amount: data.options.amount,
+        //amount: data.extraFields.amount,
         signedTransaction: {
           signatures: [],
           transactions: [signedTransaction],
@@ -128,6 +128,7 @@ class OverledgerSDK {
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
+
 
   /**
    * Get the balances of the specified addresses
@@ -153,7 +154,7 @@ class OverledgerSDK {
   }
 
   /**
-   * Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+   * Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
    *
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {

@@ -14,25 +14,54 @@ import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
-import UnsignedData from './UnsignedData';
-import TransactionOptions from './TransactionOptions';
-
+import SmartContract from './SmartContract';
+import TransactionAccountsRequest from './TransactionAccountsRequest';
+import TransactionAccountsResponse from './TransactionAccountsResponse';
+import TransactionInput from './TransactionInput';
+import TransactionOutput from './TransactionOutput';
+import TransactionRequest from './TransactionRequest';
+import TransactionResponse from './TransactionResponse';
+import TransactionUtxoRequest from './TransactionUtxoRequest';
+import TransactionUtxoResponse from './TransactionUtxoResponse';
+import TransactionTypeOptions from './associatedEnums/TransactionTypeOptions';
+import TransactionSubTypeOptions from './associatedEnums/TransactionSubTypeOptions';
+import SCFunctionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
+import SCFunctionDefinition from './SmartContractFunctionDefinition';
+import SCFunctionParam from './SmartContractFunctionParam';
+import InteropSCFunctionOptions from './associatedEnums/SCInteropOptions';
+import DltNameOptions from './associatedEnums/DltNameOptions';
+import ValidationCheck from './ValidationCheck';
 /**
  * Types used by the Overledger SDK packages.
  */
 export {
-  Account,
-  APICallWrapper,
-  DLTAndAddress,
-  DLTOptions,
-  NetworkOptions,
-  Options,
-  ProviderOptions,
-  SDKOptions,
-  SequenceDataRequest,
-  SequenceDataResponse,
+  Account, 
+  APICallWrapper, 
+  DLTAndAddress, 
+  DLTOptions, 
+  NetworkOptions, 
+  Options, 
+  ProviderOptions, 
+  SDKOptions, 
+  SequenceDataRequest, 
+  SequenceDataResponse, 
   OverledgerSignedTransaction,
   SignedTransactionRequest,
-  UnsignedData,
-  TransactionOptions,
+  SmartContract, 
+  TransactionAccountsRequest, 
+  TransactionAccountsResponse, 
+  TransactionInput,
+  TransactionOutput,
+  TransactionRequest, 
+  TransactionResponse, 
+  TransactionUtxoRequest, 
+  TransactionUtxoResponse, 
+  TransactionTypeOptions,
+  TransactionSubTypeOptions, 
+  SCFunctionTypeOptions, 
+  SCFunctionDefinition, 
+  SCFunctionParam, 
+  InteropSCFunctionOptions,
+  DltNameOptions,
+  ValidationCheck
 };

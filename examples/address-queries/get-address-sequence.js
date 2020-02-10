@@ -1,5 +1,5 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -30,6 +30,6 @@ const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
         console.log('\n');
 
     } catch (e) {
-        console.error('error', e.response.data);
+        console.error('error', e);
     }
 })();

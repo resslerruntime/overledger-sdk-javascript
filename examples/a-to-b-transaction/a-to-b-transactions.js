@@ -1,24 +1,27 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionSubTypeOptions = require('@quantnetwork/overledger-types').TransactionSubTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '...';
+const bpiKey = '...';
+
 
 // Paste in your ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3';
-const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761'
+const partyAEthereumPrivateKey = '...'; //should have 0x in front
+const partyAEthereumAddress = '...'; //Xsender
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC'
-
-
-const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
+const partyARipplePrivateKey = '...';
+const partyARippleAddress = '...';
+
+//now provide two other addresses that you will be transfering value too
+const partyBEthereumAddress = '...';
+const partyBRippleAddress = '...';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -31,7 +34,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
       provider: { network: 'testnet' },
     });
 
-    const transactionMessage = 'Overledger JavaScript SDK Test';
+    const transactionMessage = 'A Transaction Test';
 
     // SET partyA accounts for signing;
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
@@ -43,8 +46,10 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
     const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
     const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
 
-
     // Sign the transactions.
+    //As input to this function, we will be providing:
+    //  (1) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (2) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
     const signedTransactions = await overledger.sign([
       //{
         //         dlt: 'bitcoin',
@@ -60,36 +65,54 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         //         }
         //     },
     {
-      // In order to prepare an ethereum transaction offline, we have to specify the sequence (nonce), a feePrice (gasPrice) and feeLimit (gasLimit).
-      dlt: 'ethereum',
-      toAddress: partyBEthereumAddress,
+            //the following parameters are from the TransactionRequest object:
+      dlt: DltNameOptions.ethereum,
+      type: TransactionTypeOptions.accounts,
+      subType: TransactionSubTypeOptions.valueTransfer,
       message: transactionMessage,
-      options: {
-        amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
-        sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
-        feePrice: '1000', // Price for each individual gas unit this transaction will consume
-        feeLimit: '80000', // The maximum fee that this transaction will use
+            //the following parameters are from the TransactionAccountRequest object:
+      fromAddress: partyAEthereumAddress,
+      toAddress: partyBEthereumAddress,
+      sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
+      extraFields: {
+              //the following parameters are from the TransactionEthereumRequest object:
+        compUnitPrice: '8000000000', // Price for each individual gas unit this transaction will consume
+        compLimit: '80000', // The maximum fee that this transaction will use
       },
     },
     {
-      // In order to prepare a ripple transaction offline, we have to specify a fee, sequence and maxLedgerVersion.
-      dlt: 'ripple',
-      toAddress: partyBRippleAddress,
+            //the following parameters are from the TransactionRequest object:
+      dlt: DltNameOptions.xrp,
+      type: TransactionTypeOptions.accounts,
+      subType: TransactionSubTypeOptions.valueTransfer,
       message: transactionMessage,
-      options: {
-        amount: '1', // Minimum allowed amount of drops is 1.
-        sequence: rippleAccountSequence, // Sequence increases by 1 with each transaction and starts at 1 right after getting the address from the XRP testnet faucet.
+            //the following parameters are from the TransactionAccountRequest object:
+      fromAddress: partyARippleAddress,
+      toAddress: partyBRippleAddress,
+      sequence: rippleAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '1', // Minimum allowed amount of drops is 1.      
+      extraFields: {
+                      //the following parameters are from the TransactionXRPRequest object:
         feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       },
     },]);
 
+    console.log("Signed transactions: ");
+    console.log(JSON.stringify(signedTransactions, null, 2));
+
     // Send the transactions to Overledger.
     const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
+    console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
-
+    console.log('\n');
+    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[0].transactionHash);
+    console.log('\n');
+    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[1].transactionHash);
+    console.log('\n');
   } catch (e) {
     console.error('error:', e);
   }
