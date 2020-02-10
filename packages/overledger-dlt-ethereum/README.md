@@ -153,7 +153,7 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
 
 #### *ethereum*.createAccount()
-Create an account for a specific DLT
+Create an Ethereum account
 
 **Returns**: <code>Account</code> - the new Ethereum account  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>

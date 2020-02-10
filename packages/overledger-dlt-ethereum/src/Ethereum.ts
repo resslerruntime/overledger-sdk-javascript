@@ -54,7 +54,7 @@ class Ethereum extends AbstractDLT {
   }
 
   /**
-   * Create an account for a specific DLT
+   * Create an Ethereum account
    *
    * @return {Account} the new Ethereum account
    */

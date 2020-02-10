@@ -42,9 +42,9 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Create an account for a specific DLT
+   * Create an XRP account
    *
-   * @return {Account}
+   * @return {Account} (privateKey, address)
    */
   createAccount(): Account {
     const generated = this.rippleAPI.generateAddress();
