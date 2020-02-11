@@ -1,7 +1,6 @@
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
-const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const TransactionEthereumSubTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').TransactionEthereumSubTypeOptions;
 const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
 //  ---------------------------------------------------------
@@ -11,12 +10,7 @@ const mappId = '...';
 const bpiKey = '...';
 
 
-// Paste in your bitcoin, ethereum and ripple private keys.
-// For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
-const partyABitcoinPrivateKey = 'cNfaxhH4XxKaHWFZZDhbAcWcZq4qDdpuCtbCHo9T6yAhC8YGWAqV'; //should have 0x in front
-const partyABitcoinAddress = 'mmhJJqp1o2w5GR9CCgn8VMXjcNEgcTu3iA'; 
-const partyAs2ndBitcoinPrivateKey = 'cVpfBYcHDY8sR9YpgWMs2wv3CdMiqSt8XZQzeB93dWdzrsbYoaQy'; //should have 0x in front
-const partyAs2ndBitcoinAddress = 'mrCHRbJ9fU9zrk5of2dj3Kk5fsyvPWREoq'; //nominate a Bitcoin address you own for the change to be returned to
+// Paste in your Ethereum and ripple private keys.
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '...'; //should have 0x in front
 const partyAEthereumAddress = '...'; 
@@ -26,7 +20,6 @@ const partyARipplePrivateKey = '...';
 const partyARippleAddress = '...';
 
 //now provide two other addresses that you will be transfering value too
-const partyBBitcoinAddress = '...';
 const partyBEthereumAddress = '...';
 const partyBRippleAddress = '...';
 //  ---------------------------------------------------------
@@ -36,7 +29,7 @@ const partyBRippleAddress = '...';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
       provider: { network: 'testnet' },
     });
 
@@ -54,45 +47,14 @@ const partyBRippleAddress = '...';
 
     // Sign the transactions.
     //As input to this function, we will be providing:
-    //  (1) a TransactionBitcoinRequest object (of @quantnetwork/overledger-dlt-bitcoin) that inherits from the TransactionUtxoRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
-    //  (2) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
-    //  (3) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (1) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (2) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
     const signedTransactions = await overledger.sign([
-    {
-          //the following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.bitcoin,
-      type: TransactionTypeOptions.utxo,
-      subType: TransactionBitcoinSubTypeOptions.valueTransfer,
-      message: transactionMessage,
-            //the following parameters are from the TransactionUtxoRequest object:
-      txInputs: [
-        {
-          linkedTx: "588fe992197b2f842d5f8879051b18a97ae150bae57b9bbc086e2f37c0d4535d",
-          linkedIndex: "0",
-          fromAddress: "2MutwwhL1cXSc5js4h4dexvawn3RBwi2Cge", 
-          amount: 0.0161803
-        }
-      ],
-      txOutputs: [
-        {
-          toAddress: partyBBitcoinAddress, 
-          amount: 0.00102
-        },
-        {
-          toAddress: partyAs2ndBitcoinAddress, 
-          amount: (0.0161803 - 0.00102 - 0.00034905)
-        }
-      ],
-      extraFields: {
-              //the following parameters are from the TransactionBitcoinRequest object:
-        feePrice: '0.00034905' // Price for the miner to add this transaction to the block
-      },
-    },
     {
             //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.ethereum,
       type: TransactionTypeOptions.accounts,
-      subType: TransactionEthereumSubTypeOptions.valueTransfer,
+      subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
       message: transactionMessage,
             //the following parameters are from the TransactionAccountRequest object:
       fromAddress: partyAEthereumAddress,
@@ -109,7 +71,7 @@ const partyBRippleAddress = '...';
             //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.xrp,
       type: TransactionTypeOptions.accounts,
-      subType: TransactionXRPSubTypeOptions.valueTransfer,
+      subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
       message: transactionMessage,
             //the following parameters are from the TransactionAccountRequest object:
       fromAddress: partyARippleAddress,

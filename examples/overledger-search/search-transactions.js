@@ -1,5 +1,4 @@
 const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
-const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -10,7 +9,6 @@ const bpiKey = '<ENTER YOUR BPIKEY>';
 // If looking for transaction hashes, they can be returned by running the 'a-to-b-transaction' example
 const ethereumTransactionHash = '0x4016406d985f0273d841353c95e88906fc805c700b7a5bf4c79124df1dd53985';
 const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E0756D1D7EBA287F';
-const bitcoinTransactionHash = 'cba56fa5543cab114ff54b315a453a89912ce34737e7d1a799e22f9f00b501d9';
 
 // After creating a transaction from a file in the a-to-b-transaction, you can put the transaction hash here to query its details
 const ethereumTransactionHash = '0xf18c2f363994591c8ca21bdd4cecb58d335736b009e8f36d74bb24527bd2a959';
@@ -23,16 +21,13 @@ const rippleTransactionHash = '67D7AA9D1A0273E3FDB8264D78476571C3D3CDD5C9E5FA12D
     try {
         //connect to overledger and choose the XRP distributed ledger:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
             provider: { network: 'testnet' },
         });
 
-        const bitcoinTransaction = await overledger.search.getTransaction(bitcoinTransactionHash);
         const ethereumTransaction = await overledger.search.getTransaction(ethereumTransactionHash);
         const rippleTransaction = await overledger.search.getTransaction(rippleTransactionHash);
 
-        console.log('Bitcoin transaction: ', bitcoinTransaction.data);
-        console.log('\n');
         console.log('Ethereum transaction: ', ethereumTransaction.data);
         console.log('\n');
         console.log('Ripple transaction: ', rippleTransaction.data);

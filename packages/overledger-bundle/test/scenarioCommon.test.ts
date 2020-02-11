@@ -7,8 +7,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Dlt/Common', () => {
   [
     {type: 'ethereum', symbol: 'ETH'},
-    {type: 'ripple', symbol: 'XRP'},
-    {type: 'bitcoin', symbol: 'XBT'},
+    {type: 'ripple', symbol: 'XRP'}
   ].forEach(dlt => {
     describe(dlt.type, () => {
       let overledger;
