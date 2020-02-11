@@ -7,6 +7,8 @@
 <dd></dd>
 <dt><a href="#module_overledger-dlt-abstract">overledger-dlt-abstract</a></dt>
 <dd></dd>
+<dt><a href="#module_overledger-dlt-bitcoin">overledger-dlt-bitcoin</a></dt>
+<dd></dd>
 <dt><a href="#module_overledger-dlt-ethereum">overledger-dlt-ethereum</a></dt>
 <dd></dd>
 <dt><a href="#module_overledger-dlt-ripple">overledger-dlt-ripple</a></dt>
@@ -16,6 +18,13 @@
 <dt><a href="#module_overledger-search">overledger-search</a></dt>
 <dd></dd>
 <dt><a href="#module_overledger-types">overledger-types</a></dt>
+<dd></dd>
+</dl>
+
+## Classes
+
+<dl>
+<dt><a href="#Bitcoin">Bitcoin</a></dt>
 <dd></dd>
 </dl>
 
@@ -30,8 +39,6 @@
 ## Typedefs
 
 <dl>
-<dt><a href="#Account">Account</a> : <code>Object</code></dt>
-<dd></dd>
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
@@ -48,7 +55,7 @@
 <dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for instantiating the SDK.</p>
+<dd><p>Options for instantiating the SDK</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -73,9 +80,6 @@
 </dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
-</dd>
-<dt><a href="#UnsignedData">UnsignedData</a> : <code>Object</code></dt>
-<dd><p>Unsigned transaction data.</p>
 </dd>
 </dl>
 
@@ -492,6 +496,14 @@ Takes the given smartContractQuery and validates it
 
 Wrap a specific DLT signed transaction with the Overledger required fields
 
+<a name="module_overledger-dlt-bitcoin"></a>
+
+## overledger-dlt-bitcoin
+<a name="module_overledger-dlt-bitcoin.default"></a>
+
+### *overledger-dlt-bitcoin*.default
+Development package for Bitcoin blockchain.
+
 <a name="module_overledger-dlt-ethereum"></a>
 
 ## overledger-dlt-ethereum
@@ -841,7 +853,6 @@ Takes the Overledger definition of a transaction and converts it into a specific
 
 validates an OVL transactionRequest according to XRP specific rules
 
-**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(thisTransaction)
@@ -1081,6 +1092,101 @@ Query a smart contract
 <a name="module_overledger-types.SCInteropOptions"></a>
 
 ### *overledger-types*.SCInteropOptions
+<a name="Bitcoin"></a>
+
+## Bitcoin
+
+* [Bitcoin](#Bitcoin)
+
+    * [.name](#Bitcoin+name)
+
+    * [.symbol](#Bitcoin+symbol)
+
+    * [.buildTransaction(thisTransaction)](#Bitcoin+buildTransaction)
+
+    * [._transactionValidation(thisTransaction)](#Bitcoin+_transactionValidation)
+
+    * [._sign(thisTransaction)](#Bitcoin+_sign)
+
+    * [.createAccount()](#Bitcoin+createAccount)
+
+    * [.setAccount()](#Bitcoin+setAccount)
+
+    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#Bitcoin+_buildSmartContractQuery)
+
+    * [._smartContractQueryValidation(contractQueryDetails)](#Bitcoin+_smartContractQueryValidation)
+
+
+<a name="Bitcoin+name"></a>
+
+### *bitcoin*.name
+Name of the DLT
+
+<a name="Bitcoin+symbol"></a>
+
+### *bitcoin*.symbol
+Symbol of the DLT
+
+<a name="Bitcoin+buildTransaction"></a>
+
+### *bitcoin*.buildTransaction(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
+
+Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
+
+**Returns**: <code>Transaction</code> - the Bitcoin transaction  
+<a name="Bitcoin+_transactionValidation"></a>
+
+### *bitcoin*._transactionValidation(thisTransaction)
+
+| Param | Description |
+| --- | --- |
+| thisTransaction | The transaction request |
+
+validates an OVL transactionRequest according to XRP specific rules
+
+<a name="Bitcoin+_sign"></a>
+
+### *bitcoin*._sign(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an XRP transaction |
+
+Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+
+<a name="Bitcoin+createAccount"></a>
+
+### *bitcoin*.createAccount()
+<a name="Bitcoin+setAccount"></a>
+
+### *bitcoin*.setAccount()
+<a name="Bitcoin+_buildSmartContractQuery"></a>
+
+### *bitcoin*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's Bitcoin address |
+| contractQueryDetails | <code>Object</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+
+Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for XRP)
+
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="Bitcoin+_smartContractQueryValidation"></a>
+
+### *bitcoin*._smartContractQueryValidation(contractQueryDetails)
+
+| Param | Description |
+| --- | --- |
+| contractQueryDetails | the query details |
+
+validates an OVL smart contract query according to Bitcoin specific rules
+
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
 <a name="computeParamType"></a>
 
 ## computeParamType(param)
@@ -1090,16 +1196,6 @@ Query a smart contract
 | param | the parameter definition |
 
 This function is used to prepare the parameter definition for the web3 package
-
-<a name="Account"></a>
-
-## Account
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-| address | <code>string</code> | The address |
 
 <a name="Account"></a>
 
@@ -1163,7 +1259,7 @@ Overledger network options.
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for instantiating the SDK.
+Options for instantiating the SDK
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -1235,7 +1331,6 @@ Overledger sequence data response.
 | --- | --- | --- |
 | dlt | <code>string</code> | The distributed ledger technology. |
 | fromAddress | <code>string</code> | The address initiating the transaction. |
-| amount | <code>string</code> | The token amount in the lowest unit for the respective DLT. |
 | signedTransaction | [<code>OverledgerSignedTransaction</code>](#OverledgerSignedTransaction) | The signed transaction object. |
 
 Overledger signed transaction request object.
@@ -1266,18 +1361,4 @@ A generic object to describe a smart contract function parameter.
 | error | <code>string</code> | Is there any more information on this error? |
 
 A generic object to describe a validationCheck.
-
-<a name="UnsignedData"></a>
-
-## UnsignedData
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| dlt | <code>string</code> | The DLT used for this transaction. |
-| toAddress | <code>string</code> | The recipient for this transaction. |
-| message | <code>string</code> | The transaction message. |
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | The specific transaction options. |
-
-Unsigned transaction data.
 
