@@ -1,5 +1,9 @@
 import axios from 'axios';
 import OverledgerSDK from '../src';
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionEthereumSubTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').TransactionEthereumSubTypeOptions;
+const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -170,34 +174,39 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Can sign Ethereum and Ripple transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: 'ethereum',
+          dlt: DltNameOptions.ethereum,
+          type: TransactionTypeOptions.accounts,
+          subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
+          message: "",
+          fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
           toAddress: '0x0000000000000000000000000000000000000000',
-          message: 'message',
-          options: {
-            amount: '0',
-            sequence: 1,
-            feeLimit: '100',
-            feePrice: '1',
+          sequence: 1, 
+          amount: '0', 
+          extraFields: {
+            compUnitPrice: '8000000000', 
+            compLimit: '80000'
           },
         },
         {
-          dlt: 'ripple',
-          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'message',
-          options: {
-            amount: '1',
-            sequence: 1,
-            feePrice: '12',
-            maxLedgerVersion: '100000000',
+          dlt: DltNameOptions.xrp,
+          type: TransactionTypeOptions.accounts,
+          subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
+          message: "",
+          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111",
+          toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+          sequence: 1, 
+          amount: '1',     
+          extraFields: {
+            feePrice: '12', 
+            maxLedgerVersion: '4294967295'
           },
-        },
+        }
       ]);
 
       expect(signedTransactions).toEqual([
         {
           dlt: 'ethereum',
           fromAddress: expect.any(String),
-          amount: expect.any(String),
           signedTransaction: {
             signatures: [],
             transactions: [expect.any(String)],
@@ -206,7 +215,6 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ripple',
           fromAddress: expect.any(String),
-          amount: expect.any(String),
           signedTransaction: {
             signatures: [],
             transactions: [expect.any(String)],
@@ -230,7 +238,6 @@ describe('Dlt/RippleAndEthereum', () => {
             {
               dlt: 'ethereum',
               fromAddress: expect.any(String),
-              amount: expect.any(String),
               signedTransaction: {
                 signatures: [],
                 transactions: [expect.any(String)],
@@ -239,7 +246,6 @@ describe('Dlt/RippleAndEthereum', () => {
             {
               dlt: 'ripple',
               fromAddress: expect.any(String),
-              amount: expect.any(String),
               signedTransaction: {
                 signatures: [],
                 transactions: [expect.any(String)],
@@ -284,34 +290,39 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Can sign Ethereum and Ripple transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: 'ethereum',
+          dlt: DltNameOptions.ethereum,
+          type: TransactionTypeOptions.accounts,
+          subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
+          message: "",
+          fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101', //should really be the  address of the private key but for this test is does not matter
           toAddress: '0x0000000000000000000000000000000000000000',
-          message: 'message',
-          options: {
-            amount: '0',
-            sequence: 1,
-            feeLimit: '100',
-            feePrice: '1',
+          sequence: 1, 
+          amount: '0', 
+          extraFields: {
+            compUnitPrice: '8000000000', 
+            compLimit: '80000'
           },
         },
         {
-          dlt: 'ripple',
-          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-          message: 'message',
-          options: {
-            amount: '1',
-            sequence: 1,
-            feePrice: '12',
-            maxLedgerVersion: '100000000',
+          dlt: DltNameOptions.xrp,
+          type: TransactionTypeOptions.accounts,
+          subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
+          message: "",
+          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111", //should really be the  address of the private key but for this test is does not matter
+          toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+          sequence: 1, 
+          amount: '1',     
+          extraFields: {
+            feePrice: '12', 
+            maxLedgerVersion: '4294967295'
           },
-        },
+        }
       ]);
 
       expect(signedTransactions).toEqual([
         {
           dlt: 'ethereum',
           fromAddress: expect.any(String),
-          amount: expect.any(String),
           signedTransaction: {
             signatures: [],
             transactions: [expect.any(String)],
@@ -320,7 +331,6 @@ describe('Dlt/RippleAndEthereum', () => {
         {
           dlt: 'ripple',
           fromAddress: expect.any(String),
-          amount: expect.any(String),
           signedTransaction: {
             signatures: [],
             transactions: [expect.any(String)],
@@ -343,7 +353,6 @@ describe('Dlt/RippleAndEthereum', () => {
           {
             dlt: 'ethereum',
             fromAddress: expect.any(String),
-            amount: expect.any(String),
             signedTransaction: {
               signatures: [],
               transactions: [expect.any(String)],
@@ -352,7 +361,6 @@ describe('Dlt/RippleAndEthereum', () => {
           {
             dlt: 'ripple',
             fromAddress: expect.any(String),
-            amount: expect.any(String),
             signedTransaction: {
               signatures: [],
               transactions: [expect.any(String)],

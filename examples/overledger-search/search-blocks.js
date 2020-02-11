@@ -1,16 +1,14 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '...';
+const bpiKey = '...';
 
-// Take these from the search-transaction scripts, as the response
-// includes what block the transaction is included in
-const ethereumBlockNumber = '<block number>';
-const rippleBlockNumber = '<block number>';
+// add which block to search
+const ethereumBlockNumber = '1000000';
+const rippleBlockNumber = '4531496';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -23,7 +21,7 @@ const rippleBlockNumber = '<block number>';
             provider: { network: 'testnet' },
 
         });
-
+        
         const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
         console.log('\n');

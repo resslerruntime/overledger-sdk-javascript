@@ -1,26 +1,24 @@
-// Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '...';
+const bpiKey = '...';
 
-// If looking for transaction hashes, they can be returned by running the 'a-to-b-transaction' example
-const ethereumTransactionHash = '0x4016406d985f0273d841353c95e88906fc805c700b7a5bf4c79124df1dd53985';
-const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E0756D1D7EBA287F';
-
+// After creating a transaction from a file in the a-to-b-transaction, you can put the transaction hash here to query its details
+const ethereumTransactionHash = '0xf18c2f363994591c8ca21bdd4cecb58d335736b009e8f36d74bb24527bd2a959';
+const rippleTransactionHash = '67D7AA9D1A0273E3FDB8264D78476571C3D3CDD5C9E5FA12DD0E7C990EC88620';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
 
 ; (async () => {
     try {
+        //connect to overledger and choose the XRP distributed ledger:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
             provider: { network: 'testnet' },
-
         });
 
         const ethereumTransaction = await overledger.search.getTransaction(ethereumTransactionHash);
@@ -31,6 +29,6 @@ const rippleTransactionHash = 'A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E
         console.log('Ripple transaction: ', rippleTransaction.data);
         console.log('\n');
     } catch (e) {
-        console.error('error', e.response.data);
+        console.error('error', e);
     }
 })();
