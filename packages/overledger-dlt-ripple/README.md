@@ -141,7 +141,6 @@ Takes the Overledger definition of a transaction and converts it into a specific
 
 validates an OVL transactionRequest according to XRP specific rules
 
-**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(thisTransaction)

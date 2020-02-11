@@ -46,7 +46,7 @@ yarn add @quantnetwork/overledger-types
 <dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for instantiating the SDK.</p>
+<dd><p>Options for instantiating the SDK</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -71,9 +71,6 @@ yarn add @quantnetwork/overledger-types
 </dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
-</dd>
-<dt><a href="#UnsignedData">UnsignedData</a> : <code>Object</code></dt>
-<dd><p>Unsigned transaction data.</p>
 </dd>
 </dl>
 
@@ -156,7 +153,7 @@ Overledger network options.
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for instantiating the SDK.
+Options for instantiating the SDK
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -228,7 +225,6 @@ Overledger sequence data response.
 | --- | --- | --- |
 | dlt | <code>string</code> | The distributed ledger technology. |
 | fromAddress | <code>string</code> | The address initiating the transaction. |
-| amount | <code>string</code> | The token amount in the lowest unit for the respective DLT. |
 | signedTransaction | [<code>OverledgerSignedTransaction</code>](#OverledgerSignedTransaction) | The signed transaction object. |
 
 Overledger signed transaction request object.
@@ -259,18 +255,4 @@ A generic object to describe a smart contract function parameter.
 | error | <code>string</code> | Is there any more information on this error? |
 
 A generic object to describe a validationCheck.
-
-<a name="UnsignedData"></a>
-
-## UnsignedData
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| dlt | <code>string</code> | The DLT used for this transaction. |
-| toAddress | <code>string</code> | The recipient for this transaction. |
-| message | <code>string</code> | The transaction message. |
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | The specific transaction options. |
-
-Unsigned transaction data.
 

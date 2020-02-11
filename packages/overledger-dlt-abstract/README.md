@@ -20,20 +20,6 @@ yarn add @quantnetwork/overledger-dlt-abstract
 
 ## API Reference
 
-## Modules
-
-<dl>
-<dt><a href="#module_overledger-dlt-abstract">overledger-dlt-abstract</a></dt>
-<dd></dd>
-</dl>
-
-## Typedefs
-
-<dl>
-<dt><a href="#Account">Account</a> : <code>Object</code></dt>
-<dd></dd>
-</dl>
-
 <a name="module_overledger-dlt-abstract"></a>
 
 ## overledger-dlt-abstract
@@ -217,14 +203,4 @@ Takes the given smartContractQuery and validates it
 | signedTransaction | <code>SignedTransactionRequest</code> | 
 
 Wrap a specific DLT signed transaction with the Overledger required fields
-
-<a name="Account"></a>
-
-## Account
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-| address | <code>string</code> | The address |
 

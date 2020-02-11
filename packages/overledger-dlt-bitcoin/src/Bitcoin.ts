@@ -128,6 +128,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
     totalInputAmount = totalInputAmount + thisBitcoinTx.txInputs[counter].amount;
     counter++;
   }
+  counter = 0;
   while (counter < thisBitcoinTx.txOutputs.length){
     
     if ((!thisBitcoinTx.txOutputs[counter].amount)||(thisBitcoinTx.txOutputs[counter].amount == null)){
