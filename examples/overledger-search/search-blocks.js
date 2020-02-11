@@ -6,10 +6,9 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const mappId = '...';
 const bpiKey = '...';
 
-// Take these from the search-transaction scripts, as the response
-// includes what block the transaction is included in
+// add which block to search
 const ethereumBlockNumber = '1000000';
-const rippleBlockNumber = '1000001';
+const rippleBlockNumber = '4531496';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
