@@ -1,6 +1,5 @@
 import DltNames from "./associatedEnums/DltNameOptions";
 import TransactionType from "./associatedEnums/TransactionTypeOptions";
-import TransactionSubType from "./associatedEnums/TransactionSubTypeOptions";
 import TransactionStatus from "./associatedEnums/TransactionStatusOptions";
 import TimeStampUnits from "./associatedEnums/TimeStampUnitsOptions";
 
@@ -9,7 +8,7 @@ import TimeStampUnits from "./associatedEnums/TimeStampUnitsOptions";
  * @typedef {Object} TransactionResponse
  * @property {DltNames} dlt - the distributed ledger this transaction is for
  * @property {TransactionType} type - the type of distributed ledger this transaction is for
- * @property {TransactionSubType} subType - further details on the actions of this transaction
+ * @property {Object} subType - further details on the action this transaction is performing (for example: valueTransfer, smartContractDeploy, smartContractInvocation,....), the options of which are explicitly defined in the DLT specific transactionResponse object
  * @property {string} message - is there any message (e.g. hash) to embed within this transaction (possibly for auditability purposes)
  * @property {number} id - the id (e.g. hash) of this transaction on the ledger
  * @property {string} timestamp - the timestamp (e.g. confirmation time)
@@ -25,7 +24,7 @@ import TimeStampUnits from "./associatedEnums/TimeStampUnitsOptions";
 type TransactionResponse = {
     dlt: DltNames,
     type: TransactionType,
-    subType: TransactionSubType,
+    subType: Object,
     message: string,
     id: string,  
     timestamp: string,   

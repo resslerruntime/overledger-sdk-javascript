@@ -5,7 +5,7 @@
 /**
  * @memberof module:overledger-dlt-ethereum
  */
-export enum EthereumTypeOptions { uintB = "uintB", intB = "intB", address = "address", bool = "bool", bytesB = "bytesB", string = "string", uintBArray = "uintB[]", intBArray = "intB[]", addressArray = "address[]", boolArray = "bool[]", bytesBArray = "bytesB[]", other = "other" };
+export enum EthereumTypeOptions { uintB = "uintB", intB = "intB", address = "address", bool = "bool", bytesB = "bytesB", string = "string", uintBArray = "uintB[]", intBArray = "intB[]", addressArray = "address[]", boolArray = "bool[]", bytesBArray = "bytesB[]" };
 
 
 export default EthereumTypeOptions;

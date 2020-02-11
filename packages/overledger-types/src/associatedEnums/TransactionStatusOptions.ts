@@ -8,8 +8,7 @@
 
 export enum TransactionStatusOptions { 
     broadcast = "b",
-    confirmed = "c",
-    other = "other"
+    confirmed = "c"
 
 };
 

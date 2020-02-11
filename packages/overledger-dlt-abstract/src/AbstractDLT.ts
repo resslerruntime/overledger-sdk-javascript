@@ -1,4 +1,4 @@
-import {TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions, TransactionSubTypeOptions, TransactionAccountsRequest , TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract} from '@quantnetwork/overledger-types';
+import {TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions, TransactionAccountsRequest , TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract} from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -120,12 +120,6 @@ abstract class AbstractDLT {
             success: false,
             failingField: "subType",
             error: "All transactions must have a subType field"
-          }
-        }  else if (!Object.values(TransactionSubTypeOptions).includes(thisTransaction.subType)) {
-          return {
-            success: false,
-            failingField: "subType",
-            error: "You must select a subType from TransactionSubTypeOptions"
           }
         } else if ((!this.conversionTest(thisTransaction.message))||(thisTransaction.message === 'undefined')||(thisTransaction.message == null)) {
           return {

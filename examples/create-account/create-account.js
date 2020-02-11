@@ -13,16 +13,20 @@ const bpiKey = '...';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-          dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+          dlts: [{ dlt: DltNameOptions.bitcoin}, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
+        const bitcoinAccount = await overledger.dlts.bitcoin.createAccount();
+        console.log('Bitcoin account:\n', bitcoinAccount);
+        console.log('\n');
+
         const ethAccount = await overledger.dlts.ethereum.createAccount();
-        console.log('Account:\n', ethAccount);
+        console.log('Ethereum account:\n', ethAccount);
         console.log('\n');
 
         const xrpAccount = await overledger.dlts.ripple.createAccount();
-        console.log('Account:\n', xrpAccount);
+        console.log('XRP account:\n', xrpAccount);
         console.log('\n');
 
     } catch (e) {

@@ -3,6 +3,7 @@
  */
 
 import Ripple from './Ripple';
+import TransactionXRPSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionXRPSubTypeOptions';
 import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
 import TransactionXRPResponse from './DLTSpecificTypes/TransactionXRPResponse';
 
@@ -10,6 +11,7 @@ import TransactionXRPResponse from './DLTSpecificTypes/TransactionXRPResponse';
  * Objects and interfaces used when interacting with the Ripple (XRP Ledger) package
  */
 export {
+    TransactionXRPSubTypeOptions,
     TransactionXRPRequest,
     TransactionXRPResponse
 }

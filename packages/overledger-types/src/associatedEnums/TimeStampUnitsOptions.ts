@@ -14,8 +14,7 @@ export enum TimeStampUnitOptions {
     generalDateTimeShort = "gs",
     generalDateTimeLong = "gl",
     universalDateTimeSortable = "us",
-    universalDateTimeFull = "uf",
-    other = "other"
+    universalDateTimeFull = "uf"
 };
 
 export default TimeStampUnitOptions;

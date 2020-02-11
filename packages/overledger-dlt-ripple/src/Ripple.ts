@@ -2,11 +2,11 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Account, Options, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
+import { Account, Options, TransactionRequest, ValidationCheck} from '@quantnetwork/overledger-types';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
-
+import TransactionXRPSubTypeOptions from "./DLTSpecificTypes/associatedEnums/TransactionXRPSubTypeOptions";
 /**
  * @memberof module:overledger-dlt-ripple
 */
@@ -122,7 +122,13 @@ _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
 
   let thisXRPTx = <TransactionXRPRequest> thisTransaction;
   //check for the presence of XRP specific fields
-  if ((!thisXRPTx.extraFields)||(thisXRPTx.extraFields == null)){
+if (!Object.values(TransactionXRPSubTypeOptions).includes(thisXRPTx.subType.name)) {
+    return {
+      success: false,
+      failingField: "subType",
+      error: "You must select a subType from TransactionSubTypeOptions"
+    }
+  } else if ((!thisXRPTx.extraFields)||(thisXRPTx.extraFields == null)){
     return {
       success: false,
       failingField: "extraFields",
@@ -197,7 +203,7 @@ _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
     return {
       success: false,
       failingField: dltAddress + " " + JSON.stringify(contractQueryDetails),
-      error: "The XRP Ledger does not currently support smart contract queries",
+      error: "The XRP SDK does not currently support smart contract queries",
     }
   }
 
@@ -213,7 +219,7 @@ _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
     return {
       success: false,
       failingField: JSON.stringify(contractQueryDetails),
-      error: "The XRP Ledger does not currently support smart contract validation"
+      error: "The XRP SDK does not currently support smart contract validation"
     }
   }
 

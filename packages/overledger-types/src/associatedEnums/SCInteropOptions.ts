@@ -10,7 +10,6 @@ export enum SCInteropOptions {
     migrationCancellation = "migrate_cancel",
     oracleRequest = "oracle_request",
     oracleResponse = "oracle_response",
-    other = "other" 
   };
 
 export default SCInteropOptions;

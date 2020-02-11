@@ -15,8 +15,7 @@ export enum DltNameOptions {
     corda = "corda",
     quorum = "quorum",
     stellar = "stellar",
-    iota = "iota",
-    other = "other"
+    iota = "iota"
 
 };
 

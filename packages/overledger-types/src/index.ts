@@ -24,7 +24,6 @@ import TransactionResponse from './TransactionResponse';
 import TransactionUtxoRequest from './TransactionUtxoRequest';
 import TransactionUtxoResponse from './TransactionUtxoResponse';
 import TransactionTypeOptions from './associatedEnums/TransactionTypeOptions';
-import TransactionSubTypeOptions from './associatedEnums/TransactionSubTypeOptions';
 import SCFunctionTypeOptions from './associatedEnums/SCFunctionTypeOptions';
 import SCFunctionDefinition from './SmartContractFunctionDefinition';
 import SCFunctionParam from './SmartContractFunctionParam';
@@ -57,7 +56,6 @@ export {
   TransactionUtxoRequest, 
   TransactionUtxoResponse, 
   TransactionTypeOptions,
-  TransactionSubTypeOptions, 
   SCFunctionTypeOptions, 
   SCFunctionDefinition, 
   SCFunctionParam, 

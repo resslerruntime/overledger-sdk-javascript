@@ -9,6 +9,7 @@ import EthereumUintIntOptions from './DLTSpecificTypes/associatedEnums/UintIntBO
 import SCEthereumParam from './DLTSpecificTypes/SCEthereumParam';
 import SCQueryParams from './DLTSpecificTypes/SCQueryParams';
 import SmartContractEthereum from './DLTSpecificTypes/SmartContractEthereum';
+import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionEthereumSubTypeOptions';
 import TransactionEthereumRequest from './DLTSpecificTypes/TransactionEthereumRequest';
 import TransactionEthereumResponse from './DLTSpecificTypes/TransactionEthereumResponse';
 
@@ -22,6 +23,7 @@ export {
     SCEthereumParam,
     SCQueryParams,
     SmartContractEthereum,
+    TransactionEthereumSubTypeOptions,
     TransactionEthereumRequest,
     TransactionEthereumResponse
 }
