@@ -46,31 +46,34 @@ class Bitcoin extends AbstractDLT {
    * @return {Transaction} the Bitcoin transaction
    */
   buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
-
+    console.log("0");
     super.transactionValidation(thisTransaction);
 
     //const feePrice = Number(thisTransaction.extraFields.feePrice);
-
+    console.log("1");
     const tx = new bitcoin.TransactionBuilder(this.addressType);
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
-
+    console.log("2");
     let counter = 0;
     while (counter < thisTransaction.txInputs.length){
       tx.addInput(thisTransaction.txInputs[counter].linkedTx, thisTransaction.txInputs[counter].linkedIndex);
       counter++;
     }
+    console.log("3");
     counter = 0;
     while (counter < thisTransaction.txOutputs.length){
       tx.addOutput(thisTransaction.txOutputs[counter].toAddress, thisTransaction.txOutputs[counter].amount);
       counter++;
     }
-    
+    console.log("4");
     const ret = bitcoin.script.compile(
       [
         bitcoin.opcodes.OP_RETURN,
         data,
       ]);
+      console.log("5");
     tx.addOutput(ret, 0);
+    console.log("6");
     //tx.addOutput(this.account.address, value - amount - this.NON_DUST_AMOUNT - feePrice);
 
     return tx;
@@ -102,7 +105,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
       failingField: "extraFields",
       error: 'All transactions for Bitcoin must have the extraFields field set with feePrice parameters within it'
     } 
-  } else if ((thisBitcoinTx.extraFields.feePrice == "")||(thisBitcoinTx.extraFields.feePrice == null)||(thisBitcoinTx.extraFields.feePrice === 'undefined')||(!Number.isNaN(Number(thisBitcoinTx.extraFields.feePrice)))){
+  } else if ((thisBitcoinTx.extraFields.feePrice == "")||(thisBitcoinTx.extraFields.feePrice == null)||(thisBitcoinTx.extraFields.feePrice === 'undefined')){
     return {
       success: false,
       failingField: "extraFields.feePrice",
@@ -140,7 +143,17 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   //make sure that the fee price + transaction amounts equal the input amount (minus dust??)
   //this way we can alert the user if he expected change to be given automatically!
 
-    //start here
+  if (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice) != 0){
+    console.log("A: " + totalInputAmount); 
+    console.log("B: " + totalOutputAmount); 
+    console.log("C: " + thisBitcoinTx.extraFields.feePrice); 
+    console.log("D: " + (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice))); 
+    return {
+      success: false,
+      failingField: "amount",
+      error: 'All transactions for Bitcoin must satisfy the following logic: TotalInputAmounts - TotalOutputAmounts - feePrice = 0'
+    } 
+  }
 
   return {success: true};
 }

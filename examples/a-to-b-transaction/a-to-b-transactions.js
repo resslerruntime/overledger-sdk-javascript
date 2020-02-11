@@ -7,8 +7,8 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '...';
-const bpiKey = '...';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
 
 // Paste in your bitcoin, ethereum and ripple private keys.
@@ -18,17 +18,17 @@ const partyABitcoinAddress = 'mmhJJqp1o2w5GR9CCgn8VMXjcNEgcTu3iA';
 const partyAs2ndBitcoinPrivateKey = 'cVpfBYcHDY8sR9YpgWMs2wv3CdMiqSt8XZQzeB93dWdzrsbYoaQy'; //should have 0x in front
 const partyAs2ndBitcoinAddress = 'mrCHRbJ9fU9zrk5of2dj3Kk5fsyvPWREoq'; //nominate a Bitcoin address you own for the change to be returned to
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '...'; //should have 0x in front
-const partyAEthereumAddress = '...'; 
+const partyAEthereumPrivateKey = '0xB4949F205AEAFB7E61E3C2D4BE42F6703A79FED92FAD2B5EC6DA4A118486B3C7'; //should have 0x in front
+const partyAEthereumAddress = '0x20c109A79d0c161e6AE72E8c8e5A0aFeD28e8bd0'; 
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyARipplePrivateKey = '...';
-const partyARippleAddress = '...';
+const partyARipplePrivateKey = 'shrQbu8sZtCChEejY8cg5ZqY3wK1m';
+const partyARippleAddress = 'rPs726xarcP21tU4tb1md51Nb9HDPCh4Wy';
 
 //now provide two other addresses that you will be transfering value too
-const partyBBitcoinAddress = '...';
-const partyBEthereumAddress = '...';
-const partyBRippleAddress = '...';
+const partyBBitcoinAddress = 'mmhJJqp1o2w5GR9CCgn8VMXjcNEgcTu111';
+const partyBEthereumAddress = '0x74269e7c9D1e3f3937E8aF7b62Bc0B7795f15C1A';
+const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -36,13 +36,14 @@ const partyBRippleAddress = '...';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
     });
 
     const transactionMessage = 'A Transaction Test';
 
     // SET partyA accounts for signing;
+    overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
 
@@ -62,7 +63,7 @@ const partyBRippleAddress = '...';
           //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.bitcoin,
       type: TransactionTypeOptions.utxo,
-      subType: TransactionBitcoinSubTypeOptions.valueTransfer,
+      subType: {name: TransactionBitcoinSubTypeOptions.valueTransfer},
       message: transactionMessage,
             //the following parameters are from the TransactionUtxoRequest object:
       txInputs: [
@@ -80,7 +81,7 @@ const partyBRippleAddress = '...';
         },
         {
           toAddress: partyAs2ndBitcoinAddress, 
-          amount: (0.0161803 - 0.00102 - 0.00034905)
+          amount: 0.01481125 //i.e. 0.0161803 - 0.00102 - 0.00034905)
         }
       ],
       extraFields: {
@@ -92,7 +93,7 @@ const partyBRippleAddress = '...';
             //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.ethereum,
       type: TransactionTypeOptions.accounts,
-      subType: TransactionEthereumSubTypeOptions.valueTransfer,
+      subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
       message: transactionMessage,
             //the following parameters are from the TransactionAccountRequest object:
       fromAddress: partyAEthereumAddress,
@@ -109,7 +110,7 @@ const partyBRippleAddress = '...';
             //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.xrp,
       type: TransactionTypeOptions.accounts,
-      subType: TransactionXRPSubTypeOptions.valueTransfer,
+      subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
       message: transactionMessage,
             //the following parameters are from the TransactionAccountRequest object:
       fromAddress: partyARippleAddress,
@@ -127,16 +128,16 @@ const partyBRippleAddress = '...';
     console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
-    const result = (await overledger.send(signedTransactions)).data;
+    //const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
-    console.log('OVL result:');
-    console.log(JSON.stringify(result, null, 2));
-    console.log('\n');
-    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log('\n');
-    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    console.log('\n');
+    //console.log('OVL result:');
+    //console.log(JSON.stringify(result, null, 2));
+    //console.log('\n');
+    //console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[0].transactionHash);
+    //console.log('\n');
+    //console.log('Your XRP value transfer transaction hash is: ' + result.dltData[1].transactionHash);
+    //console.log('\n');
   } catch (e) {
     console.error('error:', e);
   }
