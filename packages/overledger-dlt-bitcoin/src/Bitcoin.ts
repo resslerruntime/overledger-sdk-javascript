@@ -115,7 +115,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   counter = 0;
   while (counter < thisBitcoinTx.txOutputs.length){
     
-    if (!("amount" in thisBitcoinTx.txOutputs[counter])){
+    if (!thisBitcoinTx.txOutputs[counter].amount || thisBitcoinTx.txOutputs[counter].amount === undefined ){
       return {
         success: false,
         failingField: "thisBitcoinTx.txOutputs.amount",
@@ -128,7 +128,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   //make sure that the fee price + transaction amounts equal the input amount (minus dust??)
   //this way we can alert the user if he expected change to be given automatically!
 
-  if (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice) != 0){ //providing a bit of leway for javascript parsing errors
+  if (totalInputAmount - totalOutputAmount - parseInt(thisBitcoinTx.extraFields.feePrice, 10) != 0){ //providing a bit of leway for javascript parsing errors
     return {
       success: false,
       failingField: "amount",
