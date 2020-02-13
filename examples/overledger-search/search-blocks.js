@@ -10,8 +10,8 @@ const bpiKey = 'bpikeytest';
 // Take these from the search-transaction scripts, as the response
 // includes what block the transaction is included in
 const ethereumBlockNumber = '1000000';
-const rippleBlockNumber = '1000001';
-//const bitcoinBlockNumber = '1000002';
+const rippleBlockNumber = '4531496';
+const bitcoinBlockNumber = '1000002';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -20,7 +20,7 @@ const rippleBlockNumber = '1000001';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: "bitcoin" }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
 
         });

@@ -2,7 +2,7 @@ import Dlt from '../src';
 import OverledgerSDK from '@quantnetwork/overledger-core';
 
 describe('Dlt', () => {
-  test('Can construct the Dlt with the index or dlt', () => {
+  test('Can construct the DLT', () => {
     const mappId = 'mockMappId';
     const bpiKey = 'mockBpiKey';
 

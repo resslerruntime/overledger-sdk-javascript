@@ -7,8 +7,9 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = 'network.quant.software';
 const bpiKey = 'bpikeytest';
 
-const ethereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
+const ethereumAddress = '0x635B4764D1939DfAcD3a8014726159abC277BecC';
 const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
+//note: Bitcoin addresses do not have a sequence number as Bitcoin is a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -17,7 +18,7 @@ const rippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'bitcoin' }, { dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 

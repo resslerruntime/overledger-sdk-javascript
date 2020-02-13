@@ -1,15 +1,13 @@
-import bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'bitcoinjs-lib';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Options, Account, TransactionRequest, ValidationCheck} from '@quantnetwork/overledger-types';
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from "./DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions";
 
-
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT: number = 546;
-  addressType: string;
-  privateKey: string;
+  addressType: bitcoin.Network;
   account: Account;
   options: Object;
 
@@ -26,15 +24,13 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  constructor(sdk: any, options: Options) {
+  constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
-
     if (sdk.network === MAINNET) {
       this.addressType = bitcoin.networks.bitcoin;
     } else {
       this.addressType = bitcoin.networks.testnet;
     }
-
     if (options.privateKey) {
       this.setAccount(options.privateKey);
     }
@@ -46,35 +42,29 @@ class Bitcoin extends AbstractDLT {
    * @return {Transaction} the Bitcoin transaction
    */
   buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
-    console.log("0");
+
     super.transactionValidation(thisTransaction);
 
     //const feePrice = Number(thisTransaction.extraFields.feePrice);
-    console.log("1");
-    const tx = new bitcoin.TransactionBuilder(this.addressType);
+    let tx;
+    tx = new bitcoin.TransactionBuilder(this.addressType, 0); //set maximum fee rate = 0 to be flexible on fee rate
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
-    console.log("2");
     let counter = 0;
     while (counter < thisTransaction.txInputs.length){
-      tx.addInput(thisTransaction.txInputs[counter].linkedTx, thisTransaction.txInputs[counter].linkedIndex);
+      tx.addInput(thisTransaction.txInputs[counter].linkedTx, Number(thisTransaction.txInputs[counter].linkedIndex));
       counter++;
     }
-    console.log("3");
     counter = 0;
     while (counter < thisTransaction.txOutputs.length){
       tx.addOutput(thisTransaction.txOutputs[counter].toAddress, thisTransaction.txOutputs[counter].amount);
       counter++;
     }
-    console.log("4");
     const ret = bitcoin.script.compile(
       [
         bitcoin.opcodes.OP_RETURN,
         data,
       ]);
-      console.log("5");
     tx.addOutput(ret, 0);
-    console.log("6");
-    //tx.addOutput(this.account.address, value - amount - this.NON_DUST_AMOUNT - feePrice);
 
     return tx;
   }
@@ -99,12 +89,6 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
       failingField: "extraFields",
       error: 'All transactions for Bitcoin must have the extraFields field set with feePrice parameters within it'
     } 
-  } else if ((!thisBitcoinTx.extraFields)||(thisBitcoinTx.extraFields == null)){
-    return {
-      success: false,
-      failingField: "extraFields",
-      error: 'All transactions for Bitcoin must have the extraFields field set with feePrice parameters within it'
-    } 
   } else if ((thisBitcoinTx.extraFields.feePrice == "")||(thisBitcoinTx.extraFields.feePrice == null)||(thisBitcoinTx.extraFields.feePrice === 'undefined')){
     return {
       success: false,
@@ -118,10 +102,10 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   let totalOutputAmount = 0;
   while (counter < thisBitcoinTx.txInputs.length){
     
-    if ((!thisBitcoinTx.txInputs[counter].amount)||(thisBitcoinTx.txInputs[counter].amount == null)){
+    if (!("amount" in thisBitcoinTx.txInputs[counter])){
       return {
         success: false,
-        failingField: "thisBitcoinTx.txInputs[counter].amount",
+        failingField: "thisBitcoinTx.txInputs.amount",
         error: 'All transactions inputs for Bitcoin must have an amount field'
       } 
     }
@@ -131,10 +115,10 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   counter = 0;
   while (counter < thisBitcoinTx.txOutputs.length){
     
-    if ((!thisBitcoinTx.txOutputs[counter].amount)||(thisBitcoinTx.txOutputs[counter].amount == null)){
+    if (!("amount" in thisBitcoinTx.txOutputs[counter])){
       return {
         success: false,
-        failingField: "thisBitcoinTx.txOutputs[counter].amount",
+        failingField: "thisBitcoinTx.txOutputs.amount",
         error: 'All transactions outputs for Bitcoin must have an amount field'
       } 
     }
@@ -144,11 +128,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   //make sure that the fee price + transaction amounts equal the input amount (minus dust??)
   //this way we can alert the user if he expected change to be given automatically!
 
-  if (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice) != 0){
-    console.log("A: " + totalInputAmount); 
-    console.log("B: " + totalOutputAmount); 
-    console.log("C: " + thisBitcoinTx.extraFields.feePrice); 
-    console.log("D: " + (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice))); 
+  if (Number(totalInputAmount)-Number(totalOutputAmount)-Number(thisBitcoinTx.extraFields.feePrice) != 0){ //providing a bit of leway for javascript parsing errors
     return {
       success: false,
       failingField: "amount",
@@ -165,9 +145,17 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
     
-    const transaction = this.buildTransaction(<TransactionBitcoinRequest>thisTransaction);
-    transaction.sign(0, this.account.privateKey);
-
+    let thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
+    const transaction = this.buildTransaction(thisBitcoinTransaction);
+    console.log("bitcoin tx: " + JSON.stringify(transaction));
+    //for each input sign them:
+    const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+    let counter = 0;
+    while (counter < thisBitcoinTransaction.txInputs.length){
+      //currently we are only supporting the p2pkh script
+      transaction.sign({prevOutScriptType: 'p2pkh', vin: counter, keyPair: myKeyPair});
+      counter++
+    }
     return Promise.resolve(transaction.build().toHex());
   }
 
@@ -175,29 +163,31 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
    * @inheritdoc
    */
   createAccount(): Account {
-    const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
 
-    const privateKey = keyPair.toWIF();
-    const { address } = bitcoin.payments
-      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
+      const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
+      const privateKey = keyPair.toWIF();
+      const { address } = bitcoin.payments
+        .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
+  
+      return {
+        privateKey,
+        address,
+      };
 
-    return {
-      privateKey,
-      address,
-    };
   }
 
   /**
    * @inheritdoc
    */
-  setAccount(privateKey: string): void {
-    const keyPair = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
+  setAccount(myPrivateKey: string): void {
 
-    this.account = {
-      privateKey: keyPair,
-      address: bitcoin.payments
-        .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
-    };
+      const keyPair = bitcoin.ECPair.fromWIF(myPrivateKey, this.addressType);
+      this.account = {
+        privateKey: myPrivateKey,
+        address: bitcoin.payments
+          .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
+      };
+    
   }
 
     /**

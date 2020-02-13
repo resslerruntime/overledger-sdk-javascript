@@ -26,9 +26,10 @@ const partyARipplePrivateKey = 'shrQbu8sZtCChEejY8cg5ZqY3wK1m';
 const partyARippleAddress = 'rPs726xarcP21tU4tb1md51Nb9HDPCh4Wy';
 
 //now provide two other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'mmhJJqp1o2w5GR9CCgn8VMXjcNEgcTu111';
+const partyBBitcoinAddress = 'mvRNyc5WnGCvjf8mdzh119vR2Q1DZyuZSR';
 const partyBEthereumAddress = '0x74269e7c9D1e3f3937E8aF7b62Bc0B7795f15C1A';
 const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
+
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -39,20 +40,17 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
       dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
     });
-
-    const transactionMessage = 'A Transaction Test';
+    const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
-
     // Get the address sequences.
-    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
-    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
-
+    //const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
+    //const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
+    const ethereumAccountSequence = 1;//ethereumSequenceRequest.data.dltData[0].sequence;
+    const rippleAccountSequence = 1;//rippleSequenceRequest.data.dltData[0].sequence;
     // Sign the transactions.
     //As input to this function, we will be providing:
     //  (1) a TransactionBitcoinRequest object (of @quantnetwork/overledger-dlt-bitcoin) that inherits from the TransactionUtxoRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
@@ -68,25 +66,31 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
             //the following parameters are from the TransactionUtxoRequest object:
       txInputs: [
         {
-          linkedTx: "588fe992197b2f842d5f8879051b18a97ae150bae57b9bbc086e2f37c0d4535d",
+          linkedTx: "f04fb35581ede6e031ec3ccbb9c876faf55f7148e078f5889e33e6b75fec250b",
           linkedIndex: "0",
-          fromAddress: "2MutwwhL1cXSc5js4h4dexvawn3RBwi2Cge", 
-          amount: 0.0161803
+          fromAddress: partyABitcoinAddress, 
+          amount: 149000 //in satoshis
+        },        
+        {
+          linkedTx: "cea5a345dcb7cb891f79c9f64ded895d47b66976b13a3c239deeaa7851164979",
+          linkedIndex: "1",
+          fromAddress: "2MyxEmuqnogTJRcoAqUoPbpY4z1WQ1Fdanp", 
+          amount: 1849625 //in satoshis
         }
       ],
       txOutputs: [
         {
-          toAddress: partyBBitcoinAddress, 
-          amount: 0.00102
-        },
-        {
           toAddress: partyAs2ndBitcoinAddress, 
-          amount: 0.01481125 //i.e. 0.0161803 - 0.00102 - 0.00034905)
-        }
+          amount: 1996125 //in satoshis
+        }/*,
+        {
+          toAddress: partyAs2ndBitcoinAddress, //the change address
+          amount: 1513630 //in satoshis
+        }*/
       ],
       extraFields: {
               //the following parameters are from the TransactionBitcoinRequest object:
-        feePrice: '0.00034905' // Price for the miner to add this transaction to the block
+        feePrice: '2500' // Price for the miner to add this transaction to the block
       },
     },
     {
@@ -128,16 +132,18 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
     console.log(JSON.stringify(signedTransactions, null, 2));
 
     // Send the transactions to Overledger.
-    //const result = (await overledger.send(signedTransactions)).data;
+    const result = (await overledger.send(signedTransactions)).data;
 
     // Log the result.
-    //console.log('OVL result:');
-    //console.log(JSON.stringify(result, null, 2));
-    //console.log('\n');
-    //console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    //console.log('\n');
-    //console.log('Your XRP value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    //console.log('\n');
+    console.log('OVL result:');
+    console.log(JSON.stringify(result, null, 2));
+    console.log('\n');
+    console.log('Your Bitcoin value transfer transaction hash is: ' + result.dltData[0].transactionHash);
+    console.log('\n');
+    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
+    console.log('\n');
+    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[2].transactionHash);
+    console.log('\n');
   } catch (e) {
     console.error('error:', e);
   }
