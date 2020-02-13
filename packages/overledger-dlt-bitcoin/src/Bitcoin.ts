@@ -102,7 +102,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   let totalOutputAmount = 0;
   while (counter < thisBitcoinTx.txInputs.length){
     
-    if (!("amount" in thisBitcoinTx.txInputs[counter])){
+    if (!thisBitcoinTx.txInputs[counter].amount || thisBitcoinTx.txInputs[counter].amount === undefined ){
       return {
         success: false,
         failingField: "thisBitcoinTx.txInputs.amount",
