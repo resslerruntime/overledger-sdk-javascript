@@ -4,11 +4,10 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
+const mappId = '...';
+const bpiKey = '...';
 
-// Take these from the search-transaction scripts, as the response
-// includes what block the transaction is included in
+// includes what block number to search
 const ethereumBlockNumber = '1000000';
 const rippleBlockNumber = '4531496';
 const bitcoinBlockNumber = '1000002';
@@ -19,6 +18,7 @@ const bitcoinBlockNumber = '1000002';
 
 ; (async () => {
     try {
+                //connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },

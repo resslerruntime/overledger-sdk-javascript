@@ -4,11 +4,11 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
+const mappId = '...';
+const bpiKey = '...';
 
-const ethereumAddress = '0x635B4764D1939DfAcD3a8014726159abC277BecC';
-const rippleAddress = 'rHH8zWrNGYBj5uQQ9MC2XaTjeA1339j7Km';
+const ethereumAddress = '...';
+const rippleAddress = '...';
 //note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------

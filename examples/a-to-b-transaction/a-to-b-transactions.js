@@ -7,28 +7,30 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
-
+const mappId = '...';
+const bpiKey = '...';
 
 // Paste in your bitcoin, ethereum and ripple private keys.
+
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
-const partyABitcoinPrivateKey = 'cNfaxhH4XxKaHWFZZDhbAcWcZq4qDdpuCtbCHo9T6yAhC8YGWAqV'; //should have 0x in front
-const partyABitcoinAddress = 'mmhJJqp1o2w5GR9CCgn8VMXjcNEgcTu3iA'; 
-const partyAs2ndBitcoinPrivateKey = 'cVpfBYcHDY8sR9YpgWMs2wv3CdMiqSt8XZQzeB93dWdzrsbYoaQy'; //should have 0x in front
-const partyAs2ndBitcoinAddress = 'mrCHRbJ9fU9zrk5of2dj3Kk5fsyvPWREoq'; //nominate a Bitcoin address you own for the change to be returned to
+const partyABitcoinPrivateKey = '...'; 
+const partyABitcoinAddress = '...'; 
+const partyAs2ndBitcoinPrivateKey = '...'; 
+const partyAs2ndBitcoinAddress = '...'; //nominate a Bitcoin address you own for the change to be returned to
+
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xB4949F205AEAFB7E61E3C2D4BE42F6703A79FED92FAD2B5EC6DA4A118486B3C7'; //should have 0x in front
-const partyAEthereumAddress = '0x20c109A79d0c161e6AE72E8c8e5A0aFeD28e8bd0'; 
+const partyAEthereumPrivateKey = '...'; //should have 0x in front
+const partyAEthereumAddress = '...'; 
+
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyARipplePrivateKey = 'shrQbu8sZtCChEejY8cg5ZqY3wK1m';
-const partyARippleAddress = 'rPs726xarcP21tU4tb1md51Nb9HDPCh4Wy';
+const partyARipplePrivateKey = '...';
+const partyARippleAddress = '...';
 
-//now provide two other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'mvRNyc5WnGCvjf8mdzh119vR2Q1DZyuZSR';
-const partyBEthereumAddress = '0x74269e7c9D1e3f3937E8aF7b62Bc0B7795f15C1A';
-const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
+//now provide three other addresses that you will be transfering value too
+const partyBBitcoinAddress = '...';
+const partyBEthereumAddress = '...';
+const partyBRippleAddress = '...';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -36,6 +38,7 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
 
 ; (async () => {
   try {
+    //connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
       dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
@@ -46,11 +49,13 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
     overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
+    
     // Get the address sequences.
-    //const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    //const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
-    const ethereumAccountSequence = 1;//ethereumSequenceRequest.data.dltData[0].sequence;
-    const rippleAccountSequence = 1;//rippleSequenceRequest.data.dltData[0].sequence;
+    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
+    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
+    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
+    const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
+
     // Sign the transactions.
     //As input to this function, we will be providing:
     //  (1) a TransactionBitcoinRequest object (of @quantnetwork/overledger-dlt-bitcoin) that inherits from the TransactionUtxoRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
@@ -66,27 +71,21 @@ const partyBRippleAddress = 'rhn2U3QAPCQHuqPvPf75FYfRJeVFrteWM2';
             //the following parameters are from the TransactionUtxoRequest object:
       txInputs: [
         {
-          linkedTx: "f04fb35581ede6e031ec3ccbb9c876faf55f7148e078f5889e33e6b75fec250b",
-          linkedIndex: "0",
+          linkedTx: "<Add previous transaction here>",
+          linkedIndex: "<Add linked transaction index here>",
           fromAddress: partyABitcoinAddress, 
-          amount: 149000 //in satoshis
-        },        
-        {
-          linkedTx: "cea5a345dcb7cb891f79c9f64ded895d47b66976b13a3c239deeaa7851164979",
-          linkedIndex: "1",
-          fromAddress: "2MyxEmuqnogTJRcoAqUoPbpY4z1WQ1Fdanp", 
-          amount: 1849625 //in satoshis
+          amount: 0 //in satoshis
         }
       ],
       txOutputs: [
         {
-          toAddress: partyAs2ndBitcoinAddress, 
-          amount: 1996125 //in satoshis
-        }/*,
+          toAddress: partyBBitcoinAddress, 
+          amount: 0 //in satoshis
+        },
         {
-          toAddress: partyAs2ndBitcoinAddress, //the change address
-          amount: 1513630 //in satoshis
-        }*/
+          toAddress: partyAs2ndBitcoinAddress, //this is the change address
+          amount: 0 //in satoshis
+        }
       ],
       extraFields: {
               //the following parameters are from the TransactionBitcoinRequest object:
