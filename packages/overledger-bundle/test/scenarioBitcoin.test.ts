@@ -86,34 +86,5 @@ describe('Dlt/Bitcoin', () => {
   test('Cannot sign a bitcoin transaction if the total input amount does not equal the total output amount + feePrice', () => {
     expect(() => overledger.dlts.bitcoin.sign({any: '...', dlt: DltNameOptions.bitcoin, type: TransactionTypeOptions.utxo, subType: {name: TransactionBitcoinSubTypeOptions.valueTransfer}, message: "", txInputs: [{any: "...", linkedTx: "...", linkedIndex: "...", fromAddress: "...", amount: 100}], txOutputs: [{toAddress: "...", amount: 80}], extraFields: {any: "...", feePrice: "10"}})).toThrow('Error parameter: amount. Error is: All transactions for Bitcoin must satisfy the following logic: TotalInputAmounts - TotalOutputAmounts - feePrice = 0');
   });
-  /*test('Can sign a ripple transaction', async () => {
-    signedTransaction = await overledger.dlts.ripple.sign({any: '...', dlt: DltNameOptions.xrp, type: TransactionTypeOptions.accounts, subType: {name: TransactionXRPSubTypeOptions.valueTransfer}, message: "", fromAddress: "rndaCtYjxKq3vBTA3ER1SAPSgvQRMXQZnz", toAddress: "rLEBHTbZBeSaY4ghcjLQMYvFEgKFyoRXbp", sequence: 1, amount: 1, extraFields: {feePrice: "1", maxLedgerVersion: "12345"}});
 
-    expect(signedTransaction.length).toBeGreaterThan(200);
-    expect(signedTransaction.startsWith('120')).toBe(true);
-  });
-
-  test('Can send a ripple signedTransaction', async () => {
-    mockedAxios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' } as any);
-    const signedTransactionRequest = {
-      dlt: 'ripple',
-      fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
-      signedTransaction: {
-        signatures: [],
-        transactions: [signedTransaction],
-      },
-    }
-    
-    await overledger.dlts.ripple.send(signedTransactionRequest);
-
-    expect(mockedAxios.post).toBeCalledWith('/transactions', {
-      mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ripple',
-          fromAddress: expect.any(String),
-          signedTransaction: expect.any(Object),
-        }],
-    });
-  });*/
 });
