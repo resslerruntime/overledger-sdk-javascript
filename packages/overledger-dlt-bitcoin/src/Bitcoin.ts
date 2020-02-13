@@ -51,7 +51,7 @@ class Bitcoin extends AbstractDLT {
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
     let counter = 0;
     while (counter < thisTransaction.txInputs.length){
-      tx.addInput(thisTransaction.txInputs[counter].linkedTx, Number(thisTransaction.txInputs[counter].linkedIndex));
+      tx.addInput(thisTransaction.txInputs[counter].linkedTx, parseInt(thisTransaction.txInputs[counter].linkedIndex, 10));
       counter++;
     }
     counter = 0;
@@ -83,13 +83,13 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
     failingField: "subType",
     error: "You must select a subType from TransactionSubTypeOptions"
   }
-} else if ((!thisBitcoinTx.extraFields)||(thisBitcoinTx.extraFields == null)){
+} else if ((!thisBitcoinTx.extraFields)||(thisBitcoinTx.extraFields === undefined)){
     return {
       success: false,
       failingField: "extraFields",
       error: 'All transactions for Bitcoin must have the extraFields field set with feePrice parameters within it'
     } 
-  } else if ((thisBitcoinTx.extraFields.feePrice == "")||(thisBitcoinTx.extraFields.feePrice == null)||(thisBitcoinTx.extraFields.feePrice === 'undefined')){
+  } else if ((thisBitcoinTx.extraFields.feePrice === "")||(thisBitcoinTx.extraFields.feePrice == null)||(thisBitcoinTx.extraFields.feePrice === undefined)){
     return {
       success: false,
       failingField: "extraFields.feePrice",

@@ -156,7 +156,7 @@ abstract class AbstractDLT {
         } else if (thisTransaction.type == TransactionTypeOptions.utxo){
           
           let thisUtxoTx = <TransactionUtxoRequest> thisTransaction;
-          if (thisUtxoTx.txInputs == null){
+          if (!thisUtxoTx.txInputs || thisUtxoTx.txInputs === undefined){
             return {
               success: false,
               failingField: "txInputs",
