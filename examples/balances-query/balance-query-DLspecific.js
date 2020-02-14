@@ -22,11 +22,11 @@ const rippleAddress = '...';
 
         const rippleAddressBalance = await overledger.dlts.ripple.getBalance(rippleAddress);
         console.log('XRP address balance:\n', rippleAddressBalance.data);
-        console.log('\n');
+        console.log("");
 
         const ethereumAddressBalance = await overledger.dlts.ethereum.getBalance(ethereumAddress);
         console.log('Ethereum address balance:\n', ethereumAddressBalance.data);
-        console.log('\n');
+        console.log("");
     } catch (e) {
         console.error('error', e);
     }

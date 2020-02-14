@@ -19,15 +19,15 @@ const bpiKey = '...';
 
         const bitcoinAccount = await overledger.dlts.bitcoin.createAccount();
         console.log('Bitcoin account:\n', bitcoinAccount);
-        console.log('\n');
+        console.log("");
 
         const ethAccount = await overledger.dlts.ethereum.createAccount();
         console.log('Ethereum account:\n', ethAccount);
-        console.log('\n');
+        console.log("");
 
         const xrpAccount = await overledger.dlts.ripple.createAccount();
         console.log('XRP account:\n', xrpAccount);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e);

@@ -90,9 +90,9 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     // Log the result.
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
-    console.log('\n');
+    console.log("");
     console.log('Your smart contract invocation transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log('\n');
+    console.log("");
 
   } catch (e) {
     console.error('error:', e);

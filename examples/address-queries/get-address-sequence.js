@@ -24,11 +24,11 @@ const rippleAddress = '...';
 
         const ethereumAddressSequence = await overledger.dlts.ethereum.getSequence(ethereumAddress);
         console.log('Ethereum address sequence:\n', ethereumAddressSequence.data);
-        console.log('\n');
+        console.log("");
 
         const rippleAddressSequence = await overledger.dlts.ripple.getSequence(rippleAddress);
         console.log('Ripple address sequence:\n', rippleAddressSequence.data);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e);

@@ -136,13 +136,13 @@ const partyBRippleAddress = '...';
     // Log the result.
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
-    console.log('\n');
+    console.log("");
     console.log('Your Bitcoin value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log('\n');
+    console.log("");
     console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    console.log('\n');
+    console.log("");
     console.log('Your XRP value transfer transaction hash is: ' + result.dltData[2].transactionHash);
-    console.log('\n');
+    console.log("");
   } catch (e) {
     console.error('error:', e);
   }

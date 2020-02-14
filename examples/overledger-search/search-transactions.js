@@ -30,11 +30,11 @@ const bitcoinTransactionHash = 'cea5a345dcb7cb891f79c9f64ded895d47b66976b13a3c23
         const rippleTransaction = await overledger.search.getTransaction(rippleTransactionHash);
 
         console.log('Bitcoin transaction: ', bitcoinTransaction.data);
-        console.log('\n');
+        console.log("");
         console.log('Ethereum transaction: ', ethereumTransaction.data);
-        console.log('\n');
+        console.log("");
         console.log('Ripple transaction: ', rippleTransaction.data);
-        console.log('\n');
+        console.log("");
     } catch (e) {
         console.error('error', e);
     }

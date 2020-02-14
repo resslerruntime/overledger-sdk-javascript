@@ -35,7 +35,7 @@ const rippleAddress = '...';
 
         const balances = await overledger.getBalances(array);
         console.log('Balances:\n', balances.data);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e.response.data);

@@ -27,15 +27,15 @@ const bitcoinBlockNumber = '1000002';
 
         const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
         console.log('Bitcoin block: ', bitcoinBlock.data);
-        console.log('\n');
+        console.log("");
         
         const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
-        console.log('\n');
+        console.log("");
 
         const rippleBlock = await overledger.search.getBlockByDltAndNumber('ripple', rippleBlockNumber);
         console.log('Ripple block: ', rippleBlock.data);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e.response.data);
