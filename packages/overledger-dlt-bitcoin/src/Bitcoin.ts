@@ -5,6 +5,9 @@ import { Options, Account, TransactionRequest, ValidationCheck} from '@quantnetw
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from "./DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions";
 
+/**
+ * @memberof module:overledger-dlt-bitcoin
+*/
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT: number = 546;
   addressType: bitcoin.Network;
@@ -22,7 +25,8 @@ class Bitcoin extends AbstractDLT {
   symbol: string = 'XBT';
 
   /**
-   * @inheritdoc
+   * @param {any} sdk - the sdk instance
+   * @param {Object} options - any additional options to instantiate this dlt
    */
   constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
@@ -160,7 +164,9 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   }
 
   /**
-   * @inheritdoc
+   * Create a Bitcoin account
+   *
+   * @return {Account} the new Bitcoin account
    */
   createAccount(): Account {
 
@@ -177,7 +183,9 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   }
 
   /**
-   * @inheritdoc
+   * Set an account for signing transactions for a specific DLT
+   *
+   * @param {string} privateKey The privateKey
    */
   setAccount(myPrivateKey: string): void {
 
@@ -191,7 +199,7 @@ if (!Object.values(TransactionBitcoinSubTypeOptions).includes(thisBitcoinTx.subT
   }
 
     /**
-   * Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for XRP)
+   * Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for Bitcoin)
    * @param {string} dltAddress - the user's Bitcoin address
    * @param {Object} contractQueryDetails - the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call.
    *

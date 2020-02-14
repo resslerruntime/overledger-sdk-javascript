@@ -37,7 +37,6 @@ class Ethereum extends AbstractDLT {
    * @param {any} sdk - the sdk instance
    * @param {Object} options - any additional options to instantiate this dlt
    */
-  // @TODO: add options statement
   constructor(sdk: any, options: Options = {}) {
     super(sdk, options);
 
