@@ -13,7 +13,7 @@ const bpiKey = '...';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-          dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+          dlts: [{ dlt: DltNameOptions.bitcoin}, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
