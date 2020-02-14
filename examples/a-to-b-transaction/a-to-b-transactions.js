@@ -1,6 +1,7 @@
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
+const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const TransactionEthereumSubTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').TransactionEthereumSubTypeOptions;
 const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
 //  ---------------------------------------------------------
@@ -9,36 +10,46 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 const mappId = '...';
 const bpiKey = '...';
 
+// Paste in your bitcoin, ethereum and ripple private keys.
 
-// Paste in your Ethereum and ripple private keys.
+// For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
+const partyABitcoinPrivateKey = '...'; 
+const partyABitcoinAddress = '...'; 
+const partyAs2ndBitcoinPrivateKey = '...'; 
+const partyAs2ndBitcoinAddress = '...'; //nominate a Bitcoin address you own for the change to be returned to
+
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '...'; //should have 0x in front
 const partyAEthereumAddress = '...'; 
+
 // For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
 // Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
 const partyARipplePrivateKey = '...';
 const partyARippleAddress = '...';
 
-//now provide two other addresses that you will be transfering value too
+//now provide three other addresses that you will be transfering value too
+const partyBBitcoinAddress = '...';
 const partyBEthereumAddress = '...';
 const partyBRippleAddress = '...';
+
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
 
 ; (async () => {
   try {
+    //connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+      dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
       provider: { network: 'testnet' },
     });
-
-    const transactionMessage = 'A Transaction Test';
+    const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
+    overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
     overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
-
+    
     // Get the address sequences.
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
     const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
@@ -47,9 +58,40 @@ const partyBRippleAddress = '...';
 
     // Sign the transactions.
     //As input to this function, we will be providing:
-    //  (1) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
-    //  (2) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (1) a TransactionBitcoinRequest object (of @quantnetwork/overledger-dlt-bitcoin) that inherits from the TransactionUtxoRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (2) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
+    //  (3) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
     const signedTransactions = await overledger.sign([
+    {
+          //the following parameters are from the TransactionRequest object:
+      dlt: DltNameOptions.bitcoin,
+      type: TransactionTypeOptions.utxo,
+      subType: {name: TransactionBitcoinSubTypeOptions.valueTransfer},
+      message: transactionMessage,
+            //the following parameters are from the TransactionUtxoRequest object:
+      txInputs: [
+        {
+          linkedTx: "<Add previous transaction here>",
+          linkedIndex: "<Add linked transaction index here>",
+          fromAddress: partyABitcoinAddress, 
+          amount: 0 //in satoshis
+        }
+      ],
+      txOutputs: [
+        {
+          toAddress: partyBBitcoinAddress, 
+          amount: 0 //in satoshis
+        },
+        {
+          toAddress: partyAs2ndBitcoinAddress, //this is the change address
+          amount: 0 //in satoshis
+        }
+      ],
+      extraFields: {
+              //the following parameters are from the TransactionBitcoinRequest object:
+        feePrice: '2500' // Price for the miner to add this transaction to the block
+      },
+    },
     {
             //the following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.ethereum,
@@ -94,11 +136,13 @@ const partyBRippleAddress = '...';
     // Log the result.
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
-    console.log('\n');
-    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log('\n');
-    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    console.log('\n');
+    console.log("");
+    console.log('Your Bitcoin value transfer transaction hash is: ' + result.dltData[0].transactionHash);
+    console.log("");
+    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
+    console.log("");
+    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[2].transactionHash);
+    console.log("");
   } catch (e) {
     console.error('error:', e);
   }

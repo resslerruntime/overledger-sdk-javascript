@@ -208,7 +208,7 @@ describe('Dlt/RippleAndEthereum', () => {
           dlt: 'ethereum',
           fromAddress: expect.any(String),
           signedTransaction: {
-            signatures: [],
+            signatures: [expect.any(String)],
             transactions: [expect.any(String)],
           }
         },
@@ -216,7 +216,7 @@ describe('Dlt/RippleAndEthereum', () => {
           dlt: 'ripple',
           fromAddress: expect.any(String),
           signedTransaction: {
-            signatures: [],
+            signatures: [expect.any(String)],
             transactions: [expect.any(String)],
           }
         },
@@ -239,7 +239,7 @@ describe('Dlt/RippleAndEthereum', () => {
               dlt: 'ethereum',
               fromAddress: expect.any(String),
               signedTransaction: {
-                signatures: [],
+                signatures: [expect.any(String)],
                 transactions: [expect.any(String)],
               }
             },
@@ -247,7 +247,7 @@ describe('Dlt/RippleAndEthereum', () => {
               dlt: 'ripple',
               fromAddress: expect.any(String),
               signedTransaction: {
-                signatures: [],
+                signatures: [expect.any(String)],
                 transactions: [expect.any(String)],
               }
             },
@@ -324,7 +324,7 @@ describe('Dlt/RippleAndEthereum', () => {
           dlt: 'ethereum',
           fromAddress: expect.any(String),
           signedTransaction: {
-            signatures: [],
+            signatures: [expect.any(String)],
             transactions: [expect.any(String)],
           }
         },
@@ -332,7 +332,7 @@ describe('Dlt/RippleAndEthereum', () => {
           dlt: 'ripple',
           fromAddress: expect.any(String),
           signedTransaction: {
-            signatures: [],
+            signatures: [expect.any(String)],
             transactions: [expect.any(String)],
           }
         },
@@ -354,7 +354,7 @@ describe('Dlt/RippleAndEthereum', () => {
             dlt: 'ethereum',
             fromAddress: expect.any(String),
             signedTransaction: {
-              signatures: [],
+              signatures: [expect.any(String)],
               transactions: [expect.any(String)],
             }
           },
@@ -362,7 +362,7 @@ describe('Dlt/RippleAndEthereum', () => {
             dlt: 'ripple',
             fromAddress: expect.any(String),
             signedTransaction: {
-              signatures: [],
+              signatures: [expect.any(String)],
               transactions: [expect.any(String)],
             }
           },

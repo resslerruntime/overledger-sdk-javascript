@@ -156,7 +156,7 @@ abstract class AbstractDLT {
         } else if (thisTransaction.type == TransactionTypeOptions.utxo){
           
           let thisUtxoTx = <TransactionUtxoRequest> thisTransaction;
-          if ((!this.conversionTest(thisUtxoTx.txInputs))||(thisUtxoTx.txInputs == null)){
+          if (!thisUtxoTx.txInputs || thisUtxoTx.txInputs === undefined){
             return {
               success: false,
               failingField: "txInputs",
@@ -203,7 +203,7 @@ abstract class AbstractDLT {
             if ((!this.conversionTest(outputToValidate.toAddress))||(outputToValidate.toAddress == null)||(outputToValidate.toAddress === 'undefined')){
               return {
                 success: false,
-                failingField: "txInputs.toAddress",
+                failingField: "txOutputs.toAddress",
                 error: 'Each txOutput for a utxo distributed ledger transaction must have a toAddress field.'
               }       
             }

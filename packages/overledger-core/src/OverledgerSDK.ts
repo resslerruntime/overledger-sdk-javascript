@@ -107,7 +107,7 @@ class OverledgerSDK {
         fromAddress: this.dlts[data.dlt].account.address,
         //amount: data.extraFields.amount,
         signedTransaction: {
-          signatures: [],
+          signatures: ["not used"],
           transactions: [signedTransaction],
         },
       };

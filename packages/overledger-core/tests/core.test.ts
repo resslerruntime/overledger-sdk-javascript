@@ -8,7 +8,8 @@ describe('Core', () => {
     const sdkOptions = {
       dlts: [
         { dlt: 'ethereum' },
-        { dlt: 'ripple' }
+        { dlt: 'ripple' },
+        { dlt: 'bitcoin' }
       ],
     };
 

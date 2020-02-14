@@ -101,7 +101,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     //and finally we will send the smart contract function query to the node.
     const returnedValues2 = await overledger.search.smartContractQuery(DltNameOptions.ethereum, ethereumSmartContractQueryBuild2.response);
     console.log(`returned output value for smart contract function 'getTestArray'`,  returnedValues2.data);
-    console.log('\n');
+    console.log("");
 
   } catch (e) {
     console.error('error:', e);
