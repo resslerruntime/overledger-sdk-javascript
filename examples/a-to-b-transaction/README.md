@@ -1,6 +1,6 @@
 # Overledger Party A to Party B Transaction
 
-This example contains a script which goes through the following steps:
+This example contains a script which goes through the following steps: 
 1. Create and fund Testnet accounts for party A
 2. Create and fund Testnet accounts for party B
 3. Send a multiple DLT transation from party A to party B
