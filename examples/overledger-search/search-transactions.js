@@ -1,5 +1,4 @@
 const OverledgerSDK = require('@quantnetwork/overledger-bundle/dist').default;
-const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------

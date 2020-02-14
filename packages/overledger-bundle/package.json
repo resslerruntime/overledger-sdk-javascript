@@ -29,7 +29,6 @@
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
     "@quantnetwork/overledger-core": "^1.0.0-beta.1",
-    "@quantnetwork/overledger-dlt-bitcoin": "^1.0.0-beta.1",
     "@quantnetwork/overledger-dlt-ethereum": "^1.0.0-beta.1",
     "@quantnetwork/overledger-dlt-ripple": "^1.0.0-beta.1"
   },
