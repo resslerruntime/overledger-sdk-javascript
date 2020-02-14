@@ -9,7 +9,7 @@ describe('Core', () => {
       dlts: [
         { dlt: 'ethereum' },
         { dlt: 'ripple' },
-        { dlt: 'bitcoin' },
+        { dlt: 'bitcoin' }
       ],
     };
 
