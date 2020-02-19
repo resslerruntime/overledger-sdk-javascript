@@ -160,7 +160,7 @@ Wrap the DLT Data with the API schema
 
 | Param | Type | Description |
 | --- | --- | --- |
-| unsignedData | <code>Array.&lt;UnsignedData&gt;</code> | Array of unsigned data |
+| unsignedData | <code>Array.&lt;TransactionRequest&gt;</code> | the provided transactions in the standard overledger form |
 
 Sign the provided transactions
 

@@ -55,6 +55,20 @@ class OverledgerSearch {
     }
   }
 
+
+  /**
+   * Get block by DLT and number
+   *
+   * @param {string} dlt The DLT name
+   */
+  getBlockHeightByDlt(dlt: string): AxiosPromise {
+    try {
+      return this.request.get(`/${dlt}/block/height`);
+    } catch (e) {
+      return e.response;
+    }
+  }
+
   /**
    * Get block by DLT and hash
    *
@@ -68,6 +82,20 @@ class OverledgerSearch {
       return e.response;
     }
   }
-}
 
+
+  /**
+   * Query a smart contract 
+   * @param dlt - the distributed ledger that this smart contract is on
+   * @param contractQueryDetails - details on this smart contract query
+   */
+  smartContractQuery(dlt: string, contractQueryDetails: Object): AxiosPromise {
+    try {
+      return this.request.post(`/${dlt}/contracts/query/`, JSON.stringify(contractQueryDetails));
+    } catch (e) {
+      return e.response;
+    }
+  }
+
+}
 export default OverledgerSearch;

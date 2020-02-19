@@ -46,7 +46,7 @@ yarn add @quantnetwork/overledger-types
 <dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for instantiating the SDK.</p>
+<dd><p>Options for instantiating the SDK</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -66,17 +66,31 @@ yarn add @quantnetwork/overledger-types
 <dt><a href="#SignedTransactionRequest">SignedTransactionRequest</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction request object.</p>
 </dd>
-<dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
-<dd><p>DLT transaction options.</p>
+<dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a smart contract function parameter.</p>
 </dd>
-<dt><a href="#UnsignedData">UnsignedData</a> : <code>Object</code></dt>
-<dd><p>Unsigned transaction data.</p>
+<dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
+<dd><p>A generic object to describe a validationCheck.</p>
 </dd>
 </dl>
 
 <a name="module_overledger-types"></a>
 
 ## overledger-types
+
+* [overledger-types](#module_overledger-types)
+
+    * [.DltNameOptions](#module_overledger-types.DltNameOptions)
+
+    * [.SCInteropOptions](#module_overledger-types.SCInteropOptions)
+
+
+<a name="module_overledger-types.DltNameOptions"></a>
+
+### *overledger-types*.DltNameOptions
+<a name="module_overledger-types.SCInteropOptions"></a>
+
+### *overledger-types*.SCInteropOptions
 <a name="Account"></a>
 
 ## Account
@@ -139,7 +153,7 @@ Overledger network options.
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for instantiating the SDK.
+Options for instantiating the SDK
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -211,34 +225,34 @@ Overledger sequence data response.
 | --- | --- | --- |
 | dlt | <code>string</code> | The distributed ledger technology. |
 | fromAddress | <code>string</code> | The address initiating the transaction. |
-| amount | <code>string</code> | The token amount in the lowest unit for the respective DLT. |
 | signedTransaction | [<code>OverledgerSignedTransaction</code>](#OverledgerSignedTransaction) | The signed transaction object. |
 
 Overledger signed transaction request object.
 
-<a name="TransactionOptions"></a>
+<a name="SmartContractFunctionParam"></a>
 
-## TransactionOptions
+## SmartContractFunctionParam
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [sequence] | <code>number</code> | This transaction's sequence in relation to the initiating account. |
-| amount | <code>string</code> | The amount of tokens in the lowest unit available on the DLT. |
+| type | <code>object</code> | information on the parameter's type |
+| name | <code>string</code> | the parameter's name |
+| value | <code>object</code> | information on the parameter's value |
+| options | <code>object</code> | information the valid values that this parameter can take |
 
-DLT transaction options.
+A generic object to describe a smart contract function parameter.
 
-<a name="UnsignedData"></a>
+<a name="validationCheck"></a>
 
-## UnsignedData
+## validationCheck
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| dlt | <code>string</code> | The DLT used for this transaction. |
-| toAddress | <code>string</code> | The recipient for this transaction. |
-| message | <code>string</code> | The transaction message. |
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | The specific transaction options. |
+| success | <code>boolean</code> | was the validation check successful? |
+| failingField | <code>string</code> | if it was not successful, what was the first field that failed? |
+| error | <code>string</code> | Is there any more information on this error? |
 
-Unsigned transaction data.
+A generic object to describe a validationCheck.
 

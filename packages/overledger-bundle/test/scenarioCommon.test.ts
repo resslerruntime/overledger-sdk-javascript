@@ -8,6 +8,7 @@ describe('Dlt/Common', () => {
   [
     {type: 'ethereum', symbol: 'ETH'},
     {type: 'ripple', symbol: 'XRP'},
+    {type: 'bitcoin', symbol: 'XBT'}
   ].forEach(dlt => {
     describe(dlt.type, () => {
       let overledger;
