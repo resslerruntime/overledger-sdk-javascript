@@ -6,10 +6,9 @@
  * @memberof module:overledger-types
  */
 
-export enum TransactionStatusOptions { 
-    broadcast = "b",
-    confirmed = "c"
-
-};
+export enum TransactionStatusOptions {
+    broadcast = 'b',
+    confirmed = 'c',
+}
 
 export default TransactionStatusOptions;

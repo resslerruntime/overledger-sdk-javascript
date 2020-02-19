@@ -12,11 +12,10 @@
  * @memberof module:overledger-types
  */
 type SmartContractFunctionParam = {
-    type: object,
-    name?: string,
-    value?: object,
-    options?: object
-  };
-  
-  export default SmartContractFunctionParam;
-  
+  type: object,
+  name?: string,
+  value?: object,
+  options?: object,
+};
+
+export default SmartContractFunctionParam;

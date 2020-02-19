@@ -1,6 +1,6 @@
-import TransactionRequest from "./TransactionRequest";
-import TransactionInput from "./TransactionInput";
-import TransactionOutput from "./TransactionOutput";
+import TransactionRequest from './TransactionRequest';
+import TransactionInput from './TransactionInput';
+import TransactionOutput from './TransactionOutput';
 
 /**
  * A generic object used to describe an Overledger transaction request for utxo based distributed ledgers. Note that this object inherits many parameters from TransactionRequest.
@@ -13,9 +13,8 @@ import TransactionOutput from "./TransactionOutput";
  * @memberof module:overledger-types
  */
 interface TransactionUtxoRequest extends TransactionRequest {
-      txInputs: TransactionInput[],
-      txOutputs: TransactionOutput[]
-  };
-  
-  export default TransactionUtxoRequest;
-  
+  txInputs: TransactionInput[];
+  txOutputs: TransactionOutput[];
+}
+
+export default TransactionUtxoRequest;

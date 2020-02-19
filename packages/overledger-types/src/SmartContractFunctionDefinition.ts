@@ -14,12 +14,11 @@ import SmartContractFunctionParam from './SmartContractFunctionParam';
  * @memberof module:overledger-types
  */
 type SmartContractFunctionDefinition = {
-    functionType: functionTypeOptions,
-    functionName: string,
-    code?: string,
-    inputParams?: SmartContractFunctionParam[],
-    outputParams?: SmartContractFunctionParam[]
-  };
-  
-  export default SmartContractFunctionDefinition;
-  
+  functionType: functionTypeOptions,
+  functionName: string,
+  code?: string,
+  inputParams?: SmartContractFunctionParam[],
+  outputParams?: SmartContractFunctionParam[],
+};
+
+export default SmartContractFunctionDefinition;
