@@ -55,7 +55,6 @@ class OverledgerSearch {
     }
   }
 
-
   /**
    * Get block by DLT and number
    *
@@ -83,9 +82,8 @@ class OverledgerSearch {
     }
   }
 
-
   /**
-   * Query a smart contract 
+   * Query a smart contract
    * @param dlt - the distributed ledger that this smart contract is on
    * @param contractQueryDetails - details on this smart contract query
    */

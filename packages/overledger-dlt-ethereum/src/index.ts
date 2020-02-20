@@ -25,8 +25,8 @@ export {
     SmartContractEthereum,
     TransactionEthereumSubTypeOptions,
     TransactionEthereumRequest,
-    TransactionEthereumResponse
-}
+    TransactionEthereumResponse,
+};
 /**
  * Development package for Ethereum.
  */

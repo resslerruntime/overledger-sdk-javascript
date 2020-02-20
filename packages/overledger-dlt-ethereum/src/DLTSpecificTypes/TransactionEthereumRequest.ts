@@ -1,5 +1,5 @@
-import {TransactionAccountsRequest} from "@quantnetwork/overledger-types";
-import TransactionEthereumSubTypeOptions from "./associatedEnums/TransactionEthereumSubTypeOptions";
+import { TransactionAccountsRequest } from '@quantnetwork/overledger-types';
+import TransactionEthereumSubTypeOptions from './associatedEnums/TransactionEthereumSubTypeOptions';
 
 /**
 * A generic object used to describe an Overledger transaction request for the Ethereum blockchain. Note that this object inherits many parameters from TransactionAccountsRequest.
@@ -11,14 +11,13 @@ import TransactionEthereumSubTypeOptions from "./associatedEnums/TransactionEthe
 
 /**
  * @memberof module:overledger-dlt-ethereum
- */ 
+ */
 interface TransactionEthereumRequest extends TransactionAccountsRequest {
-    subType: {name: TransactionEthereumSubTypeOptions},    
-    extraFields: {
-            compUnitPrice: string,
-            compLimit: string
-        }
+  subType: { name: TransactionEthereumSubTypeOptions };
+  extraFields: {
+    compUnitPrice: string,
+    compLimit: string,
   };
-  
-  export default TransactionEthereumRequest;
-  
+}
+
+export default TransactionEthereumRequest;

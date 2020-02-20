@@ -1,5 +1,7 @@
-import { TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions,
-   TransactionAccountsRequest , TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract} from '@quantnetwork/overledger-types';
+import {
+  TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions,
+  TransactionAccountsRequest, TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract,
+} from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
@@ -74,7 +76,7 @@ abstract class AbstractDLT {
   public sign(thisTransaction: TransactionRequest): Promise<string> {
     const transactionValidation = this.transactionValidation(thisTransaction);
     if (!transactionValidation.success) {
-      throw new Error('Error parameter: ' + transactionValidation.failingField + '. Error is: ' + transactionValidation.error);
+      throw new Error(`Error parameter: ${transactionValidation.failingField}. Error is: ${transactionValidation.error}`);
     }
     return this._sign(thisTransaction);
   }
@@ -88,130 +90,138 @@ abstract class AbstractDLT {
    *  the first failing transaction field and error will contain information on this problem
    */
   public transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
-        // input validation for the user account
-       if (!this.account) {
+    // input validation for the user account
+    if (!this.account) {
+      return {
+        success: false,
+        failingField: 'overledger account',
+        error: `The ${this.name} account must be set up`,
+      };
+    }
+    // now input validation for a generic transaction
+    if ((!thisTransaction.dlt) || (thisTransaction.dlt === null)) {
+      return {
+        success: false,
+        failingField: 'dlt',
+        error: 'All transactions must have a dlt field',
+      };
+    }
+    if ((!thisTransaction.type) || (thisTransaction.type === null)) {
+      return {
+        success: false,
+        failingField: 'type',
+        error: 'All transactions must have a type field',
+      };
+    }
+    if (!Object.values(TransactionTypeOptions).includes(thisTransaction.type)) {
+      return {
+        success: false,
+        failingField: 'type',
+        error: 'You must select a type from TransactionTypeOptions',
+      };
+    }
+    if ((!thisTransaction.subType) || (thisTransaction.subType === null)) {
+      return {
+        success: false,
+        failingField: 'subType',
+        error: 'All transactions must have a subType field',
+      };
+    }
+    if ((!this.conversionTest(thisTransaction.message)) || (thisTransaction.message === 'undefined') || (thisTransaction.message == null)) {
+      return {
+        success: false,
+        failingField: 'message',
+        error: 'All transactions must have a message field. If no message is required, assign message to the empty string, i.e. message: ""',
+      };
+    }
+
+    // now input validation on a generic accounts-based transaction or utxo-based transaction
+    if (thisTransaction.type === TransactionTypeOptions.accounts) {
+      const thisAccountsTx = <TransactionAccountsRequest>thisTransaction;
+      if ((!thisAccountsTx.fromAddress) || (thisAccountsTx.fromAddress === '') || (thisAccountsTx.fromAddress == null) || (thisAccountsTx.fromAddress === 'undefined')) {
+        return {
+          success: false,
+          failingField: 'fromAddress',
+          error: 'All transactions for accounts distributed ledgers must have the fromAddress field',
+        };
+      }
+      if ((!this.conversionTest(thisAccountsTx.toAddress)) || (thisAccountsTx.toAddress == null) || (thisAccountsTx.toAddress === 'undefined')) {
+        return {
+          success: false,
+          failingField: 'toAddress',
+          error: 'All transactions for accounts distributed ledgers must have the toAddress field. If you do not want to set a toAddress (maybe you are creating an on-chain smart contract?), assign toAddress to the empty string, i.e. toAddress = ""',
+        };
+      }
+      if ((!this.conversionTest(thisAccountsTx.sequence)) || (thisAccountsTx.sequence == null) || (thisAccountsTx.sequence < 0)) {
+        return {
+          success: false,
+          failingField: 'sequence',
+          error: 'All transactions for accounts distributed ledgers must have the sequence field as a number greater or equal to 0',
+        };
+      }
+
+    } else if (thisTransaction.type === TransactionTypeOptions.utxo) {
+      const thisUtxoTx = <TransactionUtxoRequest>thisTransaction;
+      if (!thisUtxoTx.txInputs || thisUtxoTx.txInputs === undefined) {
+        return {
+          success: false,
+          failingField: 'txInputs',
+          error: 'All transactions for utxo distributed ledgers must have the txInputs field',
+        };
+      }
+      if ((!this.conversionTest(thisUtxoTx.txOutputs)) || (thisUtxoTx.txOutputs == null)) {
+        return {
+          success: false,
+          failingField: 'txOutputs',
+          error: 'All transactions for utxo distributed ledgers must have the txOutputs field',
+        };
+      }
+      // check each input
+      let counter = 0;
+      let inputToValidate;
+      while (counter < thisUtxoTx.txInputs.length) {
+        inputToValidate = <TransactionInput>thisUtxoTx.txInputs[counter];
+        if ((!this.conversionTest(inputToValidate.linkedTx)) || (inputToValidate.linkedTx == null) || (inputToValidate.linkedTx === 'undefined')) {
           return {
             success: false,
-            failingField: 'overledger account',
-            error: `The ${this.name} account must be set up`,
+            failingField: 'txInputs.linkedTx',
+            error: 'Each txInput for a utxo distributed ledger transaction must have a linkedTx field. If there is no linked transaction, set to the empty string, i.e.: linkedTx = ""',
           };
         }
-        // now input validation for a generic transaction
-       if ((!thisTransaction.dlt) || (thisTransaction.dlt === null)) {
+        if ((!this.conversionTest(inputToValidate.linkedIndex)) || (inputToValidate.linkedIndex == null) || (inputToValidate.linkedIndex === 'undefined')) {
           return {
             success: false,
-            failingField: 'dlt',
-            error: 'All transactions must have a dlt field',
-          };
-        } else if ((!thisTransaction.type) || (thisTransaction.type === null)) {
-          return {
-            success: false,
-            failingField: 'type',
-            error: 'All transactions must have a type field',
-          };
-        } else if (!Object.values(TransactionTypeOptions).includes(thisTransaction.type)) {
-          return {
-            success: false,
-            failingField: 'type',
-            error: 'You must select a type from TransactionTypeOptions',
-          };
-        } else if ((!thisTransaction.subType) || (thisTransaction.subType === null)) {
-          return {
-            success: false,
-            failingField: 'subType',
-            error: 'All transactions must have a subType field',
-          };
-        } else if ((!this.conversionTest(thisTransaction.message)) || (thisTransaction.message === 'undefined') || (thisTransaction.message == null)) {
-          return {
-            success: false,
-            failingField: 'message',
-            error: 'All transactions must have a message field. If no message is required, assign message to the empty string, i.e. message: ""',
+            failingField: 'txInputs.linkedIndex',
+            error: 'Each txInput for a utxo distributed ledger transaction must have a linkedIndex field. If there is no linked transaction index, set to the empty string, i.e.: linkedIndex = ""',
           };
         }
-
-        // now input validation on a generic accounts-based transaction or utxo-based transaction
-        if (thisTransaction.type === TransactionTypeOptions.accounts) {
-          const thisAccountsTx = <TransactionAccountsRequest> thisTransaction;
-          if ((!thisAccountsTx.fromAddress) || (thisAccountsTx.fromAddress === '') || (thisAccountsTx.fromAddress == null) || (thisAccountsTx.fromAddress === 'undefined')) {
-            return {
-              success: false,
-              failingField: 'fromAddress',
-              error: 'All transactions for accounts distributed ledgers must have the fromAddress field',
-            };
-          } else if ((!this.conversionTest(thisAccountsTx.toAddress)) || (thisAccountsTx.toAddress == null) || (thisAccountsTx.toAddress === 'undefined')) {
-            return {
-              success: false,
-              failingField: 'toAddress',
-              error: 'All transactions for accounts distributed ledgers must have the toAddress field. If you do not want to set a toAddress (maybe you are creating an on-chain smart contract?), assign toAddress to the empty string, i.e. toAddress = ""',
-            };
-          } else if ((!this.conversionTest(thisAccountsTx.sequence)) || (thisAccountsTx.sequence == null) || (thisAccountsTx.sequence < 0)) {
-            return {
-              success: false,
-              failingField: 'sequence',
-              error: 'All transactions for accounts distributed ledgers must have the sequence field as a number greater or equal to 0',
-            };
-          }
-
-        } else if (thisTransaction.type === TransactionTypeOptions.utxo) {
-
-          const thisUtxoTx = <TransactionUtxoRequest> thisTransaction;
-          if (!thisUtxoTx.txInputs || thisUtxoTx.txInputs === undefined) {
-            return {
-              success: false,
-              failingField: 'txInputs',
-              error: 'All transactions for utxo distributed ledgers must have the txInputs field',
-            };
-          } else if ((!this.conversionTest(thisUtxoTx.txOutputs)) || (thisUtxoTx.txOutputs == null)) {
-            return {
-              success: false,
-              failingField: 'txOutputs',
-              error: 'All transactions for utxo distributed ledgers must have the txOutputs field',
-            };
-          }
-          // check each input
-          let counter = 0;
-          let inputToValidate;
-          while (counter < thisUtxoTx.txInputs.length) {
-            inputToValidate = <TransactionInput> thisUtxoTx.txInputs[counter];
-            if ((!this.conversionTest(inputToValidate.linkedTx)) || (inputToValidate.linkedTx == null) || (inputToValidate.linkedTx === 'undefined')) {
-              return {
-                success: false,
-                failingField: 'txInputs.linkedTx',
-                error: 'Each txInput for a utxo distributed ledger transaction must have a linkedTx field. If there is no linked transaction, set to the empty string, i.e.: linkedTx = ""',
-              };
-            } else if ((!this.conversionTest(inputToValidate.linkedIndex)) || (inputToValidate.linkedIndex == null) || (inputToValidate.linkedIndex === 'undefined')) {
-              return {
-                success: false,
-                failingField: 'txInputs.linkedIndex',
-                error: 'Each txInput for a utxo distributed ledger transaction must have a linkedIndex field. If there is no linked transaction index, set to the empty string, i.e.: linkedIndex = ""',
-              };
-            }  else if ((!this.conversionTest(inputToValidate.fromAddress)) || (inputToValidate.fromAddress == null) || (inputToValidate.fromAddress === 'undefined')) {
-              return {
-                success: false,
-                failingField: 'txInputs.fromAddress',
-                error: 'Each txInput for a utxo distributed ledger transaction must have a fromAddress field. If there is no from address (e.g. for coinbase transactions), set to the empty string, i.e.: fromAddress = ""',
-              };
-            }
-            counter = counter + 1;
-          }
-          // check each output
-          counter = 0;
-          let outputToValidate;
-          while (counter < thisUtxoTx.txOutputs.length) {
-            outputToValidate = <TransactionOutput> thisUtxoTx.txOutputs[counter];
-            if ((!this.conversionTest(outputToValidate.toAddress)) || (outputToValidate.toAddress == null) || (outputToValidate.toAddress === 'undefined')) {
-              return {
-                success: false,
-                failingField: 'txOutputs.toAddress',
-                error: 'Each txOutput for a utxo distributed ledger transaction must have a toAddress field.',
-              };
-            }
-            counter = counter + 1;
-          }
+        if ((!this.conversionTest(inputToValidate.fromAddress)) || (inputToValidate.fromAddress == null) || (inputToValidate.fromAddress === 'undefined')) {
+          return {
+            success: false,
+            failingField: 'txInputs.fromAddress',
+            error: 'Each txInput for a utxo distributed ledger transaction must have a fromAddress field. If there is no from address (e.g. for coinbase transactions), set to the empty string, i.e.: fromAddress = ""',
+          };
         }
+        counter = counter + 1;
+      }
+      // check each output
+      counter = 0;
+      let outputToValidate;
+      while (counter < thisUtxoTx.txOutputs.length) {
+        outputToValidate = <TransactionOutput>thisUtxoTx.txOutputs[counter];
+        if ((!this.conversionTest(outputToValidate.toAddress)) || (outputToValidate.toAddress == null) || (outputToValidate.toAddress === 'undefined')) {
+          return {
+            success: false,
+            failingField: 'txOutputs.toAddress',
+            error: 'Each txOutput for a utxo distributed ledger transaction must have a toAddress field.',
+          };
+        }
+        counter = counter + 1;
+      }
+    }
 
-        // finally input validation on the distributed ledger specific transaction
-        return this._transactionValidation(thisTransaction);
+    // finally input validation on the distributed ledger specific transaction
+    return this._transactionValidation(thisTransaction);
   }
 
   private conversionTest(thisObject: Object): boolean {
@@ -240,8 +250,8 @@ abstract class AbstractDLT {
    */
   public buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContract): Object {
     const smartContractQueryValidation = this.smartContractQueryValidation(contractQueryDetails);
-    if (smartContractQueryValidation.success === false) {
-      throw new Error("Error parameter: " + smartContractQueryValidation.failingField + ". Error is: " + smartContractQueryValidation.error);
+    if (!smartContractQueryValidation.success) {
+      throw new Error(`Error parameter:  ${smartContractQueryValidation.failingField}. Error is: ${smartContractQueryValidation.failingField}`);
     }
     return this._buildSmartContractQuery(dltAddress, contractQueryDetails);
   }
@@ -256,38 +266,36 @@ abstract class AbstractDLT {
    */
   public smartContractQueryValidation(contractQueryDetails: SmartContract): ValidationCheck {
 
-    //must be calling a function
-    if ((!contractQueryDetails.functionCall)||(contractQueryDetails.functionCall.length == 0)){
+    // must be calling a function
+    if ((!contractQueryDetails.functionCall) || (contractQueryDetails.functionCall.length === 0)) {
       return {
         success: false,
-        failingField: "smartContract.functionCall",
-        error: 'To query a smart contract, you need to provide the smartContract.functionCall field'
-      }   
+        failingField: 'smartContract.functionCall',
+        error: 'To query a smart contract, you need to provide the smartContract.functionCall field',
+      };
     }
-    //now go to ledger specific validation
+    // now go to ledger specific validation
     return this._smartContractQueryValidation(contractQueryDetails);
 
   }
 
-
-   /**
-    * Internal method to sign a transaction for the DLT
-    * @param {TransactionRequest} thisTransaction 
-    */
+  /**
+   * Internal method to sign a transaction for the DLT
+   * @param {TransactionRequest} thisTransaction
+   */
   abstract _sign(thisTransaction: TransactionRequest): Promise<string>;
 
-     /**
-    * Internal method to validate a transaction for the DLT
-    * @param {TransactionRequest} thisTransaction 
-    */
-   abstract _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck;
+  /**
+ * Internal method to validate a transaction for the DLT
+ * @param {TransactionRequest} thisTransaction
+ */
+  abstract _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck;
 
-    /**
-    * Internal method to validate a smart contract query for the DLT
-    * @param {SmartContract} contractQueryDetails the query
-    */
-   abstract _smartContractQueryValidation(contractQueryDetails: SmartContract): ValidationCheck;
-
+  /**
+  * Internal method to validate a smart contract query for the DLT
+  * @param {SmartContract} contractQueryDetails the query
+  */
+  abstract _smartContractQueryValidation(contractQueryDetails: SmartContract): ValidationCheck;
 
   /**
    * Allows a smart contract to be queried on the specific distributed ledger.
@@ -307,11 +315,10 @@ abstract class AbstractDLT {
     return {
       dlt: stx.dlt,
       fromAddress: stx.fromAddress,
-      //amount: stx.amount,
+      // amount: stx.amount,
       signedTransaction: stx.signedTransaction,
     };
   }
 }
-
 
 export default AbstractDLT;

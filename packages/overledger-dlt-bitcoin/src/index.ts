@@ -13,8 +13,8 @@ import TransactionBitcoinResponse from './DLTSpecificTypes/TransactionBitcoinRes
 export {
     TransactionBitcoinSubTypeOptions,
     TransactionBitcoinRequest,
-    TransactionBitcoinResponse
-}
+    TransactionBitcoinResponse,
+};
 /**
  * Development package for Bitcoin blockchain.
  */

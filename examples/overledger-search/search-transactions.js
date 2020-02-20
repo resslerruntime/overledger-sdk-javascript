@@ -18,13 +18,13 @@ const bitcoinTransactionHash = 'cea5a345dcb7cb891f79c9f64ded895d47b66976b13a3c23
 
 ; (async () => {
     try {
-        //connect to overledger and choose which distributed ledgers to use:
+        // Connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
-        //search for the details of the transaction
+        // Search for the details of the transaction
         const bitcoinTransaction = await overledger.search.getTransaction(bitcoinTransactionHash);
         const ethereumTransaction = await overledger.search.getTransaction(ethereumTransactionHash);
         const rippleTransaction = await overledger.search.getTransaction(rippleTransactionHash);

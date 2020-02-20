@@ -9,7 +9,8 @@ const bpiKey = '...';
 
 const ethereumAddress = '...';
 const rippleAddress = '...';
-//note: Bitcoin addresses do not have a sequence number as Bitcoin is a UTXO-based distributed ledger
+
+// Note: Bitcoin addresses do not have a sequence number as Bitcoin is a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------

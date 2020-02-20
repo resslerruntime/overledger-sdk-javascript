@@ -13,8 +13,8 @@ import TransactionXRPResponse from './DLTSpecificTypes/TransactionXRPResponse';
 export {
     TransactionXRPSubTypeOptions,
     TransactionXRPRequest,
-    TransactionXRPResponse
-}
+    TransactionXRPResponse,
+};
 /**
  * Development package for Ripple (XRP Ledger).
  */

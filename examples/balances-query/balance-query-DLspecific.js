@@ -9,7 +9,8 @@ const bpiKey = '...';
 
 const ethereumAddress = '...';
 const rippleAddress = '...';
-//note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
+
+// Note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
