@@ -51,7 +51,7 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
             // The following parameters are from the TransactionRequest object:
         dlt: DltNameOptions.ethereum,
         type: TransactionTypeOptions.accounts,
-        subType: {name: TransactionEthereumSubTypeOptions.smartContractDeploy},
+        subType: { name: TransactionEthereumSubTypeOptions.smartContractDeploy },
         message: "",  // This must be empty for a contractDeploy transaction
             // The following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,

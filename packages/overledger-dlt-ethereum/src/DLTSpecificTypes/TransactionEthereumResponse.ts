@@ -13,7 +13,7 @@ import TransactionEthereumSubTypeOptions from './associatedEnums/TransactionEthe
  * @memberof module:overledger-dlt-ethereum
  */
 interface TransactionEthereumResponse extends TransactionAccountsResponse {
-    subType: { name: TransactionEthereumSubTypeOptions };
+  subType: { name: TransactionEthereumSubTypeOptions };
   extraFields: {
     compUnitPrice: string,
     compLimit: string,
