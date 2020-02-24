@@ -47,7 +47,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
             //the following parameters are from the TransactionRequest object:
         dlt: DltNameOptions.ethereum,
         type: TransactionTypeOptions.accounts,
-        subType: TransactionEthereumSubTypeOptions.smartContractInvocation,
+        subType: {name: TransactionEthereumSubTypeOptions.smartContractInvocation},
         message: "",  //This must be empty for a contractInvocation transaction
             //the following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,
