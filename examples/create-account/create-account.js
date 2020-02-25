@@ -26,7 +26,7 @@ const bpiKey = '...';
         console.log("");
 
         const xrpAccount = await overledger.dlts.ripple.createAccount();
-        console.log('XRP account:\n', xrpAccount);
+        console.log('XRP ledger account:\n', xrpAccount);
         console.log("");
 
     } catch (e) {

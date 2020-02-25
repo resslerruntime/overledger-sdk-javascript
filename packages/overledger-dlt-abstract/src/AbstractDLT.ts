@@ -251,7 +251,7 @@ abstract class AbstractDLT {
   public buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContract): Object {
     const smartContractQueryValidation = this.smartContractQueryValidation(contractQueryDetails);
     if (!smartContractQueryValidation.success) {
-      throw new Error(`Error parameter:  ${smartContractQueryValidation.failingField}. Error is: ${smartContractQueryValidation.failingField}`);
+      throw new Error(`Error parameter: ${smartContractQueryValidation.failingField}. Error is: ${smartContractQueryValidation.error}`);
     }
     return this._buildSmartContractQuery(dltAddress, contractQueryDetails);
   }

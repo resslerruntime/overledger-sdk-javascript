@@ -32,7 +32,7 @@ type TransactionResponse = {
   timestamp: string,
   timestampUnit: TimeStampUnits,
   status: TransactionStatus,
-  signature: string[],
+  signatures: string[],
   extraFields?: Object,
 };
 

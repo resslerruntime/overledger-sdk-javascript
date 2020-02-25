@@ -15,8 +15,9 @@ const mappId = '...';
 const bpiKey = '...';
 
 // Paste in your ethereum address and private key.
-const partyAEthereumPrivateKey = '...'; //should have 0x in front
-const partyAEthereumAddress = '...';
+const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
+const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
+
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -42,7 +43,7 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
     const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
 
-    console.error('ethereumAccountSequence:' + ethereumAccountSequence);
+    console.log('ethereumAccountSequence:' + ethereumAccountSequence);
 
     // Sign the transaction.
     // As input to this function, we will be providing a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)

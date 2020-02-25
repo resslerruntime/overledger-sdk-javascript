@@ -5,7 +5,7 @@ import SmartContractFunctionParam from './SmartContractFunctionParam';
  * @typedef {Object} SmartContractFunctionDefinition
  * @property {functionTypeOptions} functionType - what type of function does this describe (constructor, normal function call, with parameters, without parameters)
  * @property {string} functionName - the name of the function. In some circumstances, you can set to the empty string if the function type is constructor. Check documentation.
- * @property {string} code - the code  of the function or the code used to call the function
+ * @property {string} code - the code of the function (if available) or the code used to call the function (if required)
  * @property {SmartContractFunctionParam[]} inputParams - the list of parameters this function takes as input
  * @property {SmartContractFunctionParam[]} outputParams - the list of paramters this function gives as output
  */
