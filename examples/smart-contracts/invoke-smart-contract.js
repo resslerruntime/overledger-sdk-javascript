@@ -57,11 +57,11 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
         smartContract: {
           code: "", // No need to put code here as you are declaring the function call ->
           functionCall: [{
-            functionType: SCFunctionTypeOptions.fFUNCTION_CALL_WITH_PARAMETERS,
+            functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
             functionName: "setOVLTestArray", // The function name must be given
             inputParams: [
               {  
-                type: { selectedType: EthereumTypeOptions.boolArray }, // First parameter is a boolean array
+                type: { selectedType: EthereumTypeOptions.BOOLEAN_ARRAY }, // First parameter is a boolean array
                 name: 'newArray', // Name of parameter
                 value: [true,true,true], // Value of the boolean array
               }

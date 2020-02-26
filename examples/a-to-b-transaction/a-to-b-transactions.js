@@ -8,21 +8,21 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '...';
-const bpiKey = '...';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpikeytest';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
-const partyABitcoinPrivateKey = 'cVRJipj585NeirnEt2q2CYrvonQLzQNRNQsh1vMaSAqXJTN5bQDR'; 
-const partyABitcoinAddress = 'mgRvRj22C38dusBc8xqViKn168CCgHFzgv';
-const partyAs2ndBitcoinPrivateKey = 'cNmsFjPqWCaVdhbPoHQJqDpayYdtKR9Qo81KVAEMHJwmgRVJZjDu';
-const partyAs2ndBitcoinAddress = 'mo54poo7oLL5LvHEYwhDmYdCpqvx7j3Ks2'; // Nominate a Bitcoin address you own for the change to be returned to
-const bitcoinLinkedTx = '...'; // Add the previous transaction here
-const bitcoinLinkedIndex = '...'; // Add the linked transaction index here
-const bitcoinInputAmount = 0; // set equal to the number of satoshis in your first input
-const bitcoinPartyBAmount = 0; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
+const partyABitcoinPrivateKey = 'cNmsFjPqWCaVdhbPoHQJqDpayYdtKR9Qo81KVAEMHJwmgRVJZjDu'; 
+const partyABitcoinAddress = 'mo54poo7oLL5LvHEYwhDmYdCpqvx7j3Ks2';
+const partyAs2ndBitcoinPrivateKey = 'cVRJipj585NeirnEt2q2CYrvonQLzQNRNQsh1vMaSAqXJTN5bQDR';
+const partyAs2ndBitcoinAddress = 'mgRvRj22C38dusBc8xqViKn168CCgHFzgv'; // Nominate a Bitcoin address you own for the change to be returned to
+const bitcoinLinkedTx = '6a23a5b1cda511b8004c67cd873aa84d704ead7b313ef565c50918dead03f0d8'; // Add the previous transaction here
+const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinInputAmount = 2500; // set equal to the number of satoshis in your first input
+const bitcoinPartyBAmount = 200; // set equal to the number of satoshis to send to party B
+const bitcoinChangeAmount = 100; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
@@ -47,7 +47,7 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
   try {
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP }],
+      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Test';
@@ -96,7 +96,7 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
       ],
       extraFields: {
               // The following parameters are from the TransactionBitcoinRequest object:
-        feePrice: '2500' // Price for the miner to add this transaction to the block
+        feePrice: '2200' // Price for the miner to add this transaction to the block
       },
     },
     {
@@ -118,7 +118,7 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     },
     {
             // The following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.XRP,
+      dlt: DltNameOptions.XRP_LEDGER,
       type: TransactionTypeOptions.ACCOUNTS,
       subType: { name: TransactionXRPSubTypeOptions.VALUE_TRANSFER },
       message: transactionMessage,
@@ -144,12 +144,12 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
     console.log("");
-    console.log('Your Bitcoin value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log("");
-    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    console.log("");
-    console.log('Your XRP ledger value transfer transaction hash is: ' + result.dltData[2].transactionHash);
-    console.log("");
+    counter = 0;
+    while (counter < result.dltData.length){
+      console.log('Your ' + result.dltData[counter].dlt + ' value transfer transaction hash is: ' + result.dltData[counter].transactionHash);
+      console.log("");
+      counter = counter + 1;
+    }
   } catch (e) {
     console.error('error:', e);
   }

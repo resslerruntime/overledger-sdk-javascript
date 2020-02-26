@@ -13,6 +13,7 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = '...';
 const bpiKey = '...';
 
+
 // Paste in your ethereum address.
 const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
 
@@ -42,7 +43,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
         inputParams: [],
         outputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.B256}, //first parameter is an integer
+            type: {selectedType: EthereumTypeOptions.UINT_B, selectedIntegerLength: EthereumUintIntOptions.B256}, //first parameter is an integer
           }
         ]
       }],
@@ -75,14 +76,14 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
         functionName: "getTestArray", // Not needed for constructor
         inputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.B256},
+            type: {selectedType: EthereumTypeOptions.UINT_B, selectedIntegerLength: EthereumUintIntOptions.B256},
             value: '0',
             name: 'index'
           }
         ],
         outputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.bool}
+            type: {selectedType: EthereumTypeOptions.BOOLEAN}
           }
         ]
       }],

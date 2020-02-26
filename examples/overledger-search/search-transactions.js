@@ -21,7 +21,7 @@ const xrpTransactionHash = 'AF8EF2CA324D12D937679D2E277EED5820C3047B690D3B917CF6
     try {
         // Connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP }],
+            dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
             provider: { network: 'testnet' },
         });
 

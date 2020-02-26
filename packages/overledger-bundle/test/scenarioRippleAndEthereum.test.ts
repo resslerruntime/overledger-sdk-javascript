@@ -12,29 +12,29 @@ describe('Dlt/RippleAndEthereum', () => {
   describe('Main read functions', () => {
     test('Can getSequences for specific addresses', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [{ dlt: 'ethereum', }, { dlt: 'ripple', },],
+        dlts: [{ dlt: DltNameOptions.ETHEREUM, }, { dlt: DltNameOptions.XRP_LEDGER, },],
       });
 
       mockedAxios.post.mockResolvedValue({
         dltData: [
           {
             sequence: 0,
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
           },
           {
             sequence: 1,
-            dlt: 'ripple',
+            dlt: DltNameOptions.XRP_LEDGER,
           },
         ],
       } as any);
 
       const params = [
         {
-          dlt: 'ethereum',
+          dlt: DltNameOptions.ETHEREUM,
           address: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
         },
         {
-          dlt: 'ripple',
+          dlt: DltNameOptions.XRP_LEDGER,
           address: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
         },
       ];
@@ -44,11 +44,11 @@ describe('Dlt/RippleAndEthereum', () => {
       expect(mockedAxios.post).toBeCalledWith('/sequence', {
         dltData: [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
             address: expect.any(String),
           },
           {
-            dlt: 'ripple',
+            dlt: DltNameOptions.XRP_LEDGER,
             address: expect.any(String),
           },
         ],
@@ -60,10 +60,10 @@ describe('Dlt/RippleAndEthereum', () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
-            dlt: 'ripple',
+            dlt: DltNameOptions.XRP_LEDGER,
           },
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
           },
         ],
       });
@@ -73,7 +73,7 @@ describe('Dlt/RippleAndEthereum', () => {
           dltData: [
             {
               sequence: 1,
-              dlt: 'ethereum',
+              dlt: DltNameOptions.ETHEREUM,
             },
           ],
         },
@@ -84,7 +84,7 @@ describe('Dlt/RippleAndEthereum', () => {
       expect(mockedAxios.post).toBeCalledWith('/sequence', {
         dltData: [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
             address: expect.any(String),
           },
         ],
@@ -93,7 +93,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can read transactions from mappId', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [{ dlt: 'ripple', }, { dlt: 'ethereum', },],
+        dlts: [{ dlt: DltNameOptions.XRP_LEDGER, }, { dlt: DltNameOptions.ETHEREUM, },],
       });
 
       mockedAxios.get.mockResolvedValue([
@@ -103,7 +103,7 @@ describe('Dlt/RippleAndEthereum', () => {
           timestamp: '2018-09-07T10:29:50.695Z',
           dltData: [
             {
-              dlt: 'ethereum',
+              dlt: DltNameOptions.ETHEREUM,
               transactionHash: '0xa3f8277dd54f1341dec3dfae3ad844ad8a226faa511e05b7dfe1e9de55481111',
               status: 'broadcasted',
               errorReason: null,
@@ -120,7 +120,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can read transactions by overledger transaction id', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [{ dlt: 'ripple', }, { dlt: 'ethereum', },],
+        dlts: [{ dlt: DltNameOptions.XRP_LEDGER, }, { dlt: DltNameOptions.ETHEREUM, },],
       });
 
       mockedAxios.get.mockResolvedValue({
@@ -129,7 +129,7 @@ describe('Dlt/RippleAndEthereum', () => {
         timestamp: '2018-09-07T23:36:49.832Z',
         dltData: [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
             transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631111',
             status: 'broadcasted',
             errorReason: null,
@@ -153,7 +153,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Load Ethereum and Ripple DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
-        dlts: [{ dlt: 'ethereum', }, { dlt: 'ripple', },],
+        dlts: [{ dlt: DltNameOptions.ETHEREUM, }, { dlt: DltNameOptions.XRP_LEDGER, },],
       });
 
       expect(overledger.dlts.ethereum).toBeDefined();
@@ -188,7 +188,7 @@ describe('Dlt/RippleAndEthereum', () => {
           },
         },
         {
-          dlt: DltNameOptions.XRP,
+          dlt: DltNameOptions.XRP_LEDGER,
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
@@ -205,7 +205,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       expect(signedTransactions).toEqual([
         {
-          dlt: 'ethereum',
+          dlt: DltNameOptions.ETHEREUM,
           fromAddress: expect.any(String),
           signedTransaction: {
             signatures: [expect.any(String)],
@@ -213,7 +213,7 @@ describe('Dlt/RippleAndEthereum', () => {
           }
         },
         {
-          dlt: 'ripple',
+          dlt: DltNameOptions.XRP_LEDGER,
           fromAddress: expect.any(String),
           signedTransaction: {
             signatures: [expect.any(String)],
@@ -225,8 +225,8 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can send Ethereum and Ripple signedTransactions', async () => {
       mockedAxios.post.mockResolvedValue([
-        { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
-        { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
+        { dlt: DltNameOptions.ETHEREUM, status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
+        { dlt: DltNameOptions.XRP_LEDGER, status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
       ] as any );
 
       await overledger.send(signedTransactions);
@@ -236,7 +236,7 @@ describe('Dlt/RippleAndEthereum', () => {
         dltData:
           [
             {
-              dlt: 'ethereum',
+              dlt: DltNameOptions.ETHEREUM,
               fromAddress: expect.any(String),
               signedTransaction: {
                 signatures: [expect.any(String)],
@@ -244,7 +244,7 @@ describe('Dlt/RippleAndEthereum', () => {
               }
             },
             {
-              dlt: 'ripple',
+              dlt: DltNameOptions.XRP_LEDGER,
               fromAddress: expect.any(String),
               signedTransaction: {
                 signatures: [expect.any(String)],
@@ -265,8 +265,8 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Load Ethereum and Ripple DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
-          { dlt: 'ethereum', privateKey: '0xe58af4f4a4a509b0190d87bdcd6d05ec4c274cfdd2282f4d196da6466d56c621', },
-          { dlt: 'ripple', privateKey: 'shL8VmeBqoB7CnbPjXmfue7zeBeeg', },
+          { dlt: DltNameOptions.ETHEREUM, privateKey: '0xe58af4f4a4a509b0190d87bdcd6d05ec4c274cfdd2282f4d196da6466d56c621', },
+          { dlt: DltNameOptions.XRP_LEDGER, privateKey: 'shL8VmeBqoB7CnbPjXmfue7zeBeeg', },
         ],
       });
 
@@ -304,7 +304,7 @@ describe('Dlt/RippleAndEthereum', () => {
           },
         },
         {
-          dlt: DltNameOptions.XRP,
+          dlt: DltNameOptions.XRP_LEDGER,
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
@@ -321,7 +321,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       expect(signedTransactions).toEqual([
         {
-          dlt: 'ethereum',
+          dlt: DltNameOptions.ETHEREUM,
           fromAddress: expect.any(String),
           signedTransaction: {
             signatures: [expect.any(String)],
@@ -329,7 +329,7 @@ describe('Dlt/RippleAndEthereum', () => {
           }
         },
         {
-          dlt: 'ripple',
+          dlt: DltNameOptions.XRP_LEDGER,
           fromAddress: expect.any(String),
           signedTransaction: {
             signatures: [expect.any(String)],
@@ -341,8 +341,8 @@ describe('Dlt/RippleAndEthereum', () => {
 
     test('Can send ripple & ethereum signedTransactions', async () => {
       mockedAxios.post.mockResolvedValue([
-        { dlt: 'ripple', status: 'broadcasted', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' },
-        { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
+        { dlt: DltNameOptions.XRP_LEDGER, status: 'broadcasted', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' },
+        { dlt: DltNameOptions.ETHEREUM, status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ] as any);
 
       await overledger.send(signedTransactions);
@@ -351,7 +351,7 @@ describe('Dlt/RippleAndEthereum', () => {
         mappId: 'testmappid',
         dltData: [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ETHEREUM,
             fromAddress: expect.any(String),
             signedTransaction: {
               signatures: [expect.any(String)],
@@ -359,7 +359,7 @@ describe('Dlt/RippleAndEthereum', () => {
             }
           },
           {
-            dlt: 'ripple',
+            dlt: DltNameOptions.XRP_LEDGER,
             fromAddress: expect.any(String),
             signedTransaction: {
               signatures: [expect.any(String)],

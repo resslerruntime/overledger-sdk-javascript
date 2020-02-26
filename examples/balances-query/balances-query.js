@@ -20,7 +20,7 @@ const xrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-          dlts: [{ dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP }],
+          dlts: [{ dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
             provider: { network: 'testnet' },
         });
 
@@ -30,7 +30,7 @@ const xrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
             address: ethereumAddress,
           },
           {
-            dlt: DltNameOptions.XRP,
+            dlt: DltNameOptions.XRP_LEDGER,
             address: xrpAddress,
           },
         ];

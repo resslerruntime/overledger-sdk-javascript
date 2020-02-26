@@ -8,15 +8,15 @@
  */
 
 export enum DltNameOptions {
-    XRP = 'RIPPLE',
-    ETHEREUM = 'ETHEREUM',
-    BITCOIN = 'BITCOIN',
-    HYPERLEDGER_FABRIC = 'HYPERLEDGER_FABRIC',
-    CORDA = 'CORDA',
-    QUORUM = 'QUORUM',
-    STELLAR = 'STELLAR',
-    IOTA = 'IOTA',
-    CONSTELLATION = 'CONSTELLATION',
+    XRP_LEDGER = 'ripple',
+    ETHEREUM = 'ethereum',
+    BITCOIN = 'bitcoin',
+    HYPERLEDGER_FABRIC = 'hyperledgerFabric',
+    CORDA = 'corda',
+    QUORUM = 'quorum',
+    STELLAR = 'stellar',
+    IOTA = 'iota',
+    CONSTELLATION = 'constellation',
 }
 
 export default DltNameOptions;

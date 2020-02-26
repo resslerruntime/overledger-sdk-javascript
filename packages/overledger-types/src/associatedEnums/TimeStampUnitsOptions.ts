@@ -9,7 +9,7 @@
 export enum TimeStampUnitOptions {
     ISO_DATE = 'ISO_DATE', // Standard code: iso
     BLOCK_HEIGHT = 'BLOCK_HEIGHT',
-    FULL_DATE_TIME_SHORT = 'FULL_DATE_TIME_SHORT', // Standard code: fs 
+    FULL_DATE_TIME_SHORT = 'FULL_DATE_TIME_SHORT', // Standard code: fs
     FULL_DATE_TIME_LONG = 'FULL_DATE_TIME_LONG', // Standard code: fl
     GENERAL_DATE_TIME_SHORT = 'GENERAL_DATE_TIME_SHORT', // Standard code: gs
     GENERAL_DATE_TIME_LONG = 'GENERAL_DATE_TIME_LONG',  // Standard code: gl
