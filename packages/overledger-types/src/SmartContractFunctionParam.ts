@@ -13,7 +13,7 @@
  */
 type SmartContractFunctionParam = {
   type: object,
-  name?: string,Smart
+  name?: string,
   value?: object,
   options?: object,
 };
