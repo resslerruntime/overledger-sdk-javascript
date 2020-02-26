@@ -1,3 +1,4 @@
+//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
@@ -51,9 +52,9 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
             // The following parameters are from the TransactionRequest object:
         dlt: DltNameOptions.ethereum,
         type: TransactionTypeOptions.accounts,
-        subType: TransactionEthereumSubTypeOptions.smartContractDeploy,
-        message: "",  // This must be empty for a contractDeploy transaction
-            // The following parameters are from the TransactionAccountRequest object:
+        subType: {name: TransactionEthereumSubTypeOptions.smartContractDeploy},
+        message: "",  //This must be empty for a contractDeploy transaction
+            //the following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,
         toAddress: "", // This must be empty for a contractDeploy transaction
         sequence: ethereumAccountSequence, // must be an integer >= 0
