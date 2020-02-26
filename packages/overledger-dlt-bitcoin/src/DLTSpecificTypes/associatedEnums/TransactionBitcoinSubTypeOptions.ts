@@ -6,9 +6,8 @@
  * @memberof module:overledger-dlt-bitcoin
  */
 
-export enum TransactionBitcoinSubTypeOptions { 
-    valueTransfer = "value"
-
-};
+export enum TransactionBitcoinSubTypeOptions {
+    valueTransfer = 'value',
+}
 
 export default TransactionBitcoinSubTypeOptions;

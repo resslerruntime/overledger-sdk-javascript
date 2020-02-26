@@ -1,5 +1,5 @@
-import {TransactionUtxoResponse} from "@quantnetwork/overledger-types";
-import TransactionBitcoinSubTypeOptions from "./associatedEnums/TransactionBitcoinSubTypeOptions";
+import { TransactionUtxoResponse } from '@quantnetwork/overledger-types';
+import TransactionBitcoinSubTypeOptions from './associatedEnums/TransactionBitcoinSubTypeOptions';
 /**
 * A generic object used to describe an Overledger transaction response for the Bitcoin blockchain. Note that this object inherits many parameters from TransactionUtxoResponse.
  * @typedef {Object} TransactionBitcoinResponse
@@ -9,13 +9,12 @@ import TransactionBitcoinSubTypeOptions from "./associatedEnums/TransactionBitco
 
 /**
  * @memberof module:overledger-dlt-bitcoin
- */ 
+ */
 interface TransactionBitcoinResponse extends TransactionUtxoResponse {
-    subType: {name: TransactionBitcoinSubTypeOptions},
-    extraFields: {
-        feePrice: string
-    }
+  subType: { name: TransactionBitcoinSubTypeOptions };
+  extraFields: {
+    feePrice: string,
   };
-  
-  export default TransactionBitcoinResponse;
-  
+}
+
+export default TransactionBitcoinResponse;

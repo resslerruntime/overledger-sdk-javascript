@@ -11,10 +11,9 @@
  * @memberof module:overledger-types
  */
 type validationCheck = {
-    success: boolean,
-    failingField?: string,
-    error?: string
-  };
-  
-  export default validationCheck;
-  
+  success: boolean,
+  failingField?: string,
+  error?: string,
+};
+
+export default validationCheck;

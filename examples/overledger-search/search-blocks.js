@@ -8,9 +8,9 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = '...';
 const bpiKey = '...';
 
-// includes what block number to search
+// Includes what block number to search
 const ethereumBlockNumber = '1000000';
-const rippleBlockNumber = '4531496';
+const xrpBlockNumber = '4923953';
 const bitcoinBlockNumber = '1000002';
 
 //  ---------------------------------------------------------
@@ -19,23 +19,23 @@ const bitcoinBlockNumber = '1000002';
 
 ; (async () => {
     try {
-                //connect to overledger and choose which distributed ledgers to use:
+                // connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
 
         });
 
-        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
+        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.bitcoin, bitcoinBlockNumber);
         console.log('Bitcoin block: ', bitcoinBlock.data);
         console.log("");
         
-        const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
+        const ethereumBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.ethereum, ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
         console.log("");
 
-        const rippleBlock = await overledger.search.getBlockByDltAndNumber('ripple', rippleBlockNumber);
-        console.log('Ripple block: ', rippleBlock.data);
+        const xrpBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.xrp, xrpBlockNumber);
+        console.log('XRP ledger block: ', xrpBlock.data);
         console.log("");
 
     } catch (e) {

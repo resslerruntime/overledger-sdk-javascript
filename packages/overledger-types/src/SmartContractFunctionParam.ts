@@ -5,18 +5,17 @@
  * @property {object} type - information on the parameter's type
  * @property {string} name - the parameter's name
  * @property {object} value - information on the parameter's value
- * @property {object} options - information the valid values that this parameter can take
+ * @property {object} options - information on the valid values that this parameter can take
  */
 
 /**
  * @memberof module:overledger-types
  */
 type SmartContractFunctionParam = {
-    type: object,
-    name?: string,
-    value?: object,
-    options?: object
-  };
-  
-  export default SmartContractFunctionParam;
-  
+  type: object,
+  name?: string,Smart
+  value?: object,
+  options?: object,
+};
+
+export default SmartContractFunctionParam;

@@ -1,5 +1,5 @@
-import {TransactionAccountsRequest} from "@quantnetwork/overledger-types";
-import TransactionXRPSubTypeOptions from "./associatedEnums/TransactionXRPSubTypeOptions";
+import { TransactionAccountsRequest } from '@quantnetwork/overledger-types';
+import TransactionXRPSubTypeOptions from './associatedEnums/TransactionXRPSubTypeOptions';
 /**
 * A generic object used to describe an Overledger transaction request for the XRP Ledger. Note that this object inherits many parameters from TransactionAccountsRequest.
  * @typedef {Object} TransactionAccountsRequest
@@ -12,12 +12,11 @@ import TransactionXRPSubTypeOptions from "./associatedEnums/TransactionXRPSubTyp
  * @memberof module:overledger-dlt-xrp
  */
 interface TransactionXRPRequest extends TransactionAccountsRequest {
-        subType: {name: TransactionXRPSubTypeOptions},
-        extraFields: {
-            feePrice: string,
-            maxLedgerVersion: string
-        }
+  subType: { name: TransactionXRPSubTypeOptions };
+  extraFields: {
+    feePrice: string,
+    maxLedgerVersion: string,
   };
-  
-  export default TransactionXRPRequest;
-  
+}
+
+export default TransactionXRPRequest;

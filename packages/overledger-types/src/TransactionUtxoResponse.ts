@@ -1,6 +1,6 @@
-import TransactionResponse from "./TransactionResponse";
-import TransactionInput from "./TransactionInput";
-import TransactionOutput from "./TransactionOutput";
+import TransactionResponse from './TransactionResponse';
+import TransactionInput from './TransactionInput';
+import TransactionOutput from './TransactionOutput';
 
 /**
  * A generic object used to describe an Overledger transaction response for utxo based distributed ledgers. Note that this object inherits many parameters from TransactionResponse.
@@ -13,9 +13,8 @@ import TransactionOutput from "./TransactionOutput";
  * @memberof module:overledger-types
  */
 interface TransactionUtxoResponse extends TransactionResponse {
-        txInputs: TransactionInput[],
-        txOutputs: TransactionOutput[]
-  };
-  
-  export default TransactionUtxoResponse;
-  
+  txInputs: TransactionInput[];
+  txOutputs: TransactionOutput[];
+}
+
+export default TransactionUtxoResponse;

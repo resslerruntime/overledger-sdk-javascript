@@ -8,9 +8,10 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = '...';
 const bpiKey = '...';
 
-const ethereumAddress = '...';
-const rippleAddress = '...';
-//note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
+const ethereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
+const xrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
+
+// Note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -30,7 +31,7 @@ const rippleAddress = '...';
           },
           {
             dlt: DltNameOptions.xrp,
-            address: rippleAddress,
+            address: xrpAddress,
           },
         ];
 
