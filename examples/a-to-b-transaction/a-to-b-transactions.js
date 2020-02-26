@@ -144,12 +144,12 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
     console.log("");
-    console.log('Your Bitcoin value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    console.log("");
-    console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
-    console.log("");
-    console.log('Your XRP ledger value transfer transaction hash is: ' + result.dltData[2].transactionHash);
-    console.log("");
+    counter = 0;
+    while (counter < result.dltData.length){
+      console.log('Your ' + result.dltData[counter].dlt + ' value transfer transaction hash is: ' + result.dltData[counter].transactionHash);
+      console.log("");
+      counter = counter + 1;
+    }
   } catch (e) {
     console.error('error:', e);
   }
