@@ -1,20 +1,17 @@
-// Replace the dependency by @overledger/bundle if you're in your own project
-const OverledgerSDK = require("../../packages/bundle").default;
+//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '...';
+const bpiKey = '...';
 
-// Take these from the search-transaction scripts, as the response
-// includes what block the transaction is included in (except for bitcoin);
-
-// TODO: research if the transaction call on bitcoin can return the block it was included in
-// blockchain.com seems to have this capability
-// const bitcoinBlockNumber = '<block number>';
-const ethereumBlockNumber = '<block number>';
-const rippleBlockNumber = '<block number>';
+// includes what block number to search
+const ethereumBlockNumber = '1000000';
+const rippleBlockNumber = '4531496';
+const bitcoinBlockNumber = '1000002';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -22,19 +19,24 @@ const rippleBlockNumber = '<block number>';
 
 ; (async () => {
     try {
+                //connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+            dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
 
         });
 
+        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber('bitcoin', bitcoinBlockNumber);
+        console.log('Bitcoin block: ', bitcoinBlock.data);
+        console.log("");
+        
         const ethereumBlock = await overledger.search.getBlockByDltAndNumber('ethereum', ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
-        console.log('\n');
+        console.log("");
 
         const rippleBlock = await overledger.search.getBlockByDltAndNumber('ripple', rippleBlockNumber);
         console.log('Ripple block: ', rippleBlock.data);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e.response.data);

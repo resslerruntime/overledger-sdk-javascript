@@ -1,80 +1,29 @@
 # Overledger Party A to Party B Transaction
 
-This example contains three scripts which go through the following steps:
-1. Create and fund Testnet accounts for party A
-2. Create and fund Testnet accounts for party B
-3. Send a multiple DLT transation from party A to party B
+This example contains a script which allows Party A to transfer value to Party B through multiple distributed ledgers.
 
 ## Building
 
-In order to run the examples, first, make sure you have built the sdk by running the following command in the root folder of the project:
+In order to run the example, first, make sure you have built the sdk by running the following command in the root folder of the project:
 
 ```
-npm run build
+yarn run build
 ```
+
+## Configuring the script
+
+Next you will need to add some information into the script for it to run correctly, specifically:
+
+* Your MAPPID and BPIKey
+* Party A's blockchain addresses and associated private keys
+* Party B's blockchain addresses
+* Your Bitcoin transaction inputs and outputs. Note that as Bitcoin is an unspent transaction output (UTXO) based blockchain, you need to explicitly state where the funds you are spending have come from. For each transaction that has provided you with funds you are now spending, you need to add a new txInput (and set required properities). You also need to state where all of your funds are going by adding a new txOutput for each different address that will be paid. Note that you have the value of your inputs must equal the value of your outputs + extraFields.feePrice. Therefore if you do not want to spend all of your input amount, you need to add a txOutput to an address that you own with the change of the transaction. 
 
 ## Running the example
 
-Each script has a section at the beginning where a couple of variables need to be initialised. First, set a mappId and BPI key in all of the scripts. For scripts 1 and 2, these are the only variables that need to be initialised.
-
-Open two terminal windows in the a-to-b-transaction folder and run:
+Now that you have performed the necessary changes to the script, open a terminal window in the a-to-b-transaction directory and run:
 
 ```
-node 1-partyA.js
+node a-to-b-transactions
 ```
 
-Then, in a separate window run
-
-```
-node 2-partyB.js
-```
-
-The first two scripts are functionally identical, but the logs differ for ease of use. The output is going to be accounts for each supported DLT, together with the response returned by the Overledger faucets used to fund the accounts with tokens.
-
-Taking the output of the initial two scripts, fill in the variables at the beggining of the third script. Once that's done, run:
-
-```
-node 3-transactions.js
-```
-
-If all went well, the output should look like this:
-
-```
-{
-  "mappId": "network.quant.examples.a-to-b-transaction",
-  "overledgerTransactionId": "f0c1f314-7cda-4f67-8a21-3761d09af452",
-  "timestamp": "2019-04-29T14:05:40.189878Z",
-  "dltData": [
-    {
-      "dlt": "bitcoin",
-      "transactionHash": "cba56fa5543cab114ff54b315a453a89912ce34737e7d1a799e22f9f00b501d9",
-      "status": {
-        "status": "broadcasted",
-        "code": null,
-        "message": null
-      },
-      "links": []
-    },
-    {
-      "dlt": "ethereum",
-      "transactionHash": "0x4016406d985f0273d841353c95e88906fc805c700b7a5bf4c79124df1dd53985",
-      "status": {
-        "status": "broadcasted",
-        "code": "0",
-        "message": "Successfully broadcasted"
-      },
-      "links": []
-    },
-    {
-      "dlt": "ripple",
-      "transactionHash": "A7606719C83BCE64A43D102FB7D6DDF0B1A8E7014512D395E0756D1D7EBA287F",
-      "status": {
-        "status": "broadcasted",
-        "code": "tesSUCCESS",
-        "message": "The transaction was applied. Only final in a validated ledger."
-      },
-      "links": []
-    }
-  ]
-}
-```

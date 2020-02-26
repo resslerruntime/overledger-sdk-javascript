@@ -1,14 +1,16 @@
-// Replace the dependency by @overledger/bundle if you're in your own project
-const OverledgerSDK = require('../../packages/bundle').default;
+//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = '...';
+const bpiKey = '...';
 
-const ethereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
-const rippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
+const ethereumAddress = '...';
+const rippleAddress = '...';
+//note: You cannot retrieve a Bitcoin address balance unless a wallet is integrated. This is due to Bitcoin being a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -17,24 +19,24 @@ const rippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: 'ethereum' }, { dlt: 'ripple' }],
+          dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
             provider: { network: 'testnet' },
         });
 
         const array = [
           {
-            dlt: 'ethereum',
+            dlt: DltNameOptions.ethereum,
             address: ethereumAddress,
           },
           {
-            dlt: 'ripple',
+            dlt: DltNameOptions.xrp,
             address: rippleAddress,
           },
         ];
 
         const balances = await overledger.getBalances(array);
         console.log('Balances:\n', balances.data);
-        console.log('\n');
+        console.log("");
 
     } catch (e) {
         console.error('error', e.response.data);
