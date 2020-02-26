@@ -8,8 +8,8 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.software';
-const bpiKey = 'bpikeytest';
+const mappId = '...';
+const bpiKey = '...';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
