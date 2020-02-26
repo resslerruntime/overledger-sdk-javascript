@@ -7,8 +7,8 @@
  */
 
 export enum TransactionTypeOptions {
-  utxo = 'utxo',
-  accounts = 'accs',
+  UTXO = 'UTXO',
+  ACCOUNTS = 'ACCOUNTS',
 }
 
 export default TransactionTypeOptions;

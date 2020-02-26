@@ -21,20 +21,20 @@ const bitcoinBlockNumber = '1000002';
     try {
                 // connect to overledger and choose which distributed ledgers to use:
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+            dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP }],
             provider: { network: 'testnet' },
 
         });
 
-        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.bitcoin, bitcoinBlockNumber);
+        const bitcoinBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.BITCOIN, bitcoinBlockNumber);
         console.log('Bitcoin block: ', bitcoinBlock.data);
         console.log("");
         
-        const ethereumBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.ethereum, ethereumBlockNumber);
+        const ethereumBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.ETHEREUM, ethereumBlockNumber);
         console.log('Ethereum block: ', ethereumBlock.data);
         console.log("");
 
-        const xrpBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.xrp, xrpBlockNumber);
+        const xrpBlock = await overledger.search.getBlockByDltAndNumber(DltNameOptions.XRP, xrpBlockNumber);
         console.log('XRP ledger block: ', xrpBlock.data);
         console.log("");
 

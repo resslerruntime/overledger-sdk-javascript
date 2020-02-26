@@ -174,9 +174,9 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Can sign Ethereum and Ripple transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: DltNameOptions.ethereum,
-          type: TransactionTypeOptions.accounts,
-          subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
+          dlt: DltNameOptions.ETHEREUM,
+          type: TransactionTypeOptions.ACCOUNTS,
+          subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
           message: "",
           fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
           toAddress: '0x0000000000000000000000000000000000000000',
@@ -188,9 +188,9 @@ describe('Dlt/RippleAndEthereum', () => {
           },
         },
         {
-          dlt: DltNameOptions.xrp,
-          type: TransactionTypeOptions.accounts,
-          subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
+          dlt: DltNameOptions.XRP,
+          type: TransactionTypeOptions.ACCOUNTS,
+          subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
           fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111",
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
@@ -290,9 +290,9 @@ describe('Dlt/RippleAndEthereum', () => {
     test('Can sign Ethereum and Ripple transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: DltNameOptions.ethereum,
-          type: TransactionTypeOptions.accounts,
-          subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
+          dlt: DltNameOptions.ETHEREUM,
+          type: TransactionTypeOptions.ACCOUNTS,
+          subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
           message: "",
           fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101', //should really be the  address of the private key but for this test is does not matter
           toAddress: '0x0000000000000000000000000000000000000000',
@@ -304,9 +304,9 @@ describe('Dlt/RippleAndEthereum', () => {
           },
         },
         {
-          dlt: DltNameOptions.xrp,
-          type: TransactionTypeOptions.accounts,
-          subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
+          dlt: DltNameOptions.XRP,
+          type: TransactionTypeOptions.ACCOUNTS,
+          subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
           fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111", //should really be the  address of the private key but for this test is does not matter
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",

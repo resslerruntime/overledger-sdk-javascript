@@ -7,9 +7,9 @@
  */
 
 export enum ExpressivenessOptions {
-    turingComplete = 'TC', // can execute code of arbitrary algorithmic complexity
-    genericNonTuringComplete = 'generic_NTC',  // cannot execute code of arbitrary algorithmic complexity and not application specific
-    applicationSpecificNonTuringComplete = 'app_NTC', // cannot execute code of arbitrary algorithmic complexity but has a few application specific features
+    TURING_COMPLETE = 'TURING_COMPLETE', // can execute code of arbitrary algorithmic complexity
+    GENERICN_ON_TURING_COMPLETE = 'GENERIC_NON_TURING_COMPLETE',  // cannot execute code of arbitrary algorithmic complexity and not application specific
+    APPLICATION_SPECIFIC_NON_TURING_COMPLETE = 'APPLICATION_SPECIFIC_NON_TURING_COMPLETE', // cannot execute code of arbitrary algorithmic complexity but has a few application specific features
 }
 
 export default ExpressivenessOptions;

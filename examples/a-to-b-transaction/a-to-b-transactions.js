@@ -47,7 +47,7 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
   try {
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.bitcoin }, { dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP }],
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Test';
@@ -71,9 +71,9 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     const signedTransactions = await overledger.sign([
     {
           // The following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.bitcoin,
-      type: TransactionTypeOptions.utxo,
-      subType: {name: TransactionBitcoinSubTypeOptions.valueTransfer},
+      dlt: DltNameOptions.BITCOIN,
+      type: TransactionTypeOptions.UTXO,
+      subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
@@ -101,9 +101,9 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     },
     {
             // The following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.ethereum,
-      type: TransactionTypeOptions.accounts,
-      subType: {name: TransactionEthereumSubTypeOptions.valueTransfer},
+      dlt: DltNameOptions.ETHEREUM,
+      type: TransactionTypeOptions.ACCOUNTS,
+      subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
       message: transactionMessage,
             // The following parameters are from the TransactionAccountRequest object:
       fromAddress: partyAEthereumAddress,
@@ -118,9 +118,9 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     },
     {
             // The following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.xrp,
-      type: TransactionTypeOptions.accounts,
-      subType: { name: TransactionXRPSubTypeOptions.valueTransfer },
+      dlt: DltNameOptions.XRP,
+      type: TransactionTypeOptions.ACCOUNTS,
+      subType: { name: TransactionXRPSubTypeOptions.VALUE_TRANSFER },
       message: transactionMessage,
             // The following parameters are from the TransactionAccountRequest object:
       fromAddress: partyAxrpAddress,

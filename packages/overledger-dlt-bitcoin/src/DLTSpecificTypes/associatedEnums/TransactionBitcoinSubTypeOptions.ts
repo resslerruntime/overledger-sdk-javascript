@@ -7,7 +7,7 @@
  */
 
 export enum TransactionBitcoinSubTypeOptions {
-    valueTransfer = 'value',
+    VALUE_TRANSFER = 'VALUE_TRANSFER',
 }
 
 export default TransactionBitcoinSubTypeOptions;

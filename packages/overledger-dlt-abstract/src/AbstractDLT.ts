@@ -136,7 +136,7 @@ abstract class AbstractDLT {
     }
 
     // now input validation on a generic accounts-based transaction or utxo-based transaction
-    if (thisTransaction.type === TransactionTypeOptions.accounts) {
+    if (thisTransaction.type === TransactionTypeOptions.ACCOUNTS) {
       const thisAccountsTx = <TransactionAccountsRequest>thisTransaction;
       if ((!thisAccountsTx.fromAddress) || (thisAccountsTx.fromAddress === '') || (thisAccountsTx.fromAddress == null) || (thisAccountsTx.fromAddress === 'undefined')) {
         return {
@@ -160,7 +160,7 @@ abstract class AbstractDLT {
         };
       }
 
-    } else if (thisTransaction.type === TransactionTypeOptions.utxo) {
+    } else if (thisTransaction.type === TransactionTypeOptions.UTXO) {
       const thisUtxoTx = <TransactionUtxoRequest>thisTransaction;
       if (!thisUtxoTx.txInputs || thisUtxoTx.txInputs === undefined) {
         return {

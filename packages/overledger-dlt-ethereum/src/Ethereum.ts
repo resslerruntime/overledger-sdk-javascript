@@ -79,14 +79,14 @@ class Ethereum extends AbstractDLT {
     super.transactionValidation(thisTransaction);
     let transactionData = '';
     let invocationType;
-    if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.valueTransfer) {
+    if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.VALUE_TRANSFER) {
       transactionData = this.web3.utils.asciiToHex(thisTransaction.message);
-    } else if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy) {
+    } else if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY) {
       if (!thisTransaction.toAddress) {
         invocationType = thisTransaction.smartContract.functionCall[0].functionType;
-        if (invocationType === SCFunctionTypeOptions.constructorWithNoParameters) {
+        if (invocationType === SCFunctionTypeOptions.CONSTRUCTOR_WITH_NO_PARAMETERS) {
           transactionData = thisTransaction.smartContract.code;
-        } else if (invocationType === SCFunctionTypeOptions.constructorWithParameters) {
+        } else if (invocationType === SCFunctionTypeOptions.CONSTRUCTOR_WITH_PARAMETERS) {
           const paramsList = <SCEthereumParam[]>thisTransaction.smartContract.functionCall[0].inputParams;
           if (!paramsList || paramsList.length <= 0) {
             throw new Error('When deploying a smart contract with parameters, then thisTransaction.smartContract.functionCall.inputParams must be defined with a non-null length');
@@ -98,10 +98,10 @@ class Ethereum extends AbstractDLT {
       } else {
         throw new Error('When deploying a smart contract, the toAddress must be set to the empty string, i.e. Transaction.toAddress = "" ');
       }
-    } else if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation) {
+    } else if (thisTransaction.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) {
       invocationType = thisTransaction.smartContract.functionCall[0].functionType;
       if (thisTransaction.toAddress) {
-        if ((invocationType === SCFunctionTypeOptions.functionCallWithParameters) || (invocationType === SCFunctionTypeOptions.functionCallWithNoParameters)) {
+        if ((invocationType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS) || (invocationType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS)) {
           const paramsList = <SCEthereumParam[]>thisTransaction.smartContract.functionCall[0].inputParams;
           if (!paramsList) {
             throw new Error('If invoking a smart contract then the thisTransaction.smartContract.functionCall.inputParams parameter must be defined. If the called function takes no parameters then set it to the empty array, i.e. functionParameters = []');
@@ -170,28 +170,28 @@ class Ethereum extends AbstractDLT {
         error: 'All transactions for Ethereum must have the extraFields.compUnitPrice field set',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy) && (!thisEthereumTx.smartContract)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY) && (!thisEthereumTx.smartContract)) {
       return {
         success: false,
         failingField: 'smartContract',
         error: 'To deploy a smart contract on Ethereum, you need to define a smartContract object',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy) && (!ethereumSC.code)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY) && (!ethereumSC.code)) {
       return {
         success: false,
         failingField: 'smartContract.code',
         error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.code field',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy) && (!ethereumSC.functionCall)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY) && (!ethereumSC.functionCall)) {
       return {
         success: false,
         failingField: 'smartContract.functionCall',
         error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.functionCall field',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy)
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY)
      && ((!ethereumSC.functionCall[0].functionType) || (!Object.values(SCFunctionTypeOptions).includes(ethereumSC.functionCall[0].functionType)))) {
       return {
         success: false,
@@ -199,17 +199,17 @@ class Ethereum extends AbstractDLT {
         error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.functionCall[0].functionType field and set it equal to constructorWithNoParameters or constructorWithParameters',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy)
-     && ((ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.functionCallWithNoParameters)
-     || (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.functionCallWithParameters))) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY)
+     && ((ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS)
+     || (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS))) {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].functionType',
         error: 'To deploy a smart contract on Ethereum, you need to provide the smartContract.functionCall[0].functionType field and set it equal to constructorWithNoParameters or constructorWithParameters',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy)
-     && (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.constructorWithParameters)
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY)
+     && (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.CONSTRUCTOR_WITH_PARAMETERS)
      && ((typeof ethereumSC.functionCall[0].inputParams === 'undefined') || (ethereumSC.functionCall[0].inputParams == null)
      || (ethereumSC.functionCall[0].inputParams.length === 0))) {
       return {
@@ -218,36 +218,36 @@ class Ethereum extends AbstractDLT {
         error: 'To deploy a smart contract on Ethereum that has parameters in its constructor, you need to provide them in the smartContract.functionCall[0].inputParams field',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation) && (!thisEthereumTx.smartContract)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) && (!thisEthereumTx.smartContract)) {
       return {
         success: false,
         failingField: 'smartContract',
         error: 'To invoke a smart contract on Ethereum, you need to define a smartContract object',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation) && (!ethereumSC.functionCall)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) && (!ethereumSC.functionCall)) {
       return {
         success: false,
         failingField: 'smartContract.functionCall',
         error: 'To invoke a smart contract on Ethereum, you need to provide the smartContract.functionCall field',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation) && (!ethereumSC.functionCall[0].functionType)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) && (!ethereumSC.functionCall[0].functionType)) {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].functionType',
         error: 'To invoke a smart contract on Ethereum, you need to provide the smartContract.functionCall[0].functionType field and set it equal to functionCallWithNoParameters or functionCallWithParameters',
       };
     }
-    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation)
-     && (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.functionCallWithParameters) && (ethereumSC.functionCall[0].inputParams.length === 0)) {
+    if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION)
+     && (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS) && (ethereumSC.functionCall[0].inputParams.length === 0)) {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].inputParams',
         error: 'To invoke a smart contract on Ethereum that has parameters in its constructor, you need to provide them in the smartContract.functionCall[0].inputParams field',
       };
     }
-    if (((!thisEthereumTx.toAddress) || (thisEthereumTx.toAddress === '')) && thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation) {
+    if (((!thisEthereumTx.toAddress) || (thisEthereumTx.toAddress === '')) && thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) {
       return {
         success: false,
         failingField: 'toAddress',
@@ -255,7 +255,7 @@ class Ethereum extends AbstractDLT {
       };
     }
     if (thisEthereumTx.amount > 0
-      && (thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractDeploy || thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.smartContractInvocation)
+      && (thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY || thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION)
       && ((!ethereumSC.extraFields) || (!ethereumSC.extraFields.payable))) {
       return {
         success: false,
@@ -267,7 +267,7 @@ class Ethereum extends AbstractDLT {
     // for each parameter in the smart contract inputs and outputs
     // check there is a type and a value???
     let counter = 0;
-    if ((thisEthereumTx.subType.name !== TransactionEthereumSubTypeOptions.valueTransfer) && (ethereumSC.functionCall[0].inputParams)) {
+    if ((thisEthereumTx.subType.name !== TransactionEthereumSubTypeOptions.VALUE_TRANSFER) && (ethereumSC.functionCall[0].inputParams)) {
       while (counter < ethereumSC.functionCall[0].inputParams.length) {
         const thisSCEthereumParam = <SCEthereumParam>ethereumSC.functionCall[0].inputParams[counter];
         if (!thisSCEthereumParam.type) {
@@ -284,8 +284,8 @@ class Ethereum extends AbstractDLT {
             error: 'To invoke a smart contract on Ethereum that has input parameters, you need to provide the selectedType field for each smart contract input parameter type, selected from TypeOptions in the Ethereum Package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.uintB) || (thisSCEthereumParam.type.selectedType === TypeOptions.intB)
-         || (thisSCEthereumParam.type.selectedType === TypeOptions.intBArray) || (thisSCEthereumParam.type.selectedType === TypeOptions.uintBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B)
+         || (thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B_ARRAY) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedIntegerLength) || (!Object.values(UintIntBOptions).includes(thisSCEthereumParam.type.selectedIntegerLength)))) {
           return {
             success: false,
@@ -293,7 +293,7 @@ class Ethereum extends AbstractDLT {
             error: 'To invoke a smart contract on Ethereum that has input parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use, selected from UintIntOptions in the Ethereum package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.bytesB) || (thisSCEthereumParam.type.selectedType === TypeOptions.bytesBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedBytesLength) || (!Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)))) {
           return {
             success: false,
@@ -318,7 +318,7 @@ class Ethereum extends AbstractDLT {
         counter = counter + 1;
       }
     }
-    if ((thisEthereumTx.subType.name !== TransactionEthereumSubTypeOptions.valueTransfer) && (ethereumSC.functionCall[0].outputParams)) {
+    if ((thisEthereumTx.subType.name !== TransactionEthereumSubTypeOptions.VALUE_TRANSFER) && (ethereumSC.functionCall[0].outputParams)) {
       return {
         success: false,
         failingField: 'ethereumSC.functionCall[0].outputParams',
@@ -350,8 +350,8 @@ class Ethereum extends AbstractDLT {
         error: 'The smart contract query should include a functionType',
       };
     }
-    if ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.constructorWithNoParameters)
-     || ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.constructorWithParameters))) {
+    if ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.CONSTRUCTOR_WITH_NO_PARAMETERS)
+     || ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.CONSTRUCTOR_WITH_PARAMETERS))) {
       return {
         success: false,
         failingField: 'functionCall[0].functionType',
@@ -365,7 +365,7 @@ class Ethereum extends AbstractDLT {
         error: 'The smart contract query should include a functionName',
       };
     }
-    if ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.functionCallWithParameters) && (!contractQueryDetails.functionCall[0].inputParams)) {
+    if ((contractQueryDetails.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS) && (!contractQueryDetails.functionCall[0].inputParams)) {
       return {
         success: false,
         failingField: 'functionCall[0].inputParams',
@@ -398,8 +398,8 @@ class Ethereum extends AbstractDLT {
             error: 'To query a smart contract on Ethereum that has input parameters, you need to provide the selectedType field for each smart contract input parameter type, selected from TypeOptions in the Ethereum Package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.uintB) || (thisSCEthereumParam.type.selectedType === TypeOptions.intB)
-         || (thisSCEthereumParam.type.selectedType === TypeOptions.intBArray) || (thisSCEthereumParam.type.selectedType === TypeOptions.uintBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B)
+         || (thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B_ARRAY) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedIntegerLength) || (!Object.values(UintIntBOptions).includes(thisSCEthereumParam.type.selectedIntegerLength)))) {
           return {
             success: false,
@@ -407,7 +407,7 @@ class Ethereum extends AbstractDLT {
             error: 'To query a smart contract on Ethereum that has input parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use, selected from UintIntOptions in the Ethereum package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.bytesB) || (thisSCEthereumParam.type.selectedType === TypeOptions.bytesBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedBytesLength) || (!Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)))) {
           return {
             success: false,
@@ -450,8 +450,8 @@ class Ethereum extends AbstractDLT {
             error: 'To query a smart contract on Ethereum that has output parameters, you need to provide the selectedType field for each smart contract output parameter type, selected from TypeOptions in the Ethereum Package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.uintB) || (thisSCEthereumParam.type.selectedType === TypeOptions.intB)
-         || (thisSCEthereumParam.type.selectedType === TypeOptions.intBArray) || (thisSCEthereumParam.type.selectedType === TypeOptions.uintBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B)
+         || (thisSCEthereumParam.type.selectedType === TypeOptions.UINT_B_ARRAY) || (thisSCEthereumParam.type.selectedType === TypeOptions.INT_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedIntegerLength) || (!Object.values(UintIntBOptions).includes(thisSCEthereumParam.type.selectedIntegerLength)))) {
           return {
             success: false,
@@ -459,7 +459,7 @@ class Ethereum extends AbstractDLT {
             error: 'To query a smart contract on Ethereum that has output parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use, selected from UintIntOptions in the Ethereum package',
           };
         }
-        if (((thisSCEthereumParam.type.selectedType === TypeOptions.bytesB) || (thisSCEthereumParam.type.selectedType === TypeOptions.bytesBArray))
+        if (((thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B_ARRAY))
          && ((!thisSCEthereumParam.type.selectedBytesLength) || (!Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)))) {
           return {
             success: false,

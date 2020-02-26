@@ -27,7 +27,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.ethereum }],
+      dlts: [{ dlt: DltNameOptions.ETHEREUM }],
       provider: { network: 'testnet' },
     });
 
@@ -45,9 +45,9 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     const signedTransactions = await overledger.sign([
       {
             // The following parameters are from the TransactionRequest object:
-        dlt: DltNameOptions.ethereum,
-        type: TransactionTypeOptions.accounts,
-        subType: { name: TransactionEthereumSubTypeOptions.smartContractInvocation },
+        dlt: DltNameOptions.ETHEREUM,
+        type: TransactionTypeOptions.ACCOUNTS,
+        subType: { name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION },
         message: "",  // This must be empty for a contractInvocation transaction
             // The following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,
@@ -57,7 +57,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
         smartContract: {
           code: "", // No need to put code here as you are declaring the function call ->
           functionCall: [{
-            functionType: SCFunctionTypeOptions.functionCallWithParameters,
+            functionType: SCFunctionTypeOptions.fFUNCTION_CALL_WITH_PARAMETERS,
             functionName: "setOVLTestArray", // The function name must be given
             inputParams: [
               {  
