@@ -135,14 +135,14 @@ class Ripple extends AbstractDLT {
         error: 'All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it',
       };
     }
-    if ((thisXRPTx.extraFields.feePrice === '') || (thisXRPTx.extraFields.feePrice === null) || (thisXRPTx.extraFields.feePrice === 'undefined')) {
+    if ((thisXRPTx.extraFields.feePrice === '') || (thisXRPTx.extraFields.feePrice === null) || (typeof thisXRPTx.extraFields.feePrice === 'undefined')) {
       return {
         success: false,
         failingField: 'extraFields.feePrice',
         error: 'All transactions for XRP must have the extraFields.feePrice field set',
       };
     }
-    if ((thisXRPTx.extraFields.maxLedgerVersion === '') || (thisXRPTx.extraFields.maxLedgerVersion === null) || (thisXRPTx.extraFields.maxLedgerVersion === 'undefined')) {
+    if ((thisXRPTx.extraFields.maxLedgerVersion === '') || (thisXRPTx.extraFields.maxLedgerVersion === null) || (typeof thisXRPTx.extraFields.maxLedgerVersion === 'undefined')) {
       return {
         success: false,
         failingField: 'extraFields.maxLedgerVersion',

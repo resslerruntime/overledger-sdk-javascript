@@ -15,8 +15,8 @@ const mappId = '...';
 const bpiKey = '...';
 
 // Paste in your ethereum address and private key.
-const partyAEthereumPrivateKey = '...'; // Should have 0x in front
-const partyAEthereumAddress = '...';
+const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
+const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -47,9 +47,9 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
             // The following parameters are from the TransactionRequest object:
         dlt: DltNameOptions.ethereum,
         type: TransactionTypeOptions.accounts,
-        subType: {name: TransactionEthereumSubTypeOptions.smartContractInvocation},
-        message: "",  //This must be empty for a contractInvocation transaction
-            //the following parameters are from the TransactionAccountRequest object:
+        subType: { name: TransactionEthereumSubTypeOptions.smartContractInvocation },
+        message: "",  // This must be empty for a contractInvocation transaction
+            // The following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,
         toAddress: smartContractAddress, 
         sequence: ethereumAccountSequence, // Must be an integer >= 0
@@ -61,7 +61,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
             functionName: "setOVLTestArray", // The function name must be given
             inputParams: [
               {  
-                type: {selectedType: EthereumTypeOptions.boolArray}, // First parameter is a boolean array
+                type: { selectedType: EthereumTypeOptions.boolArray }, // First parameter is a boolean array
                 name: 'newArray', // Name of parameter
                 value: [true,true,true], // Value of the boolean array
               }

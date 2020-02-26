@@ -9,7 +9,6 @@ import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums
  * @memberof module:overledger-dlt-bitcoin
 */
 class Bitcoin extends AbstractDLT {
-  NON_DUST_AMOUNT: number = 546;
   addressType: bitcoin.Network;
   account: Account;
   options: Object;

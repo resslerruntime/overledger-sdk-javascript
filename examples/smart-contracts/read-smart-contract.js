@@ -14,7 +14,7 @@ const mappId = '...';
 const bpiKey = '...';
 
 // Paste in your ethereum address.
-const partyAEthereumAddress = '...';
+const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------

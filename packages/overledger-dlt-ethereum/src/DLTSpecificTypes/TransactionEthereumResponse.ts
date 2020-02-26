@@ -1,4 +1,5 @@
 import { TransactionAccountsResponse } from '@quantnetwork/overledger-types';
+import TransactionEthereumSubTypeOptions from './associatedEnums/TransactionEthereumSubTypeOptions';
 
 /**
 * A generic object used to describe an Overledger transaction response for the Ethereum blockchain. Note that this object inherits many parameters from TransactionAccountsResponse.
@@ -12,6 +13,7 @@ import { TransactionAccountsResponse } from '@quantnetwork/overledger-types';
  * @memberof module:overledger-dlt-ethereum
  */
 interface TransactionEthereumResponse extends TransactionAccountsResponse {
+  subType: { name: TransactionEthereumSubTypeOptions };
   extraFields: {
     compUnitPrice: string,
     compLimit: string,

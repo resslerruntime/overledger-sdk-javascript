@@ -20,7 +20,7 @@ type TransactionInput = {
   linkedIndex: string,
   fromAddress: string,
   amount?: number,
-  asset?: string,
+  asset?: object,
   smartContract?: SmartContract,
 };
 

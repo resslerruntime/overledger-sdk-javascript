@@ -11,27 +11,33 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 const mappId = '...';
 const bpiKey = '...';
 
-// Paste in your bitcoin, ethereum and ripple private keys.
+// Paste in your bitcoin, ethereum and XRP ledger private keys.
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
-const partyABitcoinPrivateKey = '...'; 
-const partyABitcoinAddress = '...'; 
-const partyAs2ndBitcoinPrivateKey = '...'; 
-const partyAs2ndBitcoinAddress = '...'; // Nominate a Bitcoin address you own for the change to be returned to
+const partyABitcoinPrivateKey = 'cVRJipj585NeirnEt2q2CYrvonQLzQNRNQsh1vMaSAqXJTN5bQDR'; 
+const partyABitcoinAddress = 'mgRvRj22C38dusBc8xqViKn168CCgHFzgv';
+const partyAs2ndBitcoinPrivateKey = 'cNmsFjPqWCaVdhbPoHQJqDpayYdtKR9Qo81KVAEMHJwmgRVJZjDu';
+const partyAs2ndBitcoinAddress = 'mo54poo7oLL5LvHEYwhDmYdCpqvx7j3Ks2'; // Nominate a Bitcoin address you own for the change to be returned to
+const bitcoinLinkedTx = '...'; // Add the previous transaction here
+const bitcoinLinkedIndex = '...'; // Add the linked transaction index here
+const bitcoinInputAmount = 0; // set equal to the number of satoshis in your first input
+const bitcoinPartyBAmount = 0; // set equal to the number of satoshis to send to party B
+const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
+                                // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '...'; // Should have 0x in front
-const partyAEthereumAddress = '...'; 
+const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
+const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
 
-// For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
-// Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyARipplePrivateKey = '...';
-const partyARippleAddress = '...';
+// For the XRP ledger, you can go to the official XRP Testnet Faucet to get an account already funded.
+// Keep in mind that for XRP the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
+const partyAxrpPrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
+const partyAxrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '...';
-const partyBEthereumAddress = '...';
-const partyBRippleAddress = '...';
+const partyBBitcoinAddress = 'mtHsSjGeVhSQVqcM3fv5A79qoSJ5TgEjtj';
+const partyBEthereumAddress = '0xB3ea4D180f31B4000F2fbCC58a085eF2ffD5a763';
+const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -49,13 +55,13 @@ const partyBRippleAddress = '...';
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
     overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledger.dlts.ripple.setAccount(partyARipplePrivateKey);
+    overledger.dlts.ripple.setAccount(partyAxrpPrivateKey);
     
     // Get the address sequences.
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const rippleSequenceRequest = await overledger.dlts.ripple.getSequence(partyARippleAddress);
+    const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);
     const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    const rippleAccountSequence = rippleSequenceRequest.data.dltData[0].sequence;
+    const xrpAccountSequence = xrpSequenceRequest.data.dltData[0].sequence;
 
     // Sign the transactions.
     // As input to this function, we will be providing:
@@ -70,22 +76,22 @@ const partyBRippleAddress = '...';
       subType: {name: TransactionBitcoinSubTypeOptions.valueTransfer},
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
-      txInputs: [
+      txInputs: [ // Set as many inputs as required in order to fund your outputs
         {
-          linkedTx: "<Add previous transaction here>",
-          linkedIndex: "<Add linked transaction index here>",
+          linkedTx: bitcoinLinkedTx,
+          linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress, 
-          amount: 0 // In satoshis
+          amount: bitcoinInputAmount 
         }
       ],
-      txOutputs: [
+      txOutputs: [ // Set as many outputs as required
         {
           toAddress: partyBBitcoinAddress, 
-          amount: 0 // In satoshis
+          amount: bitcoinPartyBAmount 
         },
         {
           toAddress: partyAs2ndBitcoinAddress, // This is the change address
-          amount: 0 // In satoshis
+          amount: bitcoinChangeAmount 
         }
       ],
       extraFields: {
@@ -114,16 +120,16 @@ const partyBRippleAddress = '...';
             // The following parameters are from the TransactionRequest object:
       dlt: DltNameOptions.xrp,
       type: TransactionTypeOptions.accounts,
-      subType: {name: TransactionXRPSubTypeOptions.valueTransfer},
+      subType: { name: TransactionXRPSubTypeOptions.valueTransfer },
       message: transactionMessage,
             // The following parameters are from the TransactionAccountRequest object:
-      fromAddress: partyARippleAddress,
-      toAddress: partyBRippleAddress,
-      sequence: rippleAccountSequence, // Sequence starts at 0 for newly created addresses
+      fromAddress: partyAxrpAddress,
+      toAddress: partyBxrpAddress,
+      sequence: xrpAccountSequence, // Sequence starts at 0 for newly created addresses
       amount: '1', // Minimum allowed amount of drops is 1.      
       extraFields: {
                       // The following parameters are from the TransactionXRPRequest object:
-        feePrice: '12', // Minimum feePrice on Ripple is 12 drops.
+        feePrice: '12', // Minimum feePrice on XRP Ledger is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       },
     },]);
@@ -142,7 +148,7 @@ const partyBRippleAddress = '...';
     console.log("");
     console.log('Your Ethereum value transfer transaction hash is: ' + result.dltData[1].transactionHash);
     console.log("");
-    console.log('Your XRP value transfer transaction hash is: ' + result.dltData[2].transactionHash);
+    console.log('Your XRP ledger value transfer transaction hash is: ' + result.dltData[2].transactionHash);
     console.log("");
   } catch (e) {
     console.error('error:', e);
