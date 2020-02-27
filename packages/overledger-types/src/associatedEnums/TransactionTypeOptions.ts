@@ -6,9 +6,9 @@
  * @memberof module:overledger-types
  */
 
-export enum TransactionTypeOptions { 
-  utxo = "utxo",
-  accounts = "accs"
-};
+export enum TransactionTypeOptions {
+  UTXO = 'UTXO',
+  ACCOUNTS = 'ACCOUNTS',
+}
 
 export default TransactionTypeOptions;

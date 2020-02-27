@@ -1,4 +1,4 @@
-import {SmartContract} from "@quantnetwork/overledger-types";
+import { SmartContract } from '@quantnetwork/overledger-types';
 
 /**
  * A generic object to describe an Ethereum smart contract. Note that this object inherits many parameters from SmartContract.
@@ -10,14 +10,13 @@ import {SmartContract} from "@quantnetwork/overledger-types";
 
 /**
  * @memberof module:overledger-dlt-ethereum
- */ 
+ */
 interface SmartContractEthereum extends SmartContract {
-        extraFields: {
-            payable: boolean,
-            payableFunctions?: string[],
-            newDLTxRequired?: string[]
-        }
+  extraFields: {
+    payable: boolean,
+    payableFunctions?: string[],
+    newDLTxRequired?: string[],
   };
-  
-  export default SmartContractEthereum;
-  
+}
+
+export default SmartContractEthereum;

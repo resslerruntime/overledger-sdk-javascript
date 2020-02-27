@@ -6,13 +6,12 @@
  * @memberof module:overledger-dlt-xrp
  */
 
-export enum TransactionXRPSubTypeOptions { 
-    valueTransfer = "value",
-    trustline = "trust",
-    escrowCreate = "escrow_cre",
-    escrowExecute = "escrow_exe",
-    escrowCancel = "escrow_can"
-
-};
+export enum TransactionXRPSubTypeOptions {
+    VALUE_TRANSFER = 'VALUE_TRANSFER',
+    TRUSTLINE = 'TRUSTLINE',
+    ESCROW_CREATION = 'ESCROW_CREATION',
+    ESCROW_EXECUTION = 'ESCROW_EXECUTION',
+    ESCROW_CANCELATION = 'ESCROW_CANCELATION',
+}
 
 export default TransactionXRPSubTypeOptions;

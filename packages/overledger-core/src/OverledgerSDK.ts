@@ -95,7 +95,7 @@ class OverledgerSDK {
    * Sign the provided transactions
    *
    * @param {TransactionRequest[]} - the provided transactions in the standard overledger form
-   * 
+   *
    * @return {SignedTransactionRequest[]} Array of signed transaction requests wrapped by Overledger metadata
    */
   public async sign(unsignedData: TransactionRequest[]): Promise<SignedTransactionRequest[]> {
@@ -105,9 +105,8 @@ class OverledgerSDK {
       return {
         dlt: data.dlt,
         fromAddress: this.dlts[data.dlt].account.address,
-        //amount: data.extraFields.amount,
         signedTransaction: {
-          signatures: ["not used"],
+          signatures: ['not used'],
           transactions: [signedTransaction],
         },
       };
@@ -128,7 +127,6 @@ class OverledgerSDK {
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
-
 
   /**
    * Get the balances of the specified addresses

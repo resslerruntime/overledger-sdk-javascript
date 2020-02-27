@@ -6,11 +6,10 @@
  * @memberof module:overledger-dlt-ethereum
  */
 
-export enum TransactionEthereumSubTypeOptions { 
-    valueTransfer = "value",
-    smartContractDeploy = "sc_deploy",
-    smartContractInvocation = "sc_invoke"
-
-};
+export enum TransactionEthereumSubTypeOptions {
+    VALUE_TRANSFER = 'VALUE_TRANSFER',
+    SMART_CONTRACT_DEPLOY = 'SMART_CONTRACT_DEPLOY',
+    SMART_CONTRACT_INVOCATION = 'SMART_CONTRACT_INVOCATION',
+}
 
 export default TransactionEthereumSubTypeOptions;

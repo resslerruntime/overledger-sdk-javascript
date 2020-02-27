@@ -239,7 +239,7 @@ Overledger signed transaction request object.
 | type | <code>object</code> | information on the parameter's type |
 | name | <code>string</code> | the parameter's name |
 | value | <code>object</code> | information on the parameter's value |
-| options | <code>object</code> | information the valid values that this parameter can take |
+| options | <code>object</code> | information on the valid values that this parameter can take |
 
 A generic object to describe a smart contract function parameter.
 

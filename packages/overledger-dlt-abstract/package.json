@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-dlt-abstract",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Quant Network Overledger Bitcoin software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "publishConfig": {
@@ -27,9 +27,9 @@
   ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
-  "types":"dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "dependencies": {
-    "@quantnetwork/overledger-types": "^1.0.0-beta.1",
+    "@quantnetwork/overledger-types": "^1.0.0-beta.2",
     "axios": "^0.18.0"
   },
   "devDependencies": {

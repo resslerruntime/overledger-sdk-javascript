@@ -7,16 +7,16 @@
  * @memberof module:overledger-types
  */
 
-export enum DltNameOptions { 
-    xrp = "ripple",
-    ethereum = "ethereum",
-    bitcoin = "bitcoin",
-    hyperledgerFabric = "hyperledger_fabric",
-    corda = "corda",
-    quorum = "quorum",
-    stellar = "stellar",
-    iota = "iota"
-
-};
+export enum DltNameOptions {
+    XRP_LEDGER = 'ripple',
+    ETHEREUM = 'ethereum',
+    BITCOIN = 'bitcoin',
+    HYPERLEDGER_FABRIC = 'hyperledgerFabric',
+    CORDA = 'corda',
+    QUORUM = 'quorum',
+    STELLAR = 'stellar',
+    IOTA = 'iota',
+    CONSTELLATION = 'constellation',
+}
 
 export default DltNameOptions;

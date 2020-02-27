@@ -26,7 +26,7 @@ class Provider {
   }
 
   /**
-   * 
+   *
    * @param {string} path Request endpoint resource path
    */
   createRequest(path?: string): AxiosInstance {

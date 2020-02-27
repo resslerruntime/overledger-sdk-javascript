@@ -8,9 +8,10 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = '...';
 const bpiKey = '...';
 
-const ethereumAddress = '...';
-const rippleAddress = '...';
-//note: Bitcoin addresses do not have a sequence number as Bitcoin is a UTXO-based distributed ledger
+const ethereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
+const xrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
+
+// Note: Bitcoin addresses do not have a sequence number as Bitcoin is a UTXO-based distributed ledger
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -19,7 +20,7 @@ const rippleAddress = '...';
 ; (async () => {
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
-            dlts: [{ dlt: DltNameOptions.ethereum }, { dlt: DltNameOptions.xrp }],
+            dlts: [{ dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
             provider: { network: 'testnet' },
         });
 
@@ -27,8 +28,8 @@ const rippleAddress = '...';
         console.log('Ethereum address sequence:\n', ethereumAddressSequence.data);
         console.log("");
 
-        const rippleAddressSequence = await overledger.dlts.ripple.getSequence(rippleAddress);
-        console.log('Ripple address sequence:\n', rippleAddressSequence.data);
+        const xrpAddressSequence = await overledger.dlts.ripple.getSequence(xrpAddress);
+        console.log('XRP Ledger address sequence:\n', xrpAddressSequence.data);
         console.log("");
 
     } catch (e) {
