@@ -1,6 +1,7 @@
 /**
  * The list of Ethereum type options that can be used.  If other is chosen, make sure to clarify this in the additionFields section.
- * In UINT_B, INT_B, BYTES_B, UINT_B_ARRAY, INT_B_ARRAY, BYTES_B_ARRAY enum types' names, the  capital '_B'/ '_B_' is to reflect that number of bits must be defined to store the data type. For example, UINT_B can be uint8, unint16, unint32 or uint256.
+ * In UINT_B, INT_B, BYTES_B, UINT_B_ARRAY, INT_B_ARRAY, BYTES_B_ARRAY enum types' names, the  capital '_B'/ '_B_' is to reflect that
+ * the number of bits must be defined to store the data type. For example, UINT_B can be uint8, unint16, unint32 or uint256.
  */
 
 /**
