@@ -7,8 +7,13 @@
  */
 
 export enum TransactionStatusOptions {
-    broadcast = 'b',
-    confirmed = 'c',
+    CREATED = 'CREATED',
+    SIGNED = 'SIGNED',
+    BROADCAST = 'BROADCAST',
+    UNCONFIRMED = 'UNCONFIRMED',
+    CONFIRMED = 'CONFIRMED',
+    INVALID = 'INVALID',
+    ERROR = 'ERROR',
 }
 
 export default TransactionStatusOptions;

@@ -30,10 +30,10 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
 
 ; (async () => {
   try {
-    console.log("name is: " + DltNameOptions.ethereum);
+    console.log("name is: " + DltNameOptions.ETHEREUM);
     // Initialise overledger with ethereum for this example
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.ethereum }],
+      dlts: [{ dlt: DltNameOptions.ETHEREUM }],
       provider: { network: 'testnet' },
     });
 
@@ -51,9 +51,9 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
     const signedTransactions = await overledger.sign([
       {
             // The following parameters are from the TransactionRequest object:
-        dlt: DltNameOptions.ethereum,
-        type: TransactionTypeOptions.accounts,
-        subType: { name: TransactionEthereumSubTypeOptions.smartContractDeploy },
+        dlt: DltNameOptions.ETHEREUM,
+        type: TransactionTypeOptions.ACCOUNTS,
+        subType: { name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY },
         message: "",  // This must be empty for a contractDeploy transaction
             // The following parameters are from the TransactionAccountRequest object:
         fromAddress: partyAEthereumAddress,
@@ -63,41 +63,41 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
         smartContract: {
           code: smartContractDemoCode, // Put the bytecode to deploy here
           functionCall: [{
-            functionType: SCFunctionTypeOptions.constructorWithParameters,
+            functionType: SCFunctionTypeOptions.CONSTRUCTOR_WITH_PARAMETERS,
             functionName: "", // Not needed for constructor
             inputParams: [
               {  
-                type: {selectedType: EthereumTypeOptions.bool}, // First parameter is a boolean
+                type: {selectedType: EthereumTypeOptions.BOOLEAN}, // First parameter is a boolean
                 name: 'thisTestBool', // Name of parameter
                 value: 'true', // Value of the boolean
             },
             {  
-                type: {selectedType: EthereumTypeOptions.intB, selectedIntegerLength: EthereumUintIntOptions.b256} ,  //second parameter is an integer //if you choose an integer you must say what bit value to use
+                type: {selectedType: EthereumTypeOptions.INT_B, selectedIntegerLength: EthereumUintIntOptions.B256} ,  //second parameter is an integer //if you choose an integer you must say what bit value to use
                 name: 'thisTestInt',
                 value: '5',
             },
             {  
-                type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.b16},
+                type: {selectedType: EthereumTypeOptions.UINT_B, selectedIntegerLength: EthereumUintIntOptions.B16},
                 name: 'thisTestUInt',
                 value: '33',
             },
             {  
-                type: {selectedType: EthereumTypeOptions.bytesB, selectedBytesLength: EthereumBytesOptions.b32}, //fourth parameter is bytes //if you choose bytes you must say what bit value to use
+                type: {selectedType: EthereumTypeOptions.BYTES_B, selectedBytesLength: EthereumBytesOptions.B32}, //fourth parameter is bytes //if you choose bytes you must say what bit value to use
                 name: 'thisTestBytes',
                 value: '0x68656c6c6f', // Hello in bytes, 0x identifier required.
             },
             {  
-                type: {selectedType: EthereumTypeOptions.address},
+                type: {selectedType: EthereumTypeOptions.ADDRESS},
                 name: 'thisTestAddress',
                 value: '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761', 
             },
             {  
-                type: {selectedType: EthereumTypeOptions.string},
+                type: {selectedType: EthereumTypeOptions.STRING},
                 name: 'thisTestString',
                 value: 'Hi_there!', 
             },
             {
-                type: {selectedType: EthereumTypeOptions.boolArray},
+                type: {selectedType: EthereumTypeOptions.BOOLEAN_ARRAY},
                 name: 'thisTestArray',
                 value: [true,false,true]
             }

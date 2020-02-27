@@ -13,6 +13,7 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const mappId = '...';
 const bpiKey = '...';
 
+
 // Paste in your ethereum address.
 const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
 
@@ -26,7 +27,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
 ; (async () => {
   try {
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.ethereum }],
+      dlts: [{ dlt: DltNameOptions.ETHEREUM }],
       provider: { network: 'testnet' },
     });
 
@@ -37,12 +38,12 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
       id: smartContractAddress,
       code: "", // No need to put code here if you are declaring the function call ->
       functionCall: [{
-        functionType: SCFunctionTypeOptions.functionCallWithNoParameters,
+        functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS,
         functionName: "getOVLTestUint", // Not needed for constructor
         inputParams: [],
         outputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.b256}, //first parameter is an integer
+            type: {selectedType: EthereumTypeOptions.UINT_B, selectedIntegerLength: EthereumUintIntOptions.B256}, //first parameter is an integer
           }
         ]
       }],
@@ -60,7 +61,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
   }
 
   // And finally we will send the smart contract function query to the node.
-  const returnedValues = await overledger.search.smartContractQuery(DltNameOptions.ethereum, ethereumSmartContractQueryBuild1.response);
+  const returnedValues = await overledger.search.smartContractQuery(DltNameOptions.ETHEREUM, ethereumSmartContractQueryBuild1.response);
   console.log(`\n`);
   console.log(`returned output value for smart contract function 'getOVLTestUint'`,  returnedValues.data);
   console.log(`\n`);
@@ -71,18 +72,18 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
       id: smartContractAddress,
       code: "", // No need to put code here if you are declaring the function call
       functionCall: [{
-        functionType: SCFunctionTypeOptions.functionCallWithParameters,
+        functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
         functionName: "getTestArray", // Not needed for constructor
         inputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.uintB, selectedIntegerLength: EthereumUintIntOptions.b256},
+            type: {selectedType: EthereumTypeOptions.UINT_B, selectedIntegerLength: EthereumUintIntOptions.B256},
             value: '0',
             name: 'index'
           }
         ],
         outputParams: [
           {  
-            type: {selectedType: EthereumTypeOptions.bool}
+            type: {selectedType: EthereumTypeOptions.BOOLEAN}
           }
         ]
       }],
@@ -100,7 +101,7 @@ const smartContractAddress = '0x1BA73B0aE8CfB686f2C6Fa21571018Bca48Ec89d';
     }
  
     // And finally we will send the smart contract function query to the node.
-    const returnedValues2 = await overledger.search.smartContractQuery(DltNameOptions.ethereum, ethereumSmartContractQueryBuild2.response);
+    const returnedValues2 = await overledger.search.smartContractQuery(DltNameOptions.ETHEREUM, ethereumSmartContractQueryBuild2.response);
     console.log(`returned output value for smart contract function 'getTestArray'`,  returnedValues2.data);
     console.log("");
 
