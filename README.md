@@ -58,7 +58,7 @@ const OverledgerSDK = require("@quantnetwork/overledger-bundle").default;
 
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
   dlts: [{ dlt: "ethereum" }, { dlt: "ripple" }],
-  provider: { network: 'testnet', timeoutout: 1500 }, // Optional
+  provider: { network: 'testnet', timeout: 1500 }, // Optional
 });
 ```
 
