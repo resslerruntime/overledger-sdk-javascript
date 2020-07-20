@@ -2,8 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
-
+import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
 */
@@ -136,6 +135,37 @@ class OverledgerSDK {
   public getBalances(balancesRequest: DLTAndAddress[]): AxiosPromise<Object> {
     return this.request.post('/balances', balancesRequest);
   }
+
+
+  /**
+   * subscribe status of transaction
+   *
+   * @param {StatusRequest} subStatusRequest object specifing the transaction request for subscribe status
+   */
+  public subscribeStatusUpdate(subStatusRequest: StatusRequest): Object {
+    try{
+      let subStatusReqJson = JSON.stringify(subStatusRequest);
+      return this.request.post('/webhook/subscribe', subStatusReqJson)
+      //.catch( err => err.response);  
+    }catch(e){
+      return e.response;
+    }
+  }
+  
+  /**
+   * unsubscribe status of transaction
+   *
+   * @param {StatusRequest} unSubStatusReq object specifing the transaction request for unsubscribe status
+   */
+  public unSubscribeStatusUpdate(unSubStatusReq: StatusRequest): AxiosPromise<Object> {
+    try{
+      let unSubStatusReqJson = JSON.stringify(unSubStatusReq);
+      return this.request.post('/webhook/unsubscribe', unSubStatusReqJson);
+    }catch(e){
+      return e.response;
+    }
+  }
+
 
   /**
    * Get the sequence numbers for the provided addresses
