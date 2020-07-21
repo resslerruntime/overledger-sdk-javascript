@@ -134,9 +134,9 @@ const treatyContractUrl = "http://localhost:4000";
 node PartyFlows/PartyA.js
 ```
 
- `PartyA` will first deploy, redeploy the smart contract if `redeploy` is set to `true` or retrieve the latest deployed smart contract from `OL`. When this request is finished and successful, `PartyA` will initialize a new swap request.
+ `PartyA` will first deploy, redeploy the smart contract if `redeploy` is set to `true` or retrieve the latest deployed smart contract from `OL`. When this request is finished and successful, `PartyA` will start by initiating a new request.
 
- * Once the smart contract is deployed or retrieved and the response is returned back (`****INIT NEW REQUEST****` of the next request on `PartyA` is then displayed), launch `PartyB` client.
+ * Once the smart contract is deployed or retrieved and the response is returned back (`****INIT NEW REQUEST****` of the following request on `PartyA` is then displayed), launch `PartyB` client.
 
  ```
  node PartyFlows/PartyB.js
