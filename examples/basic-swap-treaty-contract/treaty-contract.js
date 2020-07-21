@@ -43,9 +43,10 @@ if (port && port > 0) {
         console.log(`Example app listening on port ${port}!`);
     });
 } else {
-    console.log(`Port server must be defined: node treasury-payment-channel-contract.js portNumber`);
+    console.log(`Port server must be defined: node treaty-contract.js portNumber`);
 }
 
+const treatyContractUrl = `http://localhost:${port}`;
 
 app.post('/InitialiseApp', async function (req, res) {
     console.log("********************SERVER:CREATE SMART CONTRACT********************");
@@ -241,3 +242,5 @@ app.post('/ReadRequestId', async function (req, res) {
     const resp = await readParamValue(overledgerSDK, readIdParams.dltKey, readIdParams.paramName, smartContractAddress);
     return res.send(resp.result[0]);
 });
+
+exports.treatyContractUrl = treatyContractUrl;
