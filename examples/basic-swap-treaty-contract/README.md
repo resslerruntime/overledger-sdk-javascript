@@ -44,8 +44,8 @@ Two parties are involved in this example. `Party A` owning ETH amount and `Party
 * `Party A`: it runs an `TC` and owns ETH. It needs first an Ethereum account with ETH set in `PartyA.js` file
 
    ```
-    const ethPrivateKey = "0x1969D2C1EF82A5D1844C9C3A49A66245B2E927A6BC1D9F7F64B1376588A53B01";
-    const ethAddress = "0x7e0A65af0Dae83870Ce812F34C3A3D8626530d10";
+    const ethPrivateKey = '...';
+    const ethAddress = '...';
     ```
     It also needs a XRP address that will be used by `PartyB` to send the XRP amount to. This address is set in `PartyB.js` file
 
@@ -57,19 +57,19 @@ Two parties are involved in this example. `Party A` owning ETH amount and `Party
 * `Party B`: it runs an `TC` and owns XRP. It needs an XRP and Ethereum accounts set in `PartyB.js` file 
 
 ```
-const ethPrivateKey = "0x3FF22F5B016E967FFF2999254FB91691331E7B6130D12ED3B69B69873B330853";
-const ethAddress = "0x105360Ba21773A9175A8daba66CA6C7654F7A3f2";
+const ethPrivateKey = '...';
+const ethAddress = '...';
 ```
 
 ```
-const xrpPrivateKey = "snqEbKR7aGBtEgC9A12CVR8f6i6jp";
-const xrpAddress = "rfqrDC7Ux3XtVftA8v3SDkN63FL3sxRmEg";
+const xrpPrivateKey = '...';
+const xrpAddress = '...';
 ```
 
 The Ethereum address of `Party B` will be used by `Party A` to initiate the swap. It is set in `PartyA.js` file
 
 ```
-const receiverAddress = "0x105360Ba21773A9175A8daba66CA6C7654F7A3f2";
+const receiverAddress = '...';
 ```
 
 
