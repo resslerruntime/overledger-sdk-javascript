@@ -122,7 +122,7 @@ yarn add NAME_OF_PACKAGE
  node treaty-contract.js PORT_NUMBER
  ```
 
-For example, if PORT_NUMBER is set to `4000`, then the Treaty Contract URL has to be set to:
+For example, if PORT_NUMBER is set to `4000`, then the Treaty Contract URL has to be set in both party flows to:
 
 ```
 const treatyContractUrl = "http://localhost:4000";
@@ -134,7 +134,7 @@ const treatyContractUrl = "http://localhost:4000";
 node PartyFlows/PartyA.js
 ```
 
- `PartyA` will first deploy, redeploy the smart contract if `redeploy` is set to `true` or retrieve the latest deployed smart contract from `OL`. When this request is finished and successful, `PartyA` will start by initiating a new request.
+ `PartyA` will first deploy or redeploy the smart contract if `redeploy` is set to `true` or retrieve the latest deployed smart contract from `OL`. When this request is finished and successful, `PartyA` will start by initiating a new request.
 
  * Once the smart contract is deployed or retrieved and the response is returned back (`****INIT NEW REQUEST****` of the following request on `PartyA` is then displayed), launch `PartyB` client.
 
