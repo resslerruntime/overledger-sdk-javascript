@@ -22,8 +22,8 @@ const validateXRPTransactionParameters = require('./treaty-contract-functions').
 const sendXRPTransaction = require('./treaty-contract-functions').sendXRPTransaction;
 const getContractAddress = require('./treaty-contract-functions').getContractAddress;
 
-const overledgerMappId = "network.quant.testnet";
-const OverledgerBpiKey = "joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I";
+const overledgerMappId = '...';
+const OverledgerBpiKey = '...';
 const network = "testnet";
 
 const solidityFileLocation = "./smart-contracts/BasicSwapEthXRP.txt";
