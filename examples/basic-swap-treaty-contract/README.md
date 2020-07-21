@@ -108,7 +108,14 @@ const OverledgerBpiKey = '...;
 const network = "testnet";
 ```
 
-* If you need to install packages related to this example, run:
+* Generate the `@quantnetwork` node_modules packages needed by running:
+
+``` 
+yarn run build
+
+```
+
+* If you need to install other packages related to this treaty contract example, run:
 
 ```
 yarn add NAME_OF_PACKAGE
