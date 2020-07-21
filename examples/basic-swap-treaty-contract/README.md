@@ -25,18 +25,127 @@ Note that the Treaty Contract in this example is stateless.
 
 A COUPLE OF SENTENCES ON THE USE CASE OF THIS EXAMPLE - MENTION THAT THIS IS A SIMPLE NON-ATOMIC CROSS CHAIN SWAP
 
+This a simple non-atomic cross chain swap example.
+Two parties are involved in this prototype. `Party A` owning ETH amount and `Party B` owning XRP. `Party A` wants to exchange X ETH against Y XRP from `Party B`. The X ETH from `Party A` are then escrowed by a smart contract. They will be unlocked by `Party B` once `Party A` has send the Y XRP to `Party A`.
+
+
+# Components
+
+* `DLT`s: `Ethereum` and `XRP` Ledger.
+
+* `Smart Contract (SC)`: Smart Contract in the Ethereum Ledger. It locks up the ETH to be swapped against XRP. It is written in Solidity.
+
+* `Treaty Contract (TC)`: A Treaty Contract details the rules of interaction between the multiple DLTs, i.e. it contains the multi-distributed ledger logic. It can be written in any language, instantiated and shared between multiple participants and be run in many locations at the same time. It can call directly the DLT node (Ethereum or XRP) or the `SC`. It is written in Javascript/Node.js.
+
+* `ETH`: assets exchanged with XRP.
+
+* `OL`: Overledger to retrieve transactions data.
+
+# Parties
+
+* `Party A`: it runs an `TC` and owns ETH. It needs first an Ethereum account with ETH set in `PartyA.js` file
+
+   ```
+    const ethPrivateKey = "0x1969D2C1EF82A5D1844C9C3A49A66245B2E927A6BC1D9F7F64B1376588A53B01";
+    const ethAddress = "0x7e0A65af0Dae83870Ce812F34C3A3D8626530d10";
+    ```
+    It also needs a XRP address that will be used by `PartyB` to send the XRP amount to. This address is set in `PartyB.js` file
+
+    ```
+    const xrpReceiverAddress = "r94KZWGqrmpPdrWZxdzGkYCj12SBYTGxCE";
+    ```
+
+
+* `Party B`: it runs an `TC` and owns XRP. It needs an XRP and Ethereum accounts set in `PartyB.js` file 
+
+```
+const ethPrivateKey = "0x3FF22F5B016E967FFF2999254FB91691331E7B6130D12ED3B69B69873B330853";
+const ethAddress = "0x105360Ba21773A9175A8daba66CA6C7654F7A3f2";
+```
+
+```
+const xrpPrivateKey = "snqEbKR7aGBtEgC9A12CVR8f6i6jp";
+const xrpAddress = "rfqrDC7Ux3XtVftA8v3SDkN63FL3sxRmEg";
+```
+
+The Ethereum address of `Party B` will be used by `Party A` to initiate the swap. It is set in `PartyA.js` file
+
+```
+const receiverAddress = "0x105360Ba21773A9175A8daba66CA6C7654F7A3f2";
+```
+
+
+* `Party A` swaps ETH with `Party B` XRP.
+
+
+# Technical description
+
+## PARTY A
+
+* `Party A` initialises the swap 
+
+* If the smart contract is already deployed, `Party A` does not need to deploy it again. The `redeploy` in `initialiseSmartContract` can then be set to `false`.
+
+* The latest smart contract deployed on the MAPP is retrieved from `OL` transactions belonging to the mappId.
+
+* If it is not deployed, the smart contract is deployed by calling his constructor with the treaty contract hash for argument.
+
+* createEthereumEscrow: Having a contract address deployed, it initialises the swap by calling `initiateRequest` function of the smart contract through the `initialiseSmartContract` Treaty Contract endpoint.
+ This creates an ethereum transaction from `Party A` to the smart contract with the ETH amount that will be unlocked later by `Party B`. ETH amount is now locked by the smart contract.
+ * By initiating a new request, the counter set in the smart contract is increased and all the stored data on the smart contract is retrieved by calling the getters of the smart contract, passing the request id number for argument.
+
+## PARTY B
+
+* createXRPEscrow: `Party B` waits for a new request creation and when it finds it, sends XRP to `PartyA` and call the `finaliseRequest` function of the smart contract through the `finaliseRequest` Treaty Contract endpoint to unlock the ETH amount that will be then transferred to `PartyB`.
+
+
+
 ## Running the Treaty Contract
 
-HOW DO USERS RUN IT? IS THERE ARE DEPENDANCIES ON RUNNING IT? E.G. DONT THEY HAVE TO INSTALL THE SDK??? DON'T THEY NEED A MAPPID/BPIKEY?? (DON'T EXPOSE OURS!)
+* A MappId/bpiKey on `testnet` environment are needed to run the example on `OL testnet`. They should be set in the `treaty-contract.js` file:
+
+const overledgerMappId = '...';
+const OverledgerBpiKey = '...;
+const network = "testnet";
+
+* If you need to install packages related to this example, run:
+
+```
+yarn add NAME_OF_PACKAGE
+
+```
+`crypto-js` package must be installed.
+
+* Run the Treaty Contract giving a port number that will be used in both files `PartyA.js` and `PartyB.js` under the variable `treatyContractUrl`.
+
+ ```
+ node treaty-contract.js PORT_NUMBER
+ ```
+
+For example, if PORT_NUMBER is set to `4000`, then the Treaty Contract URL has to be set to:
+
+```
+const treatyContractUrl = "http://localhost:4000";
+``` 
+
+* Once the Treaty Contract is running, launch `PartyA` client. 
+
+```
+node PartyFlows/PartyA.js
+```
+
+ `PartyA` will first deploy, redeploy the smart contract if `redeploy` is set to `true` or retrieve the latest deployed smart contract from `OL`. When this request is finished and successful, `PartyA` will initialize a new swap request.
+
+ * Once the smart contract is deployed or retrieved and the response is returned back (`****INIT NEW REQUEST****` of the next request on `PartyA` is then displayed), launch `PartyB` client.
+
+ ```
+ node PartyFlows/PartyB.js
+ ```
 
 
-## Interacting with the Treaty Contract
 
-To simulate a MAPP using this example treaty contract, we have provided two scripts, partyA.js and partyB.js CHECK NAME. 
 
-HOW DO USERS RUN IT? IS THERE DEPENDANCIES ON RUNNING? E.G. AS WELL AS SDK THEY NEED ETH AND XRP TESTNET KEYS RIGHT??? -> OR I GUESS PROVIDING THEM SOME DUMMY WELL FUNDED ONES WILL BE OK???
 
-ALSO LIST THE BASIC FLOW. E.G. PARTY A CALLS TC FUNCTION A TO REGISTER A REQUEST & TRANSFER ETH.... ETC
 
 
 

@@ -126,7 +126,7 @@ app.post('/InitiateNewRequest', async function (req, res) {
             } else {
                 toReturn = {
                     success: false,
-                    msg: "withdrawal asset transaction hash is not confirmed"
+                    msg: "Init new request transaction hash is not confirmed"
                 };
             }
         } else {
@@ -169,7 +169,7 @@ app.post('/SendXRP', async function (req, res) {
             } else {
                 toReturn = {
                     success: false,
-                    msg: "withdrawal asset transaction hash is not confirmed"
+                    msg: "send xrp transaction hash is not confirmed"
                 };
             }
         } else {
@@ -214,7 +214,7 @@ app.post('/FinaliseRequest', async function (req, res) {
             } else {
                 toReturn = {
                     success: false,
-                    msg: "withdrawal asset transaction hash is not confirmed"
+                    msg: "finalise request transaction hash is not confirmed"
                 };
             }
         } else {
