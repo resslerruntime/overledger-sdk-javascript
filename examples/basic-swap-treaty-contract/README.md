@@ -24,7 +24,7 @@ Note that the Treaty Contract in this example is stateless.
 ## This Treaty Contract Example Use Case
 
 This a simple non-atomic cross chain swap example.
-Two parties are involved in this prototype. `Party A` owning ETH amount and `Party B` owning XRP. `Party A` wants to exchange X ETH against Y XRP from `Party B`. The X ETH from `Party A` are then escrowed by a smart contract. They will be unlocked by `Party B` once `Party A` has send the Y XRP to `Party A`.
+Two parties are involved in this example. `Party A` owning ETH amount and `Party B` owning XRP. `Party A` wants to exchange X ETH against Y XRP from `Party B`. The X ETH from `Party A` are then escrowed by a smart contract. They will be unlocked by `Party B` once `Party B` has sent the Y XRP to `Party A`.
 
 
 # Components
@@ -102,9 +102,11 @@ const receiverAddress = "0x105360Ba21773A9175A8daba66CA6C7654F7A3f2";
 
 * A MappId/bpiKey on `testnet` environment are needed to run the example on `OL testnet`. They should be set in the `treaty-contract.js` file:
 
+```
 const overledgerMappId = '...';
 const OverledgerBpiKey = '...;
 const network = "testnet";
+```
 
 * If you need to install packages related to this example, run:
 
