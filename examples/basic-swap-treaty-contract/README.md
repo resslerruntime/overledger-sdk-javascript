@@ -23,8 +23,6 @@ Note that the Treaty Contract in this example is stateless.
 
 ## This Treaty Contract Example Use Case
 
-A COUPLE OF SENTENCES ON THE USE CASE OF THIS EXAMPLE - MENTION THAT THIS IS A SIMPLE NON-ATOMIC CROSS CHAIN SWAP
-
 This a simple non-atomic cross chain swap example.
 Two parties are involved in this prototype. `Party A` owning ETH amount and `Party B` owning XRP. `Party A` wants to exchange X ETH against Y XRP from `Party B`. The X ETH from `Party A` are then escrowed by a smart contract. They will be unlocked by `Party B` once `Party A` has send the Y XRP to `Party A`.
 
