@@ -50,7 +50,7 @@ Two parties are involved in this example. `Party A` owning ETH amount and `Party
     It also needs a XRP address that will be used by `PartyB` to send the XRP amount to. This address is set in `PartyB.js` file
 
     ```
-    const xrpReceiverAddress = "r94KZWGqrmpPdrWZxdzGkYCj12SBYTGxCE";
+    const xrpReceiverAddress = '...';
     ```
 
 
