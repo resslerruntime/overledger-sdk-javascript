@@ -88,13 +88,13 @@ const receiverAddress = '...';
 
 * If it is not deployed, the smart contract is deployed by calling his constructor with the treaty contract hash for argument.
 
-* createEthereumEscrow: Having a contract address deployed, it initialises the swap by calling `initiateRequest` function of the smart contract through the `initialiseSmartContract` Treaty Contract endpoint.
+* Initiate the request: Having a contract address deployed, it initialises the swap by calling `initiateRequest` function of the smart contract through the `initialiseSmartContract` Treaty Contract endpoint.
  This creates an ethereum transaction from `Party A` to the smart contract with the ETH amount that will be unlocked later by `Party B`. ETH amount is now locked by the smart contract.
  * By initiating a new request, the counter set in the smart contract is increased and all the stored data on the smart contract is retrieved by calling the getters of the smart contract, passing the request id number for argument.
 
 ## PARTY B
 
-* createXRPEscrow: `Party B` waits for a new request creation and when it finds it, sends XRP to `PartyA` and call the `finaliseRequest` function of the smart contract through the `finaliseRequest` Treaty Contract endpoint to unlock the ETH amount that will be then transferred to `PartyB`.
+* Finalise the request: `Party B` waits for a new request creation and when it finds it, sends XRP to `PartyA` and call the `finaliseRequest` function of the smart contract through the `finaliseRequest` Treaty Contract endpoint to unlock the ETH amount that will be then transferred to `PartyB`.
 
 
 
