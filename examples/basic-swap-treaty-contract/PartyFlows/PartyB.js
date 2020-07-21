@@ -29,7 +29,7 @@ async function runFlow() {
   const xrpTransactionHash = await sendXRP({ dltKey: xrpDltKey, destination: xrpReceiverAddress, amount: XRPDropsToTrade });
   console.log(`xrpTransactionHash ${JSON.stringify(xrpTransactionHash)}`);
 
-  const finaliseRequestHash = await finaliseRequest({ dltKey: ethDltKey, requestId: requestId, xrpHash: xrpTransactionHash.msg.transactionHash.toString(), feePrice: '13000000000', feeLimit: '4397098' })
+  const finaliseRequestHash = await finaliseRequest({ dltKey: ethDltKey, requestId: requestId, xrpHash: xrpTransactionHash.msg.transactionHash.toString(), feePrice: '91000000000', feeLimit: '4397098' })
   console.log(`finaliseRequestHash ${JSON.stringify(finaliseRequestHash)}`);
 }
 

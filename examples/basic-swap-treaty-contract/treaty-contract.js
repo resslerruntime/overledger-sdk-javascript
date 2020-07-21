@@ -65,7 +65,7 @@ app.post('/InitialiseApp', async function (req, res) {
             console.info(`resp startup ${JSON.stringify(resp)}`);
             let isInitContractConfirmed;
             if (resp.event === "newContract") {
-                isInitContractConfirmed = await checkForTransactionConfirmation(overledgerSDK, resp.result, 0, 600);
+                isInitContractConfirmed = await checkForTransactionConfirmation(overledgerSDK, resp.result, 0, 1000);
 
                 if (isInitContractConfirmed) {
                     toReturn = {
@@ -117,7 +117,7 @@ app.post('/InitiateNewRequest', async function (req, res) {
             console.log(`smartContractAddress ${smartContractAddress}`);
             newRequestHash = await initiateNewRequest(overledgerSDK, newRequestParams.dltKey, smartContractAddress, newRequestParams.receiver, newRequestParams.amount, newRequestParams.feePrice, newRequestParams.feeLimit);
             console.log(`initiateNewRequest`, newRequestHash);
-            isNewRequest = await checkForTransactionConfirmation(overledgerSDK, newRequestHash, 0, 600);
+            isNewRequest = await checkForTransactionConfirmation(overledgerSDK, newRequestHash, 0, 1000);
             if (isNewRequest) {
                 toReturn = {
                     success: true,
@@ -160,7 +160,7 @@ app.post('/SendXRP', async function (req, res) {
             await addAccountsToOverledger(overledgerSDK, [DltNameOptions.XRP_LEDGER], [xrpTxnParams.dltKey.dltSecretKey]);
             xrpTxnHash = await sendXRPTransaction(overledgerSDK, xrpTxnParams.dltKey, xrpTxnParams.destination, xrpTxnParams.amount);
             console.log(`xrpHash`, xrpTxnHash);
-            isXRPSent = await checkForTransactionConfirmation(overledgerSDK, xrpTxnHash, 0, 600);
+            isXRPSent = await checkForTransactionConfirmation(overledgerSDK, xrpTxnHash, 0, 1000);
             if (isXRPSent) {
                 toReturn = {
                     success: true,
@@ -205,7 +205,7 @@ app.post('/FinaliseRequest', async function (req, res) {
             console.log(`smartContractAddress ${smartContractAddress}`);
             finaliseHash = await finaliseRequest(overledgerSDK, finaliseParams.dltKey, smartContractAddress, finaliseParams.requestId, finaliseParams.xrpHash, finaliseParams.feePrice, finaliseParams.feeLimit);
             console.log(`finalise`, finaliseHash);
-            isFinalised = await checkForTransactionConfirmation(overledgerSDK, finaliseHash, 0, 600);
+            isFinalised = await checkForTransactionConfirmation(overledgerSDK, finaliseHash, 0, 1000);
             if (isFinalised) {
                 toReturn = {
                     success: true,

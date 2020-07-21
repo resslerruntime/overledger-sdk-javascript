@@ -14,12 +14,12 @@ const sleep = require('../treaty-contract-functions').sleep;
 runFlow();
 
 async function runFlow() {
-    const initContractHash = await initialiseSmartContract({ dltKey: ethDltKey, redeploy: false, feePrice: '13000000000', feeLimit: '4397098' });
+    const initContractHash = await initialiseSmartContract({ dltKey: ethDltKey, redeploy: true, feePrice: '91000000000', feeLimit: '4397098' });
     if (initContractHash && initContractHash !== "") {
         console.log(`initContractHash ${initContractHash}`);
     }
     sleep(5000);
-    const initOrderHash = await initNewRequest({ dltKey: ethDltKey, receiver: receiverAddress, amount: ethAmount.toString(), feePrice: '13000000000', feeLimit: '4397098' });
+    const initOrderHash = await initNewRequest({ dltKey: ethDltKey, receiver: receiverAddress, amount: ethAmount.toString(), feePrice: '91000000000', feeLimit: '4397098' });
     console.log(`initOrderHash ${JSON.stringify(initOrderHash)}`);
 
 }
