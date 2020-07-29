@@ -20,3 +20,4 @@ type StatusRequest = {
   };
   
   export default StatusRequest;
+  

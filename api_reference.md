@@ -71,6 +71,9 @@
 <dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a smart contract function parameter.</p>
 </dd>
+<dt><a href="#StatusRequest">StatusRequest</a> : <code>Object</code></dt>
+<dd><p>Status request.</p>
+</dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
 </dd>
@@ -111,6 +114,10 @@ Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
             * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
             * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+            * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+            * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
 
             * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
@@ -153,6 +160,10 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
     * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
     * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+    * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+    * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
 
     * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
@@ -248,6 +259,26 @@ Send signed transactions to Overledger
 | balancesRequest | [<code>Array.&lt;DLTAndAddress&gt;</code>](#DLTAndAddress) | Array of objects specifing the address and corresponding DLT |
 
 Get the balances of the specified addresses
+
+<a name="module_overledger-core.OverledgerSDK+subscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.subscribeStatusUpdate(subStatusRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| subStatusRequest | [<code>StatusRequest</code>](#StatusRequest) | object specifing the transaction request for subscribe status |
+
+subscribe status of transaction
+
+<a name="module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.unSubscribeStatusUpdate(unSubStatusReq)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unSubStatusReq | [<code>StatusRequest</code>](#StatusRequest) | object specifing the transaction request for unsubscribe status |
+
+unsubscribe status of transaction
 
 <a name="module_overledger-core.OverledgerSDK+getSequences"></a>
 
@@ -1392,6 +1423,20 @@ Overledger signed transaction request object.
 | options | <code>object</code> | information on the valid values that this parameter can take |
 
 A generic object to describe a smart contract function parameter.
+
+<a name="StatusRequest"></a>
+
+## StatusRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | mappId |
+| callbackUrl | <code>string</code> | The address which the updates send to. |
+| timestamp | <code>string</code> | The timestamp |
+| overledgerTransactionId | <code>string</code> | The overledgerTransactionId |
+
+Status request.
 
 <a name="validationCheck"></a>
 
