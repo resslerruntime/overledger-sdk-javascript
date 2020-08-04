@@ -48,6 +48,10 @@ yarn add @quantnetwork/overledger-core
 
             * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
 
+            * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+            * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
+
             * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
             * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
@@ -89,6 +93,10 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
     * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
     * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+    * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+    * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
 
     * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
@@ -184,6 +192,26 @@ Send signed transactions to Overledger
 | balancesRequest | <code>Array.&lt;DLTAndAddress&gt;</code> | Array of objects specifing the address and corresponding DLT |
 
 Get the balances of the specified addresses
+
+<a name="module_overledger-core.OverledgerSDK+subscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.subscribeStatusUpdate(subStatusRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| subStatusRequest | <code>StatusRequest</code> | object specifing the transaction request for subscribe status |
+
+subscribe status of transaction
+
+<a name="module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.unSubscribeStatusUpdate(unSubStatusReq)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unSubStatusReq | <code>StatusRequest</code> | object specifing the transaction request for unsubscribe status |
+
+unsubscribe status of transaction
 
 <a name="module_overledger-core.OverledgerSDK+getSequences"></a>
 

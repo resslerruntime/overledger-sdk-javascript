@@ -30,6 +30,7 @@ import SCFunctionParam from './SmartContractFunctionParam';
 import InteropSCFunctionOptions from './associatedEnums/SCInteropOptions';
 import DltNameOptions from './associatedEnums/DltNameOptions';
 import ValidationCheck from './ValidationCheck';
+import StatusRequest from './StatusRequest';
 /**
  * Types used by the Overledger SDK packages.
  */
@@ -62,4 +63,5 @@ export {
   InteropSCFunctionOptions,
   DltNameOptions,
   ValidationCheck,
+  StatusRequest
 };

@@ -69,6 +69,9 @@ yarn add @quantnetwork/overledger-types
 <dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a smart contract function parameter.</p>
 </dd>
+<dt><a href="#StatusRequest">StatusRequest</a> : <code>Object</code></dt>
+<dd><p>Status request.</p>
+</dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
 </dd>
@@ -242,6 +245,20 @@ Overledger signed transaction request object.
 | options | <code>object</code> | information on the valid values that this parameter can take |
 
 A generic object to describe a smart contract function parameter.
+
+<a name="StatusRequest"></a>
+
+## StatusRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | mappId |
+| callbackUrl | <code>string</code> | The address which the updates send to. |
+| timestamp | <code>string</code> | The timestamp |
+| overledgerTransactionId | <code>string</code> | The overledgerTransactionId |
+
+Status request.
 
 <a name="validationCheck"></a>
 
