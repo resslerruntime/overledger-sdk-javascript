@@ -205,11 +205,15 @@ class OverledgerSDK {
    * @return {Promise<AxiosResponse>}
    */
   public getFeeEstimation(dlt: string, blockNumber: number): AxiosPromise<FeeEstimationResponse> {
-    if (dlt === null) {
+    if (dlt === '') {
       throw new Error('The dlt name must be passed');
     }
 
-    return this.request.post(`/fee/${dlt}/${blockNumber}`);
+    try {
+      return this.request.post(`/fee/${dlt}/${blockNumber}`);
+    } catch(e) {
+      return e.response;
+    }
   }
 
   /**
