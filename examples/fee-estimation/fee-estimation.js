@@ -29,13 +29,20 @@ const bpiKey = '...';
             data: "15"
         }
 
+        let requestEthereum = {
+            dlt: "ethereum",
+            data: "0"
+        }
+
         console.log("going to call fee estimation");
         const feeEstimationResponseRipple = await overledger.getFeeEstimation(requestRipple.dlt, requestRipple.data);
         const feeEstimationResponseBitcoin = await overledger.getFeeEstimation(requestBitcoin.dlt, requestBitcoin.data);
+        const feeEstimationResponseEthereum = await overledger.getFeeEstimation(requestEthereum.dlt, requestEthereum.data);
 
         console.log("");
         console.log('feeEstimationResponse for dlt: ' + feeEstimationResponseRipple.data.dlt + ", data:" + feeEstimationResponseRipple.data.data);
         console.log('feeEstimationResponse for dlt: ' + feeEstimationResponseBitcoin.data.dlt + ", data:" + feeEstimationResponseBitcoin.data.data);
+        console.log('feeEstimationResponse for dlt: ' + feeEstimationResponseEthereum.data.dlt + ", data:" + feeEstimationResponseEthereum.data.data);
         console.log("");
 
     } catch (e) {
