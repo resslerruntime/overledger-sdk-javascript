@@ -16,20 +16,28 @@ const bpiKey = '...';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
-            provider: { network: 'http://localhost:8088' , timeout: '1200000'},
+            provider: { network: 'testnet' , timeout: '1200000'},
         });
 
-        let request = {
+        let requestRipple = {
             dlt: "ripple",
             data: "0"
         }
 
+        let requestBitcoin = {
+            dlt: "bitcoin",
+            data: "15"
+        }
+
         console.log("going to call fee estimation");
-        const feeEstimationResponse = await overledger.getFeeEstimation(request.dlt, request.data);
+        const feeEstimationResponseRipple = await overledger.getFeeEstimation(requestRipple.dlt, requestRipple.data);
+        const feeEstimationResponseBitcoin = await overledger.getFeeEstimation(requestBitcoin.dlt, requestBitcoin.data);
 
         console.log("");
-        console.log('feeEstimationResponse for dlt: ' + feeEstimationResponse.data.dlt + ", data:" + feeEstimationResponse.data.data);
+        console.log('feeEstimationResponse for dlt: ' + feeEstimationResponseRipple.data.dlt + ", data:" + feeEstimationResponseRipple.data.data);
+        console.log('feeEstimationResponse for dlt: ' + feeEstimationResponseBitcoin.data.dlt + ", data:" + feeEstimationResponseBitcoin.data.data);
         console.log("");
+
     } catch (e) {
         console.error('error', e);
         //console.error('error', e.response.data.errors);
