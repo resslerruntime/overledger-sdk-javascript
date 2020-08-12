@@ -31,6 +31,7 @@ import InteropSCFunctionOptions from './associatedEnums/SCInteropOptions';
 import DltNameOptions from './associatedEnums/DltNameOptions';
 import ValidationCheck from './ValidationCheck';
 import StatusRequest from './StatusRequest';
+import FeeEstimationResponse from './FeeEstimationResponse'
 /**
  * Types used by the Overledger SDK packages.
  */
@@ -63,5 +64,6 @@ export {
   InteropSCFunctionOptions,
   DltNameOptions,
   ValidationCheck,
-  StatusRequest
+  StatusRequest,
+  FeeEstimationResponse
 };
