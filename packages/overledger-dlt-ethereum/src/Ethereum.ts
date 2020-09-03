@@ -1,4 +1,4 @@
-//import Accounts from 'web3-eth-accounts';
+// import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
 import { StateMutabilityType, AbiType } from 'web3-utils';
 import { MAINNET } from '@quantnetwork/overledger-provider';
@@ -549,9 +549,8 @@ class Ethereum extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const transaction = this.buildTransaction(<TransactionEthereumRequest>thisTransaction);
-
     return new Promise((resolve, reject) => {
-      this.account.signTransaction(transaction, (err, data) => {
+      this.web3.eth.accounts.signTransaction(transaction, this.account.privateKey, (err, data) => {
         if (err) {
           return reject(err);
         }
