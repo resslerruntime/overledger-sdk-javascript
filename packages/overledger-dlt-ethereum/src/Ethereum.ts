@@ -12,6 +12,7 @@ import TypeOptions from './DLTSpecificTypes/associatedEnums/TypeOptions';
 import BytesBOptions from './DLTSpecificTypes/associatedEnums/BytesBOptions';
 import UintIntBOptions from './DLTSpecificTypes/associatedEnums/UintIntBOptions';
 import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionEthereumSubTypeOptions';
+import Accounts from 'web3/eth/accounts';
 
 /**
  * @memberof module:overledger-dlt-ethereum
@@ -111,7 +112,7 @@ class Ethereum extends AbstractDLT {
           if (!functionName) {
             throw new Error('When invoking a smart contract function, the name of the called function must be given by setting thisTransaction.smartContract.functionCall.functionName');
           }
-          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
+          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList, thisTransaction.amount);
         } else {
           throw new Error('When invoking a smart contract function thisTransaction.smartContract.functionCall.functionType must be set to SCFunctionTypeOptions.functionCallWithNoParameters or SCFunctionTypeOptions.functionCallWithParameters');
         }
@@ -527,15 +528,22 @@ class Ethereum extends AbstractDLT {
    *
    * @return {string} the bytecode of this function call
    */
-  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[]): string {
+  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[], amount: number): string {
     const inputsAndValues =
       paramsList.reduce((values, p) => { const type = computeParamType(p); values[0].push({ type: type.toString(), name: p.name }); values[1].push(p.value); return values; }, [[], []]);
+    let payableVal = true;
+    let stateMutabilityVal = <StateMutabilityType>'payable';
+    if (amount == 0) {
+      payableVal = false;
+      stateMutabilityVal = <StateMutabilityType>'nonpayable';
+    }
     const jsonFunctionCall: IJsonFunctionCall = {
       type: 'function',
       name: functionName,
-      constant: false, //by default since it doesn't modify state
-      payable: true, // to take as param
-      stateMutability: 'payable', // to take as param 
+      //by default since it does modify state
+      constant: false,
+      payable: payableVal,
+      stateMutability: stateMutabilityVal, 
       inputs: <[{ type: string, name: string }]>inputsAndValues[0],
     };
     const encodedInput = this.web3.eth.abi.encodeFunctionCall(jsonFunctionCall, inputsAndValues[1]);
