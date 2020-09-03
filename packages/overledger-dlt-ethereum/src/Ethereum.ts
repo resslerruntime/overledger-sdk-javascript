@@ -1,5 +1,6 @@
-import Accounts from 'web3-eth-accounts';
+//import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
+import { StateMutabilityType, AbiType } from 'web3-utils';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Options, Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
@@ -17,7 +18,7 @@ import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnum
 */
 class Ethereum extends AbstractDLT {
   chainId: number;
-  account: Accounts;
+  account: Account;
   options: Object;
   web3: Web3;
 
@@ -530,8 +531,11 @@ class Ethereum extends AbstractDLT {
     const inputsAndValues =
       paramsList.reduce((values, p) => { const type = computeParamType(p); values[0].push({ type: type.toString(), name: p.name }); values[1].push(p.value); return values; }, [[], []]);
     const jsonFunctionCall: IJsonFunctionCall = {
-      name: functionName,
       type: 'function',
+      name: functionName,
+      constant: false, //by default since it doesn't modify state
+      payable: true, // to take as param
+      stateMutability: 'payable', // to take as param 
       inputs: <[{ type: string, name: string }]>inputsAndValues[0],
     };
     const encodedInput = this.web3.eth.abi.encodeFunctionCall(jsonFunctionCall, inputsAndValues[1]);
@@ -624,8 +628,11 @@ export type Transaction = {
 };
 
 interface IJsonFunctionCall {
+  type: AbiType;
   name: string;
-  type?: string;
+  constant: boolean;
+  payable: boolean;
+  stateMutability: StateMutabilityType;
   inputs: [{ type: string, name: string }];
 }
 
