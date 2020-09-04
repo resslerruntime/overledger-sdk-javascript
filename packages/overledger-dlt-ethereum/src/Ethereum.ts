@@ -12,7 +12,6 @@ import TypeOptions from './DLTSpecificTypes/associatedEnums/TypeOptions';
 import BytesBOptions from './DLTSpecificTypes/associatedEnums/BytesBOptions';
 import UintIntBOptions from './DLTSpecificTypes/associatedEnums/UintIntBOptions';
 import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionEthereumSubTypeOptions';
-import Accounts from 'web3/eth/accounts';
 
 /**
  * @memberof module:overledger-dlt-ethereum
