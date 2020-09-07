@@ -1,5 +1,6 @@
-import Accounts from 'web3-eth-accounts';
+// import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
+import { StateMutabilityType, AbiType } from 'web3-utils';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Options, Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
@@ -17,7 +18,7 @@ import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnum
 */
 class Ethereum extends AbstractDLT {
   chainId: number;
-  account: Accounts;
+  account: Account;
   options: Object;
   web3: Web3;
 
@@ -110,7 +111,7 @@ class Ethereum extends AbstractDLT {
           if (!functionName) {
             throw new Error('When invoking a smart contract function, the name of the called function must be given by setting thisTransaction.smartContract.functionCall.functionName');
           }
-          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
+          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList, thisTransaction.amount);
         } else {
           throw new Error('When invoking a smart contract function thisTransaction.smartContract.functionCall.functionType must be set to SCFunctionTypeOptions.functionCallWithNoParameters or SCFunctionTypeOptions.functionCallWithParameters');
         }
@@ -526,12 +527,22 @@ class Ethereum extends AbstractDLT {
    *
    * @return {string} the bytecode of this function call
    */
-  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[]): string {
+  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[], amount: number): string {
     const inputsAndValues =
       paramsList.reduce((values, p) => { const type = computeParamType(p); values[0].push({ type: type.toString(), name: p.name }); values[1].push(p.value); return values; }, [[], []]);
+    let payableVal = true;
+    let stateMutabilityVal = <StateMutabilityType>'payable';
+    if (amount == 0) {
+      payableVal = false;
+      stateMutabilityVal = <StateMutabilityType>'nonpayable';
+    }
     const jsonFunctionCall: IJsonFunctionCall = {
-      name: functionName,
       type: 'function',
+      name: functionName,
+      //by default since it does modify state
+      constant: false,
+      payable: payableVal,
+      stateMutability: stateMutabilityVal, 
       inputs: <[{ type: string, name: string }]>inputsAndValues[0],
     };
     const encodedInput = this.web3.eth.abi.encodeFunctionCall(jsonFunctionCall, inputsAndValues[1]);
@@ -545,9 +556,8 @@ class Ethereum extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const transaction = this.buildTransaction(<TransactionEthereumRequest>thisTransaction);
-
     return new Promise((resolve, reject) => {
-      this.account.signTransaction(transaction, (err, data) => {
+      this.web3.eth.accounts.signTransaction(transaction, this.account.privateKey, (err, data) => {
         if (err) {
           return reject(err);
         }
@@ -624,8 +634,11 @@ export type Transaction = {
 };
 
 interface IJsonFunctionCall {
+  type: AbiType;
   name: string;
-  type?: string;
+  constant: boolean;
+  payable: boolean;
+  stateMutability: StateMutabilityType;
   inputs: [{ type: string, name: string }];
 }
 

@@ -17,6 +17,7 @@ The Overledger SDK is a collection of node packages written in Typescript. Curre
   - Register your application in order to get a free MApp ID.
   - Verify your Quant token, and create a BPI key.
 - Node.js 10
+- Python 2.7
 
 ## Installation
 
