@@ -11,6 +11,10 @@
 type Account = {
   privateKey: string,
   address: string,
+  publicKey?: string,
+  id?: string,
+  password?: string,
+  provider?: string
 };
 
 export default Account;

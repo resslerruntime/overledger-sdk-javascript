@@ -67,6 +67,8 @@ class Ripple extends AbstractDLT {
     const account = {
       privateKey,
       address: keypair.publicKey,
+      // to be verified more !!! generateSeed of the keypairs library 
+      publicKey: keypair.publicKey
     };
     account.address = deriveAddress(keypair.publicKey);
     this.account = account;
@@ -219,6 +221,13 @@ class Ripple extends AbstractDLT {
       success: false,
       failingField: JSON.stringify(contractQueryDetails),
       error: 'The XRP SDK does not currently support smart contract validation',
+    };
+  }
+
+  _getLedgerVersion(){
+    return { 
+      dlt: this.name,
+      version: "" 
     };
   }
 

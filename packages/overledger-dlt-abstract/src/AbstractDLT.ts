@@ -1,6 +1,6 @@
 import {
   TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions,
-  TransactionAccountsRequest, TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract,
+  TransactionAccountsRequest, TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract, LedgerVersion
 } from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
@@ -303,6 +303,8 @@ abstract class AbstractDLT {
    * @param {smartContract} contractQueryDetails - The details on the smart contract query
    */
   abstract _buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContract): Object;
+
+  abstract _getLedgerVersion(): LedgerVersion;
 
   /**
    * Wrap a specific DLT signed transaction with the Overledger required fields

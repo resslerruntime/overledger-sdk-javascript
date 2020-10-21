@@ -182,12 +182,12 @@ class Bitcoin extends AbstractDLT {
 
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
-    const { address } = bitcoin.payments
-      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
-
+    const { address, pubkey } = bitcoin.payments
+      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }); 
     return {
-      privateKey,
+      privateKey,      
       address,
+      publicKey: pubkey.toString('hex'),
     };
 
   }
@@ -204,7 +204,9 @@ class Bitcoin extends AbstractDLT {
       privateKey: myPrivateKey,
       address: bitcoin.payments
         .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
+      publicKey: keyPair.publicKey.toString('hex'),
     };
+
 
   }
 
@@ -238,6 +240,14 @@ class Bitcoin extends AbstractDLT {
       error: 'The Bitcoin SDK does not currently support smart contract validation',
     };
   }
+
+  _getLedgerVersion(){
+    return { 
+      dlt: this.name,
+      version: "" 
+    };
+  }
+  
 }
 
 export default Bitcoin;

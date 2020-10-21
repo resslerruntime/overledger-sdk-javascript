@@ -612,6 +612,13 @@ class Ethereum extends AbstractDLT {
     return outputTypes;
   }
 
+  _getLedgerVersion(){
+    return { 
+      dlt: this.name,
+      version: "" 
+    };
+  }
+
 }
 
 interface QueryInput {
