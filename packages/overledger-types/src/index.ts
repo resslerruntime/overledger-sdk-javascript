@@ -7,6 +7,7 @@ import APICallWrapper from './APICallWrapper';
 import DLTAndAddress from './DLTAndAddress';
 import DLTOptions from './DLTOptions';
 import NetworkOptions from './NetworkOptions';
+import NodeResourceRequest from './NodeResourceRequest';
 import Options from './Options';
 import ProviderOptions from './ProviderOptions';
 import SDKOptions from './SDKOptions';
@@ -14,6 +15,7 @@ import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
+import UnsignedTransactionRequest from './UnsignedTransactionRequest';
 import SmartContract from './SmartContract';
 import TransactionAccountsRequest from './TransactionAccountsRequest';
 import TransactionAccountsResponse from './TransactionAccountsResponse';
@@ -41,6 +43,7 @@ export {
   DLTAndAddress,
   DLTOptions,
   NetworkOptions,
+  NodeResourceRequest,
   Options,
   ProviderOptions,
   SDKOptions,
@@ -61,9 +64,10 @@ export {
   SCFunctionTypeOptions,
   SCFunctionDefinition,
   SCFunctionParam,
+  UnsignedTransactionRequest,
   InteropSCFunctionOptions,
   DltNameOptions,
   ValidationCheck,
   StatusRequest,
-    FeeEstimationResponse
+  FeeEstimationResponse
 };

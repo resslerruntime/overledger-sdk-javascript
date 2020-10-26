@@ -154,7 +154,7 @@ class Ethereum extends AbstractDLT {
       return {
         success: false,
         failingField: 'extraFields',
-        error: 'All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it',
+        error: 'All transactions for Ethereum must have the extraFields field set with compUnitPrice and compLimit parameters within it',
       };
     }
     if ((thisEthereumTx.extraFields.compLimit === '') || (thisEthereumTx.extraFields.compLimit == null) || (thisEthereumTx.extraFields.compLimit === 'undefined')) {
@@ -245,7 +245,7 @@ class Ethereum extends AbstractDLT {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].inputParams',
-        error: 'To invoke a smart contract on Ethereum that has parameters in its constructor, you need to provide them in the smartContract.functionCall[0].inputParams field',
+        error: 'To invoke a smart contract on Ethereum that has parameters in its function, you need to provide them in the smartContract.functionCall[0].inputParams field',
       };
     }
     if (((!thisEthereumTx.toAddress) || (thisEthereumTx.toAddress === '')) && thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) {

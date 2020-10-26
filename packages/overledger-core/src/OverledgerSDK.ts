@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse  } from '@quantnetwork/overledger-types';
+import {StatusRequest, SignedTransactionRequest, UnsignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse, NodeResourceRequest } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
 */
@@ -18,6 +18,7 @@ class OverledgerSDK {
   provider: Provider;
   request: AxiosInstance;
   search: OverledgerSearch;
+  
 
   /**
    * Create the Overledger SDK
@@ -120,11 +121,32 @@ class OverledgerSDK {
    * @param {SignedTransactionRequest[]} signedTransactions Array of Overledger signed transaction data
    */
   public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
+    
     const apiCall = signedTransactions.map(
       stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
+  }
+
+  /**
+   * Send unsigned transactions to Overledger
+   *
+   * @param {UnsignedTransactionRequest} unsignedTransactions Unsigned transaction data
+   */
+  public sendUnsigned(unsignedTransactions: UnsignedTransactionRequest[]): AxiosPromise<Object> {
+    let count = 0;
+    while (count < unsignedTransactions.length){
+      if (unsignedTransactions[count].dlt === "hyperledger_fabric"){
+        try {
+          return this.request.post(`/chaincode/sendTransaction`, JSON.stringify(unsignedTransactions[count].txObject));
+        } catch (e) {
+          return e.response;
+        }
+      } else {
+        throw "The SDK does not yet support sending unsigned transactions for distributed ledger: " + unsignedTransactions[count].dlt;
+      }
+    }
   }
 
   /**
@@ -134,6 +156,20 @@ class OverledgerSDK {
    */
   public getBalances(balancesRequest: DLTAndAddress[]): AxiosPromise<Object> {
     return this.request.post('/balances', balancesRequest);
+  }
+
+  /**
+   * Call a resource of a node
+   *
+   * @param {NodeResourceRequest} nodeResourceRequest object specifing the resource to call on this node
+   */
+  public callNodeResource(nodeResourceRequest: NodeResourceRequest): Object {
+    try{
+      return this.request.post(nodeResourceRequest.endpoint, nodeResourceRequest.resourceObject);
+      //.catch( err => err.response);  
+    }catch(e){
+      return e.response;
+    }
   }
 
 
