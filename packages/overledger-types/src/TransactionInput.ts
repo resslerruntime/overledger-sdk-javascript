@@ -21,7 +21,9 @@ type TransactionInput = {
   fromAddress: string,
   amount?: number,
   asset?: object,
+  prevOutScript?: Buffer,
   smartContract?: SmartContract,
+  redeemScript?: Buffer
 };
 
 export default TransactionInput;

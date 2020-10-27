@@ -60,11 +60,12 @@ class Bitcoin extends AbstractDLT {
 
     // const feePrice = Number(thisTransaction.extraFields.feePrice);
     let tx;
-    tx = new bitcoin.TransactionBuilder(this.addressType, 0); // set maximum fee rate = 0 to be flexible on fee rate
+    // tx = new bitcoin.TransactionBuilder(this.addressType, 0); // set maximum fee rate = 0 to be flexible on fee rate
+    tx = new bitcoin.Transaction();
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
-      tx.addInput(thisTransaction.txInputs[counter].linkedTx, parseInt(thisTransaction.txInputs[counter].linkedIndex, 10));
+      tx.addInput(Buffer.from(thisTransaction.txInputs[counter].linkedTx, "hex").reverse(), parseInt(thisTransaction.txInputs[counter].linkedIndex, 10), 0xffffffff);
       counter = counter + 1;
     }
     counter = 0;
@@ -72,13 +73,54 @@ class Bitcoin extends AbstractDLT {
       tx.addOutput(thisTransaction.txOutputs[counter].toAddress, thisTransaction.txOutputs[counter].amount);
       counter = counter + 1;
     }
+
+    // Adding case of p2pkh or p2sh
     const ret = bitcoin.script.compile(
       [
         bitcoin.opcodes.OP_RETURN,
         data,
       ]);
+
     tx.addOutput(ret, 0);
 
+    const hashType = bitcoin.Transaction.SIGHASH_ALL;
+    console.log(`tx ${JSON.stringify(tx)}`);
+    const signatureHash = tx.hashForSignature(0, thisTransaction.txInputs[0].redeemScript, hashType);
+    console.log(`signatureHash ${Buffer.from(signatureHash).toString('hex')}`);
+
+    const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+    const redeemScriptSig = bitcoin.payments.p2sh({
+      redeem: {
+        input: bitcoin.script.compile([
+          bitcoin.script.signature.encode(
+            myKeyPair.sign(signatureHash),
+            hashType,
+          ),
+          bitcoin.opcodes.OP_TRUE,
+        ]),
+        output: thisTransaction.txInputs[0].redeemScript,
+      },
+    }).input;
+    console.log(`redeemScriptSig ${Buffer.from(redeemScriptSig).toString('hex')}`);
+    console.log(`thisTransaction.txInputs[0].prevOutScript ${Buffer.from(thisTransaction.txInputs[0].prevOutScript).toString('hex')}`);
+    tx.setInputScript(0, redeemScriptSig);
+
+    // const tx = txb.buildIncomplete();
+    // const signatureHash = tx.hashForSignature(0, thisTransaction.txInputs[0].redeemScript, hashType);
+    //  const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+    // const redeemScriptSig = bitcoin.payments.p2sh({
+    //   redeem: {
+    //     output: thisTransaction.txInputs[0].redeemScript,
+    //     input: bitcoin.script.compile([
+    //       bitcoin.script.signature.encode(
+    //         myKeyPair.sign(signatureHash),
+    //         hashType,
+    //       ),
+    //       bitcoin.opcodes.OP_TRUE,
+    //     ]),       
+    //   },
+    // }).input;
+    // tx.setInputScript(0, redeemScriptSig);
     return tx;
   }
 
@@ -130,13 +172,13 @@ class Bitcoin extends AbstractDLT {
     counter = 0;
     while (counter < thisBitcoinTx.txOutputs.length) {
 
-      if (!thisBitcoinTx.txOutputs[counter].amount || thisBitcoinTx.txOutputs[counter].amount === undefined) {
-        return {
-          success: false,
-          failingField: 'thisBitcoinTx.txOutputs.amount',
-          error: 'All transactions outputs for Bitcoin must have an amount field',
-        };
-      }
+      // if (!thisBitcoinTx.txOutputs[counter].amount) { //|| thisBitcoinTx.txOutputs[counter].amount === undefined) {
+      //   return {
+      //     success: false,
+      //     failingField: 'thisBitcoinTx.txOutputs.amount',
+      //     error: 'All transactions outputs for Bitcoin must have an amount field',
+      //   };
+      // }
       totalOutputAmount = totalOutputAmount + thisBitcoinTx.txOutputs[counter].amount;
       counter = counter + 1;
     }
@@ -162,15 +204,22 @@ class Bitcoin extends AbstractDLT {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     const transaction = this.buildTransaction(thisBitcoinTransaction);
+    const finalTX = bitcoin.TransactionBuilder.fromTransaction(transaction);
+    console.log(`transaction ${JSON.stringify(transaction)}`);
+    console.log(`finalTX ${JSON.stringify(finalTX)}`);
     // for each input sign them:
-    const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
-    let counter = 0;
-    while (counter < thisBitcoinTransaction.txInputs.length) {
-      // currently we are only supporting the p2pkh script
-      transaction.sign({ prevOutScriptType: 'p2pkh', vin: counter, keyPair: myKeyPair });
-      counter = counter + 1;
-    }
-    return Promise.resolve(transaction.build().toHex());
+    // const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+    // let counter = 0;
+    // while (counter < thisBitcoinTransaction.txInputs.length) {
+    //  console.log(`counter ${counter}`);
+    //  // currently we are only supporting the p2pkh script
+    //   // transaction.sign({ prevOutScriptType: 'p2sh-p2pkh', vin: counter, keyPair: myKeyPair, redeemScript: thisBitcoinTransaction.txInputs[0].redeemScript });
+    //   transaction.sign(counter, myKeyPair, thisBitcoinTransaction.txInputs[counter].redeemScript, thisBitcoinTransaction.txInputs[counter].amount);
+    //  counter = counter + 1;
+    // }
+    //  return Promise.resolve(transaction.build().toHex());
+     return Promise.resolve(transaction.toHex());
+
   }
 
   /**
@@ -182,6 +231,7 @@ class Bitcoin extends AbstractDLT {
 
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
+    // create account for p2sh ??
     const { address } = bitcoin.payments
       .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
 

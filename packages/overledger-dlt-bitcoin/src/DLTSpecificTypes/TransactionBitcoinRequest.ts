@@ -15,6 +15,9 @@ interface TransactionBitcoinRequest extends TransactionUtxoRequest {
   extraFields: {
     feePrice: string,
   };
+  script?: Array<any>,
+  addressType?: string,
+  redeemScript?: Buffer 
 }
 
 export default TransactionBitcoinRequest;

@@ -1,11 +1,13 @@
 //NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
 const bitcoin = require('bitcoinjs-lib');
+const bip65 = require('bip65');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
-const TransactionEthereumSubTypeOptions = require('@quantnetwork/overledger-dlt-ethereum').TransactionEthereumSubTypeOptions;
-const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
+const buildRedeemScript = require('../bitcoin-p2sh/p2sh-example').buildRedeemScript;
+const cltvCheckSigOutput = require('../bitcoin-p2sh/p2sh-example').cltvCheckSigOutput;
+const utcNow = require('../bitcoin-p2sh/p2sh-example').utcNow;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
@@ -19,26 +21,13 @@ const partyABitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
 const partyABitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
 const partyAs2ndBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 const partyAs2ndBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj'; // Nominate a Bitcoin address you own for the change to be returned to
-const bitcoinLinkedTx = 'c94753acde88ee2a7a5e23042d908d8976c1a19df9ddc2f8162c14c5435ff370'; // Add the previous transaction here
-const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinLinkedTx = 'e1484dc578633d1f471dd3e48284f5d49aa3ed95be7eaf7ab3c5adaaa5b71b51'; // Add the previous transaction here
+const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 100000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 87800; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
-// For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
-const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
-
-// For the XRP ledger, you can go to the official XRP Testnet Faucet to get an account already funded.
-// Keep in mind that for XRP the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyAxrpPrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyAxrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
-
-// Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '3BmR1ztM6YaDvp12PpVYJ3WWJHmgmy3DiC';
-const partyBEthereumAddress = '0xB3ea4D180f31B4000F2fbCC58a085eF2ffD5a763';
-const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -48,35 +37,21 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
   try {
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
+      dlts: [{ dlt: DltNameOptions.BITCOIN }],
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
-    overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledger.dlts.ripple.setAccount(partyAxrpPrivateKey);
-    
-    // Get the address sequences.
-    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);
-    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    const xrpAccountSequence = xrpSequenceRequest.data.dltData[0].sequence;
 
-    const redeemScriptOPsArraySimplePaymentChannel = [ bitcoin.opcodes.OP_IF,
-      bitcoin.ECPair.fromWIF('cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT', bitcoin.networks.testnet).publicKey,
-      bitcoin.opcodes.OP_CHECKSIGVERIFY,
-      bitcoin.opcodes.OP_ELSE,
-      bitcoin.ECPair.fromWIF('cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn', bitcoin.networks.testnet).publicKey,
-      bitcoin.opcodes.OP_CHECKSIGVERIFY,
-      bitcoin.script.number.encode(1601380409),
-      bitcoin.opcodes.OP_CHECKLOCKTIMEVERIFY,
-      bitcoin.opcodes.OP_DROP,
-      bitcoin.opcodes.OP_ENDIF
-     ];
-
-     const redeemScriptPaymentChannel =  bitcoin.script.compile(redeemScriptOPsArraySimplePaymentChannel);  
+    const lockTime = bip65.encode({ utc: utcNow() - 3600 * 3 });
+    const pubKeyA = bitcoin.ECPair.fromWIF('cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn', bitcoin.networks.testnet).publicKey;
+    const pubKeyB = bitcoin.ECPair.fromWIF('cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT', bitcoin.networks.testnet).publicKey;
+    const redeemScriptStr = buildRedeemScript(pubKeyA, pubKeyB, lockTime);
+    const redeemScriptPaymentChannel = cltvCheckSigOutput(redeemScriptStr);
+      
+  
 
     // Sign the transactions.
     // As input to this function, we will be providing:
@@ -95,7 +70,7 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: partyABitcoinAddress, 
+          fromAddress: partyABitcoinAddress,
           amount: bitcoinInputAmount 
         }
       ],
@@ -115,40 +90,6 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         feePrice: '2200' // Price for the miner to add this transaction to the block
       },
     },
-    // {
-    //         // The following parameters are from the TransactionRequest object:
-    //   dlt: DltNameOptions.ETHEREUM,
-    //   type: TransactionTypeOptions.ACCOUNTS,
-    //   subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
-    //   message: transactionMessage,
-    //         // The following parameters are from the TransactionAccountRequest object:
-    //   fromAddress: partyAEthereumAddress,
-    //   toAddress: partyBEthereumAddress,
-    //   sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
-    //   amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
-    //   extraFields: {
-    //           // The following parameters are from the TransactionEthereumRequest object:
-    //     compUnitPrice: '8000000000', // Price for each individual gas unit this transaction will consume
-    //     compLimit: '80000', // The maximum fee that this transaction will use
-    //   },
-    // },
-    // {
-    //         // The following parameters are from the TransactionRequest object:
-    //   dlt: DltNameOptions.XRP_LEDGER,
-    //   type: TransactionTypeOptions.ACCOUNTS,
-    //   subType: { name: TransactionXRPSubTypeOptions.VALUE_TRANSFER },
-    //   message: transactionMessage,
-    //         // The following parameters are from the TransactionAccountRequest object:
-    //   fromAddress: partyAxrpAddress,
-    //   toAddress: partyBxrpAddress,
-    //   sequence: xrpAccountSequence, // Sequence starts at 0 for newly created addresses
-    //   amount: '1', // Minimum allowed amount of drops is 1.      
-    //   extraFields: {
-    //                   // The following parameters are from the TransactionXRPRequest object:
-    //     feePrice: '12', // Minimum feePrice on XRP Ledger is 12 drops.
-    //     maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
-    //   },
-    // },
   ]);
 
     console.log("Signed transactions: ");
