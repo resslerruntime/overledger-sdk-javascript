@@ -29,6 +29,7 @@ const cordaNetworkConnection = '';
 
 //hyperledger fabric parameters
 const fabricSmartContract = ''; 
+const fabricMSP = '';
 const fabricAdmin = '';
 const fabricSender = MultichainSender;
 const fabricReceiver = MultichainReceiver;
@@ -52,6 +53,7 @@ const fabricNetworkConnection = '';
       provider: { network: fabricNetworkConnection },
     });
 
+   overledgerHLFConnection.dlts.hyperledger_fabric.setAccount({address: fabricAdminAddress, provider: fabricMSP});
 
 
     // (STEP 2) create Corda obligation for sender to pay receiver at a future date

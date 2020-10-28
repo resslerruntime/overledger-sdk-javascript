@@ -10,8 +10,8 @@ const HyperledgerFabricTypeOptions = require('../../packages/overledger-dlt-hype
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '';
+const bpiKey = '';
 
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
@@ -23,13 +23,13 @@ const partyAxrpPrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
 const partyAxrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 
 //hyperledger fabric parameters
-const fabricMSP = 'QuantNetworkPeerOrgMSP';
-const smartContractAddress = 'ERC20-QNT';
-const fabricAdminAddress = 'shan';
-const fabricSenderAddress = 'gilbert';
-const fabricReceiverAddress = 'peter';
-const fabricValueToSend = 1000;
-const fabricNetworkConnection = 'http://54.154.42.104:3000/fabric/testnet/v1.4x';
+const fabricMSP = '';
+const smartContractAddress = '';
+const fabricAdminAddress = '';
+const fabricSenderAddress = '';
+const fabricReceiverAddress = '';
+const fabricValueToSend = 0;
+const fabricNetworkConnection = '';
 
 // Now provide three other addresses that you will be transfering value too
 const partyBEthereumAddress = '0xB3ea4D180f31B4000F2fbCC58a085eF2ffD5a763';
