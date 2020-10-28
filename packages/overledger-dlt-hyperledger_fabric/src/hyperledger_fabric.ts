@@ -174,7 +174,7 @@ class HyperledgerFabric extends AbstractDLT {
     }
 
     // for each parameter in the smart contract inputs and outputs
-    // check there is a type and a value???
+    // check there is a type and a value
     let counter = 0;
     if ((thisHyperledgerFabricTx.subType.name === TransactionHyperledgerFabricSubTypeOptions.SMART_CONTRACT_INVOCATION) && (hyperledgerFabricSC.functionCall[0].inputParams)) {
       while (counter < hyperledgerFabricSC.functionCall[0].inputParams.length) {
