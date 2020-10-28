@@ -2,7 +2,7 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Account, Options, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
+import { Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
 import TransactionXRPSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionXRPSubTypeOptions';
 import TrustLineXRPOptions from './DLTSpecificTypes/TrustlineXRPParams';
@@ -25,7 +25,6 @@ const BASE_ESCROW_EXECUTION_FEE_PRICE = 330;
 class Ripple extends AbstractDLT {
   rippleAPI: RippleAPI;
   account: Account;
-  options: Object;
   /**
    * Name of the DLT
    */
@@ -38,19 +37,12 @@ class Ripple extends AbstractDLT {
 
   /**
    * @param {any} sdk
-   * @param {Object} options
    */
-  // @TODO: add options statement
-  constructor(sdk: any, options: Options = {}) {
-    super(sdk, options);
-
-    this.options = options;
+  constructor(sdk: any) {
+    super(sdk);
 
     this.rippleAPI = new RippleAPI();
 
-    if (options.privateKey) {
-      this.setAccount(options.privateKey);
-    }
   }
 
   /**
@@ -60,10 +52,13 @@ class Ripple extends AbstractDLT {
    */
   createAccount(): Account {
     const generated = this.rippleAPI.generateAddress();
-
+    const keypair = deriveKeypair(generated.secret);
     const account = {
       address: generated.address,
       privateKey: generated.secret,
+      publicKey: keypair.publicKey,
+      password: "",
+      provder: "",
     };
 
     return account;
@@ -72,16 +67,40 @@ class Ripple extends AbstractDLT {
   /**
    * Set an account for signing for a specific DLT
    *
-   * @param {string} privateKey The privateKey
+   * @param {Account} accountInfo The standardised account information
    */
-  setAccount(privateKey: string): void {
-    const keypair = deriveKeypair(privateKey);
-    const account = {
-      privateKey,
-      address: keypair.publicKey,
-    };
-    account.address = deriveAddress(keypair.publicKey);
-    this.account = account;
+  setAccount(accountInfo: Account): void {
+    if (typeof accountInfo.privateKey === 'undefined'){
+      throw "accountInfo.privateKey must be set";
+    }
+    let thisPrivateKey = "";
+    let thisAddress = "";
+    let thisPublicKey = "";
+    let thisProvider = "";
+    let thisPassword = "";
+    const keypair = deriveKeypair(accountInfo.privateKey);
+    const generatedAddress = deriveAddress(keypair.publicKey);
+    thisPrivateKey = accountInfo.privateKey;
+    thisPublicKey = keypair.publicKey;
+    thisAddress = generatedAddress;
+    if ((typeof accountInfo.provider !== 'undefined')){
+      thisProvider = accountInfo.provider;
+    } else {
+      thisProvider = "";
+    }
+    if ((typeof accountInfo.password !== 'undefined')){
+      thisPassword = accountInfo.password;
+    } else {
+      thisPassword = "";
+    }
+    let thisAccount = {
+      privateKey: thisPrivateKey,
+      address: thisAddress,
+      publicKey: thisPublicKey,
+      provider: thisProvider,
+      password: thisPassword,
+    }
+   this.account = thisAccount;
   }
 
   /**

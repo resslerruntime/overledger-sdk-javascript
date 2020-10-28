@@ -21,7 +21,7 @@ describe('Dlt/Bitcoin', () => {
 
   test('Can create an account', () => {
     account = overledger.dlts.bitcoin.createAccount();
-    overledger.dlts.bitcoin.setAccount(account.privateKey);
+    overledger.dlts.bitcoin.setAccount({privateKey: account.privateKey});
 
     expect(account.privateKey).toMatch(/[1-9A-HJ-NP-Za-km-z]{29}/);
     expect(account.address).toMatch(/[1-9A-HJ-NP-Za-km-z]{26,35}/);

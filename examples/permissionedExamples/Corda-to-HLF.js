@@ -292,6 +292,42 @@ const fabricNetworkConnection = '';
   }
 })();
 
+async function waitForHLFTxConfirmation(transactionHash){
+
+  try {
+    //build txQueryObject
+    txQueryObject = {
+      "userId": fabricAdmin,
+      "mspId": "QuantNetworkPeerOrgMSP",
+      "connectionProfileJSON": "connection-quant.json",
+      "channelName": "businesschannel",
+      "transactionId": transactionHash,
+    }
+    //read the block number/ledger number that this transaction was confirmed in.
+    let txParams = await overledgerHLFConnection.search.getTransaction(transactionHash,DltNameOptions.HYPERLEDGER_FABRIC,txQueryObject);
+    //as non-deterministic, lets loop a few times
+    let count = 0;
+    while ((count < 5) && (txParams.data.dlt === null)) {
+        sleep(3000);
+        txParams = await overledger.search.getTransaction(transactionHash);
+        count++;
+    }
+    if (txParams.data.dlt === null){
+      return {blockNumber: "-1"};
+    } else if (contract == false) {
+      //console.log('txParams.data.data.blockNumber: ' + txParams.data.data.blockNumber.toString());
+      return {blockNumber: txParams.data.data.blockNumber.toString()};
+    } else {
+      //console.log('txParams.data.data.blockNumber: ' + txParams.data.data.blockNumber.toString());
+      return {blockNumber: txParams.data.data.blockNumber.toString(),smartContractAddress: txParams.data.data.creates.toString()};
+    }
+  } catch (e) {
+    console.error('error:', e);
+    return {blockNumber: "-1"};
+  }
+
+}
+
 function sleep(delay) {
   var start = new Date().getTime();
   while (new Date().getTime() < start + delay);

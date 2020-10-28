@@ -21,7 +21,7 @@ describe('Dlt/Ripple', () => {
 
   test('Can create an account', () => {
     account = overledger.dlts.ripple.createAccount();
-    overledger.dlts.ripple.setAccount(account.privateKey);
+    overledger.dlts.ripple.setAccount({privateKey: account.privateKey});
 
     expect(account.privateKey).toMatch(/s[1-9A-HJ-NP-Za-km-z]{28}/);
     expect(account.address).toMatch(/r[1-9A-HJ-NP-Za-km-z]{25,34}/);

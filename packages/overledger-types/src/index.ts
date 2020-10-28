@@ -8,7 +8,6 @@ import DLTAndAddress from './DLTAndAddress';
 import DLTOptions from './DLTOptions';
 import NetworkOptions from './NetworkOptions';
 import NodeResourceRequest from './NodeResourceRequest';
-import Options from './Options';
 import ProviderOptions from './ProviderOptions';
 import SDKOptions from './SDKOptions';
 import SequenceDataRequest from './SequenceDataRequest';
@@ -44,7 +43,6 @@ export {
   DLTOptions,
   NetworkOptions,
   NodeResourceRequest,
-  Options,
   ProviderOptions,
   SDKOptions,
   SequenceDataRequest,

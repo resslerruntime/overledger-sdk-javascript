@@ -39,7 +39,7 @@ const partyBxrpAddress = 'rQDc5RRkwRwQFrgrk7iMCt5wYKB8Gmjv8q';
     const transactionMessage = 'Overledger JavaScript SDK Escrow Cancelation Test';
 
     // SET party A's corresponding private key that will be used for signing messages from his account;
-    overledger.dlts.ripple.setAccount(partyAxrpPrivateKey);
+    overledger.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
 
     // Get party A's account sequences. XRP requires transactions to be sent from an account in seqeunce order, overledger finds the next correct sequence number
     const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);

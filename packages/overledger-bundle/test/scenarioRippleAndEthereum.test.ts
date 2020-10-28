@@ -164,8 +164,8 @@ describe('Dlt/RippleAndEthereum', () => {
       rippleAccount = overledger.dlts.ripple.createAccount();
       ethereumAccount = overledger.dlts.ethereum.createAccount();
 
-      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
-      overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
+      overledger.dlts.ripple.setAccount({privateKey: rippleAccount.privateKey});
+      overledger.dlts.ethereum.setAccount({privateKey: ethereumAccount.privateKey});
 
       expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
@@ -279,8 +279,8 @@ describe('Dlt/RippleAndEthereum', () => {
       rippleAccount = overledger.dlts.ripple.createAccount();
 
 
-      overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
-      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
+      overledger.dlts.ethereum.setAccount({privateKey: ethereumAccount.privateKey});
+      overledger.dlts.ripple.setAccount({privateKey: rippleAccount.privateKey});
 
 
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);

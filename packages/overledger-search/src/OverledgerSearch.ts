@@ -22,8 +22,9 @@ class OverledgerSearch {
    *
    * @param {string} transactionHash Transaction hash
    * @param {string} dlt the dlt that the transactionHash resides on *Optional*
+   * @param {string} extraFields any extra fields required to perform this transaction search *Optional*
    */
-  getTransaction(transactionHash: string, dlt: string): AxiosPromise {
+  getTransaction(transactionHash: string, dlt: string, extraFields : object): AxiosPromise {
     if ((typeof dlt === undefined)||(typeof dlt === 'undefined')){
       try {
         return this.request.get(`/transactions/${transactionHash}`);
@@ -32,8 +33,11 @@ class OverledgerSearch {
       }
     } else {
       if (dlt === "hyperledger_fabric"){
-        //to add later
-  
+        try {
+          return this.blankRequest.post(`/ledger/queryBlockByTxId`,extraFields);
+        } catch (e) {
+          return e.response;
+        }
       } else if (dlt === "corda"){
         try {
           let fullAPI = '/transactions/' + transactionHash + '/PartyA'

@@ -126,8 +126,8 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     const transactionMessage = "Corda issueObligation Tx: " + workflowResult1.detailId + "\nCorda settleObligation Tx: " + workflowResult2.detailId;
 
     // SET partyA accounts for signing;
-    overledgerPublicDLTs.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledgerPublicDLTs.dlts.ripple.setAccount(partyAxrpPrivateKey);
+    overledgerPublicDLTs.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
+    overledgerPublicDLTs.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
     
     // Get the address sequences.
     const ethereumSequenceRequest = await overledgerPublicDLTs.dlts.ethereum.getSequence(partyAEthereumAddress);

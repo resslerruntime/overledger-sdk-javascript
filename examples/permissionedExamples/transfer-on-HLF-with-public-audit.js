@@ -10,8 +10,8 @@ const HyperledgerFabricTypeOptions = require('../../packages/overledger-dlt-hype
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '';
-const bpiKey = '';
+const mappId = 'network.quant.testnet';
+const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
 const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
@@ -23,12 +23,13 @@ const partyAxrpPrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
 const partyAxrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
 
 //hyperledger fabric parameters
-const smartContractAddress = '';
-const fabricAdminAddress = '';
-const fabricSenderAddress = '';
-const fabricReceiverAddress = '';
-const fabricValueToSend = 0;
-const fabricNetworkConnection = '';
+const fabricMSP = 'QuantNetworkPeerOrgMSP';
+const smartContractAddress = 'ERC20-QNT';
+const fabricAdminAddress = 'shan';
+const fabricSenderAddress = 'gilbert';
+const fabricReceiverAddress = 'peter';
+const fabricValueToSend = 1000;
+const fabricNetworkConnection = 'http://54.154.42.104:3000/fabric/testnet/v1.4x';
 
 // Now provide three other addresses that you will be transfering value too
 const partyBEthereumAddress = '0xB3ea4D180f31B4000F2fbCC58a085eF2ffD5a763';
@@ -51,7 +52,8 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
       provider: { network: fabricNetworkConnection },
     });
 
-
+   overledgerPermissionedDLTs.dlts.hyperledger_fabric.setAccount({address: fabricAdminAddress, provider: fabricMSP});
+ 
 
     // (STEP 2) prepare for HLF asset transfer by querying current state (asset balances)
 
@@ -79,7 +81,6 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
           // The following parameters are from the SmartContractHyperledgerFabric object:
           connectionProfileJSON: 'connection-quant.json', // the name of the connection profile to access the hyperledger fabric node
           channelName: 'businesschannel', // the hyperledger fabric channel where the related smart contract is residing in
-          userId: fabricAdminAddress
       }
   };
 
@@ -107,7 +108,6 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         // The following parameters are from the SmartContractHyperledgerFabric object:
         connectionProfileJSON: 'connection-quant.json', // the name of the connection profile to access the hyperledger fabric node
         channelName: 'businesschannel', // the hyperledger fabric channel where the related smart contract is residing in
-        userId: fabricAdminAddress
     }
     };
 
@@ -217,8 +217,8 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     const transactionMessage = "OVL HLF Tx: " + txResult.transactionId;
 
     // SET partyA accounts for signing;
-    overledgerPublicDLTs.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledgerPublicDLTs.dlts.ripple.setAccount(partyAxrpPrivateKey);
+    overledgerPublicDLTs.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
+    overledgerPublicDLTs.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
     
     // Get the address sequences.
     const ethereumSequenceRequest = await overledgerPublicDLTs.dlts.ethereum.getSequence(partyAEthereumAddress);

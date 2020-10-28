@@ -5,7 +5,6 @@ import { SmartContract } from '@quantnetwork/overledger-types';
  * @typedef {Object} SmartContractHyperledgerFabric
  * @property {boolean} connectionProfileJSON - the connection profile to access the node
  * @property {boolean} channelName - the channel that this smart contract is on
- * @property {boolean} userId - the optional userID of the admin
  */
 
 /**
@@ -15,7 +14,6 @@ interface SmartContractHyperledgerFabric extends SmartContract {
   extraFields: {
     connectionProfileJSON: string,
     channelName: string,
-    userId?: string,
   };
 }
 

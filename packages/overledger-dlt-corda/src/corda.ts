@@ -1,6 +1,6 @@
 
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Options, Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
+import { Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import WorkflowCorda from './DLTSpecificTypes/WorkflowCorda';
 import CordaParam from './DLTSpecificTypes/CordaParam';
 /**
@@ -8,7 +8,6 @@ import CordaParam from './DLTSpecificTypes/CordaParam';
 */
 class Corda extends AbstractDLT {
   account: Account;
-  options: Object;
   /**
    * Name of the DLT
    */
@@ -21,12 +20,9 @@ class Corda extends AbstractDLT {
 
   /**
    * @param {any} sdk - the sdk instance
-   * @param {Object} options - any additional options to instantiate this dlt
    */
-  constructor(sdk: any, options: Options = {}) {
-    super(sdk, options);
-
-    this.options = options;
+  constructor(sdk: any) {
+    super(sdk);
   }
 
   /**
@@ -43,10 +39,47 @@ class Corda extends AbstractDLT {
   /**
    * Set an account for this specific DLT
    *
-   * @param {string} userId The id of the user
+   * @param {Account} accountInfo The standardised account information
    */
-  setAccount(userId: string): void {
-    this.account.privateKey = userId;
+  setAccount(accountInfo: Account): void {
+    let thisPrivateKey = "";
+    let thisAddress = "";
+    let thisPublicKey = "";
+    let thisProvider = "";
+    let thisPassword = "";
+    if (typeof accountInfo.privateKey !== 'undefined'){
+      thisPrivateKey = accountInfo.privateKey;
+    } else {
+      thisPrivateKey = "";
+    }
+    if (typeof accountInfo.address === 'undefined'){
+      thisAddress = accountInfo.address;
+    } else {
+      thisAddress = "";
+    }
+    if (typeof accountInfo.publicKey !== 'undefined'){
+      thisPublicKey = accountInfo.publicKey;
+    } else {
+      thisPublicKey = "";
+    }
+    if (typeof accountInfo.provider === 'undefined'){
+      thisProvider = accountInfo.provider;
+    } else {
+      thisProvider = "";
+    }
+    if (typeof accountInfo.password !== 'undefined'){
+      thisPassword = accountInfo.password;
+    } else {
+      thisPassword = "";
+    }
+    let thisAccount = {
+      privateKey: thisPrivateKey,
+      address: thisAddress,
+      publicKey: thisPublicKey,
+      provider: thisProvider,
+      password: thisPassword,
+    }
+   this.account = thisAccount;
   }
 
 /**

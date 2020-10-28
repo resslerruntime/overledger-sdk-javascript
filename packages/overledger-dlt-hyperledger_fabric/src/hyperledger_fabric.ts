@@ -1,6 +1,6 @@
 
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Options, Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
+import {Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
 import TransactionHyperledgerFabricRequest from './DLTSpecificTypes/TransactionHyperledgerFabricRequest';
 import SCHyperledgerFabricParam from './DLTSpecificTypes/SCHyperledgerFabricParam';
 import SmartContractHyperledgerFabric from './DLTSpecificTypes/SmartContractHyperledgerFabric';
@@ -14,7 +14,6 @@ import TransactionHyperledgerFabricSubTypeOptions from './DLTSpecificTypes/assoc
 */
 class HyperledgerFabric extends AbstractDLT {
   account: Account;
-  options: Object;
   /**
    * Name of the DLT
    */
@@ -27,12 +26,10 @@ class HyperledgerFabric extends AbstractDLT {
 
   /**
    * @param {any} sdk - the sdk instance
-   * @param {Object} options - any additional options to instantiate this dlt
    */
-  constructor(sdk: any, options: Options = {}) {
-    super(sdk, options);
+  constructor(sdk: any) {
+    super(sdk);
 
-    this.options = options;
   }
 
   /**
@@ -49,10 +46,48 @@ class HyperledgerFabric extends AbstractDLT {
   /**
    * Set an account for this specific DLT
    *
-   * @param {string} userId The id of the user
+   * @param {Account} accountInfo The standardised account information
    */
-  setAccount(userId: string): void {
-    this.account.privateKey = userId;
+  setAccount(accountInfo: Account): void {
+    let thisPrivateKey = "";
+    let thisAddress = "";
+    let thisPublicKey = "";
+    let thisProvider = "";
+    let thisPassword = "";
+    if (typeof accountInfo.privateKey !== 'undefined'){
+      thisPrivateKey = accountInfo.privateKey;
+    } else {
+      thisPrivateKey = "";
+    }
+    if (typeof accountInfo.address === 'undefined'){
+      throw "accountInfo.address must be set";
+    } else {
+      thisAddress = accountInfo.address;
+    }
+    if (typeof accountInfo.publicKey !== 'undefined'){
+      thisPublicKey = accountInfo.publicKey;
+    } else {
+      thisPublicKey = "";
+    }
+    if (typeof accountInfo.provider === 'undefined'){
+      throw "accountInfo.provider must be set";
+    } else {
+      thisProvider = accountInfo.provider;
+    }
+    if (typeof accountInfo.password !== 'undefined'){
+      thisPassword = accountInfo.password;
+    } else {
+      thisPassword = "";
+    }
+    let thisAccount = {
+      privateKey: thisPrivateKey,
+      address: thisAddress,
+      publicKey: thisPublicKey,
+      provider: thisProvider,
+      password: thisPassword,
+    }
+   this.account = thisAccount;
+
   }
 
   /**
@@ -402,9 +437,12 @@ class HyperledgerFabric extends AbstractDLT {
    */
   _buildSmartContractQuery(dltAddress: string, contractQueryDetails: SmartContractHyperledgerFabric): Object {
     try {
+      if (dltAddress !== this.account.address){
+        throw "The provided dltAddress must equal the account address";
+      }
       const theseHyperledgerFabricInputParams = <SCHyperledgerFabricParam[]>contractQueryDetails.functionCall[0].inputParams;
       const data = {
-        userId: dltAddress,
+        userId: this.account.address,
         chaincodeId: contractQueryDetails.id,
         connectionProfileJSON: contractQueryDetails.extraFields.connectionProfileJSON,
         channelName: contractQueryDetails.extraFields.channelName,

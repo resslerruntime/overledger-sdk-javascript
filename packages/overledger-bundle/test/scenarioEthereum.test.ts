@@ -21,7 +21,7 @@ describe('Dlt/Ethereum', () => {
 
   test('Can create an account', () => {
     account = overledger.dlts.ethereum.createAccount();
-    overledger.dlts.ethereum.setAccount(account.privateKey);
+    overledger.dlts.ethereum.setAccount({privateKey: account.privateKey});
 
     expect(account.privateKey.length).toBe(66);
     expect(account.address.length).toBe(42);
