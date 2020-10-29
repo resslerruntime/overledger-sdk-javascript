@@ -9,33 +9,33 @@ const HyperledgerFabricTypeOptions = require('../../packages/overledger-dlt-hype
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.devnet';
-const bpiKey = 'quantbpikey';
+const mappId = '';
+const bpiKey = '';
 
 //cross chain parameters
-const MultichainSender = "PartyA";
-const MultichainReceiver = "PartyC";
-const MultichainAmount = 1000;
+const MultichainSender = "";
+const MultichainReceiver = "";
+const MultichainAmount = 0;
 
 //corda parameters
-const cordapp = "obligation"; 
-const initiateFlow = "issueObligation";
-const completionFlow = "settleObligation";
+const cordapp = ""; 
+const initiateFlow = "";
+const completionFlow = "";
 const cordaSender = MultichainSender;
 const cordaReceiver = MultichainReceiver;
 const CordaAmount = MultichainAmount.toString();
-const currency = "USD";
-const cordaNetworkConnection = "http://api.devnet.overledger.io/v1/corda";
+const currency = "";
+const cordaNetworkConnection = "";
 
 
 //hyperledger fabric parameters
-const fabricMSP = 'QuantNetworkPeerOrgMSP';
-const fabricSmartContract = 'ERC20-QNT';
-const fabricAdmin = 'shan';
+const fabricMSP = '';
+const fabricSmartContract = '';
+const fabricAdmin = '';
 const fabricSender = MultichainSender;
 const fabricReceiver = MultichainReceiver;
 const fabricValueToSend = MultichainAmount;
-const fabricNetworkConnection = 'http://54.154.42.104:3000/fabric/testnet/v1.4x';
+const fabricNetworkConnection = '';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -324,42 +324,6 @@ const fabricNetworkConnection = 'http://54.154.42.104:3000/fabric/testnet/v1.
     console.error('error:', e);
   }
 })();
-
-async function waitForHLFTxConfirmation(transactionHash){
-
-  try {
-    //build txQueryObject
-    txQueryObject = {
-      "userId": fabricAdmin,
-      "mspId": "QuantNetworkPeerOrgMSP",
-      "connectionProfileJSON": "connection-quant.json",
-      "channelName": "businesschannel",
-      "transactionId": transactionHash,
-    }
-    //read the block number/ledger number that this transaction was confirmed in.
-    let txParams = await overledgerHLFConnection.search.getTransaction(transactionHash,DltNameOptions.HYPERLEDGER_FABRIC,txQueryObject);
-    //as non-deterministic, lets loop a few times
-    let count = 0;
-    while ((count < 5) && (txParams.data.dlt === null)) {
-        sleep(3000);
-        txParams = await overledger.search.getTransaction(transactionHash);
-        count++;
-    }
-    if (txParams.data.dlt === null){
-      return {blockNumber: "-1"};
-    } else if (contract == false) {
-      //console.log('txParams.data.data.blockNumber: ' + txParams.data.data.blockNumber.toString());
-      return {blockNumber: txParams.data.data.blockNumber.toString()};
-    } else {
-      //console.log('txParams.data.data.blockNumber: ' + txParams.data.data.blockNumber.toString());
-      return {blockNumber: txParams.data.data.blockNumber.toString(),smartContractAddress: txParams.data.data.creates.toString()};
-    }
-  } catch (e) {
-    console.error('error:', e);
-    return {blockNumber: "-1"};
-  }
-
-}
 
 function sleep(delay) {
   var start = new Date().getTime();
