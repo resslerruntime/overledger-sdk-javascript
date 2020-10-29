@@ -32,6 +32,9 @@ class OverledgerSearch {
         return e.response;
       }
     } else {
+      if (typeof extraFields === 'undefined'){
+        throw "For this DLT, extraFields need to be provided, generated from the DLT package's getTransactionQueryInfo function "
+      }
       if (dlt === "hyperledger_fabric"){
         try {
           return this.blankRequest.post(`/ledger/queryBlockByTxId`,extraFields);
@@ -40,8 +43,9 @@ class OverledgerSearch {
         }
       } else if (dlt === "corda"){
         try {
-          let fullAPI = '/transactions/' + transactionHash + '/PartyA'
-          return this.blankRequest.get(fullAPI);
+          let stringConversion = <unknown>extraFields;
+          let apiString = <string>stringConversion;
+          return this.blankRequest.get(apiString.toString());
         } catch (e) {
           return e.response;
         }  

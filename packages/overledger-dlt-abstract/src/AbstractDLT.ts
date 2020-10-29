@@ -79,6 +79,7 @@ abstract class AbstractDLT {
     return this._sign(thisTransaction);
   }
 
+
   /**
    * Takes the given transaction and validates it
    * @param thisTransaction - the transaction to check the formatting of

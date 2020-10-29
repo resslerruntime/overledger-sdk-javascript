@@ -9,32 +9,33 @@ const HyperledgerFabricTypeOptions = require('../../packages/overledger-dlt-hype
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '';
-const bpiKey = '';
+const mappId = 'network.quant.devnet';
+const bpiKey = 'quantbpikey';
 
 //cross chain parameters
-const MultichainSender = '';
-const MultichainReceiver = '';
-const MultichainAmount = 0;
+const MultichainSender = "PartyA";
+const MultichainReceiver = "PartyC";
+const MultichainAmount = 1000;
 
 //corda parameters
-const cordapp = ''; 
-const initiateFlow = '';
-const completionFlow = '';
-const cordaSender = MultichainSender;
-const cordaReceiver = MultichainReceiver;
-const CordaAmount = MultichainAmount.toString();
-const currency = '';
-const cordaNetworkConnection = '';
+const cordapp = "obligation"; 
+const initiateFlow = "issueObligation";
+const completionFlow = "settleObligation";
+const cordaSender = MultichainSender;
+const cordaReceiver = MultichainReceiver;
+const CordaAmount = MultichainAmount.toString();
+const currency = "USD";
+const cordaNetworkConnection = "http://api.devnet.overledger.io/v1/corda";
+
 
 //hyperledger fabric parameters
-const fabricSmartContract = ''; 
-const fabricMSP = '';
-const fabricAdmin = '';
+const fabricMSP = 'QuantNetworkPeerOrgMSP';
+const fabricSmartContract = 'ERC20-QNT';
+const fabricAdmin = 'shan';
 const fabricSender = MultichainSender;
 const fabricReceiver = MultichainReceiver;
 const fabricValueToSend = MultichainAmount;
-const fabricNetworkConnection = '';
+const fabricNetworkConnection = 'http://54.154.42.104:3000/fabric/testnet/v1.4x';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -53,7 +54,8 @@ const fabricNetworkConnection = '';
       provider: { network: fabricNetworkConnection },
     });
 
-   overledgerHLFConnection.dlts.hyperledger_fabric.setAccount({address: fabricAdminAddress, provider: fabricMSP});
+   overledgerHLFConnection.dlts.hyperledger_fabric.setAccount({address: fabricAdmin, provider: fabricMSP});
+   overledgerCordaConnection.dlts.corda.setAccount({provider: MultichainSender});
 
 
     // (STEP 2) create Corda obligation for sender to pay receiver at a future date
@@ -86,10 +88,24 @@ const fabricNetworkConnection = '';
     if (workflowResult1.status.status !== "confirmed"){
       throw "error adding invoking Corda workflow: " + JSON.stringify(workflowResult1);
     }
+    let tx1Hash = workflowResult1.detailId;
     console.log("");
-    console.log('Your ' + DltNameOptions.CORDA + ' issueObligation workflow invocation transaction hash is:\n' + workflowResult1.detailId);
-    console.log("");
-    sleep(5000);
+    console.log('Your ' + DltNameOptions.CORDA + ' issueObligation workflow invocation transaction hash is:\n' + tx1Hash + '\n');
+    sleep(7500);
+
+    // (STEP 2b): show Corda current state
+      //query transaction
+      let cordaTxQueryInfo = overledgerCordaConnection.dlts.corda.getTransactionQueryInfo(tx1Hash);
+      let cordaTxQuery = await overledgerCordaConnection.search.getTransaction(tx1Hash, DltNameOptions.CORDA, cordaTxQueryInfo);
+      if (typeof cordaTxQuery === 'undefined'){
+          throw 'cordaTxQuery undefined';
+      }
+      //display selected new unspent output information
+      console.log("Newly created tx's output:");
+      console.log("Borrower: " + cordaTxQuery.data.wire.outputs[0].data.borrower);
+      console.log("Lender: " + cordaTxQuery.data.wire.outputs[0].data.lender);
+      console.log("Amount: " + cordaTxQuery.data.wire.outputs[0].data.amount);
+    sleep(7500);
 
     // (STEP 3) pay via HLF
 
@@ -119,7 +135,6 @@ const fabricNetworkConnection = '';
           // The following parameters are from the SmartContractHyperledgerFabric object:
           connectionProfileJSON: 'connection-quant.json', // the name of the connection profile to access the hyperledger fabric node
           channelName: 'businesschannel', // the hyperledger fabric channel where the related smart contract is residing in
-          userId: fabricAdmin
       }
       };
 
@@ -147,7 +162,6 @@ const fabricNetworkConnection = '';
       // The following parameters are from the SmartContractHyperledgerFabric object:
       connectionProfileJSON: 'connection-quant.json', // the name of the connection profile to access the hyperledger fabric node
       channelName: 'businesschannel', // the hyperledger fabric channel where the related smart contract is residing in
-      userId: fabricAdmin
     }
     };
 
@@ -160,16 +174,16 @@ const fabricNetworkConnection = '';
     throw new Error(`Hyperledger Fabric smart contract query 2 build unsuccessful: ` + hyperledgerFabricSmartContractReceiverBalanceQuery.response);      
     }
     //get the current balances:
-    console.log("Current HLF balances:");
+    console.log("\n\nCurrent HLF balances:");
     //sender
     const senderBalanceObject = await overledgerHLFConnection.search.smartContractQuery(DltNameOptions.HYPERLEDGER_FABRIC, hyperledgerFabricSmartContractSenderBalanceQuery.response);
     const senderBalance1 = senderBalanceObject.data.payload.response.balance;
-    console.log(`\nBalance of: ` + fabricSender + ` = `+ senderBalance1.toString());
+    console.log(`Balance of: ` + fabricSender + ` = `+ senderBalance1.toString());
     //receiver    
     const receiverBalanceObject = await overledgerHLFConnection.search.smartContractQuery(DltNameOptions.HYPERLEDGER_FABRIC, hyperledgerFabricSmartContractReceiverBalanceQuery.response);
     const receiverBalance1 = receiverBalanceObject.data.payload.response.balance;
-    console.log(`\nBalance of: ` + fabricReceiver + ` = `+ receiverBalance1.toString());
-    sleep(5000);
+    console.log(`Balance of: ` + fabricReceiver + ` = `+ receiverBalance1.toString());
+    sleep(7500);
 
     // (STEP 3b) Perform asset transfer by adding a tx onto HLF
       //build hlf asset transfer tx as standard object
@@ -233,27 +247,27 @@ const fabricNetworkConnection = '';
       console.log("");
       console.log('Your ' + DltNameOptions.HYPERLEDGER_FABRIC + ' smart contract invocation transaction hash is: ' + txResult.transactionId);
       console.log("");
-      sleep(5000);
+      sleep(7500);
   
   
       // (STEP 3c) check HLF asset transfer occurred correctly by querying current state (asset balances)
-      console.log("New HLF balances:");      
+      console.log("\nNew HLF balances:");      
       //sender
       const senderBalance2Object = await overledgerHLFConnection.search.smartContractQuery(DltNameOptions.HYPERLEDGER_FABRIC, hyperledgerFabricSmartContractSenderBalanceQuery.response);
       const senderBalance2 = senderBalance2Object.data.payload.response.balance;
-      console.log(`\nBalance of: ` + fabricSender + ` = `+ senderBalance2.toString());
+      console.log(`Balance of: ` + fabricSender + ` = `+ senderBalance2.toString());
       //receiver    
       const receiverBalance2Object = await overledgerHLFConnection.search.smartContractQuery(DltNameOptions.HYPERLEDGER_FABRIC, hyperledgerFabricSmartContractReceiverBalanceQuery.response);
       const receiverBalance2 = receiverBalance2Object.data.payload.response.balance;
-      console.log(`\nBalance of: ` + fabricReceiver + ` = `+ receiverBalance2.toString());
+      console.log(`Balance of: ` + fabricReceiver + ` = `+ receiverBalance2.toString());
       if (!(senderBalance2 === senderBalance1 - fabricValueToSend)){
         throw "Balance not correctly changed for the sender";
       } else if (!(receiverBalance2 === receiverBalance1 + fabricValueToSend)) {
         throw "Balance not correctly changed for the receiver";   
       } else {
-        console.log(`\nBalance updated correctly`);
+        console.log(`\nBalances updated correctly!`);
       }
-      sleep(5000);
+      sleep(7500);
       
 
     // (STEP 4) settle Corda obligation side
@@ -285,9 +299,26 @@ const fabricNetworkConnection = '';
       throw "error adding invoking Corda workflow: " + JSON.stringify(workflowResult2);
     }
     console.log("");
-    console.log('Your ' + DltNameOptions.CORDA + ' settleObligation workflow invocation transaction hash is:\n ' + workflowResult2.detailId);
+    console.log('\nYour ' + DltNameOptions.CORDA + ' settleObligation workflow invocation transaction hash is:\n ' + workflowResult2.detailId);
     console.log("");
-    sleep(5000);
+
+    // (STEP 4b): show Corda current state
+      //query transaction
+      let cordaTx2QueryInfo = overledgerCordaConnection.dlts.corda.getTransactionQueryInfo(workflowResult2.detailId);
+      let cordaTx2Query = await overledgerCordaConnection.search.getTransaction(workflowResult2.detailId, DltNameOptions.CORDA, cordaTx2QueryInfo);
+      if (typeof cordaTx2Query === 'undefined'){
+          throw 'cordaTx2Query undefined';
+      }
+      //display selected new spent input information
+      //show that the original unspent obligation is now spent as an input in the new transaction
+      console.log("Newly created tx's input:");
+      let tx2InputHash = cordaTx2Query.data.wire.inputs[0].txhash
+      console.log("Tx input hash: " + tx2InputHash);
+      if (tx2InputHash !== tx1Hash){
+        throw "Tx1Hash and tx2InputHash do NOT match";
+      } else {
+        console.log("\nTx1Hash and tx2InputHash match, therefore obligation is spent!\n");
+      }
     
   } catch (e) {
     console.error('error:', e);

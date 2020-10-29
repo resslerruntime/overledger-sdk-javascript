@@ -428,6 +428,27 @@ class HyperledgerFabric extends AbstractDLT {
   }
 
   /**
+   * Get the information required to query for a particular transaction hash
+   */
+  getTransactionQueryInfo(transactionHash: string, extraFields : object): object {
+    let thisExtraFields = <ConnectionInfo>extraFields;
+    if (typeof thisExtraFields.connectionProfileJSON === 'undefined'){
+      throw "ExtraFields must include the parameter connectionProfileJSON";
+    } else if (typeof thisExtraFields.channelName === 'undefined'){
+      throw "ExtraFields must include the parameter channelName";
+    }
+    let toReturn = {
+      userId: this.account.address,
+      mspId: this.account.provider,
+      connectionProfileJSON: thisExtraFields.connectionProfileJSON,
+      channelName: thisExtraFields.channelName,
+      transactionId: transactionHash,
+    }
+    return toReturn;
+
+  }
+
+  /**
    * Allows a user to build a smart contract query for the Hyperledger Fabric distributed ledger
    * @param {string} dltAddress - the user's Hyperledger Fabric address
    * @param {SmartContractHyperledgerFabric} contractQueryDetails - the definition of the smart contract function the user wants to interact with,
@@ -484,6 +505,11 @@ class HyperledgerFabric extends AbstractDLT {
 
 interface QueryOutput {
   type: string;
+}
+
+interface ConnectionInfo {
+  connectionProfileJSON: string;
+  channelName: string;
 }
 
 export type Transaction = {

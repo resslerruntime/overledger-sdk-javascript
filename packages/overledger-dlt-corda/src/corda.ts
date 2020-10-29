@@ -52,7 +52,7 @@ class Corda extends AbstractDLT {
     } else {
       thisPrivateKey = "";
     }
-    if (typeof accountInfo.address === 'undefined'){
+    if (typeof accountInfo.address !== 'undefined'){
       thisAddress = accountInfo.address;
     } else {
       thisAddress = "";
@@ -62,7 +62,7 @@ class Corda extends AbstractDLT {
     } else {
       thisPublicKey = "";
     }
-    if (typeof accountInfo.provider === 'undefined'){
+    if (typeof accountInfo.provider !== 'undefined'){
       thisProvider = accountInfo.provider;
     } else {
       thisProvider = "";
@@ -161,6 +161,15 @@ class Corda extends AbstractDLT {
   _transactionValidation(): ValidationCheck {
 
     throw 'Corda transactions are built via the invokeWorkflow, which triggers a Corda node to perform a process to build a correctly formatted transaction';
+
+  }
+
+    /**
+   * Get the information required to query for a particular transaction hash
+   */
+  getTransactionQueryInfo(transactionHash: string): string {
+
+    return '/transactions/' + transactionHash + '/' + this.account.provider;
 
   }
 
