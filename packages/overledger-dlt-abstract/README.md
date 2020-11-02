@@ -32,11 +32,11 @@ yarn add @quantnetwork/overledger-dlt-abstract
     * _inner_
         * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-            * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
+            * [new AbstractDLT(sdk)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
             * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+            * [.setAccount(AccountInfo)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
 
             * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
@@ -66,11 +66,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-    * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
+    * [new AbstractDLT(sdk)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
     * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+    * [.setAccount(AccountInfo)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
 
     * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
@@ -91,12 +91,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 <a name="new_module_overledger-dlt-abstract.AbstractDLT_new"></a>
 
-#### new AbstractDLT(sdk, options)
+#### new AbstractDLT(sdk)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>any</code> | 
-| options | <code>Object</code> | 
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
 
@@ -107,11 +106,11 @@ Abstract method to be implemented in each DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+setAccount"></a>
 
-#### *abstractDLT*.setAccount(privateKey)
+#### *abstractDLT*.setAccount(AccountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| AccountInfo | <code>Account</code> | The standardised Account Object |
 
 Set an account for signing transactions for a specific DLT
 

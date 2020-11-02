@@ -34,7 +34,7 @@ yarn add @quantnetwork/overledger-search
 
             * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-            * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
+            * [.getTransaction(transactionHash, dlt, extraFields)](#module_overledger-search.OverledgerSearch+getTransaction)
 
             * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
@@ -60,7 +60,7 @@ Search support package.
 
     * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-    * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
+    * [.getTransaction(transactionHash, dlt, extraFields)](#module_overledger-search.OverledgerSearch+getTransaction)
 
     * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
@@ -83,11 +83,13 @@ Search support package.
 
 <a name="module_overledger-search.OverledgerSearch+getTransaction"></a>
 
-#### *overledgerSearch*.getTransaction(transactionHash)
+#### *overledgerSearch*.getTransaction(transactionHash, dlt, extraFields)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | transactionHash | <code>string</code> | Transaction hash |
+| dlt | <code>string</code> | the dlt that the transactionHash resides on *Optional* |
+| extraFields | <code>string</code> | any extra fields required to perform this transaction search *Optional* |
 
 Get transaction by transaction hash
 

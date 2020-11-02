@@ -23,7 +23,7 @@ yarn add @quantnetwork/overledger-dlt-ethereum
 ## Modules
 
 <dl>
-<dt><a href="#module_overledger-dlt-ethereum">overledger-dlt-ethereum</a></dt>
+<dt><a href="#module_overledger-dlt-hyperledger_fabric">overledger-dlt-hyperledger_fabric</a></dt>
 <dd></dd>
 </dl>
 
@@ -35,231 +35,213 @@ yarn add @quantnetwork/overledger-dlt-ethereum
 </dd>
 </dl>
 
-<a name="module_overledger-dlt-ethereum"></a>
+<a name="module_overledger-dlt-hyperledger_fabric"></a>
 
-## overledger-dlt-ethereum
+## overledger-dlt-hyperledger_fabric
 
-* [overledger-dlt-ethereum](#module_overledger-dlt-ethereum)
+* [overledger-dlt-hyperledger_fabric](#module_overledger-dlt-hyperledger_fabric)
 
     * _static_
-        * [.EthereumBytesOptions](#module_overledger-dlt-ethereum.EthereumBytesOptions)
+        * [.HyperledgerFabricTypeOptions](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabricTypeOptions)
 
-        * [.EthereumTypeOptions](#module_overledger-dlt-ethereum.EthereumTypeOptions)
-
-        * [.EthereumUintIntOptions](#module_overledger-dlt-ethereum.EthereumUintIntOptions)
-
-        * [.default](#module_overledger-dlt-ethereum.default)
+        * [.default](#module_overledger-dlt-hyperledger_fabric.default)
 
     * _inner_
-        * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
+        * [~HyperledgerFabric](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric)
 
-            * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+            * [new HyperledgerFabric(sdk)](#new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new)
 
-            * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
+            * [.name](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name)
 
-            * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
+            * [.symbol](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol)
 
-            * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
+            * [.createAccount()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount)
 
-            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
+            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction)
 
-            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
+            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation)
 
-            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
+            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation)
 
-            * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
+            * [.computeTransactionDataForFunctionCall(invocationType, paramsList)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall)
 
-            * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
+            * [._sign(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign)
 
-            * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+            * [.getTransactionQueryInfo()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo)
 
-            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
+            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery)
 
-            * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
+            * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList)
 
-            * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
-
-
-<a name="module_overledger-dlt-ethereum.EthereumBytesOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumBytesOptions
-<a name="module_overledger-dlt-ethereum.EthereumTypeOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumTypeOptions
-<a name="module_overledger-dlt-ethereum.EthereumUintIntOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumUintIntOptions
-<a name="module_overledger-dlt-ethereum.default"></a>
-
-### *overledger-dlt-ethereum*.default
-Development package for Ethereum.
-
-<a name="module_overledger-dlt-ethereum.Ethereum"></a>
-
-### *overledger-dlt-ethereum*~Ethereum
-
-* [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
-
-    * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
-
-    * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
-
-    * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
-
-    * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
-
-    * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
-
-    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
-
-    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
-
-    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
-
-    * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
-
-    * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
-
-    * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
-
-    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
-
-    * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
-
-    * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
+            * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList)
 
 
-<a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabricTypeOptions"></a>
 
-#### new Ethereum(sdk, options)
+### *overledger-dlt-hyperledger_fabric*.HyperledgerFabricTypeOptions
+<a name="module_overledger-dlt-hyperledger_fabric.default"></a>
+
+### *overledger-dlt-hyperledger_fabric*.default
+Development package for HyperledgerFabric.
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric"></a>
+
+### *overledger-dlt-hyperledger_fabric*~HyperledgerFabric
+
+* [~HyperledgerFabric](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric)
+
+    * [new HyperledgerFabric(sdk)](#new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new)
+
+    * [.name](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name)
+
+    * [.symbol](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol)
+
+    * [.createAccount()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount)
+
+    * [.setAccount(accountInfo)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount)
+
+    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction)
+
+    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation)
+
+    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation)
+
+    * [.computeTransactionDataForFunctionCall(invocationType, paramsList)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign)
+
+    * [.getTransactionQueryInfo()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo)
+
+    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery)
+
+    * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList)
+
+    * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList)
+
+
+<a name="new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new"></a>
+
+#### new HyperledgerFabric(sdk)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | sdk | <code>any</code> | the sdk instance |
-| options | <code>Object</code> | any additional options to instantiate this dlt |
 
-<a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name"></a>
 
-#### *ethereum*.name
+#### *hyperledgerFabric*.name
 Name of the DLT
 
-<a name="module_overledger-dlt-ethereum.Ethereum+symbol"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol"></a>
 
-#### *ethereum*.symbol
+#### *hyperledgerFabric*.symbol
 Symbol of the DLT
 
-<a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount"></a>
 
-#### *ethereum*.createAccount()
-Create an Ethereum account
+#### *hyperledgerFabric*.createAccount()
+Create an Hyperledger Fabric account
 
-**Returns**: <code>Account</code> - the new Ethereum account  
-<a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
+**Returns**: <code>Account</code> - the new Hyperledger Fabric account  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount"></a>
 
-#### *ethereum*.setAccount(privateKey)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-
-Set an account for signing transactions for a specific DLT
-
-<a name="module_overledger-dlt-ethereum.Ethereum+buildTransaction"></a>
-
-#### *ethereum*.buildTransaction(thisTransaction)
+#### *hyperledgerFabric*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Ethereum distributed ledger |
+| accountInfo | <code>Account</code> | The standardised account information |
 
-Takes the Overledger definition of a transaction and converts it into a specific Ethereum transaction
+Set an account for this specific DLT
 
-**Returns**: <code>Transaction</code> - the Ethereum transaction  
-<a name="module_overledger-dlt-ethereum.Ethereum+_transactionValidation"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction"></a>
 
-#### *ethereum*._transactionValidation(thisTransaction)
+#### *hyperledgerFabric*.buildTransaction(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionHyperledgerFabricRequest</code> | details on the information to include in this transaction for the Hyperledger Fabric distributed ledger |
+
+Takes the Overledger definition of a transaction and converts it into a specific Hyperledger Fabric transaction
+
+**Returns**: <code>Transaction</code> - the Hyperledger Fabric transaction  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation"></a>
+
+#### *hyperledgerFabric*._transactionValidation(thisTransaction)
 
 | Param | Description |
 | --- | --- |
 | thisTransaction | The transaction request |
 
-validates an OVL transactionRequest according to Ethereum specific rules
+validates an OVL transactionRequest according to Hyperledger Fabric specific rules
 
-<a name="module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation"></a>
 
-#### *ethereum*._smartContractQueryValidation(contractQueryDetails)
+#### *hyperledgerFabric*._smartContractQueryValidation(contractQueryDetails)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | contractQueryDetails | <code>SmartContract</code> | The transaction request |
 
-validates an OVL smart contract query according to Ethereum specific rules
+validates an OVL smart contract query according to Hyperledger Fabric specific rules
 
-<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall"></a>
 
-#### *ethereum*.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| smartContractCode | <code>string</code> | the bytecode of the smart contract (without the byte code information on the constructor variables) |
-| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this constructor takes as input |
-
-Convert Overledger object description of a smart contract constructor and parameters into Ethereum versions
-
-**Returns**: <code>string</code> - the bytecode of the smart contract and the parameters  
-<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall"></a>
-
-#### *ethereum*.computeTransactionDataForFunctionCall(functionName, paramsList)
+#### *hyperledgerFabric*.computeTransactionDataForFunctionCall(invocationType, paramsList)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| functionName | <code>string</code> | the name of the smart contract function to call |
-| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this function takes as input |
+| invocationType | <code>string</code> | the type of smart contract function call |
+| paramsList | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | the list of parameters that this function takes as input |
 
-Convert Overledger object description of a smart contract function and parameters into Ethereum versions
+Convert Overledger object description of a smart contract function and parameters into Hyperledger Fabric versions
 
 **Returns**: <code>string</code> - the bytecode of this function call  
-<a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign"></a>
 
-#### *ethereum*._sign(thisTransaction)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an ethereum transaction |
-
-Takes in an overledger definition of a transaction for ethereum, converts it into a form that the Ethereum distributed ledger will understand, and then signs the transaction
-
-<a name="module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery"></a>
-
-#### *ethereum*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+#### *hyperledgerFabric*._sign(thisTransaction)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| dltAddress | <code>string</code> | the user's Ethereum address |
-| contractQueryDetails | <code>SmartContractEthereum</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of a Hyperledger Fabric transaction |
 
-Allows a user to build a smart contract query for the Ethereum distributed ledger
+Takes in an overledger definition of a transaction for Hyperledger Fabric, converts it into a form that the Hyperledger Fabric distributed ledger will understand, and then signs the transaction
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo"></a>
+
+#### *hyperledgerFabric*.getTransactionQueryInfo()
+Get the information required to query for a particular transaction hash
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery"></a>
+
+#### *hyperledgerFabric*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's Hyperledger Fabric address |
+| contractQueryDetails | <code>SmartContractHyperledgerFabric</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+
+Allows a user to build a smart contract query for the Hyperledger Fabric distributed ledger
 
 **Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
-<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList"></a>
 
-#### *ethereum*.computeSCQueryInputValuesList(inputFunctionParams)
+#### *hyperledgerFabric*.computeSCQueryInputValuesList(inputFunctionParams)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| inputFunctionParams | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of input parameters |
+| inputFunctionParams | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | the list of input parameters |
 
 computes the input parameters into the smart contract function query
 
-<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList"></a>
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList"></a>
 
-#### *ethereum*.computeSCQueryOutputTypesList(outputFunctionTypes)
+#### *hyperledgerFabric*.computeSCQueryOutputTypesList(outputFunctionTypes)
 
 | Param | Type |
 | --- | --- |
-| outputFunctionTypes | <code>Array.&lt;SCEthereumParam&gt;</code> | 
+| outputFunctionTypes | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | 
 
 computes the output parameters into the smart contract function query
 

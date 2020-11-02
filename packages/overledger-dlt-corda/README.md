@@ -23,253 +23,209 @@ yarn add @quantnetwork/overledger-dlt-ethereum
 ## Modules
 
 <dl>
-<dt><a href="#module_overledger-dlt-ethereum">overledger-dlt-ethereum</a></dt>
+<dt><a href="#module_overledger-dlt-corda">overledger-dlt-corda</a></dt>
 <dd></dd>
 </dl>
 
-## Functions
+## Typedefs
 
 <dl>
-<dt><a href="#computeParamType">computeParamType(param)</a></dt>
-<dd><p>This function is used to prepare the parameter definition for the web3 package</p>
+<dt><a href="#CordaParam">CordaParam</a> : <code>Object</code></dt>
+<dd><p>A description of an Corda smart contract function parameter.</p>
 </dd>
 </dl>
 
-<a name="module_overledger-dlt-ethereum"></a>
+<a name="module_overledger-dlt-corda"></a>
 
-## overledger-dlt-ethereum
+## overledger-dlt-corda
 
-* [overledger-dlt-ethereum](#module_overledger-dlt-ethereum)
+* [overledger-dlt-corda](#module_overledger-dlt-corda)
 
     * _static_
-        * [.EthereumBytesOptions](#module_overledger-dlt-ethereum.EthereumBytesOptions)
+        * [.CordaTypeOptions](#module_overledger-dlt-corda.CordaTypeOptions)
 
-        * [.EthereumTypeOptions](#module_overledger-dlt-ethereum.EthereumTypeOptions)
-
-        * [.EthereumUintIntOptions](#module_overledger-dlt-ethereum.EthereumUintIntOptions)
-
-        * [.default](#module_overledger-dlt-ethereum.default)
+        * [.default](#module_overledger-dlt-corda.default)
 
     * _inner_
-        * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
+        * [~Corda](#module_overledger-dlt-corda.Corda)
 
-            * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+            * [new Corda(sdk)](#new_module_overledger-dlt-corda.Corda_new)
 
-            * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
+            * [.name](#module_overledger-dlt-corda.Corda+name)
 
-            * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
+            * [.symbol](#module_overledger-dlt-corda.Corda+symbol)
 
-            * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
+            * [.createAccount()](#module_overledger-dlt-corda.Corda+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-corda.Corda+setAccount)
 
-            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
+            * [.buildTransaction()](#module_overledger-dlt-corda.Corda+buildTransaction)
 
-            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
+            * [.buildWorkflow(thisTransaction)](#module_overledger-dlt-corda.Corda+buildWorkflow)
 
-            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
+            * [.create_UUID()](#module_overledger-dlt-corda.Corda+create_UUID)
 
-            * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
+            * [._transactionValidation()](#module_overledger-dlt-corda.Corda+_transactionValidation)
 
-            * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
+            * [.getTransactionQueryInfo()](#module_overledger-dlt-corda.Corda+getTransactionQueryInfo)
 
-            * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
+            * [.workflowValidation(thisWorkflow)](#module_overledger-dlt-corda.Corda+workflowValidation)
 
-            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
+            * [._sign(thisTransaction)](#module_overledger-dlt-corda.Corda+_sign)
 
-            * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
+            * [._smartContractQueryValidation()](#module_overledger-dlt-corda.Corda+_smartContractQueryValidation)
 
-            * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
-
-
-<a name="module_overledger-dlt-ethereum.EthereumBytesOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumBytesOptions
-<a name="module_overledger-dlt-ethereum.EthereumTypeOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumTypeOptions
-<a name="module_overledger-dlt-ethereum.EthereumUintIntOptions"></a>
-
-### *overledger-dlt-ethereum*.EthereumUintIntOptions
-<a name="module_overledger-dlt-ethereum.default"></a>
-
-### *overledger-dlt-ethereum*.default
-Development package for Ethereum.
-
-<a name="module_overledger-dlt-ethereum.Ethereum"></a>
-
-### *overledger-dlt-ethereum*~Ethereum
-
-* [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
-
-    * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
-
-    * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
-
-    * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
-
-    * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
-
-    * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
-
-    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
-
-    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_transactionValidation)
-
-    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation)
-
-    * [.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams)
-
-    * [.computeTransactionDataForFunctionCall(functionName, paramsList)](#module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall)
-
-    * [._sign(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+_sign)
-
-    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery)
-
-    * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList)
-
-    * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList)
+            * [._buildSmartContractQuery()](#module_overledger-dlt-corda.Corda+_buildSmartContractQuery)
 
 
-<a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
+<a name="module_overledger-dlt-corda.CordaTypeOptions"></a>
 
-#### new Ethereum(sdk, options)
+### *overledger-dlt-corda*.CordaTypeOptions
+<a name="module_overledger-dlt-corda.default"></a>
+
+### *overledger-dlt-corda*.default
+Development package for Corda.
+
+<a name="module_overledger-dlt-corda.Corda"></a>
+
+### *overledger-dlt-corda*~Corda
+
+* [~Corda](#module_overledger-dlt-corda.Corda)
+
+    * [new Corda(sdk)](#new_module_overledger-dlt-corda.Corda_new)
+
+    * [.name](#module_overledger-dlt-corda.Corda+name)
+
+    * [.symbol](#module_overledger-dlt-corda.Corda+symbol)
+
+    * [.createAccount()](#module_overledger-dlt-corda.Corda+createAccount)
+
+    * [.setAccount(accountInfo)](#module_overledger-dlt-corda.Corda+setAccount)
+
+    * [.buildTransaction()](#module_overledger-dlt-corda.Corda+buildTransaction)
+
+    * [.buildWorkflow(thisTransaction)](#module_overledger-dlt-corda.Corda+buildWorkflow)
+
+    * [.create_UUID()](#module_overledger-dlt-corda.Corda+create_UUID)
+
+    * [._transactionValidation()](#module_overledger-dlt-corda.Corda+_transactionValidation)
+
+    * [.getTransactionQueryInfo()](#module_overledger-dlt-corda.Corda+getTransactionQueryInfo)
+
+    * [.workflowValidation(thisWorkflow)](#module_overledger-dlt-corda.Corda+workflowValidation)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-corda.Corda+_sign)
+
+    * [._smartContractQueryValidation()](#module_overledger-dlt-corda.Corda+_smartContractQueryValidation)
+
+    * [._buildSmartContractQuery()](#module_overledger-dlt-corda.Corda+_buildSmartContractQuery)
+
+
+<a name="new_module_overledger-dlt-corda.Corda_new"></a>
+
+#### new Corda(sdk)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | sdk | <code>any</code> | the sdk instance |
-| options | <code>Object</code> | any additional options to instantiate this dlt |
 
-<a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
+<a name="module_overledger-dlt-corda.Corda+name"></a>
 
-#### *ethereum*.name
+#### *corda*.name
 Name of the DLT
 
-<a name="module_overledger-dlt-ethereum.Ethereum+symbol"></a>
+<a name="module_overledger-dlt-corda.Corda+symbol"></a>
 
-#### *ethereum*.symbol
+#### *corda*.symbol
 Symbol of the DLT
 
-<a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
+<a name="module_overledger-dlt-corda.Corda+createAccount"></a>
 
-#### *ethereum*.createAccount()
-Create an Ethereum account
+#### *corda*.createAccount()
+Create an Corda account
 
-**Returns**: <code>Account</code> - the new Ethereum account  
-<a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
+**Returns**: <code>Account</code> - the new Corda account  
+<a name="module_overledger-dlt-corda.Corda+setAccount"></a>
 
-#### *ethereum*.setAccount(privateKey)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
-
-Set an account for signing transactions for a specific DLT
-
-<a name="module_overledger-dlt-ethereum.Ethereum+buildTransaction"></a>
-
-#### *ethereum*.buildTransaction(thisTransaction)
+#### *corda*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Ethereum distributed ledger |
+| accountInfo | <code>Account</code> | The standardised account information |
 
-Takes the Overledger definition of a transaction and converts it into a specific Ethereum transaction
+Set an account for this specific DLT
 
-**Returns**: <code>Transaction</code> - the Ethereum transaction  
-<a name="module_overledger-dlt-ethereum.Ethereum+_transactionValidation"></a>
+<a name="module_overledger-dlt-corda.Corda+buildTransaction"></a>
 
-#### *ethereum*._transactionValidation(thisTransaction)
+#### *corda*.buildTransaction()
+Takes the Overledger definition of a transaction and converts it into a specific Corda transaction
 
-| Param | Description |
-| --- | --- |
-| thisTransaction | The transaction request |
+<a name="module_overledger-dlt-corda.Corda+buildWorkflow"></a>
 
-validates an OVL transactionRequest according to Ethereum specific rules
-
-<a name="module_overledger-dlt-ethereum.Ethereum+_smartContractQueryValidation"></a>
-
-#### *ethereum*._smartContractQueryValidation(contractQueryDetails)
+#### *corda*.buildWorkflow(thisTransaction)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| contractQueryDetails | <code>SmartContract</code> | The transaction request |
+| thisTransaction | <code>WorkflowCorda</code> | details on the information to include in this workflow for the Corda distributed ledger node |
 
-validates an OVL smart contract query according to Ethereum specific rules
+Takes the Overledger definition of a Corda workflow and converts it into a specific Corda Workflow
 
-<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForConstructorWithParams"></a>
+**Returns**: <code>Workflow</code> - the Corda transaction  
+<a name="module_overledger-dlt-corda.Corda+create_UUID"></a>
 
-#### *ethereum*.computeTransactionDataForConstructorWithParams(smartContractCode, paramsList)
+#### *corda*.create_UUID()
+Creates a new UUID
 
-| Param | Type | Description |
-| --- | --- | --- |
-| smartContractCode | <code>string</code> | the bytecode of the smart contract (without the byte code information on the constructor variables) |
-| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this constructor takes as input |
+<a name="module_overledger-dlt-corda.Corda+_transactionValidation"></a>
 
-Convert Overledger object description of a smart contract constructor and parameters into Ethereum versions
+#### *corda*._transactionValidation()
+validates an OVL transactionRequest according to Corda specific rules
 
-**Returns**: <code>string</code> - the bytecode of the smart contract and the parameters  
-<a name="module_overledger-dlt-ethereum.Ethereum+computeTransactionDataForFunctionCall"></a>
+<a name="module_overledger-dlt-corda.Corda+getTransactionQueryInfo"></a>
 
-#### *ethereum*.computeTransactionDataForFunctionCall(functionName, paramsList)
+#### *corda*.getTransactionQueryInfo()
+Get the information required to query for a particular transaction hash
 
-| Param | Type | Description |
-| --- | --- | --- |
-| functionName | <code>string</code> | the name of the smart contract function to call |
-| paramsList | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of parameters that this function takes as input |
+<a name="module_overledger-dlt-corda.Corda+workflowValidation"></a>
 
-Convert Overledger object description of a smart contract function and parameters into Ethereum versions
-
-**Returns**: <code>string</code> - the bytecode of this function call  
-<a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
-
-#### *ethereum*._sign(thisTransaction)
+#### *corda*.workflowValidation(thisWorkflow)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an ethereum transaction |
+| thisWorkflow | <code>WorkflowCorda</code> | The workflow details |
 
-Takes in an overledger definition of a transaction for ethereum, converts it into a form that the Ethereum distributed ledger will understand, and then signs the transaction
+validates an OVL Corda workflow according to Corda specific rules
 
-<a name="module_overledger-dlt-ethereum.Ethereum+_buildSmartContractQuery"></a>
+<a name="module_overledger-dlt-corda.Corda+_sign"></a>
 
-#### *ethereum*._buildSmartContractQuery(dltAddress, contractQueryDetails)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dltAddress | <code>string</code> | the user's Ethereum address |
-| contractQueryDetails | <code>SmartContractEthereum</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
-
-Allows a user to build a smart contract query for the Ethereum distributed ledger
-
-**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
-<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryInputValuesList"></a>
-
-#### *ethereum*.computeSCQueryInputValuesList(inputFunctionParams)
+#### *corda*._sign(thisTransaction)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| inputFunctionParams | <code>Array.&lt;SCEthereumParam&gt;</code> | the list of input parameters |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an Corda transaction |
 
-computes the input parameters into the smart contract function query
+Takes in an overledger definition of a transaction for Corda, converts it into a form that the Corda distributed ledger will understand, and then signs the transaction
 
-<a name="module_overledger-dlt-ethereum.Ethereum+computeSCQueryOutputTypesList"></a>
+<a name="module_overledger-dlt-corda.Corda+_smartContractQueryValidation"></a>
 
-#### *ethereum*.computeSCQueryOutputTypesList(outputFunctionTypes)
+#### *corda*._smartContractQueryValidation()
+validates an OVL smart contract query according to Corda specific rules
 
-| Param | Type |
-| --- | --- |
-| outputFunctionTypes | <code>Array.&lt;SCEthereumParam&gt;</code> | 
+<a name="module_overledger-dlt-corda.Corda+_buildSmartContractQuery"></a>
 
-computes the output parameters into the smart contract function query
+#### *corda*._buildSmartContractQuery()
+Allows a user to build a smart contract query for the Corda distributed ledger
 
-<a name="computeParamType"></a>
+<a name="CordaParam"></a>
 
-## computeParamType(param)
+## CordaParam
+**Properties**
 
-| Param | Description |
-| --- | --- |
-| param | the parameter definition |
+| Name | Type | Description |
+| --- | --- | --- |
+| type | <code>object</code> | information on the selectedType from the valid options. If an integer or byte type was chosen then further information is required on the exact number of bytes being used. If an integer is used, then selectedIntegerLength is required. If a byte is used then selectedBytesLength is required |
+| value | <code>object</code> | information on the parameter's value |
+| name | <code>string</code> | the parameter's name |
 
-This function is used to prepare the parameter definition for the web3 package
+A description of an Corda smart contract function parameter.
 
