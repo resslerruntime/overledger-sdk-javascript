@@ -192,7 +192,7 @@ describe('Dlt/RippleAndEthereum', () => {
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
-          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111",
+          fromAddress: "r4xKe53WXRQv5uv9NKYpwCB8DMvy3RNZMV",
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
           sequence: 1, 
           amount: '1',     
@@ -308,7 +308,7 @@ describe('Dlt/RippleAndEthereum', () => {
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
-          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111", //should really be the  address of the private key but for this test is does not matter
+          fromAddress: "r4xKe53WXRQv5uv9NKYpwCB8DMvy3RNZMV", //should really be the  address of the private key but for this test is does not matter
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
           sequence: 1, 
           amount: '1',     

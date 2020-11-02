@@ -5,20 +5,17 @@ describe('Dlt', () => {
   test('Can construct the DLT', () => {
     const mappId = 'mockMappId';
     const bpiKey = 'mockBpiKey';
+    const mockPrivateKey = 'cRgjFWSzDjdN2SqXUMiCQuQhf7c9bTLVsk5Kx9quL4bsn4iJEdu2';
 
-    const options = {
-      privateKey: 'cRgjFWSzDjdN2SqXUMiCQuQhf7c9bTLVsk5Kx9quL4bsn4iJEdu2',
-    };
     const sdkOptions = {
       dlts: [
-        { dlt: 'bitcoin', ...options },
+        { dlt: 'bitcoin' },
       ],
     };
 
     const sdk = new OverledgerSDK(mappId, bpiKey, sdkOptions);
-    const dlt = new Dlt(sdk, options);
-
-    expect(sdk.dlts.bitcoin.name).toEqual(dlt.name);
-    expect(sdk.dlts.bitcoin.account.address).toEqual(dlt.account.address);
+    sdk.dlts.bitcoin.setAccount({privateKey: mockPrivateKey});
+    expect(sdk.dlts.bitcoin.name).toEqual('bitcoin');
+    expect(sdk.dlts.bitcoin.account.privateKey).toEqual(mockPrivateKey);
   });
 });

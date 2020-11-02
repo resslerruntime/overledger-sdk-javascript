@@ -67,5 +67,5 @@ export {
   DltNameOptions,
   ValidationCheck,
   StatusRequest,
-  FeeEstimationResponse
+  FeeEstimationResponse,
 };
