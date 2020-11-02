@@ -1,10 +1,10 @@
 //NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
-const OverledgerSDK = require('../../packages/overledger-bundle/dist').default;
+const OverledgerSDK = require('@quantnetwork/packages/overledger-bundle/dist').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
-const TransactionHyperledgerFabricSubTypeOptions = require('../../packages/overledger-dlt-hyperledger_fabric/dist').TransactionHyperledgerFabricSubTypeOptions;
-const HyperledgerFabricTypeOptions = require('../../packages/overledger-dlt-hyperledger_fabric/dist').HyperledgerFabricTypeOptions;
+const TransactionHyperledgerFabricSubTypeOptions = require('@quantnetwork/packages/overledger-dlt-hyperledger_fabric/dist').TransactionHyperledgerFabricSubTypeOptions;
+const HyperledgerFabricTypeOptions = require('@quantnetwork/packages/overledger-dlt-hyperledger_fabric/dist').HyperledgerFabricTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
