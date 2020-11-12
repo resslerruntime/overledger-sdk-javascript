@@ -3,7 +3,7 @@ import TransactionXRPSubTypeOptions from './associatedEnums/TransactionXRPSubTyp
 import AtomicSwapXRPParams from './AtomicSwapXRPParams';
 import TrustLineXRPOptions from './TrustLineXRPParams';
 
-/**
+/** TrustLineXRPParams
 * A generic object used to describe an Overledger transaction response for the XRP Ledger. Note that this object inherits many parameters from TransactionAccountsResponse.
 * @typedef {Object} TransactionEthereumResponse
 * @property {Object} subType - a redefinition of the TransactionResponse object, to add more XRP specific information

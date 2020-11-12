@@ -5,7 +5,7 @@ import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import TransactionXRPRequest from './DLTSpecificTypes/TransactionXRPRequest';
 import TransactionXRPSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionXRPSubTypeOptions';
-import TrustLineXRPOptions from './DLTSpecificTypes/TrustlineXRPParams';
+import TrustLineXRPOptions from './DLTSpecificTypes/TrustLineXRPParams';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 import { EscrowCreation } from 'ripple-lib/dist/npm/transaction/escrow-creation';
@@ -159,15 +159,15 @@ class Ripple extends AbstractDLT {
           let createCondition;
           if (typeof paramsCreate.hashAlgorithmCondition !== 'undefined'){
             createCondition = paramsCreate.hashAlgorithmCondition;
-            console.log("createCondition0: " + createCondition); 
+            console.log("createCondition0: " + createCondition);
           } else {
             //createCondition = this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInputString).escrowCondition;
             const conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsCreate.hashAlgorithmInputString);
             createCondition = conditionAndFulfillment.escrowCondition;
-            const execFulfillment = conditionAndFulfillment.escrowFulfillment;  
-            console.log("paramsCreate.hashAlgorithmInputString: " + paramsCreate.hashAlgorithmInputString);             
-            console.log("createCondition1: " + createCondition);   
-            console.log("execFulfillment1: " + execFulfillment);      
+            const execFulfillment = conditionAndFulfillment.escrowFulfillment;
+            console.log("paramsCreate.hashAlgorithmInputString: " + paramsCreate.hashAlgorithmInputString);
+            console.log("createCondition1: " + createCondition);
+            console.log("execFulfillment1: " + execFulfillment);
           }
           escrowCreation = {
             amount: amountInXRP,
@@ -193,9 +193,9 @@ class Ripple extends AbstractDLT {
             const conditionAndFulfillment = this.computeEscrowConditionFulfillment(paramsExecute.hashAlgorithmInputString);
             execCondition = conditionAndFulfillment.escrowCondition;
             execFulfillment = conditionAndFulfillment.escrowFulfillment;
-            console.log("paramsExecute..hashAlgorithmInputString: " + paramsExecute.hashAlgorithmInputString);             
-            console.log("execCondition2: " + execCondition);   
-            console.log("execFulfillment2: " + execFulfillment); 
+            console.log("paramsExecute..hashAlgorithmInputString: " + paramsExecute.hashAlgorithmInputString);
+            console.log("execCondition2: " + execCondition);
+            console.log("execFulfillment2: " + execFulfillment);
           }
           escrowExecution = {
             owner: paramsExecute.owner,
@@ -236,7 +236,7 @@ class Ripple extends AbstractDLT {
         };
         toReturn.xrpObject = trustLine;
       }
-    
+
     const feeInXRP = dropsToXrp(fee.toString());
     const instructions = {
       maxLedgerVersion,
@@ -316,7 +316,7 @@ class Ripple extends AbstractDLT {
         success: false,
         failingField: 'extraFields.currency',
         error: 'A format of the currency is not correct',
-      };    
+      };
     }
 
     if (!this.isValidRippleAddress(thisXRPTx.fromAddress)) {
@@ -344,7 +344,7 @@ class Ripple extends AbstractDLT {
           failingField: 'extraFields.atomicSwapParameters',
           error: 'All escrow creation transactions for XRP must have atomicSwapParameters',
         };
-      } 
+      }
       let params = <AtomicSwapCreateOptions> thisXRPTx.extraFields.atomicSwapParameters;
       if ((params.allowCancelAfter === '') || (params.allowCancelAfter === null) || (typeof params.allowCancelAfter === 'undefined')) {
         return {
@@ -410,7 +410,7 @@ class Ripple extends AbstractDLT {
           failingField: 'extraFields.atomicSwapParameters',
           error: 'All escrow execution transactions for XRP must have atomicSwapParameters',
         };
-      } 
+      }
       let params = <AtomicSwapExecuteOptions> thisXRPTx.extraFields.atomicSwapParameters;
       if (params.hashAlgorithmInputString && ((params.hashAlgorithmInputString.length <= 0) || (typeof params.hashAlgorithmInputString !== 'string'))) {
         return {
@@ -458,7 +458,7 @@ class Ripple extends AbstractDLT {
             failingField: 'extraFields.atomicSwapParameters',
             error: 'All escrow execution transactions for XRP must have atomicSwapParameters',
           };
-        } 
+        }
         let params = <AtomicSwapCancelOptions> thisXRPTx.extraFields.atomicSwapParameters;
      if ((params.escrowSequence === '') || (params.escrowSequence === null) || (typeof params.escrowSequence === 'undefined')) {
           return {
@@ -485,7 +485,7 @@ class Ripple extends AbstractDLT {
             error: 'the owner address is in the incorrect format',
           };
         }
-  
+
       } else if (thisXRPTx.subType.name === TransactionXRPSubTypeOptions.TRUSTLINE_CREATE){
         //if escrow claim
           if ((thisXRPTx.extraFields.trustlineParameters === null) || (typeof thisXRPTx.extraFields.trustlineParameters === 'undefined')) {
@@ -494,7 +494,7 @@ class Ripple extends AbstractDLT {
               failingField: 'extraFields.trustlineParameters',
               error: 'All escrow execution transactions for XRP must have trustlineParameters',
             };
-          } 
+          }
           let params = <TrustLineXRPOptions> thisXRPTx.extraFields.trustlineParameters;
           if (params.maxCredit && ((params.maxCredit.length <= 0) || (typeof params.maxCredit !== 'string'))) {
             return {
@@ -503,8 +503,8 @@ class Ripple extends AbstractDLT {
               error: 'The maxCredit parameter must be a non null string',
             };
           }
-    
-        } 
+
+        }
 
 
     return { success: true };
@@ -552,7 +552,7 @@ class Ripple extends AbstractDLT {
             .then(
               prepared => this.rippleAPI.sign(prepared.txJSON, this.account.privateKey).signedTransaction,
             );
-        }  
+        }
       } catch (e) {
         console.error(`Error while sending a ripple transaction`, e);
       }
@@ -590,8 +590,8 @@ class Ripple extends AbstractDLT {
   }
 
     /**
-   * 
-   * @param initialFee 
+   *
+   * @param initialFee
    * @param transactionType - what type of transaction is this
    * @param fulfillment - is there an escrow fulfillment to be added to the transaction
    */
@@ -628,8 +628,8 @@ class Ripple extends AbstractDLT {
   }
 
     /**
-   * Takes a string hash algorith input and generates both the bytecode version of the condition to be placed on the ledger and also the bytecode version of its pre-image fulfillment 
-   * @param hashAlgorithmInput 
+   * Takes a string hash algorith input and generates both the bytecode version of the condition to be placed on the ledger and also the bytecode version of its pre-image fulfillment
+   * @param hashAlgorithmInput
    */
   computeEscrowConditionFulfillment(hashAlgorithmInput: string): { escrowCondition: string, escrowFulfillment: string } {
     const data = Buffer.from(hashAlgorithmInput, 'utf-8');
@@ -677,7 +677,7 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * 
+   *
    * @param address - the address to check
    */
   isValidRippleAddress(address: string): boolean {
@@ -688,23 +688,23 @@ class Ripple extends AbstractDLT {
 }
 
 interface AtomicSwapCreateOptions {
-  allowCancelAfter: string; 
+  allowCancelAfter: string;
   allowExecuteAfter: string;
-  hashAlgorithmInputString?: string; 
+  hashAlgorithmInputString?: string;
   hashAlgorithmCondition?: string;
 }
 
 interface AtomicSwapExecuteOptions {
   owner: string;
   escrowSequence: string; //
-  hashAlgorithmInputString?: string; 
+  hashAlgorithmInputString?: string;
   hashAlgorithmCondition?: string;
   hashAlgorithmFulfillment?: string;
 }
 
 interface AtomicSwapCancelOptions {
   owner: string;
-  escrowSequence: string; 
+  escrowSequence: string;
 }
 
 export type Transaction = {
