@@ -8,8 +8,8 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '...';
-const bpiKey = '...';
+const mappId = '';
+const bpiKey = '';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
@@ -53,9 +53,9 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
-    overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledger.dlts.ripple.setAccount(partyAxrpPrivateKey);
+    overledger.dlts.bitcoin.setAccount({privateKey: partyABitcoinPrivateKey});
+    overledger.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
+    overledger.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
     
     // Get the address sequences.
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);

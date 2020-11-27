@@ -16,11 +16,9 @@ abstract class AbstractDLT {
 
   /**
    * @param {any} sdk
-   * @param {Object} options
    */
-  constructor(sdk: any, options: Object = {}) {
+  constructor(sdk: any) {
     this.sdk = sdk;
-    this.options = options;
   }
 
   /**
@@ -37,9 +35,9 @@ abstract class AbstractDLT {
    * Set an account for signing transactions for a specific DLT
    *
    * Abstract method to be implemented in each DLT
-   * @param {string} privateKey The privateKey
+   * @param {Account} AccountInfo The standardised Account Object
    */
-  public setAccount(_privateKey: string): void {
+  public setAccount(_accountInfo: Account): void {
     throw new Error('setAccount: abstract method must be implemented');
   }
 

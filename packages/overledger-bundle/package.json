@@ -15,14 +15,24 @@
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/bundle",
   "contributors": [
     {
-      "name": "Sebastien Bramille",
-      "email": "sebastien.bramille@quant.network",
-      "url": "https://github.com/oktapodia"
+      "name": "Luke Riley",
+      "email": "luke.riley@quant.network",
+      "url": "https://github.com/lukerQuant"
+    },
+    {
+      "name": "Najla Chamseddine",
+      "email": "najla.chamseddine@quant.network",
+      "url": "https://github.com/najla-quant"
     },
     {
       "name": "Alexandru Chiriac",
       "email": "alexandru.chiriac@quant.network",
       "url": "https://github.com/alexchiriac"
+    },
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
     }
   ],
   "license": "Apache-2.0",
@@ -31,7 +41,9 @@
     "@quantnetwork/overledger-core": "^1.0.0-beta.3",
     "@quantnetwork/overledger-dlt-bitcoin": "^1.0.0-beta.3",
     "@quantnetwork/overledger-dlt-ethereum": "^1.0.0-beta.3",
-    "@quantnetwork/overledger-dlt-ripple": "^1.0.0-beta.3"
+    "@quantnetwork/overledger-dlt-ripple": "^1.0.0-beta.3",
+    "@quantnetwork/overledger-dlt-hyperledger_fabric": "^1.0.0-beta.3",
+    "@quantnetwork/overledger-dlt-corda": "^1.0.0-beta.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",

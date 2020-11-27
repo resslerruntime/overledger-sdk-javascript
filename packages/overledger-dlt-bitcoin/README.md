@@ -46,7 +46,7 @@ yarn add @quantnetwork/overledger-dlt-bitcoin
 
             * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
             * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -78,7 +78,7 @@ Development package for Bitcoin blockchain.
 
     * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
     * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -143,11 +143,11 @@ Create a Bitcoin account
 **Returns**: <code>Account</code> - the new Bitcoin account  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+setAccount"></a>
 
-#### *bitcoin*.setAccount(privateKey)
+#### *bitcoin*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | <code>Account</code> | The standardised account information |
 
 Set an account for signing transactions for a specific DLT
 

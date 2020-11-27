@@ -9,7 +9,11 @@
 <dd></dd>
 <dt><a href="#module_overledger-dlt-bitcoin">overledger-dlt-bitcoin</a></dt>
 <dd></dd>
+<dt><a href="#module_overledger-dlt-corda">overledger-dlt-corda</a></dt>
+<dd></dd>
 <dt><a href="#module_overledger-dlt-ethereum">overledger-dlt-ethereum</a></dt>
+<dd></dd>
+<dt><a href="#module_overledger-dlt-hyperledger_fabric">overledger-dlt-hyperledger_fabric</a></dt>
 <dd></dd>
 <dt><a href="#module_overledger-dlt-ripple">overledger-dlt-ripple</a></dt>
 <dd></dd>
@@ -27,11 +31,23 @@
 <dt><a href="#computeParamType">computeParamType(param)</a></dt>
 <dd><p>This function is used to prepare the parameter definition for the web3 package</p>
 </dd>
+<dt><a href="#computeParamType">computeParamType(param)</a></dt>
+<dd><p>This function is used to prepare the parameter definition for the web3 package</p>
+</dd>
 </dl>
 
 ## Typedefs
 
 <dl>
+<dt><a href="#CordaParam">CordaParam</a> : <code>Object</code></dt>
+<dd><p>A description of an Corda smart contract function parameter.</p>
+</dd>
+<dt><a href="#AtomicSwapXRPParams">AtomicSwapXRPParams</a> : <code>Object</code></dt>
+<dd><p>An object used to describe the atomic swap params required for XRP</p>
+</dd>
+<dt><a href="#TrustlineXRPRequest">TrustlineXRPRequest</a> : <code>Object</code></dt>
+<dd><p>A generic object used to describe an Overledger transaction request for the XRP Ledger. Note that this object inherits many parameters from TransactionAccountsRequest.</p>
+</dd>
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
@@ -44,11 +60,14 @@
 <dt><a href="#DLTOptions">DLTOptions</a> : <code>Object</code></dt>
 <dd><p>Options for loading a DLT in the SDK.</p>
 </dd>
+<dt><a href="#dlt">dlt</a> : <code>string</code></dt>
+<dd><p>Fee estimation from different DLT</p>
+</dd>
 <dt><a href="#NetworkOptions">NetworkOptions</a> : <code>string</code></dt>
 <dd><p>Overledger network options.</p>
 </dd>
-<dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for instantiating the SDK</p>
+<dt><a href="#NodeResourceRequest">NodeResourceRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger node resource request object.</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -73,6 +92,9 @@
 </dd>
 <dt><a href="#StatusRequest">StatusRequest</a> : <code>Object</code></dt>
 <dd><p>Status request.</p>
+</dd>
+<dt><a href="#UnsignedTransactionRequest">UnsignedTransactionRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger signed transaction request object.</p>
 </dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
@@ -113,7 +135,11 @@ Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
 
             * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
+            * [.sendUnsigned(unsignedTransactions)](#module_overledger-core.OverledgerSDK+sendUnsigned)
+
             * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+            * [.callNodeResource(nodeResourceRequest)](#module_overledger-core.OverledgerSDK+callNodeResource)
 
             * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
 
@@ -124,6 +150,8 @@ Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
             * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
             * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
+
+            * [.getFeeEstimation(address, blockNumber)](#module_overledger-core.OverledgerSDK+getFeeEstimation)
 
             * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
@@ -159,7 +187,11 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
 
     * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
+    * [.sendUnsigned(unsignedTransactions)](#module_overledger-core.OverledgerSDK+sendUnsigned)
+
     * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+    * [.callNodeResource(nodeResourceRequest)](#module_overledger-core.OverledgerSDK+callNodeResource)
 
     * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
 
@@ -170,6 +202,8 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
     * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
     * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
+
+    * [.getFeeEstimation(address, blockNumber)](#module_overledger-core.OverledgerSDK+getFeeEstimation)
 
     * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
@@ -250,6 +284,16 @@ Sign the provided transactions
 
 Send signed transactions to Overledger
 
+<a name="module_overledger-core.OverledgerSDK+sendUnsigned"></a>
+
+#### *overledgerSDK*.sendUnsigned(unsignedTransactions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unsignedTransactions | [<code>UnsignedTransactionRequest</code>](#UnsignedTransactionRequest) | Unsigned transaction data |
+
+Send unsigned transactions to Overledger
+
 <a name="module_overledger-core.OverledgerSDK+getBalances"></a>
 
 #### *overledgerSDK*.getBalances(balancesRequest)
@@ -259,6 +303,16 @@ Send signed transactions to Overledger
 | balancesRequest | [<code>Array.&lt;DLTAndAddress&gt;</code>](#DLTAndAddress) | Array of objects specifing the address and corresponding DLT |
 
 Get the balances of the specified addresses
+
+<a name="module_overledger-core.OverledgerSDK+callNodeResource"></a>
+
+#### *overledgerSDK*.callNodeResource(nodeResourceRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| nodeResourceRequest | [<code>NodeResourceRequest</code>](#NodeResourceRequest) | object specifing the resource to call on this node |
+
+Call a resource of a node
 
 <a name="module_overledger-core.OverledgerSDK+subscribeStatusUpdate"></a>
 
@@ -306,6 +360,17 @@ Get transactions submitted through Overledger by the Multi-Chain Application ID 
 
 Get the transaction specified by the Overledger Transaction ID
 
+<a name="module_overledger-core.OverledgerSDK+getFeeEstimation"></a>
+
+#### *overledgerSDK*.getFeeEstimation(address, blockNumber)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | The address to query for |
+| blockNumber | <code>number</code> | The number of blocks |
+
+Get the fee estimation for a DLT
+
 <a name="module_overledger-core.OverledgerSDK+setMappId"></a>
 
 #### *overledgerSDK*.setMappId(mappId)
@@ -348,11 +413,11 @@ Get the Overledger Blockchain Programming Interface license key
     * _inner_
         * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-            * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
+            * [new AbstractDLT(sdk)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
             * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+            * [.setAccount(AccountInfo)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
 
             * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
@@ -382,11 +447,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-    * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
+    * [new AbstractDLT(sdk)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
     * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+    * [.setAccount(AccountInfo)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
 
     * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
@@ -407,12 +472,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 <a name="new_module_overledger-dlt-abstract.AbstractDLT_new"></a>
 
-#### new AbstractDLT(sdk, options)
+#### new AbstractDLT(sdk)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>any</code> | 
-| options | <code>Object</code> | 
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
 
@@ -423,11 +487,11 @@ Abstract method to be implemented in each DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+setAccount"></a>
 
-#### *abstractDLT*.setAccount(privateKey)
+#### *abstractDLT*.setAccount(AccountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| AccountInfo | [<code>Account</code>](#Account) | The standardised Account Object |
 
 Set an account for signing transactions for a specific DLT
 
@@ -546,7 +610,7 @@ Wrap a specific DLT signed transaction with the Overledger required fields
 
             * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
             * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -578,7 +642,7 @@ Development package for Bitcoin blockchain.
 
     * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
     * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -643,11 +707,11 @@ Create a Bitcoin account
 **Returns**: [<code>Account</code>](#Account) - the new Bitcoin account  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+setAccount"></a>
 
-#### *bitcoin*.setAccount(privateKey)
+#### *bitcoin*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | [<code>Account</code>](#Account) | The standardised account information |
 
 Set an account for signing transactions for a specific DLT
 
@@ -674,6 +738,187 @@ Allows a user to build a smart contract query for the Bitcoin distributed ledger
 validates an OVL smart contract query according to Bitcoin specific rules
 
 **Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="module_overledger-dlt-corda"></a>
+
+## overledger-dlt-corda
+
+* [overledger-dlt-corda](#module_overledger-dlt-corda)
+
+    * _static_
+        * [.CordaTypeOptions](#module_overledger-dlt-corda.CordaTypeOptions)
+
+        * [.default](#module_overledger-dlt-corda.default)
+
+    * _inner_
+        * [~Corda](#module_overledger-dlt-corda.Corda)
+
+            * [new Corda(sdk)](#new_module_overledger-dlt-corda.Corda_new)
+
+            * [.name](#module_overledger-dlt-corda.Corda+name)
+
+            * [.symbol](#module_overledger-dlt-corda.Corda+symbol)
+
+            * [.createAccount()](#module_overledger-dlt-corda.Corda+createAccount)
+
+            * [.setAccount(accountInfo)](#module_overledger-dlt-corda.Corda+setAccount)
+
+            * [.buildTransaction()](#module_overledger-dlt-corda.Corda+buildTransaction)
+
+            * [.buildWorkflow(thisTransaction)](#module_overledger-dlt-corda.Corda+buildWorkflow)
+
+            * [.create_UUID()](#module_overledger-dlt-corda.Corda+create_UUID)
+
+            * [._transactionValidation()](#module_overledger-dlt-corda.Corda+_transactionValidation)
+
+            * [.getTransactionQueryInfo()](#module_overledger-dlt-corda.Corda+getTransactionQueryInfo)
+
+            * [.workflowValidation(thisWorkflow)](#module_overledger-dlt-corda.Corda+workflowValidation)
+
+            * [._sign(thisTransaction)](#module_overledger-dlt-corda.Corda+_sign)
+
+            * [._smartContractQueryValidation()](#module_overledger-dlt-corda.Corda+_smartContractQueryValidation)
+
+            * [._buildSmartContractQuery()](#module_overledger-dlt-corda.Corda+_buildSmartContractQuery)
+
+
+<a name="module_overledger-dlt-corda.CordaTypeOptions"></a>
+
+### *overledger-dlt-corda*.CordaTypeOptions
+<a name="module_overledger-dlt-corda.default"></a>
+
+### *overledger-dlt-corda*.default
+Development package for Corda.
+
+<a name="module_overledger-dlt-corda.Corda"></a>
+
+### *overledger-dlt-corda*~Corda
+
+* [~Corda](#module_overledger-dlt-corda.Corda)
+
+    * [new Corda(sdk)](#new_module_overledger-dlt-corda.Corda_new)
+
+    * [.name](#module_overledger-dlt-corda.Corda+name)
+
+    * [.symbol](#module_overledger-dlt-corda.Corda+symbol)
+
+    * [.createAccount()](#module_overledger-dlt-corda.Corda+createAccount)
+
+    * [.setAccount(accountInfo)](#module_overledger-dlt-corda.Corda+setAccount)
+
+    * [.buildTransaction()](#module_overledger-dlt-corda.Corda+buildTransaction)
+
+    * [.buildWorkflow(thisTransaction)](#module_overledger-dlt-corda.Corda+buildWorkflow)
+
+    * [.create_UUID()](#module_overledger-dlt-corda.Corda+create_UUID)
+
+    * [._transactionValidation()](#module_overledger-dlt-corda.Corda+_transactionValidation)
+
+    * [.getTransactionQueryInfo()](#module_overledger-dlt-corda.Corda+getTransactionQueryInfo)
+
+    * [.workflowValidation(thisWorkflow)](#module_overledger-dlt-corda.Corda+workflowValidation)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-corda.Corda+_sign)
+
+    * [._smartContractQueryValidation()](#module_overledger-dlt-corda.Corda+_smartContractQueryValidation)
+
+    * [._buildSmartContractQuery()](#module_overledger-dlt-corda.Corda+_buildSmartContractQuery)
+
+
+<a name="new_module_overledger-dlt-corda.Corda_new"></a>
+
+#### new Corda(sdk)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sdk | <code>any</code> | the sdk instance |
+
+<a name="module_overledger-dlt-corda.Corda+name"></a>
+
+#### *corda*.name
+Name of the DLT
+
+<a name="module_overledger-dlt-corda.Corda+symbol"></a>
+
+#### *corda*.symbol
+Symbol of the DLT
+
+<a name="module_overledger-dlt-corda.Corda+createAccount"></a>
+
+#### *corda*.createAccount()
+Create an Corda account
+
+**Returns**: [<code>Account</code>](#Account) - the new Corda account  
+<a name="module_overledger-dlt-corda.Corda+setAccount"></a>
+
+#### *corda*.setAccount(accountInfo)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| accountInfo | [<code>Account</code>](#Account) | The standardised account information |
+
+Set an account for this specific DLT
+
+<a name="module_overledger-dlt-corda.Corda+buildTransaction"></a>
+
+#### *corda*.buildTransaction()
+Takes the Overledger definition of a transaction and converts it into a specific Corda transaction
+
+<a name="module_overledger-dlt-corda.Corda+buildWorkflow"></a>
+
+#### *corda*.buildWorkflow(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>WorkflowCorda</code> | details on the information to include in this workflow for the Corda distributed ledger node |
+
+Takes the Overledger definition of a Corda workflow and converts it into a specific Corda Workflow
+
+**Returns**: <code>Workflow</code> - the Corda transaction  
+<a name="module_overledger-dlt-corda.Corda+create_UUID"></a>
+
+#### *corda*.create_UUID()
+Creates a new UUID
+
+<a name="module_overledger-dlt-corda.Corda+_transactionValidation"></a>
+
+#### *corda*._transactionValidation()
+validates an OVL transactionRequest according to Corda specific rules
+
+<a name="module_overledger-dlt-corda.Corda+getTransactionQueryInfo"></a>
+
+#### *corda*.getTransactionQueryInfo()
+Get the information required to query for a particular transaction hash
+
+<a name="module_overledger-dlt-corda.Corda+workflowValidation"></a>
+
+#### *corda*.workflowValidation(thisWorkflow)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisWorkflow | <code>WorkflowCorda</code> | The workflow details |
+
+validates an OVL Corda workflow according to Corda specific rules
+
+<a name="module_overledger-dlt-corda.Corda+_sign"></a>
+
+#### *corda*._sign(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an Corda transaction |
+
+Takes in an overledger definition of a transaction for Corda, converts it into a form that the Corda distributed ledger will understand, and then signs the transaction
+
+<a name="module_overledger-dlt-corda.Corda+_smartContractQueryValidation"></a>
+
+#### *corda*._smartContractQueryValidation()
+validates an OVL smart contract query according to Corda specific rules
+
+<a name="module_overledger-dlt-corda.Corda+_buildSmartContractQuery"></a>
+
+#### *corda*._buildSmartContractQuery()
+Allows a user to build a smart contract query for the Corda distributed ledger
+
 <a name="module_overledger-dlt-ethereum"></a>
 
 ## overledger-dlt-ethereum
@@ -692,7 +937,7 @@ validates an OVL smart contract query according to Bitcoin specific rules
     * _inner_
         * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-            * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+            * [new Ethereum(sdk)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
             * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
@@ -700,7 +945,7 @@ validates an OVL smart contract query according to Bitcoin specific rules
 
             * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
             * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
@@ -741,7 +986,7 @@ Development package for Ethereum.
 
 * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-    * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+    * [new Ethereum(sdk)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
     * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
@@ -749,7 +994,7 @@ Development package for Ethereum.
 
     * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
     * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
@@ -772,12 +1017,11 @@ Development package for Ethereum.
 
 <a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
 
-#### new Ethereum(sdk, options)
+#### new Ethereum(sdk)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | sdk | <code>any</code> | the sdk instance |
-| options | <code>Object</code> | any additional options to instantiate this dlt |
 
 <a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
 
@@ -797,11 +1041,11 @@ Create an Ethereum account
 **Returns**: [<code>Account</code>](#Account) - the new Ethereum account  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
-#### *ethereum*.setAccount(privateKey)
+#### *ethereum*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | [<code>Account</code>](#Account) | The standardised account information |
 
 Set an account for signing transactions for a specific DLT
 
@@ -902,6 +1146,216 @@ computes the input parameters into the smart contract function query
 
 computes the output parameters into the smart contract function query
 
+<a name="module_overledger-dlt-hyperledger_fabric"></a>
+
+## overledger-dlt-hyperledger_fabric
+
+* [overledger-dlt-hyperledger_fabric](#module_overledger-dlt-hyperledger_fabric)
+
+    * _static_
+        * [.HyperledgerFabricTypeOptions](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabricTypeOptions)
+
+        * [.default](#module_overledger-dlt-hyperledger_fabric.default)
+
+    * _inner_
+        * [~HyperledgerFabric](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric)
+
+            * [new HyperledgerFabric(sdk)](#new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new)
+
+            * [.name](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name)
+
+            * [.symbol](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol)
+
+            * [.createAccount()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount)
+
+            * [.setAccount(accountInfo)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount)
+
+            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction)
+
+            * [._transactionValidation(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation)
+
+            * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation)
+
+            * [.computeTransactionDataForFunctionCall(invocationType, paramsList)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall)
+
+            * [._sign(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign)
+
+            * [.getTransactionQueryInfo()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo)
+
+            * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery)
+
+            * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList)
+
+            * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList)
+
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabricTypeOptions"></a>
+
+### *overledger-dlt-hyperledger_fabric*.HyperledgerFabricTypeOptions
+<a name="module_overledger-dlt-hyperledger_fabric.default"></a>
+
+### *overledger-dlt-hyperledger_fabric*.default
+Development package for HyperledgerFabric.
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric"></a>
+
+### *overledger-dlt-hyperledger_fabric*~HyperledgerFabric
+
+* [~HyperledgerFabric](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric)
+
+    * [new HyperledgerFabric(sdk)](#new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new)
+
+    * [.name](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name)
+
+    * [.symbol](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol)
+
+    * [.createAccount()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount)
+
+    * [.setAccount(accountInfo)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount)
+
+    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction)
+
+    * [._transactionValidation(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation)
+
+    * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation)
+
+    * [.computeTransactionDataForFunctionCall(invocationType, paramsList)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall)
+
+    * [._sign(thisTransaction)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign)
+
+    * [.getTransactionQueryInfo()](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo)
+
+    * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery)
+
+    * [.computeSCQueryInputValuesList(inputFunctionParams)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList)
+
+    * [.computeSCQueryOutputTypesList(outputFunctionTypes)](#module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList)
+
+
+<a name="new_module_overledger-dlt-hyperledger_fabric.HyperledgerFabric_new"></a>
+
+#### new HyperledgerFabric(sdk)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sdk | <code>any</code> | the sdk instance |
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+name"></a>
+
+#### *hyperledgerFabric*.name
+Name of the DLT
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+symbol"></a>
+
+#### *hyperledgerFabric*.symbol
+Symbol of the DLT
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+createAccount"></a>
+
+#### *hyperledgerFabric*.createAccount()
+Create an Hyperledger Fabric account
+
+**Returns**: [<code>Account</code>](#Account) - the new Hyperledger Fabric account  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+setAccount"></a>
+
+#### *hyperledgerFabric*.setAccount(accountInfo)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| accountInfo | [<code>Account</code>](#Account) | The standardised account information |
+
+Set an account for this specific DLT
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+buildTransaction"></a>
+
+#### *hyperledgerFabric*.buildTransaction(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionHyperledgerFabricRequest</code> | details on the information to include in this transaction for the Hyperledger Fabric distributed ledger |
+
+Takes the Overledger definition of a transaction and converts it into a specific Hyperledger Fabric transaction
+
+**Returns**: <code>Transaction</code> - the Hyperledger Fabric transaction  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_transactionValidation"></a>
+
+#### *hyperledgerFabric*._transactionValidation(thisTransaction)
+
+| Param | Description |
+| --- | --- |
+| thisTransaction | The transaction request |
+
+validates an OVL transactionRequest according to Hyperledger Fabric specific rules
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_smartContractQueryValidation"></a>
+
+#### *hyperledgerFabric*._smartContractQueryValidation(contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| contractQueryDetails | <code>SmartContract</code> | The transaction request |
+
+validates an OVL smart contract query according to Hyperledger Fabric specific rules
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeTransactionDataForFunctionCall"></a>
+
+#### *hyperledgerFabric*.computeTransactionDataForFunctionCall(invocationType, paramsList)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| invocationType | <code>string</code> | the type of smart contract function call |
+| paramsList | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | the list of parameters that this function takes as input |
+
+Convert Overledger object description of a smart contract function and parameters into Hyperledger Fabric versions
+
+**Returns**: <code>string</code> - the bytecode of this function call  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_sign"></a>
+
+#### *hyperledgerFabric*._sign(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of a Hyperledger Fabric transaction |
+
+Takes in an overledger definition of a transaction for Hyperledger Fabric, converts it into a form that the Hyperledger Fabric distributed ledger will understand, and then signs the transaction
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+getTransactionQueryInfo"></a>
+
+#### *hyperledgerFabric*.getTransactionQueryInfo()
+Get the information required to query for a particular transaction hash
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+_buildSmartContractQuery"></a>
+
+#### *hyperledgerFabric*._buildSmartContractQuery(dltAddress, contractQueryDetails)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dltAddress | <code>string</code> | the user's Hyperledger Fabric address |
+| contractQueryDetails | <code>SmartContractHyperledgerFabric</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
+
+Allows a user to build a smart contract query for the Hyperledger Fabric distributed ledger
+
+**Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryInputValuesList"></a>
+
+#### *hyperledgerFabric*.computeSCQueryInputValuesList(inputFunctionParams)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputFunctionParams | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | the list of input parameters |
+
+computes the input parameters into the smart contract function query
+
+<a name="module_overledger-dlt-hyperledger_fabric.HyperledgerFabric+computeSCQueryOutputTypesList"></a>
+
+#### *hyperledgerFabric*.computeSCQueryOutputTypesList(outputFunctionTypes)
+
+| Param | Type |
+| --- | --- |
+| outputFunctionTypes | <code>Array.&lt;SCHyperledgerFabricParam&gt;</code> | 
+
+computes the output parameters into the smart contract function query
+
 <a name="module_overledger-dlt-ripple"></a>
 
 ## overledger-dlt-ripple
@@ -914,7 +1368,7 @@ computes the output parameters into the smart contract function query
     * _inner_
         * [~Ripple](#module_overledger-dlt-ripple.Ripple)
 
-            * [new Ripple(sdk, options)](#new_module_overledger-dlt-ripple.Ripple_new)
+            * [new Ripple(sdk)](#new_module_overledger-dlt-ripple.Ripple_new)
 
             * [.name](#module_overledger-dlt-ripple.Ripple+name)
 
@@ -922,7 +1376,7 @@ computes the output parameters into the smart contract function query
 
             * [.createAccount()](#module_overledger-dlt-ripple.Ripple+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
             * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
@@ -933,6 +1387,16 @@ computes the output parameters into the smart contract function query
             * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_buildSmartContractQuery)
 
             * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_smartContractQueryValidation)
+
+            * [.computeFeePrice(initialFee, transactionType, fulfillment)](#module_overledger-dlt-ripple.Ripple+computeFeePrice)
+
+            * [.computeEscrowConditionFulfillment(hashAlgorithmInput)](#module_overledger-dlt-ripple.Ripple+computeEscrowConditionFulfillment)
+
+            * [.isValidISODateFormat(dateTime)](#module_overledger-dlt-ripple.Ripple+isValidISODateFormat)
+
+            * [.isValidDate(dateTimeCreate, dateTimeCancel)](#module_overledger-dlt-ripple.Ripple+isValidDate)
+
+            * [.isValidRippleAddress(address)](#module_overledger-dlt-ripple.Ripple+isValidRippleAddress)
 
 
 <a name="module_overledger-dlt-ripple.default"></a>
@@ -946,7 +1410,7 @@ Development package for Ripple (XRP Ledger).
 
 * [~Ripple](#module_overledger-dlt-ripple.Ripple)
 
-    * [new Ripple(sdk, options)](#new_module_overledger-dlt-ripple.Ripple_new)
+    * [new Ripple(sdk)](#new_module_overledger-dlt-ripple.Ripple_new)
 
     * [.name](#module_overledger-dlt-ripple.Ripple+name)
 
@@ -954,7 +1418,7 @@ Development package for Ripple (XRP Ledger).
 
     * [.createAccount()](#module_overledger-dlt-ripple.Ripple+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
     * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
@@ -966,15 +1430,24 @@ Development package for Ripple (XRP Ledger).
 
     * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-ripple.Ripple+_smartContractQueryValidation)
 
+    * [.computeFeePrice(initialFee, transactionType, fulfillment)](#module_overledger-dlt-ripple.Ripple+computeFeePrice)
+
+    * [.computeEscrowConditionFulfillment(hashAlgorithmInput)](#module_overledger-dlt-ripple.Ripple+computeEscrowConditionFulfillment)
+
+    * [.isValidISODateFormat(dateTime)](#module_overledger-dlt-ripple.Ripple+isValidISODateFormat)
+
+    * [.isValidDate(dateTimeCreate, dateTimeCancel)](#module_overledger-dlt-ripple.Ripple+isValidDate)
+
+    * [.isValidRippleAddress(address)](#module_overledger-dlt-ripple.Ripple+isValidRippleAddress)
+
 
 <a name="new_module_overledger-dlt-ripple.Ripple_new"></a>
 
-#### new Ripple(sdk, options)
+#### new Ripple(sdk)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>any</code> | 
-| options | <code>Object</code> | 
 
 <a name="module_overledger-dlt-ripple.Ripple+name"></a>
 
@@ -994,11 +1467,11 @@ Create an XRP account
 **Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
-#### *ripple*.setAccount(privateKey)
+#### *ripple*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | [<code>Account</code>](#Account) | The standardised account information |
 
 Set an account for signing for a specific DLT
 
@@ -1056,6 +1529,55 @@ Allows a user to build a smart contract query for the XRP distributed ledger (cu
 validates an OVL smart contract query according to XRP specific rules
 
 **Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
+<a name="module_overledger-dlt-ripple.Ripple+computeFeePrice"></a>
+
+#### *ripple*.computeFeePrice(initialFee, transactionType, fulfillment)
+
+| Param | Description |
+| --- | --- |
+| initialFee |  |
+| transactionType | what type of transaction is this |
+| fulfillment | is there an escrow fulfillment to be added to the transaction |
+
+<a name="module_overledger-dlt-ripple.Ripple+computeEscrowConditionFulfillment"></a>
+
+#### *ripple*.computeEscrowConditionFulfillment(hashAlgorithmInput)
+
+| Param |
+| --- |
+| hashAlgorithmInput | 
+
+Takes a string hash algorith input and generates both the bytecode version of the condition to be placed on the ledger and also the bytecode version of its pre-image fulfillment
+
+<a name="module_overledger-dlt-ripple.Ripple+isValidISODateFormat"></a>
+
+#### *ripple*.isValidISODateFormat(dateTime)
+
+| Param | Description |
+| --- | --- |
+| dateTime | the date to check |
+
+Checking the given parameter passes the ISODate format
+
+<a name="module_overledger-dlt-ripple.Ripple+isValidDate"></a>
+
+#### *ripple*.isValidDate(dateTimeCreate, dateTimeCancel)
+
+| Param | Description |
+| --- | --- |
+| dateTimeCreate | the escrow creation time |
+| dateTimeCancel | the escrow cancelation time |
+
+Checking the given parameter passes the ISODate format
+
+<a name="module_overledger-dlt-ripple.Ripple+isValidRippleAddress"></a>
+
+#### *ripple*.isValidRippleAddress(address)
+
+| Param | Description |
+| --- | --- |
+| address | the address to check |
+
 <a name="module_overledger-provider"></a>
 
 ## overledger-provider
@@ -1135,7 +1657,7 @@ Network provider package.
 
             * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-            * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
+            * [.getTransaction(transactionHash, dlt, extraFields)](#module_overledger-search.OverledgerSearch+getTransaction)
 
             * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
@@ -1161,7 +1683,7 @@ Search support package.
 
     * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-    * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
+    * [.getTransaction(transactionHash, dlt, extraFields)](#module_overledger-search.OverledgerSearch+getTransaction)
 
     * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
@@ -1184,11 +1706,13 @@ Search support package.
 
 <a name="module_overledger-search.OverledgerSearch+getTransaction"></a>
 
-#### *overledgerSearch*.getTransaction(transactionHash)
+#### *overledgerSearch*.getTransaction(transactionHash, dlt, extraFields)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | transactionHash | <code>string</code> | Transaction hash |
+| dlt | <code>string</code> | the dlt that the transactionHash resides on *Optional* |
+| extraFields | <code>string</code> | any extra fields required to perform this transaction search *Optional* |
 
 Get transaction by transaction hash
 
@@ -1272,6 +1796,59 @@ Query a smart contract
 
 This function is used to prepare the parameter definition for the web3 package
 
+<a name="computeParamType"></a>
+
+## computeParamType(param)
+
+| Param | Description |
+| --- | --- |
+| param | the parameter definition |
+
+This function is used to prepare the parameter definition for the web3 package
+
+<a name="CordaParam"></a>
+
+## CordaParam
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| type | <code>object</code> | information on the selectedType from the valid options. If an integer or byte type was chosen then further information is required on the exact number of bytes being used. If an integer is used, then selectedIntegerLength is required. If a byte is used then selectedBytesLength is required |
+| value | <code>object</code> | information on the parameter's value |
+| name | <code>string</code> | the parameter's name |
+
+A description of an Corda smart contract function parameter.
+
+<a name="AtomicSwapXRPParams"></a>
+
+## AtomicSwapXRPParams
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| allowCancelAfter | <code>Object</code> | from when can the escrow be executed? In ISOString format |
+| allowExecuteAfter | <code>Object</code> | from when can the escrow be cancelled? In ISOString format |
+| hashAlgorithmInputString | <code>Object</code> | this is the sha256 hash algorithm input as a string. It will NOT be placed on the ledger when creating a transaction. |
+| hashAlgorithmCondition | <code>Object</code> | this is if there has been a hash string placed onto another chain and now we want to add it to this chain. |
+| escrowSequence | <code>string</code> | The sequence number of the escrow you are executing or cancelling |
+| hashAlgorithmFulfillment | <code>string</code> | This is the value to unlock the escrow (the input to the sha256 hash algorithm) |
+| owner | <code>string</code> | The address that funded the escrow |
+
+An object used to describe the atomic swap params required for XRP
+
+<a name="TrustlineXRPRequest"></a>
+
+## TrustlineXRPRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| subType | <code>Object</code> | a redefinition of the TransactionRequest object, to add more XRP specific information |
+| feePrice | <code>string</code> | the fee to pay for this transaction to enter the XRP ledger. It is denoted in drops where the current minimum allowed is 12. |
+| maxLedgerVersion | <code>string</code> | The maximum ledger version the transaction can be included in |
+
+A generic object used to describe an Overledger transaction request for the XRP Ledger. Note that this object inherits many parameters from TransactionAccountsRequest.
+
 <a name="Account"></a>
 
 ## Account
@@ -1280,7 +1857,10 @@ This function is used to prepare the parameter definition for the web3 package
 | Name | Type | Description |
 | --- | --- | --- |
 | privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
-| address | <code>string</code> | The address or public key of the account, used for receiving messages. |
+| address | <code>string</code> | The address of the account, used for receiving messages |
+| publicKey | <code>string</code> | The public key of the account. The address parameter will be a representation of this public key. |
+| password | <code>string</code> | For some accounts, they may be protected by a password, or a password is used instead of a private key |
+| provider | <code>string</code> | If the account is stored or managed not by the user, then this person is the provider |
 
 An Overledger Account instance for a single DLT.
 
@@ -1320,21 +1900,36 @@ DLT and Address pair.
 
 Options for loading a DLT in the SDK.
 
+<a name="dlt"></a>
+
+## dlt
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>object</code> | from the fee estimation call |
+
+Fee estimation from different DLT
+
 <a name="NetworkOptions"></a>
 
 ## NetworkOptions
 Overledger network options.
 
-<a name="Options"></a>
+<a name="NodeResourceRequest"></a>
 
-## Options
+## NodeResourceRequest
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [privateKey] | <code>string</code> | The private key of the user account. |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| node | <code>Object</code> | The node on the distributed ledger network |
+| nodePermissions | <code>Object</code> | If there is any permissioned to access this node |
+| endpoint | <code>Object</code> | The OVL endpoint associated with this resource |
+| resourceObject | <code>Object</code> | The payload this resource requires |
 
-Options for instantiating the SDK
+Overledger node resource request object.
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -1437,6 +2032,18 @@ A generic object to describe a smart contract function parameter.
 | overledgerTransactionId | <code>string</code> | The overledgerTransactionId |
 
 Status request.
+
+<a name="UnsignedTransactionRequest"></a>
+
+## UnsignedTransactionRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| txObject | <code>Object</code> | The unsigned transaction object. |
+
+Overledger signed transaction request object.
 
 <a name="validationCheck"></a>
 

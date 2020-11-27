@@ -164,8 +164,8 @@ describe('Dlt/RippleAndEthereum', () => {
       rippleAccount = overledger.dlts.ripple.createAccount();
       ethereumAccount = overledger.dlts.ethereum.createAccount();
 
-      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
-      overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
+      overledger.dlts.ripple.setAccount({privateKey: rippleAccount.privateKey});
+      overledger.dlts.ethereum.setAccount({privateKey: ethereumAccount.privateKey});
 
       expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
@@ -192,7 +192,7 @@ describe('Dlt/RippleAndEthereum', () => {
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
-          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111",
+          fromAddress: "r4xKe53WXRQv5uv9NKYpwCB8DMvy3RNZMV",
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
           sequence: 1, 
           amount: '1',     
@@ -279,8 +279,8 @@ describe('Dlt/RippleAndEthereum', () => {
       rippleAccount = overledger.dlts.ripple.createAccount();
 
 
-      overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
-      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
+      overledger.dlts.ethereum.setAccount({privateKey: ethereumAccount.privateKey});
+      overledger.dlts.ripple.setAccount({privateKey: rippleAccount.privateKey});
 
 
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
@@ -308,7 +308,7 @@ describe('Dlt/RippleAndEthereum', () => {
           type: TransactionTypeOptions.ACCOUNTS,
           subType: {name: TransactionXRPSubTypeOptions.VALUE_TRANSFER},
           message: "",
-          fromAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwd1111", //should really be the  address of the private key but for this test is does not matter
+          fromAddress: "r4xKe53WXRQv5uv9NKYpwCB8DMvy3RNZMV", //should really be the  address of the private key but for this test is does not matter
           toAddress: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
           sequence: 1, 
           amount: '1',     

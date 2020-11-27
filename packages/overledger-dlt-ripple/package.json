@@ -16,14 +16,24 @@
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/dlt-ripple",
   "contributors": [
     {
-      "name": "Sebastien Bramille",
-      "email": "sebastien.bramille@quant.network",
-      "url": "https://github.com/oktapodia"
+      "name": "Luke Riley",
+      "email": "luke.riley@quant.network",
+      "url": "https://github.com/lukerQuant"
+    },
+    {
+      "name": "Najla Chamseddine",
+      "email": "najla.chamseddine@quant.network",
+      "url": "https://github.com/najla-quant"
     },
     {
       "name": "Alexandru Chiriac",
       "email": "alexandru.chiriac@quant.network",
       "url": "https://github.com/alexchiriac"
+    },
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
     }
   ],
   "license": "Apache-2.0",

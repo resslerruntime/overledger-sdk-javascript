@@ -73,7 +73,7 @@ describe('Dlt/Common', () => {
       });
 
       test('Can set the account previously created', () => {
-        overledger.dlts[dlt.type].setAccount(account.privateKey);
+        overledger.dlts[dlt.type].setAccount({privateKey: account.privateKey});
 
         expect(overledger.dlts[dlt.type].account.address).toBe(account.address);
       });

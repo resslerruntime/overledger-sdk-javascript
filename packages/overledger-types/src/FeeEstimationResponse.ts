@@ -8,8 +8,8 @@
  * @memberof module:overledger-types
  */
 type FeeEstimationResponse = {
-    dlt: string,
-    data: object,
+  dlt: string,
+  data: object,
 };
 
 export default FeeEstimationResponse;
