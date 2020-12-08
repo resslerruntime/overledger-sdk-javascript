@@ -17,28 +17,15 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 const partyABitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyAs2ndBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
-const partyAs2ndBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj'; // Nominate a Bitcoin address you own for the change to be returned to
-const bitcoinLinkedTx = 'c94753acde88ee2a7a5e23042d908d8976c1a19df9ddc2f8162c14c5435ff370'; // Add the previous transaction here
-const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinLinkedTx = '2b591108b4089b04936ca97f3683a448d5a68490a17b52b4bc272cd272e76eea'; // Add the previous transaction here
+const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 100000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 87800; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
-// For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
-const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
-const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761';
-
-// For the XRP ledger, you can go to the official XRP Testnet Faucet to get an account already funded.
-// Keep in mind that for XRP the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
-const partyAxrpPrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
-const partyAxrpAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC';
-
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '3BmR1ztM6YaDvp12PpVYJ3WWJHmgmy3DiC';
-const partyBEthereumAddress = '0xB3ea4D180f31B4000F2fbCC58a085eF2ffD5a763';
-const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
+const partyBBitcoinAddress = '32UgbH1uoEo3jzY2vdsBjhP1yv9W6UMab1';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -48,41 +35,14 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
   try {
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
+      dlts: [{ dlt: DltNameOptions.BITCOIN }],
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
-    overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
-    overledger.dlts.ripple.setAccount(partyAxrpPrivateKey);
-    
-    // Get the address sequences.
-    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);
-    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    const xrpAccountSequence = xrpSequenceRequest.data.dltData[0].sequence;
 
-    const redeemScriptOPsArraySimplePaymentChannel = [ bitcoin.opcodes.OP_IF,
-      bitcoin.ECPair.fromWIF('cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT', bitcoin.networks.testnet).publicKey,
-      bitcoin.opcodes.OP_CHECKSIGVERIFY,
-      bitcoin.opcodes.OP_ELSE,
-      bitcoin.ECPair.fromWIF('cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn', bitcoin.networks.testnet).publicKey,
-      bitcoin.opcodes.OP_CHECKSIGVERIFY,
-      bitcoin.script.number.encode(1601380409),
-      bitcoin.opcodes.OP_CHECKLOCKTIMEVERIFY,
-      bitcoin.opcodes.OP_DROP,
-      bitcoin.opcodes.OP_ENDIF
-     ];
-
-     const redeemScriptPaymentChannel =  bitcoin.script.compile(redeemScriptOPsArraySimplePaymentChannel);  
-
-    // Sign the transactions.
-    // As input to this function, we will be providing:
-    //  (1) a TransactionBitcoinRequest object (of @quantnetwork/overledger-dlt-bitcoin) that inherits from the TransactionUtxoRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
-    //  (2) a TransactionEthereumRequest object (of @quantnetwork/overledger-dlt-ethereum) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
-    //  (3) a TransactionXRPRequest object (of @quantnetwork/overledger-dlt-ripple) that inherits from the TransactionAccountRequest object which inherits from the TransactionRequest object (both of @quantnetwork/overledger-types)
     const signedTransactions = await overledger.sign([
     {
           // The following parameters are from the TransactionRequest object:
@@ -100,9 +60,8 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         }
       ],
       txOutputs: [ // Set as many outputs as required
-        {
-          // toAddress: bitcoin.script.compile(redeemScriptOPsArraySimplePaymentChannel), 
-          toAddress: bitcoin.payments.p2sh( { redeem: { output: redeemScriptPaymentChannel } }).output,
+        { 
+          toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
