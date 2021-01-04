@@ -22,6 +22,9 @@ type TransactionInput = {
   amount?: number,
   asset?: object,
   smartContract?: SmartContract,
+  rawTransaction?: string,
+  scriptPubKey?: string,
+  redeemScript?: string
 };
 
 export default TransactionInput;

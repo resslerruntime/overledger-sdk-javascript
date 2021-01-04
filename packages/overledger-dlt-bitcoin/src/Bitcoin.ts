@@ -40,7 +40,7 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
-  getEstimateFeeRate():AxiosPromise {
+  getEstimateFeeRate(): AxiosPromise {
     try {
       this.request = this.sdk.provider.createRequest('/bitcoin');
       return this.request.get('/transactions/fee');
@@ -49,37 +49,149 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
+  // /**
+  //  * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
+  //  * @param {TransactionEthereumRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
+  //  * @return {Transaction} the Bitcoin transaction
+  //  */
+  // buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
+
+  //   super.transactionValidation(thisTransaction);
+
+  //   // const feePrice = Number(thisTransaction.extraFields.feePrice);
+  //   let tx;
+  //   tx = new bitcoin.TransactionBuilder(this.addressType, 0); // set maximum fee rate = 0 to be flexible on fee rate
+  //   const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
+  //   let counter = 0;
+  //   while (counter < thisTransaction.txInputs.length) {
+  //     tx.addInput(thisTransaction.txInputs[counter].linkedTx, parseInt(thisTransaction.txInputs[counter].linkedIndex, 10));
+  //     counter = counter + 1;
+  //   }
+  //   counter = 0;
+  //   while (counter < thisTransaction.txOutputs.length) {
+  //     tx.addOutput(thisTransaction.txOutputs[counter].toAddress, thisTransaction.txOutputs[counter].amount);
+  //     counter = counter + 1;
+  //   }
+  //   const ret = bitcoin.script.compile(
+  //     [
+  //       bitcoin.opcodes.OP_RETURN,
+  //       data,
+  //     ]);
+  //   tx.addOutput(ret, 0);
+
+  //   return tx;
+  // }
+
   /**
-   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
-   * @param {TransactionEthereumRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
-   * @return {Transaction} the Bitcoin transaction
-   */
+  * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
+  * @param {TransactionEthereumRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
+  * @return {Transaction} the Bitcoin transaction
+  */
   buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
 
     super.transactionValidation(thisTransaction);
 
     // const feePrice = Number(thisTransaction.extraFields.feePrice);
-    let tx;
-    tx = new bitcoin.TransactionBuilder(this.addressType, 0); // set maximum fee rate = 0 to be flexible on fee rate
-    const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
+    console.log(`network ${JSON.stringify(this.addressType)}`);
+    const NETWORK = bitcoin.networks.testnet;
+    const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
+    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
+    psbtObj.setMaximumFeeRate(0);
+    psbtObj.setVersion(2); // These are defaults. This line is not needed.
+    psbtObj.setLocktime(0);
+    // const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
+    // A TO B FUND SMART CONTRACT
+    // let counter = 0;
+    // const rawTxnInput = '0200000000010139eb5e0a7df21d8bd294a60273170cdbc00eb2990988cc6fbba2ea31f7f7c01a0100000017160014a52d4c177d021872cf7ba7e61ca09c8ae75029bdfeffffff02a0860100000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac0e2114000000000017a914f2edd405a393006bbf04366b103efb0f7132702d8702473044022013bb411577bd1bcc67a02858f1a0559f3833be4172c728e827b274a0fad3a67402201c2618294f219591d147a3cebd1512b8a3c5e922dfd1dc54fec886f64246f506012103b5f27d6eba933ed4f79365942c0e184bdf8d947c2791cce9e0bf48940962b08f460c1c00';
+    // const isSegwit = rawTxnInput.substring(8, 12) === '0001';
+    // console.log(`isSegwit ${isSegwit}`);
+    // while (counter < thisTransaction.txInputs.length) {
+    //   let input = {
+    //     hash: thisTransaction.txInputs[counter].linkedTx.toString(), 
+    //     index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
+    //     nonWitnessUtxo: Buffer.from('0200000000010139eb5e0a7df21d8bd294a60273170cdbc00eb2990988cc6fbba2ea31f7f7c01a0100000017160014a52d4c177d021872cf7ba7e61ca09c8ae75029bdfeffffff02a0860100000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac0e2114000000000017a914f2edd405a393006bbf04366b103efb0f7132702d8702473044022013bb411577bd1bcc67a02858f1a0559f3833be4172c728e827b274a0fad3a67402201c2618294f219591d147a3cebd1512b8a3c5e922dfd1dc54fec886f64246f506012103b5f27d6eba933ed4f79365942c0e184bdf8d947c2791cce9e0bf48940962b08f460c1c00', 'hex')
+    //   };
+
+    //   console.log(`input ${JSON.stringify(input)}`);
+    //   psbtObj.addInput(input);
+    //   // psbtObj.addInputs(inputs);
+    //   counter = counter + 1;
+    // }
+
+    // counter = 0;
+    // while (counter < thisTransaction.txOutputs.length) {
+    //   psbtObj.addOutput({
+    //     // address: thisTransaction.txOutputs[counter].toAddress.toString(), 
+    //     script: Buffer.from('a91408a2ff1da1924a1f550abf9c2d47aaac607fcdc887', 'hex'),
+    //     value: thisTransaction.txOutputs[counter].amount
+    //   });
+    //   counter = counter + 1;
+    // }
+    // // NEEDED FOR SIMPLE TRANSACTION
+    // // const ret = bitcoin.script.compile(
+    // //   [
+    // //     bitcoin.opcodes.OP_RETURN,
+    // //     data,
+    // //   ]);
+    // //   psbt.addOutput(ret, 0);
+
+    // A TO B REDEEM SMART CONTRACT
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
-      tx.addInput(thisTransaction.txInputs[counter].linkedTx, parseInt(thisTransaction.txInputs[counter].linkedIndex, 10));
+      const rawTransactionInput = thisTransaction.txInputs[counter].rawTransaction.toString();
+      const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
+      console.log(`isSegwit ${isSegwit}`);
+      let input;
+      if (isSegwit) {
+        input = {
+          hash: thisTransaction.txInputs[counter].linkedTx.toString(),
+          index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
+          witnessUtxo: {
+            script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
+            value: thisTransaction.txInputs[counter].amount
+          },
+          noWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
+          // witness script also
+          redeemScript: Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex')
+        };
+      } else {
+        input = {
+          hash: thisTransaction.txInputs[counter].linkedTx.toString(),
+          index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
+          noWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
+          // witnessScript also
+          witnessUtxo: {
+            script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
+            value: thisTransaction.txInputs[counter].amount
+          },
+          redeemScript: Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex')
+        };
+      }
+
+      console.log(`input ${JSON.stringify(input)}`);
+      psbtObj.addInput(input);
+      // psbtObj.addInputs(inputs);
       counter = counter + 1;
     }
+
     counter = 0;
     while (counter < thisTransaction.txOutputs.length) {
-      tx.addOutput(thisTransaction.txOutputs[counter].toAddress, thisTransaction.txOutputs[counter].amount);
+      psbtObj.addOutput({
+        address: thisTransaction.txOutputs[counter].toAddress.toString(),
+        value: thisTransaction.txOutputs[counter].amount
+      });
       counter = counter + 1;
     }
-    const ret = bitcoin.script.compile(
-      [
-        bitcoin.opcodes.OP_RETURN,
-        data,
-      ]);
-    tx.addOutput(ret, 0);
+    // NEEDED FOR SIMPLE TRANSACTION
+    // const ret = bitcoin.script.compile(
+    //   [
+    //     bitcoin.opcodes.OP_RETURN,
+    //     data,
+    //   ]);
+    //   psbt.addOutput(ret, 0);
 
-    return tx;
+
+    return psbtObj;
   }
 
   /**
@@ -130,7 +242,8 @@ class Bitcoin extends AbstractDLT {
     counter = 0;
     while (counter < thisBitcoinTx.txOutputs.length) {
 
-      if (!thisBitcoinTx.txOutputs[counter].amount || thisBitcoinTx.txOutputs[counter].amount === undefined) {
+      // if (!thisBitcoinTx.txOutputs[counter].amount || thisBitcoinTx.txOutputs[counter].amount === undefined) {
+      if (thisBitcoinTx.txOutputs[counter].amount === undefined) {
         return {
           success: false,
           failingField: 'thisBitcoinTx.txOutputs.amount',
@@ -161,16 +274,35 @@ class Bitcoin extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
-    const transaction = this.buildTransaction(thisBitcoinTransaction);
+    let psbt = this.buildTransaction(thisBitcoinTransaction);
     // for each input sign them:
     const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+    console.log(`myKeyPair ${myKeyPair}`);
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
       // currently we are only supporting the p2pkh script
-      transaction.sign({ prevOutScriptType: 'p2pkh', vin: counter, keyPair: myKeyPair });
+      // if not redeemScript or not witnessScript
+      psbt.signInput(counter, myKeyPair);
       counter = counter + 1;
     }
-    return Promise.resolve(transaction.build().toHex());
+
+    // psbt.finalizeInput in case of a redeem fund
+    psbt.validateSignaturesOfAllInputs();
+    // A TO B FUND SMART CONTRACT
+    // psbt.finalizeAllInputs();
+
+    // A TO B REDEEM SMART CONTRACT
+    const finalizeRedeem = bitcoin.payments.p2sh({
+      redeem: {
+         input: bitcoin.script.compile([
+           
+         ]),
+         output: Buffer.from()
+       }
+    }); 
+    psbt.finalizeInput(0,  );
+
+    return Promise.resolve(psbt.extractTransaction(true).toHex());
   }
 
   /**
