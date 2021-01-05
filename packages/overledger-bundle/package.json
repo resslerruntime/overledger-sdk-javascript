@@ -40,10 +40,10 @@
   "dependencies": {
     "@quantnetwork/overledger-core": "^1.0.0-beta.4",
     "@quantnetwork/overledger-dlt-bitcoin": "^1.0.0-beta.4",
+    "@quantnetwork/overledger-dlt-corda": "^1.0.0-beta.4",
     "@quantnetwork/overledger-dlt-ethereum": "^1.0.0-beta.4",
-    "@quantnetwork/overledger-dlt-ripple": "^1.0.0-beta.4",
     "@quantnetwork/overledger-dlt-hyperledger_fabric": "^1.0.0-beta.4",
-    "@quantnetwork/overledger-dlt-corda": "^1.0.0-beta.4"
+    "@quantnetwork/overledger-dlt-ripple": "^1.0.0-beta.4"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
@@ -55,5 +55,6 @@
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
-  }
+  },
+  "gitHead": "8bc31b5afe31b8e9865408cfbf6b0b8ad1aa07cb"
 }
