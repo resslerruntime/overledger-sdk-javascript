@@ -7,13 +7,14 @@ import APICallWrapper from './APICallWrapper';
 import DLTAndAddress from './DLTAndAddress';
 import DLTOptions from './DLTOptions';
 import NetworkOptions from './NetworkOptions';
-import Options from './Options';
+import NodeResourceRequest from './NodeResourceRequest';
 import ProviderOptions from './ProviderOptions';
 import SDKOptions from './SDKOptions';
 import SequenceDataRequest from './SequenceDataRequest';
 import SequenceDataResponse from './SequenceDataResponse';
 import OverledgerSignedTransaction from './OverledgerSignedTransaction';
 import SignedTransactionRequest from './SignedTransactionRequest';
+import UnsignedTransactionRequest from './UnsignedTransactionRequest';
 import SmartContract from './SmartContract';
 import TransactionAccountsRequest from './TransactionAccountsRequest';
 import TransactionAccountsResponse from './TransactionAccountsResponse';
@@ -30,6 +31,8 @@ import SCFunctionParam from './SmartContractFunctionParam';
 import InteropSCFunctionOptions from './associatedEnums/SCInteropOptions';
 import DltNameOptions from './associatedEnums/DltNameOptions';
 import ValidationCheck from './ValidationCheck';
+import StatusRequest from './StatusRequest';
+import FeeEstimationResponse from './FeeEstimationResponse';
 /**
  * Types used by the Overledger SDK packages.
  */
@@ -39,7 +42,7 @@ export {
   DLTAndAddress,
   DLTOptions,
   NetworkOptions,
-  Options,
+  NodeResourceRequest,
   ProviderOptions,
   SDKOptions,
   SequenceDataRequest,
@@ -59,7 +62,10 @@ export {
   SCFunctionTypeOptions,
   SCFunctionDefinition,
   SCFunctionParam,
+  UnsignedTransactionRequest,
   InteropSCFunctionOptions,
   DltNameOptions,
   ValidationCheck,
+  StatusRequest,
+  FeeEstimationResponse,
 };

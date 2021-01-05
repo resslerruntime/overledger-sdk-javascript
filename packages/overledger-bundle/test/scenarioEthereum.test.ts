@@ -21,7 +21,7 @@ describe('Dlt/Ethereum', () => {
 
   test('Can create an account', () => {
     account = overledger.dlts.ethereum.createAccount();
-    overledger.dlts.ethereum.setAccount(account.privateKey);
+    overledger.dlts.ethereum.setAccount({privateKey: account.privateKey});
 
     expect(account.privateKey.length).toBe(66);
     expect(account.address.length).toBe(42);
@@ -64,7 +64,7 @@ describe('Dlt/Ethereum', () => {
     expect(() => overledger.dlts.ethereum.sign({any: '...', dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: "..."}, message: "...", fromAddress: "abcdefg", toAddress: "pqrst", sequence: 1})).toThrow('Error parameter: subType. Error is: You must select a subType from TransactionSubTypeOptions');
   });
   test('Cannot sign an ethereum transaction without providing the extraFields parameter', () => {
-    expect(() => overledger.dlts.ethereum.sign({any: '...', dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER}, message: "", fromAddress: "abcdefg", toAddress: "pqrst", sequence: 1})).toThrow('Error parameter: extraFields. Error is: All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it');
+    expect(() => overledger.dlts.ethereum.sign({any: '...', dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER}, message: "", fromAddress: "abcdefg", toAddress: "pqrst", sequence: 1})).toThrow('Error parameter: extraFields. Error is: All transactions for Ethereum must have the extraFields field set with compUnitPrice and compLimit parameters within it');
   });
   test('Cannot sign an ethereum transaction without providing the extraFields.compLimit parameter', () => {
     expect(() => overledger.dlts.ethereum.sign({any: '...', dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER}, message: "", fromAddress: "abcdefg", toAddress: "pqrst", sequence: 1, extraFields: {any: "kjhg"}})).toThrow('Error parameter: extraFields.compLimit. Error is: All transactions for Ethereum must have the extraFields.compLimit field set');
@@ -173,21 +173,21 @@ describe('Dlt/Ethereum', () => {
   });
   
   test('Can sign an ethereum transaction for valueTransfer', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER}, message: "", fromAddress: account.address, toAddress: "0x635B4764D1939DfAcD3a8014726159abC277BecC", sequence: 1, amount: 20, extraFields: {compLimit: "1", compUnitPrice: "2"}});
+    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER}, message: "", fromAddress: account.address, toAddress: "0x635B4764D1939DfAcD3a8014726159abC277BecC", sequence: 1, amount: 20, extraFields: {compLimit: "21004", compUnitPrice: "2"}});
    
     expect(signedTransaction.length).toBeGreaterThan(180);
     expect(signedTransaction.startsWith('0x')).toBe(true);
   });
 
   test('Can sign an ethereum transaction for smartContractDeploy', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY}, message: "", fromAddress: account.address, toAddress: "", sequence: 1, amount: 0, smartContract:{code: "0x1234567890abcdef", functionCall: [{functionType: SCFunctionTypeOptions.CONSTRUCTOR_WITH_NO_PARAMETERS}], extraFields: {payable: false}}, extraFields: {compLimit: "1", compUnitPrice: "2"}});
+    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY}, message: "", fromAddress: account.address, toAddress: "", sequence: 1, amount: 0, smartContract:{code: "0x1234567890abcdef", functionCall: [{functionType: SCFunctionTypeOptions.CONSTRUCTOR_WITH_NO_PARAMETERS}], extraFields: {payable: false}}, extraFields: {compLimit: "53544", compUnitPrice: "2"}});
 
     expect(signedTransaction.length).toBeGreaterThan(160);
     expect(signedTransaction.startsWith('0x')).toBe(true);
   });
 
   test('Can sign an ethereum transaction for smartContractInvocation', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION}, message: "", fromAddress: account.address, toAddress: "0x635B4764D1939DfAcD3a8014726159abC277BecC", sequence: 1, amount: 0, smartContract:{code: "", functionCall: [{functionName: "test", functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS, inputParams: []}], extraFields: {payable: false}}, extraFields: {compLimit: "1", compUnitPrice: "2"}});
+    signedTransaction = await overledger.dlts.ethereum.sign({dlt: DltNameOptions.ETHEREUM, type: TransactionTypeOptions.ACCOUNTS, subType: {name: TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION}, message: "", fromAddress: account.address, toAddress: "0x635B4764D1939DfAcD3a8014726159abC277BecC", sequence: 1, amount: 0, smartContract:{code: "", functionCall: [{functionName: "test", functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS, inputParams: []}], extraFields: {payable: false}}, extraFields: {compLimit: "21272", compUnitPrice: "2"}});
 
     expect(signedTransaction.length).toBeGreaterThan(190);
     expect(signedTransaction.startsWith('0x')).toBe(true);

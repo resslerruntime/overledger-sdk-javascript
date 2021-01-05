@@ -1,8 +1,9 @@
-import Accounts from 'web3-eth-accounts';
+// import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
+import { StateMutabilityType, AbiType } from 'web3-utils';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Options, Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
+import {Account, TransactionRequest, SCFunctionTypeOptions, ValidationCheck } from '@quantnetwork/overledger-types';
 import TransactionEthereumRequest from './DLTSpecificTypes/TransactionEthereumRequest';
 import SCEthereumParam from './DLTSpecificTypes/SCEthereumParam';
 import SmartContractEthereum from './DLTSpecificTypes/SmartContractEthereum';
@@ -17,8 +18,7 @@ import TransactionEthereumSubTypeOptions from './DLTSpecificTypes/associatedEnum
 */
 class Ethereum extends AbstractDLT {
   chainId: number;
-  account: Accounts;
-  options: Object;
+  account: Account;
   web3: Web3;
 
   /**
@@ -33,17 +33,11 @@ class Ethereum extends AbstractDLT {
 
   /**
    * @param {any} sdk - the sdk instance
-   * @param {Object} options - any additional options to instantiate this dlt
    */
-  constructor(sdk: any, options: Options = {}) {
-    super(sdk, options);
+  constructor(sdk: any) {
+    super(sdk);
 
     this.web3 = new Web3();
-    this.options = options;
-
-    if (options.privateKey) {
-      this.setAccount(options.privateKey);
-    }
 
     if (sdk.network === MAINNET) {
       this.chainId = 1;
@@ -58,16 +52,63 @@ class Ethereum extends AbstractDLT {
    * @return {Account} the new Ethereum account
    */
   createAccount(): Account {
-    return this.web3.eth.accounts.create();
+    let web3Account = this.web3.eth.accounts.create();
+    let thisAccount = {
+      privateKey: web3Account.privateKey,
+      address: web3Account.address,
+      publicKey: "",
+      password: "",
+      provider: "",
+    }
+    return thisAccount;
   }
 
   /**
    * Set an account for signing transactions for a specific DLT
    *
-   * @param {string} privateKey The privateKey
+   * @param {Account} accountInfo The standardised account information
    */
-  setAccount(privateKey: string): void {
-    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+  setAccount(accountInfo: Account): void {
+    if ((typeof accountInfo.privateKey === 'undefined')&&((typeof accountInfo.provider === 'undefined')||(typeof accountInfo.password === 'undefined')||(typeof accountInfo.address !== 'undefined'))){
+      throw "either accountInfo.privateKey must be set (signing client side) or, accountInfo.provider AND accountInfo.password AND accountInfo.address must be set (signing via the node)";
+    }
+    let thisPrivateKey = "";
+    let thisAddress = "";
+    let thisPublicKey = "";
+    let thisProvider = "";
+    let thisPassword = "";
+    if ((typeof accountInfo.privateKey !== 'undefined')){
+      let web3Account = this.web3.eth.accounts.privateKeyToAccount(accountInfo.privateKey);
+      thisPrivateKey = web3Account.privateKey;
+      thisAddress = web3Account.address;
+    } else if ((typeof accountInfo.provider !== 'undefined')&&(typeof accountInfo.password !== 'undefined')&&(typeof accountInfo.address !== 'undefined')){
+      thisPrivateKey = "";
+      thisAddress = accountInfo.address;
+    }
+    if ((typeof accountInfo.publicKey !== 'undefined')){
+      thisPublicKey = accountInfo.publicKey;
+    } else {
+      thisPublicKey = "";
+    }
+    if ((typeof accountInfo.provider !== 'undefined')){
+      thisProvider = accountInfo.provider;
+    } else {
+      thisProvider = "";
+    }
+    if ((typeof accountInfo.password !== 'undefined')){
+      thisPassword = accountInfo.password;
+    } else {
+      thisPassword = "";
+    }
+    let thisAccount = {
+      privateKey: thisPrivateKey,
+      address: thisAddress,
+      publicKey: thisPublicKey,
+      provider: thisProvider,
+      password: thisPassword,
+    }
+   this.account = thisAccount;
+
   }
 
   /**
@@ -110,7 +151,7 @@ class Ethereum extends AbstractDLT {
           if (!functionName) {
             throw new Error('When invoking a smart contract function, the name of the called function must be given by setting thisTransaction.smartContract.functionCall.functionName');
           }
-          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList);
+          transactionData = this.computeTransactionDataForFunctionCall(functionName, paramsList, thisTransaction.amount);
         } else {
           throw new Error('When invoking a smart contract function thisTransaction.smartContract.functionCall.functionType must be set to SCFunctionTypeOptions.functionCallWithNoParameters or SCFunctionTypeOptions.functionCallWithParameters');
         }
@@ -153,7 +194,7 @@ class Ethereum extends AbstractDLT {
       return {
         success: false,
         failingField: 'extraFields',
-        error: 'All transactions for XRP must have the extraFields field set with feePrice and maxLedgerVersion parameters within it',
+        error: 'All transactions for Ethereum must have the extraFields field set with compUnitPrice and compLimit parameters within it',
       };
     }
     if ((thisEthereumTx.extraFields.compLimit === '') || (thisEthereumTx.extraFields.compLimit == null) || (thisEthereumTx.extraFields.compLimit === 'undefined')) {
@@ -244,7 +285,7 @@ class Ethereum extends AbstractDLT {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].inputParams',
-        error: 'To invoke a smart contract on Ethereum that has parameters in its constructor, you need to provide them in the smartContract.functionCall[0].inputParams field',
+        error: 'To invoke a smart contract on Ethereum that has parameters in its function, you need to provide them in the smartContract.functionCall[0].inputParams field',
       };
     }
     if (((!thisEthereumTx.toAddress) || (thisEthereumTx.toAddress === '')) && thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_INVOCATION) {
@@ -526,12 +567,22 @@ class Ethereum extends AbstractDLT {
    *
    * @return {string} the bytecode of this function call
    */
-  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[]): string {
+  private computeTransactionDataForFunctionCall(functionName: string, paramsList: SCEthereumParam[], amount: number): string {
     const inputsAndValues =
       paramsList.reduce((values, p) => { const type = computeParamType(p); values[0].push({ type: type.toString(), name: p.name }); values[1].push(p.value); return values; }, [[], []]);
+    let payableVal = true;
+    let stateMutabilityVal = <StateMutabilityType>'payable';
+    if (amount == 0) {
+      payableVal = false;
+      stateMutabilityVal = <StateMutabilityType>'nonpayable';
+    }
     const jsonFunctionCall: IJsonFunctionCall = {
-      name: functionName,
       type: 'function',
+      name: functionName,
+      //by default since it does modify state
+      constant: false,
+      payable: payableVal,
+      stateMutability: stateMutabilityVal, 
       inputs: <[{ type: string, name: string }]>inputsAndValues[0],
     };
     const encodedInput = this.web3.eth.abi.encodeFunctionCall(jsonFunctionCall, inputsAndValues[1]);
@@ -545,9 +596,8 @@ class Ethereum extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const transaction = this.buildTransaction(<TransactionEthereumRequest>thisTransaction);
-
     return new Promise((resolve, reject) => {
-      this.account.signTransaction(transaction, (err, data) => {
+      this.web3.eth.accounts.signTransaction(transaction, this.account.privateKey, (err, data) => {
         if (err) {
           return reject(err);
         }
@@ -624,8 +674,11 @@ export type Transaction = {
 };
 
 interface IJsonFunctionCall {
+  type: AbiType;
   name: string;
-  type?: string;
+  constant: boolean;
+  payable: boolean;
+  stateMutability: StateMutabilityType;
   inputs: [{ type: string, name: string }];
 }
 

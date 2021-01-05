@@ -42,11 +42,14 @@ yarn add @quantnetwork/overledger-types
 <dt><a href="#DLTOptions">DLTOptions</a> : <code>Object</code></dt>
 <dd><p>Options for loading a DLT in the SDK.</p>
 </dd>
+<dt><a href="#dlt">dlt</a> : <code>string</code></dt>
+<dd><p>Fee estimation from different DLT</p>
+</dd>
 <dt><a href="#NetworkOptions">NetworkOptions</a> : <code>string</code></dt>
 <dd><p>Overledger network options.</p>
 </dd>
-<dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for instantiating the SDK</p>
+<dt><a href="#NodeResourceRequest">NodeResourceRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger node resource request object.</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -68,6 +71,12 @@ yarn add @quantnetwork/overledger-types
 </dd>
 <dt><a href="#SmartContractFunctionParam">SmartContractFunctionParam</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a smart contract function parameter.</p>
+</dd>
+<dt><a href="#StatusRequest">StatusRequest</a> : <code>Object</code></dt>
+<dd><p>Status request.</p>
+</dd>
+<dt><a href="#UnsignedTransactionRequest">UnsignedTransactionRequest</a> : <code>Object</code></dt>
+<dd><p>Overledger signed transaction request object.</p>
 </dd>
 <dt><a href="#validationCheck">validationCheck</a> : <code>Object</code></dt>
 <dd><p>A generic object to describe a validationCheck.</p>
@@ -99,7 +108,10 @@ yarn add @quantnetwork/overledger-types
 | Name | Type | Description |
 | --- | --- | --- |
 | privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
-| address | <code>string</code> | The address or public key of the account, used for receiving messages. |
+| address | <code>string</code> | The address of the account, used for receiving messages |
+| publicKey | <code>string</code> | The public key of the account. The address parameter will be a representation of this public key. |
+| password | <code>string</code> | For some accounts, they may be protected by a password, or a password is used instead of a private key |
+| provider | <code>string</code> | If the account is stored or managed not by the user, then this person is the provider |
 
 An Overledger Account instance for a single DLT.
 
@@ -139,21 +151,36 @@ DLT and Address pair.
 
 Options for loading a DLT in the SDK.
 
+<a name="dlt"></a>
+
+## dlt
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data | <code>object</code> | from the fee estimation call |
+
+Fee estimation from different DLT
+
 <a name="NetworkOptions"></a>
 
 ## NetworkOptions
 Overledger network options.
 
-<a name="Options"></a>
+<a name="NodeResourceRequest"></a>
 
-## Options
+## NodeResourceRequest
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| [privateKey] | <code>string</code> | The private key of the user account. |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| node | <code>Object</code> | The node on the distributed ledger network |
+| nodePermissions | <code>Object</code> | If there is any permissioned to access this node |
+| endpoint | <code>Object</code> | The OVL endpoint associated with this resource |
+| resourceObject | <code>Object</code> | The payload this resource requires |
 
-Options for instantiating the SDK
+Overledger node resource request object.
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -242,6 +269,32 @@ Overledger signed transaction request object.
 | options | <code>object</code> | information on the valid values that this parameter can take |
 
 A generic object to describe a smart contract function parameter.
+
+<a name="StatusRequest"></a>
+
+## StatusRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | mappId |
+| callbackUrl | <code>string</code> | The address which the updates send to. |
+| timestamp | <code>string</code> | The timestamp |
+| overledgerTransactionId | <code>string</code> | The overledgerTransactionId |
+
+Status request.
+
+<a name="UnsignedTransactionRequest"></a>
+
+## UnsignedTransactionRequest
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dlt | <code>string</code> | The distributed ledger technology. |
+| txObject | <code>Object</code> | The unsigned transaction object. |
+
+Overledger signed transaction request object.
 
 <a name="validationCheck"></a>
 

@@ -53,7 +53,7 @@ yarn add @quantnetwork/overledger-dlt-ethereum
     * _inner_
         * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-            * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+            * [new Ethereum(sdk)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
             * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
@@ -61,7 +61,7 @@ yarn add @quantnetwork/overledger-dlt-ethereum
 
             * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
             * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
@@ -102,7 +102,7 @@ Development package for Ethereum.
 
 * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-    * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
+    * [new Ethereum(sdk)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
     * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
@@ -110,7 +110,7 @@ Development package for Ethereum.
 
     * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
     * [.buildTransaction(thisTransaction)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
@@ -133,12 +133,11 @@ Development package for Ethereum.
 
 <a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
 
-#### new Ethereum(sdk, options)
+#### new Ethereum(sdk)
 
 | Param | Type | Description |
 | --- | --- | --- |
 | sdk | <code>any</code> | the sdk instance |
-| options | <code>Object</code> | any additional options to instantiate this dlt |
 
 <a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
 
@@ -158,11 +157,11 @@ Create an Ethereum account
 **Returns**: <code>Account</code> - the new Ethereum account  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
-#### *ethereum*.setAccount(privateKey)
+#### *ethereum*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | <code>Account</code> | The standardised account information |
 
 Set an account for signing transactions for a specific DLT
 

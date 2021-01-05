@@ -46,7 +46,7 @@ yarn add @quantnetwork/overledger-dlt-bitcoin
 
             * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-            * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+            * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
             * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -78,7 +78,7 @@ Development package for Bitcoin blockchain.
 
     * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
-    * [.setAccount(privateKey)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+    * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
 
     * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -110,9 +110,9 @@ Symbol of the DLT
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
+| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
 
-Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction.
+Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
 
 **Returns**: <code>Transaction</code> - the Bitcoin transaction  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_transactionValidation"></a>
@@ -123,7 +123,7 @@ Takes the Overledger definition of a transaction and converts it into a specific
 | --- | --- |
 | thisTransaction | The transaction request |
 
-Validates an OVL transactionRequest according to Bitcoin specific rules.
+validates an OVL transactionRequest according to XRP specific rules
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_sign"></a>
 
@@ -131,9 +131,9 @@ Validates an OVL transactionRequest according to Bitcoin specific rules.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of a Bitcoin transaction |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an XRP transaction |
 
-Takes in an overledger definition of a transaction for Bitcoin, converts it into a form that the Bitcoin distributed ledger will understand, and then signs the transaction.
+Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+createAccount"></a>
 
@@ -143,13 +143,13 @@ Create a Bitcoin account
 **Returns**: <code>Account</code> - the new Bitcoin account  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+setAccount"></a>
 
-#### *bitcoin*.setAccount(privateKey)
+#### *bitcoin*.setAccount(accountInfo)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| privateKey | <code>string</code> | The privateKey |
+| accountInfo | <code>Account</code> | The standardised account information |
 
-Set an account for signing transactions for a specific DLT.
+Set an account for signing transactions for a specific DLT
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery"></a>
 
@@ -160,7 +160,7 @@ Set an account for signing transactions for a specific DLT.
 | dltAddress | <code>string</code> | the user's Bitcoin address |
 | contractQueryDetails | <code>Object</code> | the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call. |
 
-Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for Bitcoin).
+Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for Bitcoin)
 
 **Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_smartContractQueryValidation"></a>
@@ -171,6 +171,6 @@ Allows a user to build a smart contract query for the Bitcoin distributed ledger
 | --- | --- |
 | contractQueryDetails | the query details |
 
-Validates an OVL smart contract query according to Bitcoin specific rules.
+validates an OVL smart contract query according to Bitcoin specific rules
 
 **Returns**: <code>Object</code> - success indicates if this query building was correct, if yes then it will be in the response field of the object  

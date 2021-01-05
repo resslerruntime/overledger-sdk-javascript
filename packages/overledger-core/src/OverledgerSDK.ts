@@ -2,8 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
-
+import {StatusRequest, SignedTransactionRequest, UnsignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse, NodeResourceRequest } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
 */
@@ -19,6 +18,7 @@ class OverledgerSDK {
   provider: Provider;
   request: AxiosInstance;
   search: OverledgerSearch;
+  
 
   /**
    * Create the Overledger SDK
@@ -121,11 +121,32 @@ class OverledgerSDK {
    * @param {SignedTransactionRequest[]} signedTransactions Array of Overledger signed transaction data
    */
   public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
+    
     const apiCall = signedTransactions.map(
       stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
+  }
+
+  /**
+   * Send unsigned transactions to Overledger
+   *
+   * @param {UnsignedTransactionRequest} unsignedTransactions Unsigned transaction data
+   */
+  public sendUnsigned(unsignedTransactions: UnsignedTransactionRequest[]): AxiosPromise<Object> {
+    let count = 0;
+    while (count < unsignedTransactions.length){
+      if (unsignedTransactions[count].dlt === "hyperledger_fabric"){
+        try {
+          return this.request.post(`/chaincode/sendTransaction`, JSON.stringify(unsignedTransactions[count].txObject));
+        } catch (e) {
+          return e.response;
+        }
+      } else {
+        throw "The SDK does not yet support sending unsigned transactions for distributed ledger: " + unsignedTransactions[count].dlt;
+      }
+    }
   }
 
   /**
@@ -136,6 +157,51 @@ class OverledgerSDK {
   public getBalances(balancesRequest: DLTAndAddress[]): AxiosPromise<Object> {
     return this.request.post('/balances', balancesRequest);
   }
+
+  /**
+   * Call a resource of a node
+   *
+   * @param {NodeResourceRequest} nodeResourceRequest object specifing the resource to call on this node
+   */
+  public callNodeResource(nodeResourceRequest: NodeResourceRequest): Object {
+    try{
+      return this.request.post(nodeResourceRequest.endpoint, nodeResourceRequest.resourceObject);
+      //.catch( err => err.response);  
+    }catch(e){
+      return e.response;
+    }
+  }
+
+
+  /**
+   * subscribe status of transaction
+   *
+   * @param {StatusRequest} subStatusRequest object specifing the transaction request for subscribe status
+   */
+  public subscribeStatusUpdate(subStatusRequest: StatusRequest): Object {
+    try{
+      let subStatusReqJson = JSON.stringify(subStatusRequest);
+      return this.request.post('/webhook/subscribe', subStatusReqJson)
+      //.catch( err => err.response);  
+    }catch(e){
+      return e.response;
+    }
+  }
+  
+  /**
+   * unsubscribe status of transaction
+   *
+   * @param {StatusRequest} unSubStatusReq object specifing the transaction request for unsubscribe status
+   */
+  public unSubscribeStatusUpdate(unSubStatusReq: StatusRequest): AxiosPromise<Object> {
+    try{
+      let unSubStatusReqJson = JSON.stringify(unSubStatusReq);
+      return this.request.post('/webhook/unsubscribe', unSubStatusReqJson);
+    }catch(e){
+      return e.response;
+    }
+  }
+
 
   /**
    * Get the sequence numbers for the provided addresses
@@ -166,6 +232,24 @@ class OverledgerSDK {
    */
   public readOverledgerTransaction(overledgerTransactionId: string): AxiosPromise<Object> {
     return this.request.get(`/transactions/id/${overledgerTransactionId}`);
+  }
+
+  /**
+   * Get the fee estimation for a DLT
+   * @param {string} address The address to query for
+   * @param {number} blockNumber The number of blocks
+   * @return {Promise<AxiosResponse>}
+   */
+  public getFeeEstimation(dlt: string, blockNumber: number): AxiosPromise<FeeEstimationResponse> {
+    if (dlt === '') {
+      throw new Error('The dlt name must be passed');
+    }
+
+    try {
+      return this.request.post(`/fee/${dlt}/${blockNumber}`);
+    } catch(e) {
+      return e.response;
+    }
   }
 
   /**

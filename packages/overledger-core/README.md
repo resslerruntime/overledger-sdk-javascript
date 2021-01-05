@@ -46,13 +46,23 @@ yarn add @quantnetwork/overledger-core
 
             * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
+            * [.sendUnsigned(unsignedTransactions)](#module_overledger-core.OverledgerSDK+sendUnsigned)
+
             * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+            * [.callNodeResource(nodeResourceRequest)](#module_overledger-core.OverledgerSDK+callNodeResource)
+
+            * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+            * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
 
             * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
             * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
             * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
+
+            * [.getFeeEstimation(address, blockNumber)](#module_overledger-core.OverledgerSDK+getFeeEstimation)
 
             * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
@@ -88,13 +98,23 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
 
     * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
+    * [.sendUnsigned(unsignedTransactions)](#module_overledger-core.OverledgerSDK+sendUnsigned)
+
     * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
+
+    * [.callNodeResource(nodeResourceRequest)](#module_overledger-core.OverledgerSDK+callNodeResource)
+
+    * [.subscribeStatusUpdate(subStatusRequest)](#module_overledger-core.OverledgerSDK+subscribeStatusUpdate)
+
+    * [.unSubscribeStatusUpdate(unSubStatusReq)](#module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate)
 
     * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
     * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
     * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
+
+    * [.getFeeEstimation(address, blockNumber)](#module_overledger-core.OverledgerSDK+getFeeEstimation)
 
     * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
@@ -175,6 +195,16 @@ Sign the provided transactions
 
 Send signed transactions to Overledger
 
+<a name="module_overledger-core.OverledgerSDK+sendUnsigned"></a>
+
+#### *overledgerSDK*.sendUnsigned(unsignedTransactions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unsignedTransactions | <code>UnsignedTransactionRequest</code> | Unsigned transaction data |
+
+Send unsigned transactions to Overledger
+
 <a name="module_overledger-core.OverledgerSDK+getBalances"></a>
 
 #### *overledgerSDK*.getBalances(balancesRequest)
@@ -184,6 +214,36 @@ Send signed transactions to Overledger
 | balancesRequest | <code>Array.&lt;DLTAndAddress&gt;</code> | Array of objects specifing the address and corresponding DLT |
 
 Get the balances of the specified addresses
+
+<a name="module_overledger-core.OverledgerSDK+callNodeResource"></a>
+
+#### *overledgerSDK*.callNodeResource(nodeResourceRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| nodeResourceRequest | <code>NodeResourceRequest</code> | object specifing the resource to call on this node |
+
+Call a resource of a node
+
+<a name="module_overledger-core.OverledgerSDK+subscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.subscribeStatusUpdate(subStatusRequest)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| subStatusRequest | <code>StatusRequest</code> | object specifing the transaction request for subscribe status |
+
+subscribe status of transaction
+
+<a name="module_overledger-core.OverledgerSDK+unSubscribeStatusUpdate"></a>
+
+#### *overledgerSDK*.unSubscribeStatusUpdate(unSubStatusReq)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| unSubStatusReq | <code>StatusRequest</code> | object specifing the transaction request for unsubscribe status |
+
+unsubscribe status of transaction
 
 <a name="module_overledger-core.OverledgerSDK+getSequences"></a>
 
@@ -210,6 +270,17 @@ Get transactions submitted through Overledger by the Multi-Chain Application ID 
 | overledgerTransactionId | <code>string</code> | Overledger Transaction ID |
 
 Get the transaction specified by the Overledger Transaction ID
+
+<a name="module_overledger-core.OverledgerSDK+getFeeEstimation"></a>
+
+#### *overledgerSDK*.getFeeEstimation(address, blockNumber)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| address | <code>string</code> | The address to query for |
+| blockNumber | <code>number</code> | The number of blocks |
+
+Get the fee estimation for a DLT
 
 <a name="module_overledger-core.OverledgerSDK+setMappId"></a>
 
