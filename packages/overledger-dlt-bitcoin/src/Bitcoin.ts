@@ -150,7 +150,7 @@ class Bitcoin extends AbstractDLT {
             script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
             value: thisTransaction.txInputs[counter].amount
           },
-          noWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
+          // nonWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
           // witness script also
           redeemScript: Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex')
         };
@@ -158,18 +158,19 @@ class Bitcoin extends AbstractDLT {
         input = {
           hash: thisTransaction.txInputs[counter].linkedTx.toString(),
           index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
-          noWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
+          nonWitnessUtxo: Buffer.from(thisTransaction.txInputs[counter].rawTransaction.toString(), 'hex'),
           // witnessScript also
-          witnessUtxo: {
-            script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
-            value: thisTransaction.txInputs[counter].amount
-          },
+          // witnessUtxo: {
+          //   script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
+          //   value: thisTransaction.txInputs[counter].amount
+          // },
           redeemScript: Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex')
         };
       }
 
       console.log(`input ${JSON.stringify(input)}`);
       psbtObj.addInput(input);
+      // psbtObj.updateInput(counter,input);
       // psbtObj.addInputs(inputs);
       counter = counter + 1;
     }
@@ -274,7 +275,7 @@ class Bitcoin extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
-    let psbt = this.buildTransaction(thisBitcoinTransaction);
+    let psbtObj = this.buildTransaction(thisBitcoinTransaction);
     // for each input sign them:
     const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
     console.log(`myKeyPair ${myKeyPair}`);
@@ -282,27 +283,29 @@ class Bitcoin extends AbstractDLT {
     while (counter < thisBitcoinTransaction.txInputs.length) {
       // currently we are only supporting the p2pkh script
       // if not redeemScript or not witnessScript
-      psbt.signInput(counter, myKeyPair);
+      psbtObj.signInput(counter, myKeyPair);
       counter = counter + 1;
     }
-
     // psbt.finalizeInput in case of a redeem fund
-    psbt.validateSignaturesOfAllInputs();
     // A TO B FUND SMART CONTRACT
+    psbtObj.validateSignaturesOfAllInputs();
     // psbt.finalizeAllInputs();
+
+    console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
 
     // A TO B REDEEM SMART CONTRACT
     const finalizeRedeem = bitcoin.payments.p2sh({
       redeem: {
          input: bitcoin.script.compile([
-           
+          psbtObj.data.inputs[0].partialSig[0].signature,
+          Buffer.from('', 'hex')
          ]),
-         output: Buffer.from()
+         output: Buffer.from('', 'hex')
        }
     }); 
-    psbt.finalizeInput(0,  );
+    psbtObj.finalizeInput(0, finalizeRedeem);
 
-    return Promise.resolve(psbt.extractTransaction(true).toHex());
+    return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
   /**
