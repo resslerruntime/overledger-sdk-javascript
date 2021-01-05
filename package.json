@@ -8,7 +8,7 @@
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test --stream",
-    "prepublishOnly": "yarn run lint && yarn run build && yarn run test && yarn run docs",
+    "prepublishOnly": "yarn run build && yarn run test && yarn run docs",
     "build": "make",
     "lint": "lerna exec -- yarn run lint",
     "docs": "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/dist/**/*.js' > api_reference.md"
