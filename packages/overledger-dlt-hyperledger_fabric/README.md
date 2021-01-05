@@ -1,21 +1,21 @@
 [docs]: https://github.com/quantnetwork/overledger-sdk-javascript/blob/master/README.md
 [repo]: https://github.com/quantnetwork/overledger-sdk-javascript
 
-# @quantnetwork/overledger-dlt-hyperledger_fabric
+# @quantnetwork/overledger-dlt-ethereum
 
-[Overledger SDK][repo] module for interaction with the Hyperledger Fabric distributed ledger technology.
+[Overledger SDK][repo] module for interaction with the Ethereum distributed ledger technology.
 
 ## Installation
 
 Install using [npm](https://www.npmjs.org/):
 ```
-npm install @quantnetwork/overledger-dlt-hyperledger_fabric
+npm install @quantnetwork/overledger-dlt-ethereum
 ```
 
 Or, if you prefer using [yarn](https://yarnpkg.com/):
 
 ```
-yarn add @quantnetwork/overledger-dlt-hyperledger_fabric
+yarn add @quantnetwork/overledger-dlt-ethereum
 ```
 
 ## API Reference
