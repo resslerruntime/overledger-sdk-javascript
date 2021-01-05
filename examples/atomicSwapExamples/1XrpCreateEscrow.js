@@ -1,16 +1,16 @@
 // Replace the dependency by @quantnetwork/overledger-bundle if you're in your own project
-const OverledgerSDK = require('../../packages/overledger-bundle').default;
-const TransactionXRPSubTypeOptions = require('../../packages/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
-const DltNameOptions = require('../../packages/overledger-types').DltNameOptions;
-const TransactionTypeOptions = require('../../packages/overledger-types').TransactionTypeOptions;
+const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-ripple').TransactionXRPSubTypeOptions;
+const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
+const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
 
 //The following are found from your Overledger Account:
-const mappId = '';
-const bpiKey = '';
+const mappId = '...';
+const bpiKey = '...';
 
 // This example, shows how to create an escrow on XRP between two parties A and B.
 // Paste in the two parties XRP addresses (also known as account) and party A's private key.

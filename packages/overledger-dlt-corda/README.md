@@ -3,7 +3,7 @@
 
 # @quantnetwork/overledger-dlt-corda
 
-[Overledger SDK][repo] module for interaction with the corda distributed ledger technology.
+[Overledger SDK][repo] module for interaction with the Corda distributed ledger technology.
 
 ## Installation
 
