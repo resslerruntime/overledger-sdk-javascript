@@ -294,16 +294,6 @@ class Bitcoin extends AbstractDLT {
     console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
 
     // A TO B REDEEM SMART CONTRACT
-    // const finalizeRedeem = bitcoin.payments.p2sh({
-    //   redeem: {
-    //     input: bitcoin.script.compile([
-    //       psbtObj.data.inputs[0].partialSig[0].signature,
-    //       'quantbitcoinpaymentchannel'
-    //     ]),
-    //     output: Buffer.from('a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16704b49b8c00b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', 'hex')
-    //   }
-    // });
-    // psbtObj.finalizeInput(0, finalizeRedeem.witness);
     psbtObj.finalizeInput(0, this.getFinalScripts);
 
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
