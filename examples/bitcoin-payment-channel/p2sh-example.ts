@@ -19,7 +19,7 @@ const secret = 'quantbitcoinpaymentchannel';
 const hashSecret = sha256(secret).toString();
 console.log(`Hash secret ${hashSecret}`);
 
-const timelock = bip65.encode( {blocks: 9214900} );
+const timelock = bip65.encode( {blocks: 1902800} );
 console.log(`Timelock ${timelock}`);
 
 function getPublicKey(privateKey){

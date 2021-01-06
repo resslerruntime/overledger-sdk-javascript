@@ -16,7 +16,7 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = '2b591108b4089b04936ca97f3683a448d5a68490a17b52b4bc272cd272e76eea'; // Add the previous transaction here
+const bitcoinLinkedTx = 'd6ebe2e645b3327e0012a7ade563c10d96c53db495be735ed4ef6da5c006daa0'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 100000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
@@ -24,7 +24,7 @@ const bitcoinChangeAmount = 87800; // set equal to the number of satoshis to sen
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '32UgbH1uoEo3jzY2vdsBjhP1yv9W6UMab1';
+const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
