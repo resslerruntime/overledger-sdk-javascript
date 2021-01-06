@@ -299,16 +299,17 @@ class Bitcoin extends AbstractDLT {
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
-  getFinalScripts(psbtObject, inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
+  getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH, psbtObject) {
     // script is the locking script === scriptPubKey
-    console.log(`script ${Buffer.from(script, 'hex').toString('hex')}`);
+    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${input.toString('hex')} script: ${script} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH}`);
     let finalizeRedeem;
     if (isP2SH) {
       // return finalScriptSig
+      console.log(`isP2SH ${isP2SH}`);
       finalizeRedeem = bitcoin.payments.p2sh({
         redeem: {
           input: bitcoin.script.compile([
-            psbtObject.data.inputs[inputIndex].partialSig[0].signature,
+            input.partialSig[0].signature,
             'quantbitcoinpaymentchannel'
           ]),
           output: Buffer.from('a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16704b49b8c00b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', 'hex')
@@ -317,10 +318,11 @@ class Bitcoin extends AbstractDLT {
          return { finalScriptSig: finalizeRedeem.input };
     } else if (isP2WSH) {
       // return finalScriptWitness
+      console.log(`isP2WSH ${isP2WSH}`);
       finalizeRedeem = bitcoin.payments.p2wsh({
         redeem: {
           input: bitcoin.script.compile([
-            psbtObject.data.inputs[0].partialSig[0].signature,
+            input.partialSig[0].signature,
             'quantbitcoinpaymentchannel'
           ]),
           output: Buffer.from('a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16704b49b8c00b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', 'hex')
@@ -329,7 +331,10 @@ class Bitcoin extends AbstractDLT {
       return { finalScriptWitness: psbtObject.witnessStackToScriptWitness(finalizeRedeem.witness) };
 
     } else {
+      console.log(`isSTANDARD REDEEM PAYMENT`);
       return psbtObject.getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH);
+      // take the getFinalScripts defined in psbt library
+      return true;
     }
 
   }
