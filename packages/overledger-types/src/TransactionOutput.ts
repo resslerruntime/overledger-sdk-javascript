@@ -18,6 +18,8 @@ type TransactionOutput = {
   asset?: string,
   amount?: number,
   smartContract?: SmartContract,
+  scriptType?: string
+  script?: Buffer | string
 };
 
 export default TransactionOutput;

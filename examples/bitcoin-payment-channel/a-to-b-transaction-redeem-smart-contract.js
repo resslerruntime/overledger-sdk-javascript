@@ -65,10 +65,12 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       ],
       txOutputs: [ // Set as many outputs as required
         { 
+          scriptType: 'p2pkh',
           toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
+          scriptType: 'p2pkh',
           toAddress: partyBBitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }

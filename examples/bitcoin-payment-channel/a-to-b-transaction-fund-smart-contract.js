@@ -48,6 +48,7 @@ const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
+      // scriptType: { name: ''}
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
@@ -59,11 +60,14 @@ const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
         }
       ],
       txOutputs: [ // Set as many outputs as required
-        { 
+        {  
+          scriptType: 'p2sh',
           toAddress: partyBBitcoinAddress,
+          script: 'a9146ddf8fb4b545035cee3474f99bb7bcb6b4d0f3da87',
           amount: bitcoinPartyBAmount 
         },
         {
+          scriptType: 'p2pkh',
           toAddress: partyABitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
