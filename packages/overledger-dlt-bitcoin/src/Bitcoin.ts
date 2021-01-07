@@ -328,13 +328,13 @@ interface UtxoInput {
   index: number;
   nonWitnessUtxo?: Buffer;
   witnessUtxo?: { script: Buffer, value: number };
-  redeemScript: Buffer;
-  witnessScript: Buffer;
+  redeemScript?: Buffer;
+  witnessScript?: Buffer;
 };
 
 interface UtxoOutput {
-  address: string;
-  script: Buffer;
   value: number;
+  address?: string;
+  script?: Buffer;
 }
 export default Bitcoin;
