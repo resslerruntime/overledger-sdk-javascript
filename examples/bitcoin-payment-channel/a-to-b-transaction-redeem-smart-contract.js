@@ -4,6 +4,7 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
+const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -65,12 +66,12 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       ],
       txOutputs: [ // Set as many outputs as required
         { 
-          scriptType: 'p2pkh',
+          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
-          scriptType: 'p2pkh',
+          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyBBitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
