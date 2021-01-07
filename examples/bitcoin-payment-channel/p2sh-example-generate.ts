@@ -62,7 +62,13 @@ const p2sh = bitcoin.payments.p2sh( {redeem: {output: currentPaymentChannel, NET
 console.log(`p2sh object ${JSON.stringify(p2sh)}`);
 console.log(`p2sh address ${p2sh.address}`);
 console.log(`output script ${p2sh.output.toString('hex')}`);
+console.log(`redeemScript ${p2sh.redeem.output}`);
 
 
 // 32UgbH1uoEo3jzY2vdsBjhP1yv9W6UMab1
 // hash160(buffer) === ripemd160(sha256(buffer))
+
+// Each utxos has a separate raw hex, you are using raw hex from my example for all outputs, which is a duplicate error. So how can get raw hex from txId quickly, You can fetch from this public API then take value of key hex:
+
+// https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
+// Or using your bitcoind node with getrawtransaction API. https://bitcoincore.org/en/doc/0.17.0/rpc/rawtransactions/getrawtransaction/
