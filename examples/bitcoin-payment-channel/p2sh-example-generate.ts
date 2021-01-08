@@ -62,7 +62,7 @@ const p2sh = bitcoin.payments.p2sh( {redeem: {output: currentPaymentChannel, NET
 console.log(`p2sh object ${JSON.stringify(p2sh)}`);
 console.log(`p2sh address ${p2sh.address}`);
 console.log(`output script ${p2sh.output.toString('hex')}`);
-console.log(`redeemScript ${p2sh.redeem.output}`);
+console.log(`redeemScript ${p2sh.redeem.output.toString('hex')}`);
 
 
 // 32UgbH1uoEo3jzY2vdsBjhP1yv9W6UMab1
