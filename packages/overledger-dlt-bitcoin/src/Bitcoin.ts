@@ -203,11 +203,11 @@ class Bitcoin extends AbstractDLT {
       // if not redeemScript or not witnessScript
       psbtObj.signInput(counter, myKeyPair);
       psbtObj.validateSignaturesOfInput(counter);
-      // if(thisBitcoinTransaction.txInputs[counter.]){
-      psbtObj.finalizeInput(counter, this.getFinalScripts);
-    } else {
-      psbtObj.finalizeInput(counter);
-    }
+      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM') {
+        psbtObj.finalizeInput(counter, this.getFinalScripts);
+      } else {
+        psbtObj.finalizeInput(counter);
+      }
       counter = counter + 1;
     }
     // // psbt.finalizeInput in case of a redeem fund
@@ -256,13 +256,7 @@ class Bitcoin extends AbstractDLT {
       });
       return { finalScriptWitness: psbtObject.witnessStackToScriptWitness(finalizeRedeem.witness) };
       // case of p2sh and p2wsh
-    } else {
-      console.log(`isSTANDARD REDEEM PAYMENT`);
-      return psbtObject.getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH);
-      // take the getFinalScripts defined in psbt library
-      return true;
     }
-
   }
 
   /**

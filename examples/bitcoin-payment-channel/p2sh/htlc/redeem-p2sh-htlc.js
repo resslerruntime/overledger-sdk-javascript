@@ -50,7 +50,6 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
-      transferType: 'REDEEM',
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
