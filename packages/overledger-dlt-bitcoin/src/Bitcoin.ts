@@ -100,12 +100,13 @@ class Bitcoin extends AbstractDLT {
         value: thisTransaction.txOutputs[counter].amount
       }
       if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
-        output.script = Buffer.from(thisTransaction.txOutputs[counter].script, 'hex');
+        output.script = Buffer.from(<string>thisTransaction.txOutputs[counter].script, 'hex');
+        psbtObj.addOutput(<{value: number, script: Buffer}>output);
       } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH) {
         output.address = thisTransaction.txOutputs[counter].toAddress.toString();
+        psbtObj.addOutput(<{value: number, address: string}>output);
       }
       console.log(`output ${output}`);
-      psbtObj.addOutput(output);
       counter = counter + 1;
     }
     return psbtObj;
@@ -205,7 +206,7 @@ class Bitcoin extends AbstractDLT {
     // psbt.finalizeInput in case of a redeem fund
     // A TO B FUND SMART CONTRACT
     psbtObj.validateSignaturesOfAllInputs();
-    // psbt.finalizeAllInputs();
+    psbtObj.finalizeAllInputs();
 
     console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
 
@@ -219,6 +220,7 @@ class Bitcoin extends AbstractDLT {
     // script is the locking script === scriptPubKey
     console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${input.toString('hex')} script: ${script} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH}`);
     let finalizeRedeem;
+    // add enum p2sh HTLC
     if (isP2SH) {
       // return finalScriptSig
       console.log(`isP2SH ${isP2SH}`);
@@ -337,4 +339,5 @@ interface UtxoOutput {
   address?: string;
   script?: Buffer;
 }
+
 export default Bitcoin;
