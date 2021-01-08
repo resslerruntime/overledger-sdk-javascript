@@ -19,13 +19,13 @@ const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDAp
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
 const bitcoinLinkedTx = 'd6ebe2e645b3327e0012a7ade563c10d96c53db495be735ed4ef6da5c006daa0'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
-const bitcoinInputAmount = 100000; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 1046114; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 87800; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1033914; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
+const partyBBitcoinAddress = '3KHbnuv7baChYeijEuuYhird84UMQrWKQs';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -49,7 +49,7 @@ const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
-      // scriptType: { name: ''}
+      // scriptType: { name: ''} // TRANSFER TYPE ???
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
@@ -58,6 +58,7 @@ const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
           rawTransaction: '020000000001011c2f05a306f15899aa4024030d4f1817182f6cb879efb2448f891e31818988eb01000000171600149166552c256635fdcb2a44629aa79e3f1350d4d3feffffff0262f60f00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac69946a180100000017a914a15b83a0d0888f3001ca65f46848c113e6ca33c68702473044022036850c4716a5e994ab0e9f388677ca5d98ac00b0ecf1eb3ec4a2dce25aba8896022065a0cedf583c7072242d0021f5e3375ab60dee5cf971351294b79a5c47804719012103ff2c1cd0df2ccc779e64b4fd1c801b9c18604a4576beeb8f77c162f07b6c7e2850081d00',
+          scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount 
         }
       ],
@@ -65,7 +66,7 @@ const partyBBitcoinAddress = '3BhyPmWh9YtiqrWJe397g4Ksx4K4iNqapK';
         {  
           scriptType: TransactionBitcoinScriptTypeOptions.P2SH,
           toAddress: partyBBitcoinAddress,
-          script: 'a9146ddf8fb4b545035cee3474f99bb7bcb6b4d0f3da87',
+          script: 'a914c1048d8fa8e577320e44ae57f8367abbc83132e487',
           amount: bitcoinPartyBAmount 
         },
         {

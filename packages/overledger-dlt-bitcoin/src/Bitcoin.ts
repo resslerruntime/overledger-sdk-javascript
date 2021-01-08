@@ -70,6 +70,7 @@ class Bitcoin extends AbstractDLT {
     // const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
+      console.log(`counter input ${counter}`);
       const rawTransactionInput = thisTransaction.txInputs[counter].rawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
       console.log(`isSegwit ${isSegwit}`);
@@ -101,10 +102,10 @@ class Bitcoin extends AbstractDLT {
       }
       if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         output.script = Buffer.from(<string>thisTransaction.txOutputs[counter].script, 'hex');
-        psbtObj.addOutput(<{value: number, script: Buffer}>output);
+        psbtObj.addOutput(<{ value: number, script: Buffer }>output);
       } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH) {
         output.address = thisTransaction.txOutputs[counter].toAddress.toString();
-        psbtObj.addOutput(<{value: number, address: string}>output);
+        psbtObj.addOutput(<{ value: number, address: string }>output);
       }
       console.log(`output ${output}`);
       counter = counter + 1;
@@ -201,24 +202,31 @@ class Bitcoin extends AbstractDLT {
       // currently we are only supporting the p2pkh script
       // if not redeemScript or not witnessScript
       psbtObj.signInput(counter, myKeyPair);
+      psbtObj.validateSignaturesOfInput(counter);
+      // if(thisBitcoinTransaction.txInputs[counter.]){
+      psbtObj.finalizeInput(counter, this.getFinalScripts);
+    } else {
+      psbtObj.finalizeInput(counter);
+    }
       counter = counter + 1;
     }
-    // psbt.finalizeInput in case of a redeem fund
-    // A TO B FUND SMART CONTRACT
-    psbtObj.validateSignaturesOfAllInputs();
-    psbtObj.finalizeAllInputs();
+    // // psbt.finalizeInput in case of a redeem fund
+    // // A TO B FUND SMART CONTRACT
+    // psbtObj.validateSignaturesOfAllInputs();
+    // // not in case of htlc 
+    // psbtObj.finalizeAllInputs();
 
-    console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
+    // console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
 
-    // A TO B REDEEM SMART CONTRACT
-    psbtObj.finalizeInput(0, this.getFinalScripts);
+    // // A TO B REDEEM SMART CONTRACT
+    // psbtObj.finalizeInput(0, this.getFinalScripts);
 
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
   getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH, psbtObject) {
     // script is the locking script === scriptPubKey
-    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${input.toString('hex')} script: ${script} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH}`);
+    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${input.toString('hex')} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH}`);
     let finalizeRedeem;
     // add enum p2sh HTLC
     if (isP2SH) {
@@ -228,10 +236,9 @@ class Bitcoin extends AbstractDLT {
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            // 'quantbitcoinpaymentchannel'
-            ''
+            'quantbitcoinpaymentchannel'
           ]),
-          output: Buffer.from('a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16704b49b8c00b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', 'hex')
+          output: Buffer.from(script, 'hex')
         }
       });
       return { finalScriptSig: finalizeRedeem.input };
@@ -248,7 +255,7 @@ class Bitcoin extends AbstractDLT {
         }
       });
       return { finalScriptWitness: psbtObject.witnessStackToScriptWitness(finalizeRedeem.witness) };
-
+      // case of p2sh and p2wsh
     } else {
       console.log(`isSTANDARD REDEEM PAYMENT`);
       return psbtObject.getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH);

@@ -41,7 +41,8 @@
   "dependencies": {
     "@quantnetwork/overledger-bundle": "^1.0.0-beta.3",
     "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.3",
-    "bitcoinjs-lib": "^5.1.10",
+    "bip65": "^1.0.3",
+    "bitcoinjs-lib": "^5.2.0",
     "coinselect": "^3.1.12",
     "crypto-js": "^4.0.0",
     "csv-writer": "^1.6.0",

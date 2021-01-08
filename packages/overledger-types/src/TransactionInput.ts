@@ -27,6 +27,7 @@ type TransactionInput = {
   redeemScript?: Buffer | string,
   witnessScript?: Buffer | string,
   preimage? : Buffer | string
+  transferType?: string
 };
 
 export default TransactionInput;
