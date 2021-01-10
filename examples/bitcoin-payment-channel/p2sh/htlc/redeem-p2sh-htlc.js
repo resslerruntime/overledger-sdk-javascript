@@ -16,8 +16,8 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 // const partyABitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
-const partyABitcoinAddress = '2Mt2tf1wwQhJPwnAabmV4MeNHCGMfsS2AvR';
-const bitcoinLinkedTx = 'd147ea01b9e1c803aeb0adc8c170c63cd1f60e7f3e4fb5b45a9b035f77a8b1bb'; // Add the previous transaction here
+const partyABitcoinAddress = '2NAqorer9D2i3kSMGv3XRKfqtLQgXBSN4KY';
+const bitcoinLinkedTx = 'fbe00f24bbf51c6984dd0c9783fde042561948680ab3fc7bc32161af0ad2e14f'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -60,7 +60,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           amount: bitcoinInputAmount,
           scriptPubKey: 'a914c1048d8fa8e577320e44ae57f8367abbc83132e487',
           redeemScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167038c0b1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
-          rawTransaction: '0200000001ea6ee772d22c27bcb4527ba19084a6d548a483367fa96c93049b08b40811592b000000006a473044022061ed482e32f267d58d537bf0e5ea7c389411a3e3ea6a42d446b0a21351e7aa9002202d21429449a825ca5b2b616f33e2f57f2b82a24b8c6b7df6652dd8f4081e951e0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a91408a2ff1da1924a1f550abf9c2d47aaac607fcdc887f85601000000000017a91408a2ff1da1924a1f550abf9c2d47aaac607fcdc88700000000',
+          rawTransaction: '0200000001a0da06c0a56defd45e73be95b43dc5960dc163e5ada712007e32b345e6e2ebd6000000006b483045022100afaf51663dbb36e85c36b733e34cd180a34978ceeddb327004a58258e25f721202205f8e1da8ad7ee1f271eb4051817905d09f97716564173ebc1190406cb8f27cb90121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a914c1048d8fa8e577320e44ae57f8367abbc83132e487bac60f00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
           preimage: 'quantbitcoinpaymentchannel',
           transferType: 'REDEEM'
         }

@@ -236,7 +236,7 @@ class Bitcoin extends AbstractDLT {
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            'quantbitcoinpaymentchannel'
+            Buffer.from('quantbitcoinpaymentchannel')
           ]),
           output: Buffer.from(script, 'hex')
         }
