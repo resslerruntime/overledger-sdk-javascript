@@ -14,17 +14,18 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
-const partyABitcoinAddress = '2NAqorer9D2i3kSMGv3XRKfqtLQgXBSN4KY';
-const bitcoinLinkedTx = 'fbe00f24bbf51c6984dd0c9783fde042561948680ab3fc7bc32161af0ad2e14f'; // Add the previous transaction here
-const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
-const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
-const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
+// For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
+const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
+const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
+const bitcoinLinkedTx = '3ef442b5b7bb9a5d7dd2e1f50cfa3179b7b3f2bf81e38459177500e1ba0a7ba3'; // Add the previous transaction here
+const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinInputAmount = 1677407; // set equal to the number of satoshis in your first input
+const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
+const bitcoinChangeAmount = 1665207; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
+const partyBBitcoinAddress = '2Mtfpk3Wzjq7bEeyvMH51YzKf1mK12hzMzm';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -40,7 +41,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount(partyBBitcoinPrivateKey);
+    overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
 
     const signedTransactions = await overledger.sign([
     {
@@ -48,30 +49,28 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
+      // scriptType: { name: ''} // TRANSFER TYPE ???
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
-        { 
+        {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          amount: bitcoinInputAmount,
-          scriptPubKey: 'a914c1048d8fa8e577320e44ae57f8367abbc83132e487',
-          redeemScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167038c0b1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
-          rawTransaction: '0200000001a0da06c0a56defd45e73be95b43dc5960dc163e5ada712007e32b345e6e2ebd6000000006b483045022100afaf51663dbb36e85c36b733e34cd180a34978ceeddb327004a58258e25f721202205f8e1da8ad7ee1f271eb4051817905d09f97716564173ebc1190406cb8f27cb90121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a914c1048d8fa8e577320e44ae57f8367abbc83132e487bac60f00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
-          preimage: 'quantbitcoinpaymentchannel',
-          transferType: 'REDEEM'
+          rawTransaction: '0200000000010187cdf342e2e9a90fa1342a7cfcfc553f2db1e0191c14245fb76005bad124adc60000000000feffffff020952cb110000000017a91444fdd98d1cd03a11918139eec0cac870716c0eba875f981900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac024730440220773b9e5197669b26c3492a2c305f86762a7262f42e16c034e0a1c2e4d5de18e3022044d0fe4b00f03b174cdd2412d3558657b698a9c3ce2ce862e3a0d79cd5975706012102e22872d5d3a0756f757adbc0cf99622f84837e013e0eb592141f1b0b8eaa152e7b0b1d00',
+          scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
+          amount: bitcoinInputAmount
         }
       ],
       txOutputs: [ // Set as many outputs as required
-        { 
-          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
+        {  
+          scriptType: TransactionBitcoinScriptTypeOptions.P2SHP2MS,
           toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
           scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
-          toAddress: partyBBitcoinAddress, // This is the change address
+          toAddress: partyABitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
       ],
@@ -102,3 +101,9 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.error('error:', e);
   }
 })();
+
+
+// f305d9acee40131d19c22e4978c3872e2fcc3eff6089593746c6e95a233489a8
+
+// transaction id 
+// d147ea01b9e1c803aeb0adc8c170c63cd1f60e7f3e4fb5b45a9b035f77a8b1bb

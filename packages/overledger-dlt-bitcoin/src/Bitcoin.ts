@@ -94,7 +94,7 @@ class Bitcoin extends AbstractDLT {
       psbtObj.addInput(input);
       counter = counter + 1;
     }
-
+    console.log(`inputs added`);
     counter = 0;
     while (counter < thisTransaction.txOutputs.length) {
       let output: UtxoOutput = {
@@ -103,7 +103,7 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         output.script = Buffer.from(<string>thisTransaction.txOutputs[counter].script, 'hex');
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
-      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH) {
+      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2MS) {
         output.address = thisTransaction.txOutputs[counter].toAddress.toString();
         psbtObj.addOutput(<{ value: number, address: string }>output);
       }
