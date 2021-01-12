@@ -14,6 +14,7 @@ class Bitcoin extends AbstractDLT {
   addressType: bitcoin.Network;
   request: AxiosInstance;
   account: Account;
+  multisignatureAccount: [Account];
   options: Object;
   /**
    * Name of the DLT
@@ -38,6 +39,8 @@ class Bitcoin extends AbstractDLT {
     }
     if (options.privateKey) {
       this.setAccount(options.privateKey);
+    } else if (options.privateKeysList) {
+      this.multisigAccount()
     }
   }
 
@@ -195,15 +198,15 @@ class Bitcoin extends AbstractDLT {
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     let psbtObj = this.buildTransaction(thisBitcoinTransaction);
     // for each input sign them:
+    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
+    return;
     const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
     console.log(`myKeyPair ${myKeyPair}`);
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
-      // currently we are only supporting the p2pkh script
-      // if not redeemScript or not witnessScript
       psbtObj.signInput(counter, myKeyPair);
       psbtObj.validateSignaturesOfInput(counter);
-      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM') {
+      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-HTLC') {
         psbtObj.finalizeInput(counter, this.getFinalScripts);
       } else {
         psbtObj.finalizeInput(counter);
@@ -275,7 +278,6 @@ class Bitcoin extends AbstractDLT {
       privateKey,
       address,
     };
-
   }
 
   /**
@@ -292,6 +294,50 @@ class Bitcoin extends AbstractDLT {
         .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
     };
 
+  }
+
+  setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string) {
+    const keys = privateKeys.map(pk => {
+      const keyPair = bitcoin.ECPair.fromWIF(pk, this.addressType);
+      return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey }
+    });
+    const p2ms = bitcoin.payments.p2ms({
+      m: numberCoSigners,
+      pubkeys: keys.map(k => k.publicKey),
+      network: this.addressType
+    });
+    if (scriptType !== undefined) {
+      if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
+        const p2sh = bitcoin.payments.p2sh({ redeem: p2ms, network: this.addressType });
+        return {
+          keys,
+          address: p2sh.address,
+          script: p2sh.output.toString('hex'),
+          redeemScript: p2sh.redeem.output.toString('hex')
+        }
+      } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2WSH) {
+        const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
+        return {
+          keys,
+          address: p2wsh.address,
+          script: p2wsh.output.toString('hex'),
+          witnessScript: p2wsh.redeem.output.toString('hex')
+        }
+      } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
+        const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
+        const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
+        return {
+          keys,
+          address: p2sh.address,
+          script: p2sh.output.toString('hex'),
+          redeemScript: p2sh.redeem.output.toString('hex')
+        }
+      } else {
+        throw new Error('scriptType not supported');
+      }
+    } else {
+      throw new Error('Script type must be defined');
+    }
   }
 
   /**
