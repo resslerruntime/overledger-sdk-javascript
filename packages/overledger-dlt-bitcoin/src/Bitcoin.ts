@@ -199,19 +199,51 @@ class Bitcoin extends AbstractDLT {
     let psbtObj = this.buildTransaction(thisBitcoinTransaction);
     // for each input sign them:
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
-    const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
-    console.log(`myKeyPair ${myKeyPair}`);
+    let myKeyPair;
+    if (this.account) {
+      myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
+      console.log(`myKeyPair ${myKeyPair}`);
+    }
+
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
-      psbtObj.signInput(counter, myKeyPair);
-      psbtObj.validateSignaturesOfInput(counter);
-      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-HTLC') {
-        psbtObj.finalizeInput(counter, this.getFinalScripts);
+      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS') {
+        if (!this.multisigAccount) {
+          throw new Error('A multisig Account must be set');
+        } else {
+          if (thisBitcoinTransaction.txInputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
+            throw new Error(`coSigners must be ${this.multisigAccount.numberCoSigners}`);
+          }
+          const privateKeys = this.multisigAccount.keys.map(k => k.privateKey.toString('hex'));
+          thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
+            if (privateKeys.includes(signer)) {
+              throw new Error('The current coSigner does not belong to the current multisig account');
+            }
+            const kPair = bitcoin.ECPair.fromWIF(signer, this.addressType);
+            psbtObj.signInput(counter, kPair);
+          });
+          thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
+            const key = this.multisigAccount.keys.filter(k => k.privateKey.toString('hex') === signer.toString());
+            if (key.length === 1) {
+              psbtObj.validateSignaturesOfInput(counter, key[0].publicKey);
+            } else {
+              throw new Error('Signer is duplicated');
+            }
+          });
+          psbtObj.finalizeInput(counter);
+        }
       } else {
-        psbtObj.finalizeInput(counter);
+        psbtObj.signInput(counter, myKeyPair);
+        psbtObj.validateSignaturesOfInput(counter);
+        if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-HTLC') {
+          psbtObj.finalizeInput(counter, this.getFinalScripts);
+        } else {
+          psbtObj.finalizeInput(counter);
+        }
       }
       counter = counter + 1;
     }
+
     // // psbt.finalizeInput in case of a redeem fund
     // // A TO B FUND SMART CONTRACT
     // psbtObj.validateSignaturesOfAllInputs();
@@ -298,7 +330,10 @@ class Bitcoin extends AbstractDLT {
   }
 
   setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string): void {
-    const keys =<[{publicKey: Buffer, privateKey: Buffer}]>privateKeys.map(pk => {
+    if (privateKeys.length < numberCoSigners) {
+      throw new Error('Number of cosigners must be less or equal to the length of private keys');
+    }
+    const keys = <[{ publicKey: Buffer, privateKey: Buffer }]>privateKeys.map(pk => {
       const keyPair = bitcoin.ECPair.fromWIF(pk, this.addressType);
       return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey }
     });
@@ -334,7 +369,8 @@ class Bitcoin extends AbstractDLT {
           address: p2sh.address,
           numberCoSigners,
           script: p2sh.output.toString('hex'),
-          redeemScript: p2sh.redeem.output.toString('hex')
+          redeemScript: p2ms.output.toString('hex'),
+          witnessScript: p2wsh.redeem.output.toString('hex')
         }
       } else {
         throw new Error('scriptType not supported');
