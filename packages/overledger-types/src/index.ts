@@ -32,6 +32,7 @@ import DltNameOptions from './associatedEnums/DltNameOptions';
 import ValidationCheck from './ValidationCheck';
 import StatusRequest from './StatusRequest';
 import FeeEstimationResponse from './FeeEstimationResponse';
+import MultiSigAccount from './MultiSigAccount';
 /**
  * Types used by the Overledger SDK packages.
  */
@@ -65,5 +66,6 @@ export {
   DltNameOptions,
   ValidationCheck,
   StatusRequest,
-    FeeEstimationResponse
+  FeeEstimationResponse,
+  MultiSigAccount
 };

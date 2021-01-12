@@ -1,7 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import { Options, Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
+import { Options, Account, TransactionRequest, ValidationCheck, MultiSigAccount } from '@quantnetwork/overledger-types';
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
 import { AxiosInstance, AxiosPromise } from 'axios';
@@ -14,7 +14,7 @@ class Bitcoin extends AbstractDLT {
   addressType: bitcoin.Network;
   request: AxiosInstance;
   account: Account;
-  multisignatureAccount: [Account];
+  multisigAccount: MultiSigAccount;
   options: Object;
   /**
    * Name of the DLT
@@ -39,8 +39,8 @@ class Bitcoin extends AbstractDLT {
     }
     if (options.privateKey) {
       this.setAccount(options.privateKey);
-    } else if (options.privateKeysList) {
-      this.multisigAccount()
+    } else if (options.privateKeysList && options.scriptType && options.numberCoSigners) {
+      this.setMultiSigAccount(options.numberCoSigners, options.privateKeysList, options.scriptType);
     }
   }
 
@@ -199,7 +199,6 @@ class Bitcoin extends AbstractDLT {
     let psbtObj = this.buildTransaction(thisBitcoinTransaction);
     // for each input sign them:
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
-    return;
     const myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
     console.log(`myKeyPair ${myKeyPair}`);
     let counter = 0;
@@ -280,6 +279,8 @@ class Bitcoin extends AbstractDLT {
     };
   }
 
+  // createMultiSigAccount(): 
+
   /**
    * Set an account for signing transactions for a specific DLT
    *
@@ -296,8 +297,8 @@ class Bitcoin extends AbstractDLT {
 
   }
 
-  setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string) {
-    const keys = privateKeys.map(pk => {
+  setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string): void {
+    const keys =<[{publicKey: Buffer, privateKey: Buffer}]>privateKeys.map(pk => {
       const keyPair = bitcoin.ECPair.fromWIF(pk, this.addressType);
       return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey }
     });
@@ -309,26 +310,29 @@ class Bitcoin extends AbstractDLT {
     if (scriptType !== undefined) {
       if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         const p2sh = bitcoin.payments.p2sh({ redeem: p2ms, network: this.addressType });
-        return {
+        this.multisigAccount = {
           keys,
           address: p2sh.address,
+          numberCoSigners,
           script: p2sh.output.toString('hex'),
           redeemScript: p2sh.redeem.output.toString('hex')
         }
       } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
-        return {
+        this.multisigAccount = {
           keys,
           address: p2wsh.address,
+          numberCoSigners,
           script: p2wsh.output.toString('hex'),
           witnessScript: p2wsh.redeem.output.toString('hex')
         }
       } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
         const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
-        return {
+        this.multisigAccount = {
           keys,
           address: p2sh.address,
+          numberCoSigners,
           script: p2sh.output.toString('hex'),
           redeemScript: p2sh.redeem.output.toString('hex')
         }

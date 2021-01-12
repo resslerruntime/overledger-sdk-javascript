@@ -23,8 +23,14 @@ const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send ba
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
+const partyB1BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
+const partyB1BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
+
+const partyB2BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
+const partyB2BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
+
+const partyB3BitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
+const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -40,7 +46,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount(partyBBitcoinPrivateKey);
+    const multisigAccount = overledger.dlts.bitcoin.setMultiSigAccount(2,[partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2SH');
 
     const signedTransactions = await overledger.sign([
     {
@@ -56,8 +62,8 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
           amount: bitcoinInputAmount,
-          scriptPubKey: 'a9140f9f1ed5ec59f95fd386190756608b82bccb712987',
-          redeemScript: '5221035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222121037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f121038058beafa6e35ab4a0b5a99c783aa6581d344ca72c0711657acef3460c6ce3cb53ae',
+          scriptPubKey: multisigAccount.script,
+          redeemScript: multisigAccount.redeemScript,
           rawTransaction: '0200000001a37b0abae10075175984e381bff2b3b77931fa0cf5e1d27d5d9abbb7b542f43e010000006a473044022063fde40ca6ca2c601441e4780309d347df31068d2a52c07e3194b61c7a51cac70220527c8f153e0d849e86b6ddd1ac7ea9a4ef76d58f1e4fe7d77e90a937d0798a510121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9140f9f1ed5ec59f95fd386190756608b82bccb712987b7681900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
           transferType: 'REDEEM-P2SH-P2MS'
         }
@@ -65,12 +71,12 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       txOutputs: [ // Set as many outputs as required
         { 
           scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
-          toAddress: partyBBitcoinAddress,
+          toAddress: partyB1BitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
           scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
-          toAddress: partyBBitcoinAddress, // This is the change address
+          toAddress: partyB1BitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
       ],

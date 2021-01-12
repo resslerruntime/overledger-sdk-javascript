@@ -11,6 +11,9 @@
  */
 type Options = {
   privateKey?: string,
+  privateKeysList?: [string],
+  scriptType?: string,
+  numberCoSigners?: number
 };
 
 export default Options;

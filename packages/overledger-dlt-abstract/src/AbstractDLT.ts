@@ -41,6 +41,10 @@ abstract class AbstractDLT {
    */
   public setAccount(_privateKey: string): void {
     throw new Error('setAccount: abstract method must be implemented');
+  } 
+
+  public setMultiSigAccount(_numberCoSigners: number, _privateKeys: [string], _scriptType: string): void {
+    throw new Error('setMultiSigAccount: abstract method must be implemented');
   }
 
   /**
