@@ -110,3 +110,5 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
     console.error('error:', e);
   }
 })();
+
+// https://blockstream.info/testnet/address/2Mtfpk3Wzjq7bEeyvMH51YzKf1mK12hzMzm
