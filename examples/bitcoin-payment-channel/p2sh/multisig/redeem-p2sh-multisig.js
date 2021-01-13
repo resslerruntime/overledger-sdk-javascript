@@ -23,11 +23,11 @@ const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send ba
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyB1BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyB1BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
+const partyB2BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
+const partyB2BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 
-const partyB2BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const partyB2BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
+const partyB1BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
+const partyB1BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 
 const partyB3BitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
 const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
@@ -46,8 +46,10 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
     const transactionMessage = 'OVL SDK Test';
 
     // SET multisignature account
-    const multisigAccount = overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2SH');
-
+    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2SH');
+    const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
+    console.log(`script ${ multisigAccount.script}`);
+    console.log(`redeem script ${multisigAccount.redeemScript}`);
     const signedTransactions = await overledger.sign([
     {
           // The following parameters are from the TransactionRequest object:
@@ -72,7 +74,7 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
       txOutputs: [ // Set as many outputs as required
         { 
           scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
-          toAddress: partyB1BitcoinAddress,
+          toAddress: partyB2BitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {

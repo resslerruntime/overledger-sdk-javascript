@@ -209,21 +209,23 @@ class Bitcoin extends AbstractDLT {
     while (counter < thisBitcoinTransaction.txInputs.length) {
       if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS') {
         if (!this.multisigAccount) {
-          throw new Error('A multisig Account must be set');
+          throw new Error('A multisig Account must be set up');
         } else {
           if (thisBitcoinTransaction.txInputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
             throw new Error(`coSigners must be ${this.multisigAccount.numberCoSigners}`);
           }
-          const privateKeys = this.multisigAccount.keys.map(k => k.privateKey.toString('hex'));
+          const privateKeys = this.multisigAccount.keys.map(k => k.privateKeyWIF.toString());
           thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
-            if (privateKeys.includes(signer)) {
+            if (!privateKeys.includes(signer)) {
               throw new Error('The current coSigner does not belong to the current multisig account');
             }
             const kPair = bitcoin.ECPair.fromWIF(signer, this.addressType);
             psbtObj.signInput(counter, kPair);
           });
           thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
-            const key = this.multisigAccount.keys.filter(k => k.privateKey.toString('hex') === signer.toString());
+            console.log(`signer ${signer}`);
+            const key = this.multisigAccount.keys.filter(k => k.privateKeyWIF.toString() === signer.toString());
+            console.log(`key ${JSON.stringify(key)}`);
             if (key.length === 1) {
               psbtObj.validateSignaturesOfInput(counter, key[0].publicKey);
             } else {
@@ -333,18 +335,20 @@ class Bitcoin extends AbstractDLT {
     if (privateKeys.length < numberCoSigners) {
       throw new Error('Number of cosigners must be less or equal to the length of private keys');
     }
-    const keys = <[{ publicKey: Buffer, privateKey: Buffer }]>privateKeys.map(pk => {
+    const keys = <[{ publicKey: Buffer, privateKey: Buffer, privateKeyWIF: string }]>privateKeys.map(pk => {
       const keyPair = bitcoin.ECPair.fromWIF(pk, this.addressType);
-      return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey }
+      return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey, privateKeyWIF: pk }
     });
     const p2ms = bitcoin.payments.p2ms({
       m: numberCoSigners,
       pubkeys: keys.map(k => k.publicKey),
       network: this.addressType
     });
+    console.log(`p2ms ${JSON.stringify(p2ms)}`);
     if (scriptType !== undefined) {
       if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         const p2sh = bitcoin.payments.p2sh({ redeem: p2ms, network: this.addressType });
+        console.log(`p2sh ${JSON.stringify(p2sh)}`);
         this.multisigAccount = {
           keys,
           address: p2sh.address,

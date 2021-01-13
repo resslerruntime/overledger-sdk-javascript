@@ -1,6 +1,6 @@
 import {
   TransactionRequest, SignedTransactionRequest, Account, TransactionTypeOptions,
-  TransactionAccountsRequest, TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract,
+  TransactionAccountsRequest, TransactionUtxoRequest, ValidationCheck, TransactionInput, TransactionOutput, SmartContract, MultiSigAccount,
 } from '@quantnetwork/overledger-types';
 import { AxiosPromise, AxiosResponse } from 'axios';
 
@@ -13,6 +13,7 @@ abstract class AbstractDLT {
   options: Object;
 
   account?: Account;
+  multisigAccount?: MultiSigAccount;
 
   /**
    * @param {any} sdk
@@ -95,7 +96,7 @@ abstract class AbstractDLT {
    */
   public transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
     // input validation for the user account
-    if (!this.account) {
+    if (!this.account && !this.multisigAccount) {
       return {
         success: false,
         failingField: 'overledger account',
