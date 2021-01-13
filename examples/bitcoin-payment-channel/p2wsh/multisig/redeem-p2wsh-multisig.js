@@ -12,10 +12,7 @@ const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dl
 const mappId = 'network.quant.testnet';
 const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
-// Paste in your bitcoin, ethereum and XRP ledger private keys.
-
-const partyABitcoinAddress = '2Mtfpk3Wzjq7bEeyvMH51YzKf1mK12hzMzm';
-const bitcoinLinkedTx = '5eb54d6b5c725e09216ebcb0efb4442a8fca49c062b392274cf03d8a6ec48c11'; // Add the previous transaction here
+const bitcoinLinkedTx = '69a1fce9f799dc56209a4b693ea9d10586eaa53b059d198e73c82d736030b776'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -23,11 +20,11 @@ const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send ba
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // mutisig accounts
-const partyB2BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyB2BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
-
 const partyB1BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
 const partyB1BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
+
+const partyB2BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
+const partyB2BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 
 const partyB3BitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
 const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
@@ -46,7 +43,7 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
     const transactionMessage = 'OVL SDK Test';
 
     // SET multisignature account
-    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2SH');
+    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2WSH');
     const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
     const signedTransactions = await overledger.sign([
     {
@@ -60,13 +57,13 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
         { 
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: partyABitcoinAddress,
+          fromAddress: multisigAccount.address,
           amount: bitcoinInputAmount,
           scriptPubKey: multisigAccount.script,
-          redeemScript: multisigAccount.redeemScript,
-          rawTransaction: '0200000001a37b0abae10075175984e381bff2b3b77931fa0cf5e1d27d5d9abbb7b542f43e010000006a473044022063fde40ca6ca2c601441e4780309d347df31068d2a52c07e3194b61c7a51cac70220527c8f153e0d849e86b6ddd1ac7ea9a4ef76d58f1e4fe7d77e90a937d0798a510121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9140f9f1ed5ec59f95fd386190756608b82bccb712987b7681900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          witnessScript: multisigAccount.witnessScript,
+          rawTransaction: '0200000001118cc46e8a3df04c2792b362c049ca8f2a44b4efb0bc6e21095e725c6b4db55e010000006b483045022100d0b68891aca10818c5629fa7d51f8a79951355996d5e7f312324c648508614a20220738de0603103ff667e2594ac8f0198b83da0605017e010b579e7717594221aa20121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff021027000000000000220020747a5f2f5822fa03b1ac4b4a83a74bf31f552c719d48b194d7d9246e7ff2cef30f391900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
           coSigners: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey],
-          transferType: 'REDEEM-P2SH-P2MS'
+          transferType: 'REDEEM-P2WSH-P2MS'
         }
       ],
       txOutputs: [ // Set as many outputs as required

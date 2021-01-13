@@ -106,7 +106,9 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         output.script = Buffer.from(<string>thisTransaction.txOutputs[counter].script, 'hex');
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
-      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2MS) {
+      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH 
+        || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2MS
+        || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2WSHP2MS) {
         output.address = thisTransaction.txOutputs[counter].toAddress.toString();
         psbtObj.addOutput(<{ value: number, address: string }>output);
       }
@@ -207,7 +209,8 @@ class Bitcoin extends AbstractDLT {
 
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
-      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS') {
+      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS' 
+         || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2WSH-P2MS') {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
@@ -245,17 +248,6 @@ class Bitcoin extends AbstractDLT {
       }
       counter = counter + 1;
     }
-
-    // // psbt.finalizeInput in case of a redeem fund
-    // // A TO B FUND SMART CONTRACT
-    // psbtObj.validateSignaturesOfAllInputs();
-    // // not in case of htlc 
-    // psbtObj.finalizeAllInputs();
-
-    // console.log(`psbt object data ${JSON.stringify(psbtObj.data.inputs[0].partialSig[0].signature)}`);
-
-    // // A TO B REDEEM SMART CONTRACT
-    // psbtObj.finalizeInput(0, this.getFinalScripts);
 
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
