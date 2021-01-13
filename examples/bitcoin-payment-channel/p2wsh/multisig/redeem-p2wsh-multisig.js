@@ -106,4 +106,4 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
   }
 })();
 
-// https://blockstream.info/testnet/address/2Mtfpk3Wzjq7bEeyvMH51YzKf1mK12hzMzm
+https://blockstream.info/testnet/address/tb1qw3a97t6cytaq8vdvfd9g8f6t7v042tr3n4ytr9xhmyjxulljemesd4tuez
