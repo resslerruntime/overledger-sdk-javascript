@@ -90,9 +90,10 @@ class Bitcoin extends AbstractDLT {
       }
       if (thisTransaction.txInputs[counter].redeemScript !== undefined) {
         input.redeemScript = Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex');
-      } else if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
+      }
+      if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
-      };
+      }
       console.log(`input ${JSON.stringify(input)}`);
       psbtObj.addInput(input);
       counter = counter + 1;
@@ -106,9 +107,10 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         output.script = Buffer.from(<string>thisTransaction.txOutputs[counter].script, 'hex');
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
-      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH 
+      } else if (thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2PKH
         || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2MS
-        || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2WSHP2MS) {
+        || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2WSHP2MS
+        || thisTransaction.txOutputs[counter].scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSHP2MS) {
         output.address = thisTransaction.txOutputs[counter].toAddress.toString();
         psbtObj.addOutput(<{ value: number, address: string }>output);
       }
@@ -209,8 +211,9 @@ class Bitcoin extends AbstractDLT {
 
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
-      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS' 
-         || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2WSH-P2MS') {
+      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS'
+        || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2WSH-P2MS'
+        || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2WSH-P2MS') {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
@@ -323,6 +326,9 @@ class Bitcoin extends AbstractDLT {
 
   }
 
+  // setAccount P2WPKH !!! TO DO
+  // setAccount P2SHP2WPKH
+
   setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string): void {
     if (privateKeys.length < numberCoSigners) {
       throw new Error('Number of cosigners must be less or equal to the length of private keys');
@@ -359,15 +365,18 @@ class Bitcoin extends AbstractDLT {
         }
       } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
+        console.log(`p2wsh MULTISIG ${JSON.stringify(p2wsh)}`);
         const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
+        console.log(`p2sh MULTISIG ${JSON.stringify(p2sh)}`);
         this.multisigAccount = {
           keys,
           address: p2sh.address,
           numberCoSigners,
           script: p2sh.output.toString('hex'),
-          redeemScript: p2ms.output.toString('hex'),
+          redeemScript: p2sh.redeem.output.toString('hex'),
           witnessScript: p2wsh.redeem.output.toString('hex')
         }
+        console.log(`multisigAccount ${JSON.stringify(this.multisigAccount)}`);
       } else {
         throw new Error('scriptType not supported');
       }
