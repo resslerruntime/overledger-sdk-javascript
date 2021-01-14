@@ -365,9 +365,7 @@ class Bitcoin extends AbstractDLT {
         }
       } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
-        console.log(`p2wsh MULTISIG ${JSON.stringify(p2wsh)}`);
         const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
-        console.log(`p2sh MULTISIG ${JSON.stringify(p2sh)}`);
         this.multisigAccount = {
           keys,
           address: p2sh.address,
