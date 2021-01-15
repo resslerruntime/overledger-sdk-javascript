@@ -300,6 +300,7 @@ class Bitcoin extends AbstractDLT {
     return {
       privateKey,
       address,
+      isSegwit,
       publicKey: pubkey.toString('hex'),
       password: "",
       provider: "",
@@ -314,14 +315,15 @@ class Bitcoin extends AbstractDLT {
    * @param {Account} accountInfo The standardised account information
    */
   setAccount(accountInfo: Account): void {
+    console.log(`setAccount ${accountInfo.privateKey}`);
     if (!accountInfo.privateKey) {
       throw new Error("accountInfo.privateKey must be set");
     }
     const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
     let privateKey = accountInfo.privateKey;
     let isSegwit = accountInfo.isSegwit;
-    let address = isSegwit ?
-      bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }).address
+    let address = isSegwit
+      ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }).address
       : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address;
     let publicKey = keyPair.publicKey.toString('hex');
     let provider = accountInfo.provider ? accountInfo.provider : "";
@@ -334,6 +336,7 @@ class Bitcoin extends AbstractDLT {
       provider,
       password,
     }
+    console.log(`this.account ${JSON.stringify(this.account)}`);
   }
 
   // setAccount P2WPKH !!! TO DO

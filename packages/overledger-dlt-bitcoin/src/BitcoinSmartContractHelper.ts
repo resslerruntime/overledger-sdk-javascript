@@ -4,11 +4,15 @@ import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEn
 export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
-  let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret.toString('hex') : paymentHashSecret;
+  let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
+  console.log(`claimKey ${claimKey}`);
+  console.log(`refundKey ${refundKey}`);
+  console.log(`hashSecret ${hashSecret}`);
+  
   return bitcoin.script.fromASM(
     `
      OP_HASH160
-      ${bitcoin.crypto.ripemd160(hashSecret)}
+      ${bitcoin.crypto.ripemd160(hashSecret).toString('hex')}
       OP_EQUAL
       OP_IF
         ${claimKey}

@@ -1,7 +1,9 @@
 //NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
-const bitcoin = require('bitcoinjs-lib');
+const bip65 = require('bip65');
+const sha256 = require('crypto-js/sha256');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
+const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 const generateHashTimeLockContractCode = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCode;
 const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledger-dlt-bitcoin').createHashTimeLockContractPaymentChannel;
 //  ---------------------------------------------------------
@@ -31,17 +33,22 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-    const timeLock = bip65.encode({ blocks: 1903500 }); // call get block height later + 50 blocks
+    const timeLock = bip65.encode({ blocks: 1903500 }); // better to call get block height later + 50 blocks
     console.log(`Time Lock: ${timeLock}`);
 
-    const claimPublicKey = overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} ).publicKey;
-    const refundPublicKey = overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey} ).publicKey;
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
+    const claimPublicKey = overledger.dlts.bitcoin.account.publicKey;
+    console.log(`claimPublicKey ${claimPublicKey}`);
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey} );
+    const refundPublicKey =  overledger.dlts.bitcoin.account.publicKey;
+    console.log(`refundPublicKey ${refundPublicKey}`);
 
     const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
     const p2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2WSH, overledger.dlts.bitcoin.addressType);
+    console.log(`p2wsh ${JSON.stringify(p2wshPaymentChannel)}`);
     console.log(`p2wsh address: ${p2wshPaymentChannel.address}`);
     console.log(`p2wsh output script: ${p2wshPaymentChannel.output.toString('hex')}`);
-    console.log(`p2wsh redeem script: ${p2wshPaymentChannel.redeem.output.toString('hex')}`);
+    console.log(`p2wsh witness script: ${p2wshPaymentChannel.redeem.output.toString('hex')}`);
   } catch (e) {
     console.error('error:', e);
   }

@@ -27,6 +27,10 @@ function getPublicKey(privateKey){
 }
 
 function smartContractGenerator (claimPublicKey, refundPublicKey, paymentHashSecret, timelock) {
+  console.log(`claimPublicKey ${claimPublicKey.toString('hex')}`);
+  console.log(`refundPublicKey ${refundPublicKey.toString('hex')}`);
+  console.log(`paymentHashSecret ${paymentHashSecret}`);
+  console.log(`timelock ${timelock}`);
   return bitcoin.script.fromASM(
     `
      OP_HASH160
@@ -52,6 +56,9 @@ function smartContractGenerator (claimPublicKey, refundPublicKey, paymentHashSec
 
 const pubKeyA = getPublicKey('cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT');
 const pubKeyB = getPublicKey('cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn');
+
+console.log(`pubKeyA ${JSON.stringify(pubKeyA.publicKeyBuffer.toString('hex'))}`);
+console.log(`pubKeyB ${JSON.stringify(pubKeyB)}`);
 
 const currentPaymentChannel = smartContractGenerator(pubKeyB.publicKeyBuffer, pubKeyA.publicKeyBuffer, hashSecret, timelock);
 
