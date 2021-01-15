@@ -290,14 +290,15 @@ class Bitcoin extends AbstractDLT {
    *
    * @return {Account} the new Bitcoin account
    */
-  createAccount(): Account {
+  createAccount(isSegwit: boolean = false): Account {
 
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
-    const { address, pubkey } = bitcoin.payments
-      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }); 
+    const { address, pubkey } = isSegwit 
+    ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
+    : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
     return {
-      privateKey,      
+      privateKey,
       address,
       publicKey: pubkey.toString('hex'),
       password: "",
@@ -313,37 +314,26 @@ class Bitcoin extends AbstractDLT {
    * @param {Account} accountInfo The standardised account information
    */
   setAccount(accountInfo: Account): void {
-    if (typeof accountInfo.privateKey === 'undefined'){
-      throw "accountInfo.privateKey must be set";
+    if (!accountInfo.privateKey) {
+      throw new Error("accountInfo.privateKey must be set");
     }
-    let thisPrivateKey = "";
-    let thisAddress = "";
-    let thisPublicKey = "";
-    let thisProvider = "";
-    let thisPassword = "";
     const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
-    thisPrivateKey = accountInfo.privateKey;
-    thisAddress = bitcoin.payments
-    .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address;
-    thisPublicKey = keyPair.publicKey.toString('hex');
-    if ((typeof accountInfo.provider !== 'undefined')){
-      thisProvider = accountInfo.provider;
-    } else {
-      thisProvider = "";
+    let privateKey = accountInfo.privateKey;
+    let isSegwit = accountInfo.isSegwit;
+    let address = isSegwit ?
+      bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }).address
+      : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address;
+    let publicKey = keyPair.publicKey.toString('hex');
+    let provider = accountInfo.provider ? accountInfo.provider : "";
+    let password = accountInfo.password ? accountInfo.password : "";
+    this.account = {
+      privateKey,
+      address,
+      isSegwit,
+      publicKey,
+      provider,
+      password,
     }
-    if ((typeof accountInfo.password !== 'undefined')){
-      thisPassword = accountInfo.password;
-    } else {
-      thisPassword = "";
-    }
-    let thisAccount = {
-      privateKey: thisPrivateKey,
-      address: thisAddress,
-      publicKey: thisPublicKey,
-      provider: thisProvider,
-      password: thisPassword,
-    }
-   this.account = thisAccount;
   }
 
   // setAccount P2WPKH !!! TO DO

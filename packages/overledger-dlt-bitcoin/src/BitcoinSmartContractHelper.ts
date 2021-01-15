@@ -1,19 +1,22 @@
 const bitcoin = require('bitcoinjs-lib');
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
 
-export function generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, paymentHashSecret, timelock) {
+export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
+  let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
+  let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
+  let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret.toString('hex') : paymentHashSecret;
   return bitcoin.script.fromASM(
     `
      OP_HASH160
-      ${bitcoin.crypto.ripemd160(Buffer.from(paymentHashSecret, 'hex')).toString('hex')}
+      ${bitcoin.crypto.ripemd160(hashSecret)}
       OP_EQUAL
       OP_IF
-        ${claimPublicKey.toString('hex')}
+        ${claimKey}
       OP_ELSE
         ${bitcoin.script.number.encode(timelock).toString('hex')}
         OP_CHECKLOCKTIMEVERIFY
         OP_DROP
-        ${refundPublicKey.toString('hex')}
+        ${refundKey}
       OP_ENDIF
       OP_CHECKSIG
     `
@@ -39,6 +42,4 @@ export function createHashTimeLockContractPaymentChannel(currentPaymentChannel, 
   return false;
 }
 
-export function getPublicKey(privateKey){
-  return { publicKeyBuffer: bitcoin.ECPair.fromWIF(privateKey, bitcoin.networks.testnet).publicKey, privateKeyBuffer: bitcoin.ECPair.fromWIF(privateKey, bitcoin.networks.testnet).privateKey };
-}
+type HexString = string;
