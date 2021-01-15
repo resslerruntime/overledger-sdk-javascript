@@ -15,6 +15,7 @@
 type Account = {
   privateKey: string,
   address: string,
+  isSegwit?: boolean,
   publicKey?: string,
   password?: string,
   provider?: string,
