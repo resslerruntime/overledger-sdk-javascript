@@ -47,7 +47,7 @@ const feePriorityOptions = ["fastestFee", "halfHourFee", "hourFee"];
     console.log(txOutputs);
     console.log(`------Fee----------`);
     console.log(coinSelected.fee);
-    overledger.dlts.bitcoin.setAccount(senderPrivateKey);
+    overledger.dlts.bitcoin.setAccount({privateKey: senderPrivateKey});
 
     const signedTransaction = await overledger.sign([
       {

@@ -33,7 +33,7 @@ const smartContractAddress = '0x4Bf94Ec7A50cE7C3fdFEE3ACab545DF51d279D5F';
     });
 
     // SET the signing key;
-    overledger.dlts.ethereum.setAccount(partyAEthereumPrivateKey);
+    overledger.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
 
     // Get the address sequence.
     const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);

@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-provider",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Quant Network Overledger provider package to be used by the other packages",
   "main": "dist/index.js",
   "publishConfig": {
@@ -16,21 +16,31 @@
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/provider",
   "contributors": [
     {
-      "name": "Sebastien Bramille",
-      "email": "sebastien.bramille@quant.network",
-      "url": "https://github.com/oktapodia"
+      "name": "Luke Riley",
+      "email": "luke.riley@quant.network",
+      "url": "https://github.com/lukerQuant"
+    },
+    {
+      "name": "Najla Chamseddine",
+      "email": "najla.chamseddine@quant.network",
+      "url": "https://github.com/najla-quant"
     },
     {
       "name": "Alexandru Chiriac",
       "email": "alexandru.chiriac@quant.network",
       "url": "https://github.com/alexchiriac"
+    },
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
     }
   ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@quantnetwork/overledger-types": "^1.0.0-beta.3",
+    "@quantnetwork/overledger-types": "^1.0.0-beta.4",
     "axios": "^0.18.0"
   },
   "devDependencies": {
@@ -43,5 +53,5 @@
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
   },
-  "gitHead": "7cac7209c58dcbf0204f1887a48647843609c667"
+  "gitHead": "3574baa27bba109510db5f5a088e4684b286bf4b"
 }

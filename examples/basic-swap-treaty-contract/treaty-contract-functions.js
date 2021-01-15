@@ -100,7 +100,7 @@ async function addAccountsToOverledger(overledgerSDK, overledgerDLTs, overledger
     let count = 0;
     while (count < overledgerDLTs.length) {
       if (overledgerSDK.dlts[overledgerDLTs[count]] != undefined) {
-        const t = overledgerSDK.dlts[overledgerDLTs[count]].setAccount(overledgerPrivateKeys[count]);
+        const t = overledgerSDK.dlts[overledgerDLTs[count]].setAccount({privateKey: overledgerPrivateKeys[count]});
         console.log(`t ${t}`);
       }
       count++;

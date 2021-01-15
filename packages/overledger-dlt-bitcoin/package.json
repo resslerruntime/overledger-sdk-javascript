@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-dlt-bitcoin",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Quant Network Overledger Bitcoin software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
@@ -13,23 +13,33 @@
   "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/dlt-bitcoin",
   "contributors": [
     {
-      "name": "Sebastien Bramille",
-      "email": "sebastien.bramille@quant.network",
-      "url": "https://github.com/oktapodia"
+      "name": "Luke Riley",
+      "email": "luke.riley@quant.network",
+      "url": "https://github.com/lukerQuant"
+    },
+    {
+      "name": "Najla Chamseddine",
+      "email": "najla.chamseddine@quant.network",
+      "url": "https://github.com/najla-quant"
     },
     {
       "name": "Alexandru Chiriac",
       "email": "alexandru.chiriac@quant.network",
       "url": "https://github.com/alexchiriac"
+    },
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
     }
   ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.3",
-    "@quantnetwork/overledger-provider": "^1.0.0-beta.3",
-    "@quantnetwork/overledger-types": "^1.0.0-beta.3",
+    "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.4",
+    "@quantnetwork/overledger-provider": "^1.0.0-beta.4",
+    "@quantnetwork/overledger-types": "^1.0.0-beta.4",
     "axios": "^0.18.0",
     "bitcoinjs-lib": "^5.2.0",
     "event-stream": "4.0.1",
@@ -47,5 +57,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "3574baa27bba109510db5f5a088e4684b286bf4b"
 }
