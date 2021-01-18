@@ -6,6 +6,7 @@ import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequ
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
 import { AxiosInstance, AxiosPromise } from 'axios';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
+import * as varuint from 'bip174/src/lib/converter/varint';
 
 /**
  * @memberof module:overledger-dlt-bitcoin
@@ -231,20 +232,21 @@ class Bitcoin extends AbstractDLT {
         psbtObj.signInput(counter, myKeyPair);
         psbtObj.validateSignaturesOfInput(counter);
         if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-HTLC') {
-          psbtObj.finalizeInput(counter, this.getFinalScripts);
+          const preImage = thisBitcoinTransaction.txInputs[counter].preimage;
+          psbtObj.finalizeInput(counter, (inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
+            return this.getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
+          });
         } else {
           psbtObj.finalizeInput(counter);
         }
       }
       counter = counter + 1;
     }
-
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
-  getFinalScripts(inputIndex, input, script, isSegwit, isP2SH, isP2WSH, psbtObject) {
-    // script is the locking script === scriptPubKey
-    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${input.toString('hex')} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH}`);
+  getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
+    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
     let finalizeRedeem;
     // add enum p2sh HTLC
     if (isP2SH) {
@@ -254,7 +256,7 @@ class Bitcoin extends AbstractDLT {
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            Buffer.from('quantbitcoinpaymentchannel')
+            Buffer.from(preImage)
           ]),
           output: Buffer.from(script, 'hex')
         }
@@ -262,17 +264,19 @@ class Bitcoin extends AbstractDLT {
       return { finalScriptSig: finalizeRedeem.input };
     } else if (isP2WSH) {
       // return finalScriptWitness
+      console.log(`script ${script}`);
       console.log(`isP2WSH ${isP2WSH}`);
       finalizeRedeem = bitcoin.payments.p2wsh({
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            'quantbitcoinpaymentchannel'
+            Buffer.from(preImage)
           ]),
-          output: Buffer.from('a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16704b49b8c00b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', 'hex')
+          output: Buffer.from(script, 'hex')
         }
       });
-      return { finalScriptWitness: psbtObject.witnessStackToScriptWitness(finalizeRedeem.witness) };
+      console.log(`finalizeRedeem ${JSON.stringify(finalizeRedeem.witness[0].toString('hex'))}`);
+      return { finalScriptWitness: witnessStackToScriptWitness(finalizeRedeem.witness) };
       // case of p2sh and p2wsh
     }
   }
@@ -418,6 +422,30 @@ class Bitcoin extends AbstractDLT {
       error: 'The Bitcoin SDK does not currently support smart contract validation',
     };
   }
+}
+
+// From psbt library : not exported in psbt nor in bitcoinjs-lib yet
+function witnessStackToScriptWitness(witness) {
+  let buffer = Buffer.allocUnsafe(0);
+  function writeSlice(slice) {
+    buffer = Buffer.concat([buffer, Buffer.from(slice)]);
+  }
+  function writeVarInt(i) {
+    const currentLen = buffer.length;
+    const varintLen = varuint.encodingLength(i);
+    buffer = Buffer.concat([buffer, Buffer.allocUnsafe(varintLen)]);
+    varuint.encode(i, buffer, currentLen);
+  }
+  function writeVarSlice(slice) {
+    writeVarInt(slice.length);
+    writeSlice(slice);
+  }
+  function writeVector(vector) {
+    writeVarInt(vector.length);
+    vector.forEach(writeVarSlice);
+  }
+  writeVector(witness);
+  return buffer;
 }
 
 interface UtxoInput {

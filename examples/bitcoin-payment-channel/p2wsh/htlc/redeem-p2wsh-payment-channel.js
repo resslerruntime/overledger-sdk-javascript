@@ -40,7 +40,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount(partyBBitcoinPrivateKey);
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey });
 
     const signedTransactions = await overledger.sign([
     {
@@ -102,3 +102,5 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.error('error:', e);
   }
 })();
+
+https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f
