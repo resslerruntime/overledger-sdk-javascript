@@ -247,10 +247,22 @@ class Bitcoin extends AbstractDLT {
 
   getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
     console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
-    let finalizeRedeem;
-    if (isP2SH) {
-      console.log(`isP2SH ${isP2SH}`);
-      finalizeRedeem = bitcoin.payments.p2sh({
+    let finaliseRedeem;
+    if (isSegwit && isP2SH) {
+      finaliseRedeem = bitcoin.payments.p2sh({
+        redeem: bitcoin.payments.p2wsh({
+          redeem: {
+            input: bitcoin.script.compile([
+              input.partialSig[0].signature,
+              Buffer.from(preImage)
+            ]),
+            output: Buffer.from(script, 'hex')
+          }
+        })
+      });
+      return { finalScriptSig: finaliseRedeem.input, finalScriptWitness: witnessStackToScriptWitness(finaliseRedeem.witness) };
+    } else if (isP2SH) {
+      finaliseRedeem = bitcoin.payments.p2sh({
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
@@ -259,9 +271,9 @@ class Bitcoin extends AbstractDLT {
           output: Buffer.from(script, 'hex')
         }
       });
-      return { finalScriptSig: finalizeRedeem.input };
+      return { finalScriptSig: finaliseRedeem.input };
     } else if (isP2WSH) {
-      finalizeRedeem = bitcoin.payments.p2wsh({
+      finaliseRedeem = bitcoin.payments.p2wsh({
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
@@ -270,7 +282,7 @@ class Bitcoin extends AbstractDLT {
           output: Buffer.from(script, 'hex')
         }
       });
-      return { finalScriptWitness: witnessStackToScriptWitness(finalizeRedeem.witness) };
+      return { finalScriptWitness: witnessStackToScriptWitness(finaliseRedeem.witness) };
     }
   }
 
