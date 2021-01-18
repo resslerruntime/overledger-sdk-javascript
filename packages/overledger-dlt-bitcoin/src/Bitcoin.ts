@@ -248,9 +248,7 @@ class Bitcoin extends AbstractDLT {
   getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
     console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
     let finalizeRedeem;
-    // add enum p2sh HTLC
     if (isP2SH) {
-      // return finalScriptSig
       console.log(`isP2SH ${isP2SH}`);
       finalizeRedeem = bitcoin.payments.p2sh({
         redeem: {
@@ -263,9 +261,6 @@ class Bitcoin extends AbstractDLT {
       });
       return { finalScriptSig: finalizeRedeem.input };
     } else if (isP2WSH) {
-      // return finalScriptWitness
-      console.log(`script ${script}`);
-      console.log(`isP2WSH ${isP2WSH}`);
       finalizeRedeem = bitcoin.payments.p2wsh({
         redeem: {
           input: bitcoin.script.compile([
@@ -275,9 +270,7 @@ class Bitcoin extends AbstractDLT {
           output: Buffer.from(script, 'hex')
         }
       });
-      console.log(`finalizeRedeem ${JSON.stringify(finalizeRedeem.witness[0].toString('hex'))}`);
       return { finalScriptWitness: witnessStackToScriptWitness(finalizeRedeem.witness) };
-      // case of p2sh and p2wsh
     }
   }
 
@@ -290,9 +283,9 @@ class Bitcoin extends AbstractDLT {
 
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
-    const { address, pubkey } = isSegwit 
-    ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
-    : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
+    const { address, pubkey } = isSegwit
+      ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
+      : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
     return {
       privateKey,
       address,
