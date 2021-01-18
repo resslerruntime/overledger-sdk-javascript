@@ -31,16 +31,16 @@ export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexStr
 
 export function createHashTimeLockContractPaymentChannel(currentPaymentChannel, scriptType, addressType) {
   if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
-    const p2sh = bitcoin.payments.p2sh({ redeem: { output: currentPaymentChannel, addressType }, addressType });
+    const p2sh = bitcoin.payments.p2sh({ redeem: { output: currentPaymentChannel, network: addressType }, network: addressType });
     return p2sh;
   }
   if (scriptType === TransactionBitcoinScriptTypeOptions.P2WSH) {
-    const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, addressType }, addressType });
+    const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, network: addressType }, network: addressType });
     return p2wsh;
   }
   if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
-    const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, addressType }, network: this.addressType });
-    const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
+    const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, network: addressType }, network: addressType });
+    const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: addressType });
     return p2sh;
   }
   return false;
