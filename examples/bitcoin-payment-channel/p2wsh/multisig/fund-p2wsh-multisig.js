@@ -49,7 +49,7 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount(partyABitcoinPrivateKey);
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey });
     overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2WSH');
     const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
 
