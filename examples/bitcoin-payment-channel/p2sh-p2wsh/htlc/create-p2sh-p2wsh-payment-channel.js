@@ -44,11 +44,12 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.log(`refundPublicKey ${refundPublicKey}`);
 
     const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
-    const p2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SHP2WSH, overledger.dlts.bitcoin.addressType);
-    console.log(`p2wsh ${JSON.stringify(p2wshPaymentChannel)}`);
-    console.log(`p2wsh address: ${p2wshPaymentChannel.address}`);
-    console.log(`p2wsh output script: ${p2wshPaymentChannel.output.toString('hex')}`);
-    console.log(`p2wsh witness script: ${p2wshPaymentChannel.redeem.output.toString('hex')}`);
+    const p2shp2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SHP2WSH, overledger.dlts.bitcoin.addressType);
+    console.log(`p2shp2wsh ${JSON.stringify(p2shp2wshPaymentChannel)}`);
+    console.log(`p2shp2wsh address: ${p2shp2wshPaymentChannel.p2sh.address}`);
+    console.log(`p2shp2wsh output script: ${p2shp2wshPaymentChannel.p2sh.output.toString('hex')}`);
+    console.log(`p2shp2wsh witness script: ${p2shp2wshPaymentChannel.p2wsh.redeem.output.toString('hex')}`);
+    console.log(`p2shp2wsh redeem script: ${p2shp2wshPaymentChannel.p2sh.redeem.output.toString('hex')}`);
   } catch (e) {
     console.error('error:', e);
   }

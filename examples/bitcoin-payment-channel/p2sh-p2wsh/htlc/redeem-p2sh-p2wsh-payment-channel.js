@@ -14,8 +14,8 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
-const partyABitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xsc3sl5qp25lwe';
-const bitcoinLinkedTx = '10179dbe986c6e6018b059361fef827b4e8f284ce020bcac3bcc3b073517add5'; // Add the previous transaction here
+const partyABitcoinAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
+const bitcoinLinkedTx = 'ed45606201bb92b807d3a152fbe6264d112d2736ea0b0a2481f0fae7403ca279'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -55,9 +55,10 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
           amount: bitcoinInputAmount,
-          scriptPubKey: '00202b3652df28ab1d9e88271de8a9a45783cbe0ad87415236ff79b135a3431187e8',
-          rawTransaction: '0200000001f231e32e61c83bcc47c2bff523c69b31d22ef46c2e3b3de0659464182cd70d93000000006b483045022100d6d32c14f56170d6eee8bfcb31287b01df176efb4fc25c285c8a9e928b5de8c002206d81c804bbc7e0a951fdad12b3a7e68526a19f13f666668d5db84b668948dc390121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff0210270000000000002200202b3652df28ab1d9e88271de8a9a45783cbe0ad87415236ff79b135a3431187e87ced1a00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
-          witnessScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167038c0b1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
+          scriptPubKey: 'a9142be4567959db4393dff7985524fc420a0e223d4287',
+          rawTransaction: '020000000183345279d4b08f30f83e30f19ff90f549464b418fe1842d53bb266fc8016e650010000006a47304402203f8abbc0f65db1e7887d439df1b4687849a0e753a5e0416db58854931f5a4dcc02200cacc740aa0a2f5aa06098d3d4116ec6592d2c8022ce01be8162fab5690f41280121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9142be4567959db4393dff7985524fc420a0e223d428717272200000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          witnessScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167047aad2201b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
+          redeemScript: '0020426ddef1361f6cf4721aa0d34be8546c2b285dd27978ecf139b40655afb9d67d',
           preimage: 'quantbitcoinpaymentchannel',
           transferType: 'REDEEM-HTLC'
         }
@@ -100,4 +101,4 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
   }
 })();
 
-https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f
+// https://blockstream.info/testnet/tx/c23a24eb6c21f1f5b0520dd83a4b2e6e9b0bb733650269f838e11382f5d55ac4
