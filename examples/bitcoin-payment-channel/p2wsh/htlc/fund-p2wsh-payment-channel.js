@@ -102,4 +102,4 @@ const partyBBitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xs
   }
 })();
 
-https://blockstream.info/testnet/tx/10179dbe986c6e6018b059361fef827b4e8f284ce020bcac3bcc3b073517add5
+// https://blockstream.info/testnet/tx/10179dbe986c6e6018b059361fef827b4e8f284ce020bcac3bcc3b073517add5
