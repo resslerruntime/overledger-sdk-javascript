@@ -65,12 +65,10 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       ],
       txOutputs: [ // Set as many outputs as required
         { 
-          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
-          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyBBitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
@@ -103,4 +101,4 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
   }
 })();
 
-https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f
+// https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f

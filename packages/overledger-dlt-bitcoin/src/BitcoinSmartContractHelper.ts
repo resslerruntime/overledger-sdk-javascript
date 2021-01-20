@@ -5,9 +5,6 @@ export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexStr
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
   let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
-  console.log(`claimKey ${claimKey}`);
-  console.log(`refundKey ${refundKey}`);
-  console.log(`hashSecret ${hashSecret}`);
   
   return bitcoin.script.fromASM(
     `

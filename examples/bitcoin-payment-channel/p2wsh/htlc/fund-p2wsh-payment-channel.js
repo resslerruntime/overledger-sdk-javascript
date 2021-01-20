@@ -64,12 +64,10 @@ const partyBBitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xs
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          scriptType: TransactionBitcoinScriptTypeOptions.P2WSH,
           toAddress: partyBBitcoinAddress,
           amount: bitcoinPartyBAmount 
         },
         {
-          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyABitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
