@@ -25,6 +25,10 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
         console.log('Bitcoin account:\n', bitcoinAccount);
         console.log("");
 
+        const bitcoinAccountSegwit = await overledger.dlts.bitcoin.createAccount(true);
+        console.log('Bitcoin account segwit:\n', bitcoinAccountSegwit);
+        console.log("");
+
         // const ethAccount = await overledger.dlts.ethereum.createAccount();
         // console.log('Ethereum account:\n', ethAccount);
         // console.log("");
