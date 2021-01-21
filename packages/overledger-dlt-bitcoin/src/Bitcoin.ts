@@ -51,7 +51,7 @@ class Bitcoin extends AbstractDLT {
 
   /**
   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
-  * @param {TransactionEthereumRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
+  * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
   * @return {Transaction} the Bitcoin transaction
   */
   buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
@@ -60,13 +60,13 @@ class Bitcoin extends AbstractDLT {
 
     // const feePrice = Number(thisTransaction.extraFields.feePrice);
     // console.log(`network ${JSON.stringify(this.addressType)}`);
-    const NETWORK = bitcoin.networks.testnet;
-    const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
+    // const NETWORK = bitcoin.networks.testnet;
+    // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
+    const psbtObj = new bitcoin.Psbt({ network: this.addressType});
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
     psbtObj.setLocktime(0);
-    // const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
       console.log(`counter input ${counter}`);
@@ -101,10 +101,19 @@ class Bitcoin extends AbstractDLT {
         value: thisTransaction.txOutputs[counter].amount,
         address: thisTransaction.txOutputs[counter].toAddress.toString()
       }
-      psbtObj.addOutput(output);
+      psbtObj.addOutput(<{value: number, address: string}>output);
       console.log(`output ${output}`);
       counter = counter + 1;
     }
+
+    const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
+    const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
+    const dataOutput: UtxoOutput = {
+      value: 0,
+      script: unspendableReturnPayment.output
+    };
+    psbtObj.addOutput(<{value: number, script: Buffer}>dataOutput);
+
     return psbtObj;
   }
 
@@ -464,7 +473,8 @@ interface UtxoInput {
 
 interface UtxoOutput {
   value: number;
-  address: string;
+  address?: string;
+  script?: Buffer;
 }
 
 export default Bitcoin;
