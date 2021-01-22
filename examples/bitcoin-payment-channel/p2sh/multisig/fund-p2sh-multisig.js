@@ -1,5 +1,4 @@
 //NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
-const bitcoin = require('bitcoinjs-lib');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
@@ -50,7 +49,7 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey });
-    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], 'P2SH');
+    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey ], TransactionBitcoinScriptTypeOptions.P2SH);
     const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
 
     const signedTransactions = await overledger.sign([
