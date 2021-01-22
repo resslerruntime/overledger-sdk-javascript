@@ -389,7 +389,7 @@ class Bitcoin extends AbstractDLT {
           script: p2wsh.output.toString('hex'),
           witnessScript: p2wsh.redeem.output.toString('hex')
         }
-      } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
+      } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH_P2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
         const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
         this.multisigAccount = {

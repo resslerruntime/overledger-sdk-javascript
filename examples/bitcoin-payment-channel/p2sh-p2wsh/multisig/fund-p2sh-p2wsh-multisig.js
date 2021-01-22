@@ -72,12 +72,10 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          scriptType: TransactionBitcoinScriptTypeOptions.P2SHP2WSHP2MS,
           toAddress: multisigAccount.address,
           amount: bitcoinPartyBAmount 
         },
         {
-          scriptType: TransactionBitcoinScriptTypeOptions.P2PKH,
           toAddress: partyABitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }

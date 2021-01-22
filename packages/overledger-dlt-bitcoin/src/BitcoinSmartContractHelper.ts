@@ -35,7 +35,7 @@ export function createHashTimeLockContractPaymentChannel(currentPaymentChannel, 
     const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, network: addressType }, network: addressType });
     return p2wsh;
   }
-  if (scriptType === TransactionBitcoinScriptTypeOptions.P2SHP2WSH) {
+  if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH_P2WSH) {
     const p2wsh = bitcoin.payments.p2wsh({ redeem: { output: currentPaymentChannel, network: addressType }, network: addressType });
     const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: addressType });
     return { p2sh, p2wsh};

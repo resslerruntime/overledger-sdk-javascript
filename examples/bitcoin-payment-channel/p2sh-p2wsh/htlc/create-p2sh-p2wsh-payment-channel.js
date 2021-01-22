@@ -44,7 +44,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.log(`refundPublicKey ${refundPublicKey}`);
 
     const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
-    const p2shp2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SHP2WSH, overledger.dlts.bitcoin.addressType);
+    const p2shp2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SH_P2WSH, overledger.dlts.bitcoin.addressType);
     console.log(`p2shp2wsh ${JSON.stringify(p2shp2wshPaymentChannel)}`);
     console.log(`p2shp2wsh address: ${p2shp2wshPaymentChannel.p2sh.address}`);
     console.log(`p2shp2wsh output script: ${p2shp2wshPaymentChannel.p2sh.output.toString('hex')}`);
