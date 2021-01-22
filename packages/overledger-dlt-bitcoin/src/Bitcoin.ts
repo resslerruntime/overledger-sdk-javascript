@@ -6,6 +6,7 @@ import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequ
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
 import { AxiosInstance, AxiosPromise } from 'axios';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
+import TransactionBitcoinTransferTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinTransferTypeOptions';
 import * as varuint from 'bip174/src/lib/converter/varint';
 
 /**
@@ -62,7 +63,7 @@ class Bitcoin extends AbstractDLT {
     // console.log(`network ${JSON.stringify(this.addressType)}`);
     // const NETWORK = bitcoin.networks.testnet;
     // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
-    const psbtObj = new bitcoin.Psbt({ network: this.addressType});
+    const psbtObj = new bitcoin.Psbt({ network: this.addressType });
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
@@ -101,18 +102,20 @@ class Bitcoin extends AbstractDLT {
         value: thisTransaction.txOutputs[counter].amount,
         address: thisTransaction.txOutputs[counter].toAddress.toString()
       }
-      psbtObj.addOutput(<{value: number, address: string}>output);
+      psbtObj.addOutput(<{ value: number, address: string }>output);
       console.log(`output ${output}`);
       counter = counter + 1;
     }
 
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
+    const dataLength = data.length;
+    console.log(`data length ${dataLength}`);
     const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
     const dataOutput: UtxoOutput = {
       value: 0,
       script: unspendableReturnPayment.output
     };
-    psbtObj.addOutput(<{value: number, script: Buffer}>dataOutput);
+    psbtObj.addOutput(<{ value: number, script: Buffer }>dataOutput);
 
     return psbtObj;
   }
@@ -208,9 +211,8 @@ class Bitcoin extends AbstractDLT {
 
     let counter = 0;
     while (counter < thisBitcoinTransaction.txInputs.length) {
-      if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2MS'
-        || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2WSH-P2MS'
-        || thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-P2SH-P2WSH-P2MS') {
+      if (thisBitcoinTransaction.txInputs[counter].transferType
+        && thisBitcoinTransaction.txInputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_P2MS) {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
@@ -240,7 +242,8 @@ class Bitcoin extends AbstractDLT {
       } else {
         psbtObj.signInput(counter, myKeyPair);
         psbtObj.validateSignaturesOfInput(counter);
-        if (thisBitcoinTransaction.txInputs[counter].transferType === 'REDEEM-HTLC') {
+        if (thisBitcoinTransaction.txInputs[counter].transferType
+          && thisBitcoinTransaction.txInputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC) {
           const preImage = thisBitcoinTransaction.txInputs[counter].preimage;
           psbtObj.finalizeInput(counter, (inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
             return this.getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
@@ -263,7 +266,7 @@ class Bitcoin extends AbstractDLT {
           redeem: {
             input: bitcoin.script.compile([
               input.partialSig[0].signature,
-              Buffer.from(preImage)
+              Buffer.from(preImage, 'utf8')
             ]),
             output: Buffer.from(script, 'hex')
           }
@@ -275,7 +278,7 @@ class Bitcoin extends AbstractDLT {
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            Buffer.from(preImage)
+            Buffer.from(preImage, 'utf8')
           ]),
           output: Buffer.from(script, 'hex')
         }
@@ -286,7 +289,7 @@ class Bitcoin extends AbstractDLT {
         redeem: {
           input: bitcoin.script.compile([
             input.partialSig[0].signature,
-            Buffer.from(preImage)
+            Buffer.from(preImage, 'utf8')
           ]),
           output: Buffer.from(script, 'hex')
         }
