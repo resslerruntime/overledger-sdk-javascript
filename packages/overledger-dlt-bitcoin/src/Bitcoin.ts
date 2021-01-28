@@ -55,19 +55,10 @@ class Bitcoin extends AbstractDLT {
   * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
   * @return {Transaction} the Bitcoin transaction
   */
-  buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
-
+  buildTransaction(thisTransaction: TransactionBitcoinRequest): UtxosPrepare {
+    const inputs = new Array();
+    const outputs = new Array();
     super.transactionValidation(thisTransaction);
-
-    // const feePrice = Number(thisTransaction.extraFields.feePrice);
-    // console.log(`network ${JSON.stringify(this.addressType)}`);
-    // const NETWORK = bitcoin.networks.testnet;
-    // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
-    const psbtObj = new bitcoin.Psbt({ network: this.addressType });
-    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
-    psbtObj.setMaximumFeeRate(0);
-    psbtObj.setVersion(2); // These are defaults. This line is not needed.
-    psbtObj.setLocktime(0);
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
       console.log(`counter input ${counter}`);
@@ -92,17 +83,17 @@ class Bitcoin extends AbstractDLT {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
       console.log(`input ${JSON.stringify(input)}`);
-      psbtObj.addInput(input);
+      inputs.push(input);
       counter = counter + 1;
     }
     console.log(`inputs added`);
     counter = 0;
     while (counter < thisTransaction.txOutputs.length) {
-      let output: UtxoOutput = {
+      let output = {
         value: thisTransaction.txOutputs[counter].amount,
         address: thisTransaction.txOutputs[counter].toAddress.toString()
-      }
-      psbtObj.addOutput(<{ value: number, address: string }>output);
+      } as UtxoAddressOutput;
+      outputs.push(output);
       console.log(`output ${output}`);
       counter = counter + 1;
     }
@@ -111,11 +102,51 @@ class Bitcoin extends AbstractDLT {
     const dataLength = data.length;
     console.log(`data length ${dataLength}`);
     const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
-    const dataOutput: UtxoOutput = {
+    const dataOutput = {
       value: 0,
       script: unspendableReturnPayment.output
-    };
-    psbtObj.addOutput(<{ value: number, script: Buffer }>dataOutput);
+    } as UtxoScriptOutput;
+    outputs.push(dataOutput);
+
+    return { inputs, outputs };
+  }
+
+  /**
+  * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
+  * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
+  * @return {Transaction} the Bitcoin transaction
+  */
+  prepareTransaction(inputsOutputs: UtxosPrepare): any {
+
+    // const feePrice = Number(thisTransaction.extraFields.feePrice);
+    // console.log(`network ${JSON.stringify(this.addressType)}`);
+    // const NETWORK = bitcoin.networks.testnet;
+    // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
+    const psbtObj = new bitcoin.Psbt({ network: this.addressType });
+    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
+    psbtObj.setMaximumFeeRate(0);
+    psbtObj.setVersion(2); // These are defaults. This line is not needed.
+    psbtObj.setLocktime(0);
+    let counter = 0;
+    while (counter < inputsOutputs.inputs.length) {
+      const input = inputsOutputs.inputs[counter];
+      console.log(`counter input ${counter}`);
+      console.log(`input ${JSON.stringify(input)}`);
+      psbtObj.addInput(input);
+      counter = counter + 1;
+    }
+    console.log(`inputs added`);
+    counter = 0;
+    while (counter < inputsOutputs.outputs.length) {
+      const output = inputsOutputs.outputs[counter];
+      if (isAddressOutput(output)) {
+        psbtObj.addOutput(<{ value: number, address: string }>output);
+      } else {
+        psbtObj.addOutput(<{ value: number, script: Buffer }>output);
+      }
+      console.log(`output ${output}`);
+      counter = counter + 1;
+    }
 
     return psbtObj;
   }
@@ -200,7 +231,8 @@ class Bitcoin extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
-    let psbtObj = this.buildTransaction(thisBitcoinTransaction);
+    let build = this.buildTransaction(thisBitcoinTransaction);
+    let psbtObj = this.prepareTransaction(build);
     // for each input sign them:
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
     let myKeyPair;
@@ -465,6 +497,12 @@ function witnessStackToScriptWitness(witness) {
   return buffer;
 }
 
+
+function isAddressOutput(output: UtxoAddressOutput | UtxoScriptOutput): output is UtxoAddressOutput {
+  return (output as UtxoAddressOutput).address !== undefined;
+}
+
+
 interface UtxoInput {
   hash: string;
   index: number;
@@ -474,10 +512,20 @@ interface UtxoInput {
   witnessScript?: Buffer;
 };
 
-interface UtxoOutput {
+interface UtxoAddressOutput {
   value: number;
-  address?: string;
-  script?: Buffer;
+  address: string;
+}
+
+interface UtxoScriptOutput {
+  value: number;
+  script: Buffer;
+}
+
+interface UtxosPrepare {
+  inputs: [UtxoInput],
+  outputs: [UtxoAddressOutput | UtxoScriptOutput],
+
 }
 
 export default Bitcoin;
