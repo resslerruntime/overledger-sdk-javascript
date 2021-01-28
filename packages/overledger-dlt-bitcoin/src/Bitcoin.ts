@@ -82,8 +82,14 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
+
       console.log(`input ${JSON.stringify(input)}`);
-      inputs.push(input);
+      inputs.push({
+        ...input,
+        transferType: thisTransaction.txInputs[counter].transferType,
+        coSigners: thisTransaction.txInputs[counter].coSigners,
+        preimage: thisTransaction.txInputs[counter].preimage
+      });
       counter = counter + 1;
     }
     console.log(`inputs added`);
@@ -97,7 +103,6 @@ class Bitcoin extends AbstractDLT {
       console.log(`output ${output}`);
       counter = counter + 1;
     }
-
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
     const dataLength = data.length;
     console.log(`data length ${dataLength}`);
@@ -123,19 +128,15 @@ class Bitcoin extends AbstractDLT {
     // const NETWORK = bitcoin.networks.testnet;
     // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
     const psbtObj = new bitcoin.Psbt({ network: this.addressType });
-    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
     psbtObj.setLocktime(0);
     let counter = 0;
     while (counter < inputsOutputs.inputs.length) {
-      const input = inputsOutputs.inputs[counter];
-      console.log(`counter input ${counter}`);
-      console.log(`input ${JSON.stringify(input)}`);
+      const input = inputsOutputs.inputs[counter].input;
       psbtObj.addInput(input);
       counter = counter + 1;
     }
-    console.log(`inputs added`);
     counter = 0;
     while (counter < inputsOutputs.outputs.length) {
       const output = inputsOutputs.outputs[counter];
@@ -144,11 +145,10 @@ class Bitcoin extends AbstractDLT {
       } else {
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
       }
-      console.log(`output ${output}`);
       counter = counter + 1;
     }
 
-    return psbtObj;
+    return { psbtObj, inputsOutputs };
   }
 
   /**
@@ -232,34 +232,33 @@ class Bitcoin extends AbstractDLT {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     let build = this.buildTransaction(thisBitcoinTransaction);
-    let psbtObj = this.prepareTransaction(build);
+    let { psbtObj, inputsOutputs } = this.prepareTransaction(build);
     // for each input sign them:
     console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
     let myKeyPair;
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
-      console.log(`myKeyPair ${myKeyPair}`);
     }
 
     let counter = 0;
-    while (counter < thisBitcoinTransaction.txInputs.length) {
-      if (thisBitcoinTransaction.txInputs[counter].transferType
-        && thisBitcoinTransaction.txInputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_P2MS) {
+    while (counter < inputsOutputs.inputs.length) {
+      if (inputsOutputs.inputs[counter].transferType
+        && inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_P2MS) {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
-          if (thisBitcoinTransaction.txInputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
+          if (inputsOutputs.inputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
             throw new Error(`coSigners must be ${this.multisigAccount.numberCoSigners}`);
           }
           const privateKeys = this.multisigAccount.keys.map(k => k.privateKeyWIF.toString());
-          thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
+          inputsOutputs.inputs[counter].coSigners.map(signer => {
             if (!privateKeys.includes(signer)) {
               throw new Error('The current coSigner does not belong to the current multisig account');
             }
             const kPair = bitcoin.ECPair.fromWIF(signer, this.addressType);
             psbtObj.signInput(counter, kPair);
           });
-          thisBitcoinTransaction.txInputs[counter].coSigners.map(signer => {
+          inputsOutputs.inputs[counter].coSigners.map(signer => {
             console.log(`signer ${signer}`);
             const key = this.multisigAccount.keys.filter(k => k.privateKeyWIF.toString() === signer.toString());
             console.log(`key ${JSON.stringify(key)}`);
@@ -274,9 +273,9 @@ class Bitcoin extends AbstractDLT {
       } else {
         psbtObj.signInput(counter, myKeyPair);
         psbtObj.validateSignaturesOfInput(counter);
-        if (thisBitcoinTransaction.txInputs[counter].transferType
-          && thisBitcoinTransaction.txInputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC) {
-          const preImage = thisBitcoinTransaction.txInputs[counter].preimage;
+        if (inputsOutputs.inputs[counter].transferType
+          && inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC) {
+          const preImage = inputsOutputs.inputs[counter].preimage;
           psbtObj.finalizeInput(counter, (inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
             return this.getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
           });
@@ -384,8 +383,6 @@ class Bitcoin extends AbstractDLT {
     console.log(`this.account ${JSON.stringify(this.account)}`);
   }
 
-  // setAccount P2WPKH !!! TO DO
-  // setAccount P2SHP2WPKH
 
   setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string): void {
     if (privateKeys.length < numberCoSigners) {
@@ -512,6 +509,14 @@ interface UtxoInput {
   witnessScript?: Buffer;
 };
 
+interface UtxoInputWithCaracteristic {
+  input: UtxoInput,
+  tranferType?: TransactionBitcoinTransferTypeOptions,
+  coSigners?: string,
+  preimage?: string
+}
+
+
 interface UtxoAddressOutput {
   value: number;
   address: string;
@@ -523,9 +528,8 @@ interface UtxoScriptOutput {
 }
 
 interface UtxosPrepare {
-  inputs: [UtxoInput],
-  outputs: [UtxoAddressOutput | UtxoScriptOutput],
-
+  inputs: UtxoInputWithCaracteristic[],
+  outputs: (UtxoAddressOutput | UtxoScriptOutput)[],
 }
 
 export default Bitcoin;
