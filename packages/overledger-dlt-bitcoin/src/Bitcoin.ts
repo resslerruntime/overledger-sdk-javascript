@@ -104,16 +104,8 @@ class Bitcoin extends AbstractDLT {
       counter = counter + 1;
     }
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
-    const dataLength = data.length;
-    console.log(`data length ${dataLength}`);
-    const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
-    const dataOutput = {
-      value: 0,
-      script: unspendableReturnPayment.output
-    } as UtxoScriptOutput;
-    outputs.push(dataOutput);
 
-    return { inputs, outputs };
+    return { inputs, outputs, data };
   }
 
   /**
@@ -146,6 +138,18 @@ class Bitcoin extends AbstractDLT {
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
       }
       counter = counter + 1;
+    }
+
+    const data = inputsOutputs.data; // Message is inserted
+    const dataLength = data.length;
+    if (data && dataLength > 0) {
+      console.log(`data length ${dataLength}`);
+      const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
+      const dataOutput = {
+        value: 0,
+        script: unspendableReturnPayment.output
+      } as UtxoScriptOutput;
+      psbtObj.addOutput(dataOutput);
     }
 
     return { psbtObj, inputsOutputs };
@@ -530,6 +534,7 @@ interface UtxoScriptOutput {
 interface UtxosPrepare {
   inputs: UtxoInputWithCaracteristic[],
   outputs: (UtxoAddressOutput | UtxoScriptOutput)[],
+  data: Buffer
 }
 
 export default Bitcoin;
